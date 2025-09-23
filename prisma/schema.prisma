@@ -1,0 +1,297 @@
+// This is your Prisma schema file for AI Sales Enablement WebApp
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 用戶模型
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password_hash String
+  first_name    String
+  last_name     String
+  role          UserRole @default(SALES_REP)
+  department    String?
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  last_login    DateTime?
+
+  // 關聯關係
+  customers     Customer[]
+  callRecords   CallRecord[]
+  proposals     Proposal[]
+
+  @@map("users")
+  @@index([email, is_active], name: "IX_User_Email_Active")
+  @@index([role, department], name: "IX_User_Role_Department")
+}
+
+// 客戶模型
+model Customer {
+  id                 Int             @id @default(autoincrement())
+  company_name       String
+  email              String?
+  phone              String?
+  website            String?
+  industry           String?
+  company_size       CompanySize?
+  status             CustomerStatus  @default(PROSPECT)
+  assigned_user_id   Int?
+  notes              String?
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
+
+  // 關聯關係
+  assignedUser       User?           @relation(fields: [assigned_user_id], references: [id])
+  callRecords        CallRecord[]
+  proposals          Proposal[]
+  documents          Document[]
+  interactions       Interaction[]
+
+  @@map("customers")
+  // 核心查詢索引（基於第18章架構設計）
+  @@index([company_name, email, created_at], name: "IX_Customer_Search")
+  @@index([status, assigned_user_id], name: "IX_Customer_Status_User")
+  @@index([industry, company_size], name: "IX_Customer_Industry_Size")
+  @@index([created_at], name: "IX_Customer_Created")
+}
+
+// 通話記錄模型
+model CallRecord {
+  id           Int           @id @default(autoincrement())
+  customer_id  Int
+  user_id      Int
+  call_date    DateTime
+  duration     Int?          // 通話時長（秒）
+  outcome      CallOutcome?
+  summary      String?
+  action_items String?
+  recording_url String?
+  status       CallStatus   @default(SCHEDULED)
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+
+  // 關聯關係
+  customer     Customer     @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [user_id], references: [id])
+
+  @@map("call_records")
+  // 效能優化索引（基於第18章設計）
+  @@index([customer_id, call_date(sort: Desc)], name: "IX_Call_Customer_Date")
+  @@index([customer_id, status, call_date], name: "IX_CallRecord_Complex")
+  @@index([user_id, call_date], name: "IX_Call_User_Date")
+  @@index([outcome, call_date], name: "IX_Call_Outcome_Date")
+}
+
+// 提案模型
+model Proposal {
+  id           Int            @id @default(autoincrement())
+  customer_id  Int
+  user_id      Int
+  title        String
+  description  String?
+  status       ProposalStatus @default(DRAFT)
+  total_value  Decimal?       @db.Decimal(15, 2)
+  currency     String?        @default("USD")
+  version      Int            @default(1)
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  sent_at      DateTime?
+  approved_at  DateTime?
+
+  // 關聯關係
+  customer     Customer       @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  user         User           @relation(fields: [user_id], references: [id])
+  items        ProposalItem[]
+
+  @@map("proposals")
+  // 提案查詢優化索引
+  @@index([customer_id, status, created_at(sort: Desc)], name: "IX_Proposal_Status_Date")
+  @@index([user_id, status], name: "IX_Proposal_User_Status")
+  @@index([total_value, currency], name: "IX_Proposal_Value")
+}
+
+// 提案項目模型
+model ProposalItem {
+  id          Int      @id @default(autoincrement())
+  proposal_id Int
+  name        String
+  description String?
+  quantity    Int      @default(1)
+  unit_price  Decimal  @db.Decimal(10, 2)
+  total_price Decimal  @db.Decimal(15, 2)
+  created_at  DateTime @default(now())
+
+  // 關聯關係
+  proposal    Proposal @relation(fields: [proposal_id], references: [id], onDelete: Cascade)
+
+  @@map("proposal_items")
+  @@index([proposal_id], name: "IX_ProposalItem_Proposal")
+}
+
+// 文檔模型
+model Document {
+  id          Int          @id @default(autoincrement())
+  customer_id Int?
+  title       String
+  content     String?
+  file_path   String?
+  file_size   Int?
+  mime_type   String?
+  category    DocumentType @default(OTHER)
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+
+  // 關聯關係
+  customer    Customer?    @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+  @@index([customer_id, category], name: "IX_Document_Customer_Category")
+  @@index([created_at], name: "IX_Document_Created")
+}
+
+// 客戶互動記錄
+model Interaction {
+  id          Int             @id @default(autoincrement())
+  customer_id Int
+  type        InteractionType
+  description String
+  metadata    Json?           // 存儲額外的互動數據
+  created_at  DateTime        @default(now())
+
+  // 關聯關係
+  customer    Customer        @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+
+  @@map("interactions")
+  @@index([customer_id, type, created_at], name: "IX_Interaction_Customer_Type")
+}
+
+// AI 分析結果模型
+model AIAnalysis {
+  id              Int      @id @default(autoincrement())
+  entity_type     String   // 'customer', 'call', 'proposal' 等
+  entity_id       Int
+  analysis_type   String   // 'sentiment', 'priority', 'recommendation' 等
+  result          Json     // 分析結果
+  confidence      Float?   // 置信度
+  created_at      DateTime @default(now())
+
+  @@map("ai_analyses")
+  @@index([entity_type, entity_id], name: "IX_AI_Entity")
+  @@index([analysis_type, created_at], name: "IX_AI_Type_Date")
+}
+
+// 系統配置模型
+model SystemConfig {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String
+  description String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("system_configs")
+  @@index([key, is_active], name: "IX_Config_Key_Active")
+}
+
+// 審計日誌模型
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  user_id     Int?
+  entity_type String
+  entity_id   Int?
+  action      String
+  old_values  Json?
+  new_values  Json?
+  ip_address  String?
+  user_agent  String?
+  created_at  DateTime @default(now())
+
+  @@map("audit_logs")
+  @@index([user_id, created_at], name: "IX_Audit_User_Date")
+  @@index([entity_type, entity_id], name: "IX_Audit_Entity")
+  @@index([action, created_at], name: "IX_Audit_Action_Date")
+}
+
+// 枚舉定義
+enum UserRole {
+  ADMIN
+  SALES_MANAGER
+  SALES_REP
+  MARKETING
+  VIEWER
+}
+
+enum CustomerStatus {
+  PROSPECT
+  QUALIFIED
+  OPPORTUNITY
+  CUSTOMER
+  INACTIVE
+}
+
+enum CompanySize {
+  STARTUP      // 1-10 employees
+  SMALL        // 11-50 employees
+  MEDIUM       // 51-200 employees
+  LARGE        // 201-1000 employees
+  ENTERPRISE   // 1000+ employees
+}
+
+enum CallOutcome {
+  SUCCESSFUL
+  NO_ANSWER
+  BUSY
+  VOICEMAIL
+  CALLBACK_REQUESTED
+  NOT_INTERESTED
+  FOLLOW_UP_NEEDED
+}
+
+enum CallStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum ProposalStatus {
+  DRAFT
+  SENT
+  VIEWED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum DocumentType {
+  CONTRACT
+  PROPOSAL
+  PRESENTATION
+  REPORT
+  EMAIL
+  NOTE
+  OTHER
+}
+
+enum InteractionType {
+  EMAIL
+  PHONE_CALL
+  MEETING
+  DEMO
+  WEBSITE_VISIT
+  DOCUMENT_VIEW
+  PROPOSAL_VIEW
+  OTHER
+}
