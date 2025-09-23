@@ -1,19 +1,12 @@
 {
-  "timestamp": "2025-09-23T17:26:07.173Z",
+  "timestamp": "2025-09-23T17:28:07.396Z",
   "summary": {
     "totalIssues": 0,
     "highSeverity": 0,
     "mediumSeverity": 0,
     "lowSeverity": 0,
-    "suggestions": 1
+    "suggestions": 0
   },
   "issues": [],
-  "suggestions": [
-    {
-      "type": "add_to_index",
-      "file": "DEVELOPMENT-LOG.md",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: DEVELOPMENT-LOG.md"
-    }
-  ]
+  "suggestions": []
 }
