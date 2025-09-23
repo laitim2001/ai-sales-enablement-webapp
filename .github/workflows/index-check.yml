@@ -1,0 +1,213 @@
+name: 📋 Index Sync Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # 每日檢查 (UTC 時間 02:00 = GMT+8 10:00)
+    - cron: '0 2 * * *'
+
+jobs:
+  index-sync-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 需要完整歷史來檢查文件變更
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: 📦 Install dependencies
+      run: |
+        npm ci --legacy-peer-deps
+
+    - name: 🔍 Run index sync check
+      id: index_check
+      run: |
+        echo "檢查索引同步狀態..."
+        node scripts/check-index-sync.js > index_check_output.txt 2>&1 || echo "check_failed=true" >> $GITHUB_OUTPUT
+        cat index_check_output.txt
+
+    - name: 📊 Generate coverage report
+      run: |
+        echo "## 📋 索引同步檢查報告" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🎯 檢查結果" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -f "index-sync-report.json" ]; then
+          echo "檢查詳細報告已生成。" >> $GITHUB_STEP_SUMMARY
+
+          # 提取關鍵數據
+          ISSUES=$(cat index-sync-report.json | jq '.summary.totalIssues // 0')
+          HIGH_ISSUES=$(cat index-sync-report.json | jq '.summary.highSeverity // 0')
+          SUGGESTIONS=$(cat index-sync-report.json | jq '.summary.suggestions // 0')
+
+          echo "- 🔴 嚴重問題: $HIGH_ISSUES" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚠️ 總問題數: $ISSUES" >> $GITHUB_STEP_SUMMARY
+          echo "- 💡 改進建議: $SUGGESTIONS" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "無法生成詳細報告。" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: 📄 Upload reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: index-sync-reports
+        path: |
+          index-sync-report.json
+          index_check_output.txt
+        retention-days: 30
+
+    - name: 💬 Comment on PR (if applicable)
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          let comment = '## 📋 索引同步檢查結果\n\n';
+
+          try {
+            if (fs.existsSync('index-sync-report.json')) {
+              const report = JSON.parse(fs.readFileSync('index-sync-report.json', 'utf8'));
+
+              comment += '### 📊 檢查統計\n';
+              comment += `- 🔴 嚴重問題: ${report.summary?.highSeverity || 0}\n`;
+              comment += `- 🟡 中等問題: ${report.summary?.mediumSeverity || 0}\n`;
+              comment += `- 🟢 輕微問題: ${report.summary?.lowSeverity || 0}\n`;
+              comment += `- 💡 改進建議: ${report.summary?.suggestions || 0}\n\n`;
+
+              if (report.summary?.totalIssues > 0) {
+                comment += '### ⚠️ 需要注意的問題\n';
+                comment += '請檢查索引文件同步狀態，確保重要文件已正確索引。\n\n';
+                comment += '**修復建議：**\n';
+                comment += '```bash\n';
+                comment += 'npm run index:check\n';
+                comment += 'npm run index:update\n';
+                comment += '```\n\n';
+              } else {
+                comment += '### ✅ 索引狀態良好\n';
+                comment += '所有文件都已正確索引。\n\n';
+              }
+
+              if (report.suggestions?.length > 0) {
+                comment += '### 💡 改進建議\n';
+                const suggestions = report.suggestions.slice(0, 5);
+                suggestions.forEach(s => {
+                  comment += `- ${s.message}\n`;
+                });
+
+                if (report.suggestions.length > 5) {
+                  comment += `- ... 還有 ${report.suggestions.length - 5} 個建議\n`;
+                }
+              }
+
+            } else {
+              comment += '⚠️ 無法讀取詳細報告文件。\n';
+            }
+
+          } catch (error) {
+            comment += `❌ 處理報告時發生錯誤: ${error.message}\n`;
+          }
+
+          comment += '\n---\n';
+          comment += '*🤖 此報告由 GitHub Actions 自動生成*';
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+    - name: ❌ Fail if critical issues found
+      if: steps.index_check.outputs.check_failed == 'true'
+      run: |
+        echo "❌ 索引同步檢查發現嚴重問題！"
+        echo "請修復索引問題後再提交。"
+        exit 1
+
+  # 每日報告工作
+  daily-report:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: 📦 Install dependencies
+      run: npm ci --legacy-peer-deps
+
+    - name: 📊 Generate daily report
+      run: |
+        echo "生成每日索引健康報告..."
+        node scripts/check-index-sync.js > daily_report.txt 2>&1
+        node scripts/dev-reminder.js >> daily_report.txt 2>&1
+
+    - name: 📧 Create issue for daily report
+      if: contains(github.repository, 'ai-sales-enablement-webapp')
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const now = new Date();
+          const dateStr = now.toISOString().split('T')[0];
+
+          let reportContent = '## 📊 每日索引健康報告\n\n';
+          reportContent += `**日期**: ${dateStr}\n`;
+          reportContent += `**檢查時間**: ${now.toISOString()}\n\n`;
+
+          try {
+            const report = fs.readFileSync('daily_report.txt', 'utf8');
+            reportContent += '### 檢查結果\n\n';
+            reportContent += '```\n' + report + '\n```\n\n';
+          } catch (error) {
+            reportContent += '⚠️ 無法讀取報告內容。\n\n';
+          }
+
+          reportContent += '### 📋 維護建議\n\n';
+          reportContent += '1. 檢查是否有新文件需要加入索引\n';
+          reportContent += '2. 確認索引文件路徑引用正確\n';
+          reportContent += '3. 清理過期的索引引用\n\n';
+          reportContent += '**快速修復命令:**\n';
+          reportContent += '```bash\n';
+          reportContent += 'npm run index:check\n';
+          reportContent += 'npm run index:update\n';
+          reportContent += '```\n\n';
+          reportContent += '---\n';
+          reportContent += '*🤖 此報告由 GitHub Actions 每日自動生成*';
+
+          // 創建 issue
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `📊 每日索引健康報告 - ${dateStr}`,
+            body: reportContent,
+            labels: ['📋 index-maintenance', '🤖 automated']
+          });
+
+    - name: 📄 Upload daily report
+      uses: actions/upload-artifact@v4
+      with:
+        name: daily-index-report
+        path: daily_report.txt
+        retention-days: 7

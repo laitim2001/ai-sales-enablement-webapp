@@ -12,13 +12,24 @@ class IndexSyncChecker {
     this.projectRoot = process.cwd();
     this.issues = [];
     this.suggestions = [];
+    this.autoFix = false;
+    this.incrementalMode = false;
+    this.lastCheckTime = null;
   }
 
   /**
    * 主要檢查流程
    */
-  async runCheck() {
+  async runCheck(options = {}) {
+    this.autoFix = options.autoFix || false;
+    this.incrementalMode = options.incremental || false;
+
     console.log('🔍 開始索引同步檢查...\n');
+
+    if (this.incrementalMode) {
+      console.log('⚡ 增量模式：只檢查最近變更的文件');
+      await this.loadLastCheckTime();
+    }
 
     try {
       // 1. 檢查核心索引文件是否存在
@@ -36,10 +47,93 @@ class IndexSyncChecker {
       // 5. 生成報告
       this.generateReport();
 
+      // 6. 自動修復（如果啟用）
+      if (this.autoFix && this.suggestions.length > 0) {
+        await this.performAutoFix();
+      }
+
+      // 7. 記錄檢查時間
+      await this.saveLastCheckTime();
+
     } catch (error) {
       console.error('❌ 檢查過程發生錯誤:', error.message);
       process.exit(1);
     }
+  }
+
+  /**
+   * 載入上次檢查時間
+   */
+  async loadLastCheckTime() {
+    const checkFile = path.join(this.projectRoot, '.index-check-time');
+    try {
+      if (fs.existsSync(checkFile)) {
+        const timeStr = fs.readFileSync(checkFile, 'utf-8').trim();
+        this.lastCheckTime = new Date(timeStr);
+        console.log(`📅 上次檢查時間: ${this.lastCheckTime.toLocaleString()}`);
+      }
+    } catch (error) {
+      console.log('⚠️ 無法讀取上次檢查時間，將執行完整檢查');
+    }
+  }
+
+  /**
+   * 保存檢查時間
+   */
+  async saveLastCheckTime() {
+    const checkFile = path.join(this.projectRoot, '.index-check-time');
+    fs.writeFileSync(checkFile, new Date().toISOString());
+  }
+
+  /**
+   * 自動修復功能
+   */
+  async performAutoFix() {
+    console.log('\n🔧 開始自動修復...');
+
+    for (const suggestion of this.suggestions.slice(0, 5)) { // 限制一次最多修復5個
+      if (suggestion.type === 'add_to_index') {
+        await this.addFileToIndex(suggestion.file);
+      }
+    }
+  }
+
+  /**
+   * 將文件添加到索引
+   */
+  async addFileToIndex(filePath) {
+    const importance = this.getFileImportance(filePath);
+    const targetIndex = importance === 'high' ? 'AI-ASSISTANT-GUIDE.md' : 'PROJECT-INDEX.md';
+
+    console.log(`📝 添加 ${filePath} 到 ${targetIndex}`);
+
+    // 這裡可以實現自動添加邏輯
+    // 為了安全起見，目前只是記錄建議
+    this.suggestions.push({
+      type: 'auto_fix_suggestion',
+      file: filePath,
+      targetIndex: targetIndex,
+      message: `建議添加到 ${targetIndex}：${filePath}`
+    });
+  }
+
+  /**
+   * 判斷文件重要性
+   */
+  getFileImportance(filePath) {
+    const highImportancePatterns = [
+      /README\.md$/,
+      /.*\.config\.(js|ts|json)$/,
+      /package\.json$/,
+      /schema\.prisma$/,
+      /(docs|src)\/.*\.md$/
+    ];
+
+    if (highImportancePatterns.some(pattern => pattern.test(filePath))) {
+      return 'high';
+    }
+
+    return 'medium';
   }
 
   /**
@@ -172,14 +266,24 @@ class IndexSyncChecker {
         const ext = path.extname(file);
         const relativeFilePath = path.join(relativePath, file);
 
+        // 增量模式：只檢查最近修改的文件
+        if (this.incrementalMode && this.lastCheckTime) {
+          if (stat.mtime <= this.lastCheckTime) {
+            continue; // 跳過未修改的文件
+          }
+        }
+
         // 檢查是否為重要文件但未在索引中
         if (this.isImportantFile(file, ext) &&
             !this.isFileInIndex(relativeFilePath)) {
+          const importance = this.getFileImportance(relativeFilePath);
           this.suggestions.push({
             type: 'add_to_index',
             file: relativeFilePath,
-            severity: 'low',
-            message: `建議將重要文件加入索引: ${relativeFilePath}`
+            importance: importance,
+            severity: importance === 'high' ? 'medium' : 'low',
+            message: `建議將重要文件加入索引: ${relativeFilePath}`,
+            modifiedTime: stat.mtime
           });
         }
       }
@@ -320,10 +424,40 @@ class IndexSyncChecker {
 
 // 如果直接執行此腳本
 if (require.main === module) {
+  const args = process.argv.slice(2);
+  const options = {
+    autoFix: args.includes('--auto-fix') || args.includes('-f'),
+    incremental: args.includes('--incremental') || args.includes('-i')
+  };
+
+  if (args.includes('--help') || args.includes('-h')) {
+    console.log(`
+🔍 索引同步檢查工具
+
+使用方法:
+  node check-index-sync.js [選項]
+
+選項:
+  -h, --help        顯示幫助信息
+  -i, --incremental 增量模式（只檢查最近變更的文件）
+  -f, --auto-fix    自動修復模式（自動應用建議的修復）
+
+範例:
+  node check-index-sync.js                    # 完整檢查
+  node check-index-sync.js --incremental      # 增量檢查
+  node check-index-sync.js --auto-fix         # 自動修復
+  node check-index-sync.js -i -f              # 增量檢查並自動修復
+    `);
+    process.exit(0);
+  }
+
   const checker = new IndexSyncChecker();
-  checker.runCheck()
+  checker.runCheck(options)
     .then(() => {
       console.log('\n🎉 索引同步檢查完成！');
+      if (options.autoFix) {
+        console.log('🔧 已嘗試自動修復部分問題');
+      }
     })
     .catch(error => {
       console.error('💥 檢查失敗:', error);

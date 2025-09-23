@@ -23,7 +23,15 @@
     "docker:prod": "docker-compose up",
     "poc:test": "cd poc && npm run test:all",
     "index:check": "node scripts/check-index-sync.js",
+    "index:check:incremental": "node scripts/check-index-sync.js --incremental",
+    "index:check:auto-fix": "node scripts/check-index-sync.js --auto-fix",
+    "index:update": "node scripts/index-maintenance.js",
+    "index:watch": "node scripts/index-watcher.js",
     "index:health": "npm run index:check",
+    "dev:reminder": "node scripts/dev-reminder.js",
+    "dev:start": "node scripts/dev-reminder.js --quiet && npm run dev",
+    "commit": "npm run index:check:incremental && git add -A && git commit",
+    "commit:safe": "npm run index:check && npm run lint && npm run type-check && git add -A && git commit",
     "precommit:index": "npm run index:check"
   },
   "dependencies": {
