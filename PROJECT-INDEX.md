@@ -92,7 +92,9 @@
 | **忽略文件** | `.gitignore` | Git 忽略文件配置 |
 | **項目說明** | `README.md` | 專案簡介和快速開始指南 |
 | **服務啟動指南** | `STARTUP-GUIDE.md` | 完整服務啟動和健康檢查流程 |
+| **開發記錄** | `DEVELOPMENT-LOG.md` | 開發討論、決策記錄和問題解決方案 |
 | **健康檢查腳本** | `scripts/health-check.js` | PostgreSQL, Redis, pgvector, Azure OpenAI 健康檢查 |
+| **MVP同步腳本** | `scripts/sync-mvp-checklist.js` | MVP檢查清單自動同步和進度追蹤 |
 | **認證系統** | `lib/auth.ts` | JWT 認證系統和用戶管理 |
 | **TypeScript 配置** | `tsconfig.json` | TypeScript 項目配置 |
 | **Claude 規則** | `CLAUDE.md` | Claude Code 開發規則和工作流程 |
@@ -195,6 +197,7 @@ AI 助手應該 **避免** 在以下目錄中查找項目業務相關信息：
 | **技術架構** | `docs/architecture.md` | `docs/api-specification.md` |
 | **開發計劃** | `docs/mvp-development-plan.md` | `docs/mvp-implementation-checklist.md` |
 | **服務啟動** | `STARTUP-GUIDE.md` | `scripts/health-check.js` |
+| **開發記錄** | `DEVELOPMENT-LOG.md` | `scripts/sync-mvp-checklist.js` |
 | **認證系統** | `lib/auth.ts` | `app/api/auth/` |
 | **資料庫設計** | `prisma/schema.prisma` | `scripts/init-db.sql` |
 | **技術驗證** | `poc/README.md` | `docs/technical-feasibility-report.md` |

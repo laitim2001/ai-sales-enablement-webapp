@@ -33,7 +33,9 @@ docs/user-stories/MVP-PRIORITIES.md    # 24個用戶故事優先級
 docs/mvp-implementation-checklist.md   # 逐週執行清單
 docs/testing-strategy.md               # 測試策略
 STARTUP-GUIDE.md                       # 服務啟動完整指南
+DEVELOPMENT-LOG.md                     # 開發討論和決策記錄
 scripts/health-check.js               # 服務健康檢查腳本
+scripts/sync-mvp-checklist.js         # MVP進度自動同步腳本
 poc/run-all-tests.js                  # 技術驗證腳本
 README.md                              # 項目說明
 app/layout.tsx                         # Next.js 根布局
