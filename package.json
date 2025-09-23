@@ -21,7 +21,10 @@
     "test:e2e:ui": "playwright test --ui",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "docker:prod": "docker-compose up",
-    "poc:test": "cd poc && npm run test:all"
+    "poc:test": "cd poc && npm run test:all",
+    "index:check": "node scripts/check-index-sync.js",
+    "index:health": "npm run index:check",
+    "precommit:index": "npm run index:check"
   },
   "dependencies": {
     "next": "^14.2.0",

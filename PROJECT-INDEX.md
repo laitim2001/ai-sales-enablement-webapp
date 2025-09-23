@@ -91,6 +91,8 @@
 | **忽略文件** | `.gitignore` | Git 忽略文件配置 |
 | **項目說明** | `README.md` | 專案簡介和快速開始指南 |
 | **主索引** | `PROJECT-INDEX.md` | 📍 當前文件 - AI 助手導航指南 |
+| **維護指南** | `INDEX-MAINTENANCE-GUIDE.md` | 索引維護策略和自動化工具 |
+| **專門索引** | `indexes/README.md` | Level 3 專門索引擴展準備 |
 
 ---
 
