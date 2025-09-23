@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-23T15:39:31.992Z",
+  "timestamp": "2025-09-23T16:58:34.188Z",
   "overallSuccess": false,
   "testResults": {
     "dynamics365": {
@@ -13,10 +13,56 @@
       "serviceStatus": true
     },
     "pgvector": {
-      "connection": false,
+      "connection": true,
       "insert": null,
       "search": null,
-      "dimensions": null
+      "dimensions": {
+        "384": {
+          "insert": {
+            "success": true,
+            "totalTime": 470,
+            "recordsPerSecond": 212.76595744680853,
+            "avgTimePerRecord": 4.7
+          },
+          "search": {
+            "success": true,
+            "avgSearchTime": 0.8,
+            "minSearchTime": 0,
+            "maxSearchTime": 1,
+            "performance": "excellent"
+          }
+        },
+        "768": {
+          "insert": {
+            "success": true,
+            "totalTime": 458,
+            "recordsPerSecond": 218.34061135371178,
+            "avgTimePerRecord": 4.58
+          },
+          "search": {
+            "success": true,
+            "avgSearchTime": 1,
+            "minSearchTime": 1,
+            "maxSearchTime": 1,
+            "performance": "excellent"
+          }
+        },
+        "1536": {
+          "insert": {
+            "success": true,
+            "totalTime": 5042,
+            "recordsPerSecond": 19.833399444664817,
+            "avgTimePerRecord": 50.42
+          },
+          "search": {
+            "success": true,
+            "avgSearchTime": 48.8,
+            "minSearchTime": 44,
+            "maxSearchTime": 50,
+            "performance": "excellent"
+          }
+        }
+      }
     },
     "azureOpenAI": {
       "connection": false,
@@ -27,14 +73,8 @@
   },
   "summary": {
     "dynamics365": true,
-    "pgvector": false,
+    "pgvector": true,
     "azureOpenAI": false
   },
-  "recommendations": [
-    {
-      "priority": "critical",
-      "category": "database",
-      "action": "配置 PostgreSQL 和 pgvector 擴展"
-    }
-  ]
+  "recommendations": []
 }

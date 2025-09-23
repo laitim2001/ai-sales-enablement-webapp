@@ -32,9 +32,12 @@ tailwind.config.js              # Tailwind CSS 配置
 docs/user-stories/MVP-PRIORITIES.md    # 24個用戶故事優先級
 docs/mvp-implementation-checklist.md   # 逐週執行清單
 docs/testing-strategy.md               # 測試策略
+STARTUP-GUIDE.md                       # 服務啟動完整指南
+scripts/health-check.js               # 服務健康檢查腳本
 poc/run-all-tests.js                  # 技術驗證腳本
 README.md                              # 項目說明
 app/layout.tsx                         # Next.js 根布局
+lib/auth.ts                            # JWT 認證系統
 lib/db.ts                              # 資料庫連接配置
 .eslintrc.json                         # ESLint 配置
 postcss.config.js                      # PostCSS 配置

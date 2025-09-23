@@ -8,7 +8,14 @@
       "Bash(set -o allexport)",
       "Bash(source:*)",
       "Bash(set +o allexport)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(dir)",
+      "Bash(docker-compose:*)",
+      "Bash(node run-all-tests.js)",
+      "Bash(node:*)",
+      "Bash(npx prisma:*)",
+      "Bash(python:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []

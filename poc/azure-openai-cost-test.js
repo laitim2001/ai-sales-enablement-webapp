@@ -41,7 +41,7 @@ class AzureOpenAIPOC {
 
     try {
       // 測試簡單的 completion 請求
-      const response = await this.makeRequest('gpt-35-turbo', {
+      const response = await this.makeRequest('gpt-4o', {
         messages: [{ role: 'user', content: '測試連接，請回覆"連接成功"' }],
         max_tokens: 10,
         temperature: 0

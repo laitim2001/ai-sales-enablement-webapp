@@ -1,0 +1,162 @@
+{
+  "timestamp": "2025-09-23T17:24:42.571Z",
+  "summary": {
+    "totalItems": 32,
+    "completedItems": 18,
+    "percentage": 56
+  },
+  "weeks": [
+    {
+      "week": 1,
+      "title": "項目初始化和環境設置",
+      "items": [
+        {
+          "name": "Next.js 14 項目創建",
+          "completed": true
+        },
+        {
+          "name": "TypeScript 配置",
+          "completed": true
+        },
+        {
+          "name": "Tailwind CSS 設置",
+          "completed": true
+        },
+        {
+          "name": "ESLint 和 Prettier 配置",
+          "completed": true
+        },
+        {
+          "name": "Docker 開發環境",
+          "completed": true
+        },
+        {
+          "name": "PostgreSQL + pgvector 設置",
+          "completed": true
+        },
+        {
+          "name": "Prisma ORM 配置",
+          "completed": true
+        },
+        {
+          "name": "環境變數管理",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "title": "核心資料模型和API架構",
+      "items": [
+        {
+          "name": "User 模型設計",
+          "completed": true
+        },
+        {
+          "name": "Knowledge Base 模型",
+          "completed": false
+        },
+        {
+          "name": "Document 模型設計",
+          "completed": true
+        },
+        {
+          "name": "JWT 認證系統",
+          "completed": true
+        },
+        {
+          "name": "用戶註冊 API",
+          "completed": true
+        },
+        {
+          "name": "用戶登入 API",
+          "completed": true
+        },
+        {
+          "name": "資料庫遷移",
+          "completed": true
+        },
+        {
+          "name": "API 測試腳本",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "title": "前端基礎架構",
+      "items": [
+        {
+          "name": "UI 組件庫基礎",
+          "completed": true
+        },
+        {
+          "name": "登入頁面",
+          "completed": false
+        },
+        {
+          "name": "註冊頁面",
+          "completed": false
+        },
+        {
+          "name": "主儀表板布局",
+          "completed": false
+        },
+        {
+          "name": "響應式導航",
+          "completed": false
+        },
+        {
+          "name": "狀態管理設置",
+          "completed": true
+        },
+        {
+          "name": "表單驗證",
+          "completed": true
+        },
+        {
+          "name": "錯誤處理機制",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "title": "知識庫管理功能",
+      "items": [
+        {
+          "name": "知識庫列表頁面",
+          "completed": false
+        },
+        {
+          "name": "知識庫創建表單",
+          "completed": false
+        },
+        {
+          "name": "文檔上傳功能",
+          "completed": false
+        },
+        {
+          "name": "文檔處理 API",
+          "completed": false
+        },
+        {
+          "name": "向量化處理",
+          "completed": false
+        },
+        {
+          "name": "Azure OpenAI 整合",
+          "completed": true
+        },
+        {
+          "name": "文檔預覽組件",
+          "completed": false
+        },
+        {
+          "name": "基礎搜索功能",
+          "completed": false
+        }
+      ]
+    }
+  ]
+}

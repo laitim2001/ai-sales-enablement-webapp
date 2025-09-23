@@ -91,6 +91,10 @@
 | **開發容器** | `Dockerfile.dev` | 開發環境容器配置 |
 | **忽略文件** | `.gitignore` | Git 忽略文件配置 |
 | **項目說明** | `README.md` | 專案簡介和快速開始指南 |
+| **服務啟動指南** | `STARTUP-GUIDE.md` | 完整服務啟動和健康檢查流程 |
+| **健康檢查腳本** | `scripts/health-check.js` | PostgreSQL, Redis, pgvector, Azure OpenAI 健康檢查 |
+| **認證系統** | `lib/auth.ts` | JWT 認證系統和用戶管理 |
+| **TypeScript 配置** | `tsconfig.json` | TypeScript 項目配置 |
 | **Claude 規則** | `CLAUDE.md` | Claude Code 開發規則和工作流程 |
 | **GitHub 說明** | `github.md` | GitHub 相關配置和說明 |
 | **主索引** | `PROJECT-INDEX.md` | 📍 當前文件 - AI 助手導航指南 |
@@ -190,6 +194,8 @@ AI 助手應該 **避免** 在以下目錄中查找項目業務相關信息：
 | **業務需求** | `docs/prd.md` | `docs/user-stories/MVP-PRIORITIES.md` |
 | **技術架構** | `docs/architecture.md` | `docs/api-specification.md` |
 | **開發計劃** | `docs/mvp-development-plan.md` | `docs/mvp-implementation-checklist.md` |
+| **服務啟動** | `STARTUP-GUIDE.md` | `scripts/health-check.js` |
+| **認證系統** | `lib/auth.ts` | `app/api/auth/` |
 | **資料庫設計** | `prisma/schema.prisma` | `scripts/init-db.sql` |
 | **技術驗證** | `poc/README.md` | `docs/technical-feasibility-report.md` |
 | **測試策略** | `docs/testing-strategy.md` | `poc/run-all-tests.js` |
