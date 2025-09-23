@@ -9,16 +9,26 @@ Next.js 14 + PostgreSQL + pgvector + Azure OpenAI + Dynamics 365
 ## 當前狀態
 MVP Development Ready - Sprint 1 可以開始
 
+## 🤖 AI 助手索引使用指南
+1. 首次進入: 讀取當前檔案 → AI-ASSISTANT-GUIDE.md → PROJECT-INDEX.md
+2. 查找流程: L0(.ai-context) → L1(AI-ASSISTANT-GUIDE.md) → L2(PROJECT-INDEX.md) → L3(indexes/)
+3. 檢查健康: npm run index:check
+
 ## 重要檔案路徑
-- 主索引: PROJECT-INDEX.md
-- 快速指南: AI-ASSISTANT-GUIDE.md
+- L1 快速指南: AI-ASSISTANT-GUIDE.md
+- L2 主索引: PROJECT-INDEX.md
 - 產品需求: docs/prd.md
 - 技術架構: docs/architecture.md
 - 開發計劃: docs/mvp-development-plan.md
 - 資料庫: prisma/schema.prisma
 
-## 避免目錄
+## ❌ 避免目錄 (工具文件，非項目內容)
 .bmad-core/ .bmad-infrastructure-devops/ web-bundles/ .claude/ .cursor/
+
+## 索引維護
+- 維護指南: INDEX-MAINTENANCE-GUIDE.md
+- 檢查工具: scripts/check-index-sync.js
+- 專門索引: indexes/README.md
 
 ## 最後更新
 2024-09-23
