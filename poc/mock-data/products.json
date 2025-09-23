@@ -1,0 +1,41 @@
+{
+  "@odata.context": "https://mock-d365.api/data/v9.2/$metadata#products",
+  "value": [
+    {
+      "productid": "72878c0d-ba96-481a-8f12-986c84c19fab",
+      "name": "AI 銷售賦能平台 - 基礎版",
+      "productdescription": "包含知識庫管理、智能搜索、基礎分析功能",
+      "price": 50000,
+      "standardcost": 30000,
+      "currentcost": 30000,
+      "quantityonhand": 999,
+      "statecode": 0,
+      "createdon": "2025-09-23T15:38:02.488Z",
+      "modifiedon": "2025-09-23T15:38:02.488Z"
+    },
+    {
+      "productid": "d2ceaa18-b2a4-4fbc-8413-eeb240dd5972",
+      "name": "AI 銷售賦能平台 - 專業版",
+      "productdescription": "包含所有基礎功能加上 AI 提案生成、CRM 整合",
+      "price": 100000,
+      "standardcost": 60000,
+      "currentcost": 60000,
+      "quantityonhand": 999,
+      "statecode": 0,
+      "createdon": "2025-09-23T15:38:02.488Z",
+      "modifiedon": "2025-09-23T15:38:02.488Z"
+    },
+    {
+      "productid": "fdb5cf98-5986-4209-9b1a-be5877006844",
+      "name": "AI 銷售賦能平台 - 企業版",
+      "productdescription": "完整功能包含進階分析、客製化整合、專屬支援",
+      "price": 200000,
+      "standardcost": 120000,
+      "currentcost": 120000,
+      "quantityonhand": 999,
+      "statecode": 0,
+      "createdon": "2025-09-23T15:38:02.488Z",
+      "modifiedon": "2025-09-23T15:38:02.488Z"
+    }
+  ]
+}

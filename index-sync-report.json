@@ -1,13 +1,42 @@
 {
-  "timestamp": "2025-09-23T15:06:38.577Z",
+  "timestamp": "2025-09-23T15:21:14.452Z",
   "summary": {
-    "totalIssues": 0,
+    "totalIssues": 4,
     "highSeverity": 0,
-    "mediumSeverity": 0,
+    "mediumSeverity": 4,
     "lowSeverity": 0,
-    "suggestions": 41
+    "suggestions": 40
   },
-  "issues": [],
+  "issues": [
+    {
+      "type": "broken_reference",
+      "file": "AI-ASSISTANT-GUIDE.md",
+      "reference": "indexes/API-INDEX.md",
+      "severity": "medium",
+      "message": "索引文件 AI-ASSISTANT-GUIDE.md 中的路徑引用失效: indexes/API-INDEX.md"
+    },
+    {
+      "type": "broken_reference",
+      "file": "AI-ASSISTANT-GUIDE.md",
+      "reference": "indexes/COMPONENT-INDEX.md",
+      "severity": "medium",
+      "message": "索引文件 AI-ASSISTANT-GUIDE.md 中的路徑引用失效: indexes/COMPONENT-INDEX.md"
+    },
+    {
+      "type": "broken_reference",
+      "file": "AI-ASSISTANT-GUIDE.md",
+      "reference": "indexes/DATABASE-INDEX.md",
+      "severity": "medium",
+      "message": "索引文件 AI-ASSISTANT-GUIDE.md 中的路徑引用失效: indexes/DATABASE-INDEX.md"
+    },
+    {
+      "type": "broken_reference",
+      "file": "AI-ASSISTANT-GUIDE.md",
+      "reference": "indexes/TEST-INDEX.md",
+      "severity": "medium",
+      "message": "索引文件 AI-ASSISTANT-GUIDE.md 中的路徑引用失效: indexes/TEST-INDEX.md"
+    }
+  ],
   "suggestions": [
     {
       "type": "add_to_index",
@@ -236,12 +265,6 @@
       "file": "docs\\user-stories\\MVP-PRIORITIES.md",
       "severity": "low",
       "message": "建議將重要文件加入索引: docs\\user-stories\\MVP-PRIORITIES.md"
-    },
-    {
-      "type": "add_to_index",
-      "file": "AI-ASSISTANT-GUIDE.md",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: AI-ASSISTANT-GUIDE.md"
     },
     {
       "type": "add_to_index",

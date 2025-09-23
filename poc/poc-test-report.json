@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-09-23T15:39:31.992Z",
+  "overallSuccess": false,
+  "testResults": {
+    "dynamics365": {
+      "authentication": true,
+      "dataRead": true,
+      "dataCreate": true,
+      "dataUpdate": true,
+      "dataDelete": true,
+      "dataFilter": true,
+      "multiEntity": true,
+      "serviceStatus": true
+    },
+    "pgvector": {
+      "connection": false,
+      "insert": null,
+      "search": null,
+      "dimensions": null
+    },
+    "azureOpenAI": {
+      "connection": false,
+      "models": {},
+      "costProjection": {}
+    },
+    "overallSuccess": false
+  },
+  "summary": {
+    "dynamics365": true,
+    "pgvector": false,
+    "azureOpenAI": false
+  },
+  "recommendations": [
+    {
+      "priority": "critical",
+      "category": "database",
+      "action": "配置 PostgreSQL 和 pgvector 擴展"
+    }
+  ]
+}

@@ -1,10 +1,17 @@
 /**
  * 統一執行所有 POC 測試
- * 包含：Dynamics 365, pgvector, Azure OpenAI
+ * 包含：Dynamics 365 (實際/模擬), pgvector, Azure OpenAI
+ *
+ * 使用方法：
+ * node run-all-tests.js           # 自動檢測環境模式
+ * node run-all-tests.js --mock    # 強制使用模擬模式
+ * node run-all-tests.js --real    # 強制使用真實 API
  */
 
-require('dotenv').config();
+require('dotenv').config({ path: '../.env.local' });
+require('dotenv').config(); // 也載入根目錄的 .env 文件（如果存在）
 const Dynamics365POC = require('./dynamics-365-test');
+const Dynamics365MockPOC = require('./dynamics-365-test-mock');
 const PgVectorPOC = require('./pgvector-performance-test');
 const AzureOpenAIPOC = require('./azure-openai-cost-test');
 
@@ -16,6 +23,44 @@ class MasterPOC {
       azureOpenAI: null,
       overallSuccess: false
     };
+
+    // 檢測運行模式
+    this.mockMode = this.determineMockMode();
+    console.log(`🔧 運行模式: ${this.mockMode ? '模擬模式 (Mock)' : '真實 API 模式'}`);
+  }
+
+  /**
+   * 決定是否使用模擬模式
+   */
+  determineMockMode() {
+    // 命令行參數優先
+    const args = process.argv.slice(2);
+    if (args.includes('--mock')) {
+      console.log('🎯 命令行指定: 使用模擬模式');
+      return true;
+    }
+    if (args.includes('--real')) {
+      console.log('🎯 命令行指定: 使用真實 API 模式');
+      return false;
+    }
+
+    // 檢查環境變數
+    if (process.env.DYNAMICS_365_MODE === 'mock' || process.env.DYNAMICS_365_MOCK_ENABLED === 'true') {
+      console.log('📋 環境變數設定: 使用模擬模式');
+      return true;
+    }
+
+    // 檢查必要的 D365 環境變數，如果缺少則自動使用模擬模式
+    const requiredD365Envs = ['DYNAMICS_365_TENANT_ID', 'DYNAMICS_365_CLIENT_ID', 'DYNAMICS_365_CLIENT_SECRET', 'DYNAMICS_365_RESOURCE'];
+    const missingEnvs = requiredD365Envs.filter(env => !process.env[env] || process.env[env] === '本地開發時不需要');
+
+    if (missingEnvs.length > 0) {
+      console.log('🔍 自動檢測: D365 配置不完整，使用模擬模式');
+      return true;
+    }
+
+    console.log('🔍 自動檢測: 使用真實 API 模式');
+    return false;
   }
 
   /**
@@ -24,24 +69,27 @@ class MasterPOC {
   checkEnvironmentVariables() {
     console.log('🔧 檢查環境變數配置...\n');
 
+    // 根據模式調整必需的環境變數
     const requiredEnvs = {
-      'Dynamics 365': [
-        'AZURE_TENANT_ID',
-        'AZURE_CLIENT_ID',
-        'AZURE_CLIENT_SECRET',
-        'DYNAMICS_CRM_URL'
-      ],
       'PostgreSQL': [
-        'POSTGRES_HOST',
-        'POSTGRES_USER',
-        'POSTGRES_PASSWORD',
-        'POSTGRES_DB'
+        'DATABASE_URL'
       ],
       'Azure OpenAI': [
         'AZURE_OPENAI_ENDPOINT',
-        'AZURE_OPENAI_API_KEY'
+        'AZURE_OPENAI_API_KEY',
+        'AZURE_OPENAI_DEPLOYMENT_ID_GPT4'
       ]
     };
+
+    // 只有在真實 API 模式下才檢查 D365 環境變數
+    if (!this.mockMode) {
+      requiredEnvs['Dynamics 365'] = [
+        'DYNAMICS_365_TENANT_ID',
+        'DYNAMICS_365_CLIENT_ID',
+        'DYNAMICS_365_CLIENT_SECRET',
+        'DYNAMICS_365_RESOURCE'
+      ];
+    }
 
     const missingByService = {};
     let allMissing = [];
@@ -64,10 +112,18 @@ class MasterPOC {
       });
 
       console.log('請參考 .env.example 文件設定這些變數');
+      if (this.mockMode) {
+        console.log('💡 提示: 目前使用模擬模式，請確保已設定 Azure OpenAI 配置');
+      }
       return false;
     }
 
-    console.log('✅ 所有必要環境變數已配置\n');
+    console.log('✅ 所有必要環境變數已配置');
+    if (this.mockMode) {
+      console.log('🎭 Dynamics 365 將使用模擬模式\n');
+    } else {
+      console.log('🌐 所有服務將使用真實 API\n');
+    }
     return true;
   }
 
@@ -87,10 +143,16 @@ class MasterPOC {
 
     try {
       // 1. Dynamics 365 測試
-      console.log('🔷 階段 1: Dynamics 365 CRM 整合測試');
+      console.log(`🔷 階段 1: Dynamics 365 CRM 整合測試 ${this.mockMode ? '(模擬模式)' : '(真實 API)'}`);
       console.log('-' .repeat(40));
-      const dynamics365POC = new Dynamics365POC();
-      this.results.dynamics365 = await dynamics365POC.runFullTest();
+
+      if (this.mockMode) {
+        const dynamics365MockPOC = new Dynamics365MockPOC();
+        this.results.dynamics365 = await dynamics365MockPOC.runFullTest();
+      } else {
+        const dynamics365POC = new Dynamics365POC();
+        this.results.dynamics365 = await dynamics365POC.runFullTest();
+      }
 
       console.log('\n' + '=' .repeat(80));
 
@@ -134,7 +196,7 @@ class MasterPOC {
     const pgvectorSuccess = this.evaluatePgVector();
     const openAISuccess = this.evaluateAzureOpenAI();
 
-    console.log(`🔷 Dynamics 365 CRM:  ${d365Success ? '✅ 通過' : '❌ 失敗'}`);
+    console.log(`🔷 Dynamics 365 CRM:  ${d365Success ? '✅ 通過' : '❌ 失敗'} ${this.mockMode ? '(模擬)' : '(真實)'}`);
     console.log(`🔶 PostgreSQL Vector: ${pgvectorSuccess ? '✅ 通過' : '❌ 失敗'}`);
     console.log(`🔸 Azure OpenAI:      ${openAISuccess ? '✅ 通過' : '❌ 失敗'}`);
 
@@ -149,14 +211,27 @@ class MasterPOC {
 
     // Dynamics 365 分析
     if (this.results.dynamics365) {
-      console.log('\n🔷 Dynamics 365 CRM 整合:');
+      console.log(`\n🔷 Dynamics 365 CRM 整合 ${this.mockMode ? '(模擬模式)' : '(真實 API)'}:`);
       if (d365Success) {
-        console.log('   ✅ API 認證和數據讀取正常');
-        console.log('   ✅ 速率限制測試通過');
-        console.log('   💡 建議: 可以開始 CRM 整合開發');
+        if (this.mockMode) {
+          console.log('   ✅ 模擬服務運行正常');
+          console.log('   ✅ 數據 CRUD 操作測試通過');
+          console.log('   ✅ 模擬數據已準備就緒');
+          console.log('   💡 建議: 可以開始本地 CRM 整合開發');
+          console.log('   🚀 部署時需更換為真實 D365 配置');
+        } else {
+          console.log('   ✅ API 認證和數據讀取正常');
+          console.log('   ✅ 速率限制測試通過');
+          console.log('   💡 建議: 可以開始 CRM 整合開發');
+        }
       } else {
-        console.log('   ❌ 需要檢查 Azure AD 配置和權限');
-        console.log('   💡 建議: 聯繫 Microsoft 技術支援');
+        if (this.mockMode) {
+          console.log('   ❌ 模擬服務配置有問題');
+          console.log('   💡 建議: 檢查模擬數據文件和服務配置');
+        } else {
+          console.log('   ❌ 需要檢查 Azure AD 配置和權限');
+          console.log('   💡 建議: 聯繫 Microsoft 技術支援');
+        }
       }
     }
 
@@ -239,9 +314,18 @@ class MasterPOC {
   evaluateDynamics365() {
     if (!this.results.dynamics365) return false;
 
-    return this.results.dynamics365.authentication &&
-           this.results.dynamics365.dataRead &&
-           this.results.dynamics365.rateLimit;
+    if (this.mockMode) {
+      // 模擬模式的評估標準
+      return this.results.dynamics365.authentication &&
+             this.results.dynamics365.dataRead &&
+             this.results.dynamics365.dataCreate &&
+             this.results.dynamics365.serviceStatus;
+    } else {
+      // 真實 API 模式的評估標準
+      return this.results.dynamics365.authentication &&
+             this.results.dynamics365.dataRead &&
+             this.results.dynamics365.rateLimit;
+    }
   }
 
   /**

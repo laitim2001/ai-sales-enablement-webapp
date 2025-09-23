@@ -1,0 +1,47 @@
+{
+  "@odata.context": "https://mock-d365.api/data/v9.2/$metadata#accounts",
+  "value": [
+    {
+      "accountid": "fc5c0803-d553-4f6c-b76e-98bb8c3f69de",
+      "name": "台灣科技有限公司",
+      "telephone1": "+886-2-1234-5678",
+      "emailaddress1": "contact@taiwantech.com",
+      "websiteurl": "https://www.taiwantech.com",
+      "address1_city": "台北市",
+      "address1_country": "台灣",
+      "industrycode": 1,
+      "revenue": 50000000,
+      "numberofemployees": 150,
+      "createdon": "2025-09-23T15:38:02.485Z",
+      "modifiedon": "2025-09-23T15:38:02.485Z"
+    },
+    {
+      "accountid": "67624e65-818c-4fe2-91a1-0566d642d869",
+      "name": "新加坡商業集團",
+      "telephone1": "+65-6789-0123",
+      "emailaddress1": "info@sgbusiness.com",
+      "websiteurl": "https://www.sgbusiness.com",
+      "address1_city": "Singapore",
+      "address1_country": "新加坡",
+      "industrycode": 2,
+      "revenue": 100000000,
+      "numberofemployees": 300,
+      "createdon": "2025-09-23T15:38:02.485Z",
+      "modifiedon": "2025-09-23T15:38:02.485Z"
+    },
+    {
+      "accountid": "889e1c58-91c4-4119-abbc-be7811a43231",
+      "name": "馬來西亞製造公司",
+      "telephone1": "+60-3-1111-2222",
+      "emailaddress1": "sales@mymanufacturing.com",
+      "websiteurl": "https://www.mymanufacturing.com",
+      "address1_city": "吉隆坡",
+      "address1_country": "馬來西亞",
+      "industrycode": 3,
+      "revenue": 75000000,
+      "numberofemployees": 500,
+      "createdon": "2025-09-23T15:38:02.485Z",
+      "modifiedon": "2025-09-23T15:38:02.485Z"
+    }
+  ]
+}

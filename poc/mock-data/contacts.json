@@ -1,0 +1,29 @@
+{
+  "@odata.context": "https://mock-d365.api/data/v9.2/$metadata#contacts",
+  "value": [
+    {
+      "contactid": "deb0d4dd-2ff3-4ebf-a449-1326094f854b",
+      "firstname": "志明",
+      "lastname": "王",
+      "fullname": "王志明",
+      "emailaddress1": "zhiming.wang@taiwantech.com",
+      "telephone1": "+886-2-1234-5678",
+      "jobtitle": "技術總監",
+      "parentcustomerid": null,
+      "createdon": "2025-09-23T15:38:02.486Z",
+      "modifiedon": "2025-09-23T15:38:02.486Z"
+    },
+    {
+      "contactid": "72ead834-72e9-4c50-b927-07f6cd4bf49e",
+      "firstname": "Mei Ling",
+      "lastname": "Tan",
+      "fullname": "Tan Mei Ling",
+      "emailaddress1": "meiling.tan@sgbusiness.com",
+      "telephone1": "+65-6789-0123",
+      "jobtitle": "Business Development Manager",
+      "parentcustomerid": null,
+      "createdon": "2025-09-23T15:38:02.486Z",
+      "modifiedon": "2025-09-23T15:38:02.486Z"
+    }
+  ]
+}

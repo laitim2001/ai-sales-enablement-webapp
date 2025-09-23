@@ -1,0 +1,33 @@
+{
+  "@odata.context": "https://mock-d365.api/data/v9.2/$metadata#opportunities",
+  "value": [
+    {
+      "opportunityid": "5b4f4e03-9ff9-463f-ae24-2e4a444aee55",
+      "name": "AI 銷售平台導入專案",
+      "description": "為客戶導入 AI 驅動的銷售賦能平台，提升銷售效率",
+      "estimatedvalue": 500000,
+      "actualvalue": null,
+      "stepname": "Proposal/Price Quote",
+      "salesstage": 2,
+      "closeprobability": 75,
+      "estimatedclosedate": "2025-11-22T15:38:02.487Z",
+      "parentaccountid": null,
+      "createdon": "2025-09-23T15:38:02.487Z",
+      "modifiedon": "2025-09-23T15:38:02.487Z"
+    },
+    {
+      "opportunityid": "35c381f5-ebdc-43ae-b6eb-828df3de8c03",
+      "name": "CRM 整合服務",
+      "description": "與現有 CRM 系統整合，實現數據同步",
+      "estimatedvalue": 200000,
+      "actualvalue": null,
+      "stepname": "Develop",
+      "salesstage": 1,
+      "closeprobability": 50,
+      "estimatedclosedate": "2025-12-22T15:38:02.487Z",
+      "parentaccountid": null,
+      "createdon": "2025-09-23T15:38:02.487Z",
+      "modifiedon": "2025-09-23T15:38:02.487Z"
+    }
+  ]
+}
