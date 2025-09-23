@@ -37,6 +37,7 @@
 | **前端規格** | `docs/front-end-spec.md` | UI/UX 設計規格 | 🟢 中 |
 | **項目背景** | `docs/project-background.md` | 項目背景和市場分析 | 🟢 中 |
 | **規劃摘要** | `docs/planning-summary.md` | 項目規劃總結 | 🟢 中 |
+| **索引提醒** | `docs/INDEX-REMINDER-SETUP.md` | 索引同步提醒系統完整設置指南 | 🟡 高 |
 
 ### 📖 docs/user-stories/ - 用戶故事詳細規格
 **用途**: 24個詳細用戶故事，按 Epic 組織
@@ -90,9 +91,11 @@
 | **開發容器** | `Dockerfile.dev` | 開發環境容器配置 |
 | **忽略文件** | `.gitignore` | Git 忽略文件配置 |
 | **項目說明** | `README.md` | 專案簡介和快速開始指南 |
+| **Claude 規則** | `CLAUDE.md` | Claude Code 開發規則和工作流程 |
+| **GitHub 說明** | `github.md` | GitHub 相關配置和說明 |
 | **主索引** | `PROJECT-INDEX.md` | 📍 當前文件 - AI 助手導航指南 |
 | **維護指南** | `INDEX-MAINTENANCE-GUIDE.md` | 索引維護策略和自動化工具 |
-| **專門索引** | `indexes/README.md` | Level 3 專門索引擴展準備 |
+| **提醒設置** | `docs/INDEX-REMINDER-SETUP.md` | 索引同步提醒系統設置指南 |
 
 ---
 

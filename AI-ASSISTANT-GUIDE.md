@@ -83,8 +83,7 @@ web-bundles/             # 前端工具擴展 (非項目內容)
 查詢類型 → 建議路徑
 ├─ 快速了解 → 當前文件的常見查詢表
 ├─ 技術細節 → PROJECT-INDEX.md
-├─ API 專門 → indexes/API-INDEX.md (如存在)
-├─ 資料庫專門 → indexes/DATABASE-INDEX.md (如存在)
+├─ 專門領域 → 當項目規模達到觸發條件時建立
 └─ 索引維護 → INDEX-MAINTENANCE-GUIDE.md
 ```
 
@@ -125,12 +124,12 @@ npm run index:health       # 完整健康檢查
 
 當項目達到以下規模時，AI 助手應建議啟用專門索引：
 
-| 領域 | 觸發條件 | 建議動作 |
-|------|----------|----------|
-| **API 端點** | > 20 個 | 建議建立 `indexes/API-INDEX.md` |
-| **UI 組件** | > 50 個 | 建議建立 `indexes/COMPONENT-INDEX.md` |
-| **資料表** | > 15 個 | 建議建立 `indexes/DATABASE-INDEX.md` |
-| **測試文件** | > 100 個 | 建議建立 `indexes/TEST-INDEX.md` |
+| 領域 | 觸發條件 | 建議動作 | 當前狀態 |
+|------|----------|----------|----------|
+| **API 端點** | > 20 個 | 建議建立 API 專門索引 | 📊 未達標 |
+| **UI 組件** | > 50 個 | 建議建立 UI 組件專門索引 | 📊 未達標 |
+| **資料表** | > 15 個 | 建議建立資料庫專門索引 | 📊 未達標 |
+| **測試文件** | > 100 個 | 建議建立測試專門索引 | 📊 未達標 |
 
 ---
 
@@ -150,8 +149,9 @@ npm run index:health       # 完整健康檢查
 | 環境設置？ | `.env.example` |
 | **完整文件索引？** | `PROJECT-INDEX.md` |
 | **索引維護方法？** | `INDEX-MAINTENANCE-GUIDE.md` |
-| **專門索引說明？** | `indexes/README.md` |
+| **索引提醒設置？** | `docs/INDEX-REMINDER-SETUP.md` |
 | **檢查索引狀態？** | `npm run index:check` |
+| **Claude Code 規則？** | `CLAUDE.md` |
 
 ---
 
