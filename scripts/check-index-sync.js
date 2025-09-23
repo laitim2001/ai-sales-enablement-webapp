@@ -23,6 +23,7 @@ class IndexSyncChecker {
   async runCheck(options = {}) {
     this.autoFix = options.autoFix || false;
     this.incrementalMode = options.incremental || false;
+    this.hookMode = options.hookMode || false; // Git hook 模式
 
     console.log('🔍 開始索引同步檢查...\n');
 
@@ -52,8 +53,10 @@ class IndexSyncChecker {
         await this.performAutoFix();
       }
 
-      // 7. 記錄檢查時間
-      await this.saveLastCheckTime();
+      // 7. 記錄檢查時間（僅在非hook模式）
+      if (!this.hookMode) {
+        await this.saveLastCheckTime();
+      }
 
     } catch (error) {
       console.error('❌ 檢查過程發生錯誤:', error.message);
@@ -395,8 +398,10 @@ class IndexSyncChecker {
       console.log('⚠️ 建議修復上述問題以保持索引文件同步');
     }
 
-    // 保存報告到文件
-    this.saveReportToFile();
+    // 保存報告到文件（僅在非hook模式）
+    if (!this.hookMode) {
+      this.saveReportToFile();
+    }
   }
 
   /**
@@ -427,7 +432,8 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const options = {
     autoFix: args.includes('--auto-fix') || args.includes('-f'),
-    incremental: args.includes('--incremental') || args.includes('-i')
+    incremental: args.includes('--incremental') || args.includes('-i'),
+    hookMode: args.includes('--hook') || args.includes('--git-hook')
   };
 
   if (args.includes('--help') || args.includes('-h')) {
