@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(npm install:*)",
+      "Bash(docker exec:*)",
+      "Bash(npm run:*)",
+      "Bash(set -o allexport)",
+      "Bash(source:*)",
+      "Bash(set +o allexport)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

@@ -22,6 +22,9 @@ docs/architecture.md            # 技術架構 (Next.js 14 全棧)
 docs/mvp-development-plan.md     # 12週開發計劃
 docs/api-specification.md       # API 端點規格
 prisma/schema.prisma            # 資料庫設計
+package.json                    # 依賴包與腳本配置
+next.config.js                  # Next.js 配置
+tailwind.config.js              # Tailwind CSS 配置
 ```
 
 ### 🟡 重要 (常用)
@@ -31,6 +34,10 @@ docs/mvp-implementation-checklist.md   # 逐週執行清單
 docs/testing-strategy.md               # 測試策略
 poc/run-all-tests.js                  # 技術驗證腳本
 README.md                              # 項目說明
+app/layout.tsx                         # Next.js 根布局
+lib/db.ts                              # 資料庫連接配置
+.eslintrc.json                         # ESLint 配置
+postcss.config.js                      # PostCSS 配置
 ```
 
 ### 🟢 參考 (需要時查看)
