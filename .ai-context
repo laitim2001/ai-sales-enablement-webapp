@@ -1,0 +1,24 @@
+# AI 上下文快速載入檔
+
+## 項目身份
+AI Sales Enablement Platform for Malaysia/Singapore Market
+
+## 技術棧
+Next.js 14 + PostgreSQL + pgvector + Azure OpenAI + Dynamics 365
+
+## 當前狀態
+MVP Development Ready - Sprint 1 可以開始
+
+## 重要檔案路徑
+- 主索引: PROJECT-INDEX.md
+- 快速指南: AI-ASSISTANT-GUIDE.md
+- 產品需求: docs/prd.md
+- 技術架構: docs/architecture.md
+- 開發計劃: docs/mvp-development-plan.md
+- 資料庫: prisma/schema.prisma
+
+## 避免目錄
+.bmad-core/ .bmad-infrastructure-devops/ web-bundles/ .claude/ .cursor/
+
+## 最後更新
+2024-09-23

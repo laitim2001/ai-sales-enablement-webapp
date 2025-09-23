@@ -8,6 +8,13 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)
 
+## 🤖 AI 助手專用導航
+
+> **📋 AI 助手請先閱讀**:
+> - **快速指南**: [AI-ASSISTANT-GUIDE.md](AI-ASSISTANT-GUIDE.md) - 30秒了解項目
+> - **完整索引**: [PROJECT-INDEX.md](PROJECT-INDEX.md) - 詳細文件導航系統
+> - **上下文檔**: [.ai-context](.ai-context) - 快速上下文載入
+
 ## 🎯 項目概述
 
 AI 銷售賦能平台是一個全棧 Web 應用程式，結合了人工智能、知識管理和 CRM 整合，幫助銷售團隊：
