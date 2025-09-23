@@ -1,0 +1,107 @@
+# AI 銷售賦能平台 - 開發環境 Docker Compose
+# 用於本地開發環境，包含所有必要的服務
+
+version: '3.8'
+
+services:
+  # PostgreSQL 資料庫 + pgvector 擴展
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: ai-sales-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ai_sales_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev_password_123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - ai-sales-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ai_sales_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 緩存 (用於會話和快取)
+  redis:
+    image: redis:7-alpine
+    container_name: ai-sales-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ai-sales-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Next.js 應用程式 (開發模式)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: ai-sales-app-dev
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:dev_password_123@postgres:5432/ai_sales_db?schema=public
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - ai-sales-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: npm run dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # pgAdmin (資料庫管理介面，可選)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ai-sales-pgadmin-dev
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - ai-sales-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  ai-sales-network:
+    driver: bridge

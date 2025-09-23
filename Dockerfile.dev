@@ -1,0 +1,29 @@
+# AI 銷售賦能平台 - 開發環境 Dockerfile
+FROM node:18-alpine
+
+# 設定工作目錄
+WORKDIR /app
+
+# 安裝系統依賴
+RUN apk add --no-cache \
+    postgresql-client \
+    curl \
+    git
+
+# 複製 package 文件
+COPY package*.json ./
+
+# 安裝依賴 (包含開發依賴)
+RUN npm ci
+
+# 複製應用程式代碼
+COPY . .
+
+# 生成 Prisma client
+RUN npx prisma generate
+
+# 暴露應用程式端口
+EXPOSE 3000
+
+# 開發環境命令
+CMD ["npm", "run", "dev"]

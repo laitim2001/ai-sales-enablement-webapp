@@ -1,0 +1,138 @@
+# AI 銷售賦能平台 .gitignore
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+coverage/
+.nyc_output
+.coverage/
+playwright-report/
+test-results/
+*.lcov
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads and temporary files
+uploads/
+temp/
+tmp/
+*.tmp
+
+# Docker
+.dockerignore
+
+# Cache
+.cache/
+.npm/
+.eslintcache
+.stylelintcache
+
+# Prisma
+prisma/dev.db*
+
+# AI/ML temporary files
+*.pkl
+*.joblib
+*.h5
+*.pb
+*.onnx
+*.pt
+*.pth
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Package manager lockfiles (keep only package-lock.json)
+yarn.lock
+pnpm-lock.yaml
+
+# Editor directories and files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local environment configuration
+.env.local.backup
+
+# Vercel
+.vercel
+
+# Azure
+.azure/
+
+# Sentry
+.sentryclirc
+
+# Bundle analyzer
+.bundle-analyzer/
+
+# Performance monitoring
+.lighthouse/
+
+# Documentation build
+docs/build/
+
+# Custom application files
+output/
+reports/
+exports/
