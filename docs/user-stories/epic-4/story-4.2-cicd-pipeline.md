@@ -1,4 +1,7 @@
 # Story 4.2: CI/CD 管道建立（詳細版）
+> **🔴 MVP Priority: Phase 1** - 開發效率，基礎GitHub Actions足夠
+> **⏱️ 預估工作量**: 3-5天
+> **👥 需要角色**: DevOps工程師
 
 ## User Story
 作為一名開發團隊負責人，

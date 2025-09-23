@@ -1,4 +1,7 @@
 # Story 4.1: 雲端基礎設施搭建（詳細版）
+> **🔴 MVP Priority: Phase 1** - 部署基礎，簡化為Vercel或Azure App Service
+> **⏱️ 預估工作量**: 5-7天
+> **👥 需要角色**: DevOps工程師, 全棧開發者
 
 ## User Story
 作為一名 DevOps 工程師，
