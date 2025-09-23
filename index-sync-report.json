@@ -1,22 +1,14 @@
 {
-  "timestamp": "2025-09-23T17:25:52.224Z",
+  "timestamp": "2025-09-23T17:26:07.173Z",
   "summary": {
     "totalIssues": 0,
     "highSeverity": 0,
     "mediumSeverity": 0,
     "lowSeverity": 0,
-    "suggestions": 2
+    "suggestions": 1
   },
   "issues": [],
   "suggestions": [
-    {
-      "type": "add_to_index",
-      "file": "docs\\mvp-implementation-checklist.md",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\mvp-implementation-checklist.md",
-      "modifiedTime": "2025-09-23T17:24:42.585Z"
-    },
     {
       "type": "add_to_index",
       "file": "DEVELOPMENT-LOG.md",
