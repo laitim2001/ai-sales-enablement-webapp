@@ -1,0 +1,33 @@
+{
+  "name": "ai-sales-enablement-poc",
+  "version": "1.0.0",
+  "description": "Proof of Concept tests for AI Sales Enablement Platform",
+  "main": "run-all-tests.js",
+  "scripts": {
+    "test": "node run-all-tests.js",
+    "test:dynamics365": "node dynamics-365-test.js",
+    "test:pgvector": "node pgvector-performance-test.js",
+    "test:openai": "node azure-openai-cost-test.js",
+    "setup": "cp .env.example .env && echo 'Please edit .env with your actual configuration'"
+  },
+  "keywords": [
+    "poc",
+    "dynamics365",
+    "postgresql",
+    "pgvector",
+    "azure-openai",
+    "sales-enablement"
+  ],
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "pg": "^8.11.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "AI Sales Enablement Team",
+  "license": "MIT"
+}
