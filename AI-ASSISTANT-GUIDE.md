@@ -22,7 +22,7 @@ docs/architecture.md            # 技術架構 (Next.js 14 全棧)
 docs/mvp-development-plan.md     # 12週開發計劃
 docs/api-specification.md       # API 端點規格
 prisma/schema.prisma            # 資料庫設計
-package.json                    # 依賴包與腳本配置
+package.json                    # 依賴包與腳本配置 (已修復tRPC v10兼容性)
 next.config.js                  # Next.js 配置
 tailwind.config.js              # Tailwind CSS 配置
 ```

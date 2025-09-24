@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, createContext, useContext } from 'react'
+import React, { useState, useEffect, createContext, useContext } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface User {
@@ -253,11 +253,8 @@ export function useAuthState() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const authState = useAuthState()
 
-  return (
-    <AuthContext.Provider value={authState}>
-      {children}
-    </AuthContext.Provider>
-  )
+  const providerValue = authState;
+  return React.createElement(AuthContext.Provider, { value: providerValue }, children);
 }
 
 // 認證保護組件
@@ -272,16 +269,16 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated, isLoading, router])
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    )
+    return React.createElement('div', {
+      className: 'min-h-screen flex items-center justify-center'
+    }, React.createElement('div', {
+      className: 'animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'
+    }))
   }
 
   if (!isAuthenticated) {
     return null
   }
 
-  return <>{children}</>
+  return React.createElement(React.Fragment, null, children)
 }

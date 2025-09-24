@@ -1,13 +1,21 @@
 {
-  "timestamp": "2025-09-24T12:48:09.980Z",
+  "timestamp": "2025-09-24T14:18:55.641Z",
   "summary": {
-    "totalIssues": 0,
+    "totalIssues": 1,
     "highSeverity": 0,
-    "mediumSeverity": 0,
+    "mediumSeverity": 1,
     "lowSeverity": 0,
     "suggestions": 41
   },
-  "issues": [],
+  "issues": [
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "mvp-implementation-checklist.md",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: mvp-implementation-checklist.md"
+    }
+  ],
   "suggestions": [
     {
       "type": "add_to_index",
