@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createUser, validateEmail, validatePassword } from '@/lib/auth'
+import { createUser } from '@/lib/auth-server'
+import { validateEmail, validatePassword } from '@/lib/auth'
 import { ApiErrorHandler, withErrorHandling, validateRequestBody, validateRequired } from '@/lib/api/error-handler'
 import { AppError, ErrorType } from '@/lib/errors'
 

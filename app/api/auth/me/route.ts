@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyJWT } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth-server'
 import { PrismaClient } from '@prisma/client'
 import { ApiErrorHandler, withErrorHandling } from '@/lib/api/error-handler'
 import { AppError } from '@/lib/errors'
@@ -22,7 +22,7 @@ async function meHandler(request: NextRequest): Promise<NextResponse> {
 
   try {
     // 驗證 JWT token
-    const payload = verifyJWT(token)
+    const payload = verifyToken(token)
 
     if (!payload || typeof payload !== 'object' || !payload.userId) {
       throw AppError.unauthorized('Invalid token payload')

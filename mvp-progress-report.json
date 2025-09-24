@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-09-24T12:45:00.000Z",
+  "timestamp": "2025-09-24T15:06:46.003Z",
   "summary": {
     "totalItems": 32,
-    "completedItems": 32,
-    "percentage": 100
+    "completedItems": 26,
+    "percentage": 81
   },
   "weeks": [
     {
@@ -126,19 +126,19 @@
       "items": [
         {
           "name": "知識庫列表頁面",
-          "completed": true
+          "completed": false
         },
         {
           "name": "知識庫創建表單",
-          "completed": true
+          "completed": false
         },
         {
           "name": "文檔上傳功能",
-          "completed": true
+          "completed": false
         },
         {
           "name": "文檔處理 API",
-          "completed": true
+          "completed": false
         },
         {
           "name": "向量化處理",
@@ -150,11 +150,11 @@
         },
         {
           "name": "文檔預覽組件",
-          "completed": true
+          "completed": false
         },
         {
           "name": "基礎搜索功能",
-          "completed": true
+          "completed": false
         }
       ]
     }

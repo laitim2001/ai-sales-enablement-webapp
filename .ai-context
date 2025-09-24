@@ -21,6 +21,8 @@ MVP Development Ready - Sprint 1 可以開始
 - 技術架構: docs/architecture.md
 - 開發計劃: docs/mvp-development-plan.md
 - 資料庫: prisma/schema.prisma
+- 開發記錄: DEVELOPMENT-LOG.md
+- 修復記錄: FIXLOG.md
 
 ## ❌ 避免目錄 (工具文件，非項目內容)
 .bmad-core/ .bmad-infrastructure-devops/ web-bundles/ .claude/ .cursor/
@@ -31,4 +33,4 @@ MVP Development Ready - Sprint 1 可以開始
 - 專門索引: indexes/README.md
 
 ## 最後更新
-2024-09-23
+2025-09-24
