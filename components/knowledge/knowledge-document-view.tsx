@@ -15,6 +15,7 @@ import {
   ClockIcon
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/button'
+import { DocumentPreview } from './document-preview'
 
 interface DocumentData {
   id: number
@@ -389,15 +390,13 @@ export function KnowledgeDocumentView({ documentId }: KnowledgeDocumentViewProps
         {activeTab === 'content' && (
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">文檔內容</h3>
-            {document.content ? (
-              <div className="prose max-w-none">
-                <pre className="whitespace-pre-wrap font-sans text-sm text-gray-700 leading-relaxed">
-                  {document.content}
-                </pre>
-              </div>
-            ) : (
-              <p className="text-gray-500">暫無內容預覽</p>
-            )}
+            <DocumentPreview
+              documentId={document.id}
+              mimeType={document.mime_type}
+              fileName={document.title}
+              source={document.source}
+              content={document.content}
+            />
           </div>
         )}
 
