@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth-server'
 import { ProcessingStatus, ProcessingType } from '@prisma/client'
 
 // 處理任務查詢驗證 schema
@@ -26,9 +26,22 @@ const TriggerProcessingSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析查詢參數
@@ -140,9 +153,22 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析請求數據
@@ -191,7 +217,7 @@ export async function POST(request: NextRequest) {
         status: ProcessingStatus.PENDING,
         metadata: {
           ...validatedData.metadata,
-          triggered_by: user.id,
+          triggered_by: payload.userId,
           priority: validatedData.priority,
           manual_trigger: true
         }
@@ -263,9 +289,22 @@ export async function PUT(request: NextRequest) {
     }
 
     // 驗證用戶身份（這裡可能需要特殊權限檢查）
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析請求數據

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth-server'
 
 // 標籤創建驗證 schema
 const CreateTagSchema = z.object({
@@ -18,9 +18,22 @@ const UpdateTagSchema = CreateTagSchema.partial()
 export async function GET(request: NextRequest) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     const url = new URL(request.url)
@@ -118,9 +131,22 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析請求數據
@@ -205,9 +231,22 @@ export async function PUT(request: NextRequest) {
     }
 
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析請求數據
@@ -318,9 +357,22 @@ export async function DELETE(request: NextRequest) {
     }
 
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 檢查標籤是否存在

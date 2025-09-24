@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth-server'
 import { existsSync } from 'fs'
 import { readFile } from 'fs/promises'
 import path from 'path'
@@ -13,9 +13,22 @@ export async function GET(
 ) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析文檔 ID

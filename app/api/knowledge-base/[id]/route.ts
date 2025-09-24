@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth-server'
 import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'
 
 // 請求驗證 schemas
@@ -25,9 +25,22 @@ export async function GET(
 ) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     const id = parseInt(params.id, 10)
@@ -112,9 +125,22 @@ export async function PUT(
 ) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     const id = parseInt(params.id, 10)
@@ -167,7 +193,7 @@ export async function PUT(
         data: {
           ...updateData,
           hash: contentHash,
-          updated_by: user.id,
+          updated_by: payload.userId,
           version: { increment: 1 }
         }
       })
@@ -250,7 +276,7 @@ export async function PUT(
             status: ProcessingStatus.PENDING,
             metadata: {
               content_length: updateData.content.length,
-              user_id: user.id,
+              user_id: payload.userId,
               is_update: true
             }
           }
@@ -313,9 +339,22 @@ export async function DELETE(
 ) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     const id = parseInt(params.id, 10)
@@ -374,7 +413,7 @@ export async function DELETE(
           where: { id },
           data: {
             status: DocumentStatus.DELETED,
-            updated_by: user.id
+            updated_by: payload.userId
           }
         })
       }

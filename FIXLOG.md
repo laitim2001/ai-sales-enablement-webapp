@@ -9,6 +9,8 @@
 | 日期 | 問題類型 | 狀態 | 描述 |
 |------|----------|------|------|
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
+| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-002: JWT Payload userId類型不一致](#fix-002-jwt-payload-userid類型不一致) |
+| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-003: authenticateUser函數userId類型錯誤](#fix-003-authenticateuser函數userid類型錯誤) |
 
 ---
 
@@ -179,5 +181,114 @@ npm install @headlessui/react @radix-ui/react-dropdown-menu
 
 ---
 
+## FIX-002: JWT Payload userId類型不一致
+
+### 📅 **修復日期**: 2025-09-24
+### 🎯 **問題級別**: 🟡 Medium
+### ✅ **狀態**: 已解決
+
+### 🐛 **問題描述**
+- **症狀**: `/api/auth/me` 端點返回500錯誤
+- **具體錯誤**: "Invalid value provided. Expected Int, provided String"
+- **影響範圍**: 用戶認證狀態檢查失敗，導致身份驗證流程中斷
+
+### 🔍 **根本原因分析**
+JWTPayload介面定義userId為string，但實際數據庫期望number類型，造成類型不匹配。
+
+### 🔧 **修復步驟**
+1. **修正JWTPayload介面**: 將userId從string改為number
+2. **移除不必要的parseInt**: 直接使用payload.userId（現在是number）
+3. **驗證其他API路由**: 確認沒有同樣問題
+
+### 📊 **修復文件**
+- `lib/auth-server.ts`: 修正JWTPayload介面
+- `app/api/auth/me/route.ts`: 移除parseInt調用
+
+### ✅ **結果驗證**
+```bash
+GET /api/auth/me 200 in 1055ms  ✅ 成功
+GET /api/auth/me 200 in 42ms    ✅ 成功
+```
+
+### 📚 **經驗教訓**
+1. **型別一致性**: JWT payload數據類型必須與數據庫schema保持一致
+2. **介面設計**: TypeScript介面定義要準確反映實際的數據類型
+
+---
+
+## FIX-003: authenticateUser函數userId類型錯誤
+
+### 📅 **修復日期**: 2025-09-24
+### 🎯 **問題級別**: 🟡 Medium
+### ✅ **狀態**: 已解決
+
+### 🐛 **問題描述**
+- **症狀**: `/api/auth/me` API持續返回Prisma類型錯誤："Invalid value provided. Expected Int, provided String"
+- **根源**: authenticateUser函數中generateToken調用時將`user.id`轉換為字符串
+- **影響**: Dashboard頁面重新整理後跳轉到登入頁
+
+### 🔍 **根本原因分析**
+在`lib/auth-server.ts`的`authenticateUser`函數中，第143行錯誤地使用了：
+```typescript
+const token = generateToken({
+  id: user.id.toString(),  // ❌ 錯誤：將數字轉為字符串
+  email: user.email,
+  role: user.role
+})
+```
+
+這導致JWT payload中的userId變為字符串，但JWTPayload interface期望userId為數字類型。
+
+### 🔧 **修復步驟**
+```typescript
+// 修復前
+const token = generateToken({
+  id: user.id.toString(),  // ❌ 轉為字符串
+  email: user.email,
+  role: user.role
+})
+
+// 修復後
+const token = generateToken({
+  id: user.id,  // ✅ 保持數字類型
+  email: user.email,
+  role: user.role
+})
+```
+
+### 📊 **修復文件**
+- `lib/auth-server.ts`: 移除第143行的`.toString()`調用
+
+### 🔄 **問題鏈路**
+1. `authenticateUser` → 生成token時userId為字符串
+2. JWT payload → userId字符串存儲在token中
+3. `verifyToken` → 解析出字符串userId
+4. `/api/auth/me` → 使用字符串userId查詢資料庫
+5. Prisma → 拋出類型錯誤，期望Int但收到String
+
+### ✅ **驗證方法**
+```bash
+# 測試登入和獲取用戶資料
+curl -X POST http://localhost:3007/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password"}'
+
+# 使用返回的token測試/api/auth/me
+curl -X GET http://localhost:3007/api/auth/me \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+### 📚 **經驗教訓**
+1. **類型一致性**: JWT payload中的數據類型必須與database schema匹配
+2. **Interface設計**: TypeScript interface不僅是型別檢查，更是實際運行時的契約
+3. **端到端測試**: 驗證完整的認證流程，不只是單個API端點
+
+### 🚫 **避免重蹈覆轍**
+- ❌ **不要**: 隨意轉換數據類型，特別是在跨模組呼叫時
+- ✅ **應該**: 確保數據類型在整個認證流程中保持一致
+- ✅ **應該**: 定期測試完整的使用者認證流程
+
+---
+
 **最後更新**: 2025-09-24
-**下次建議檢查**: 當出現認證相關問題時參考FIX-001
+**下次建議檢查**: 當出現認證相關問題時參考FIX-001、FIX-002、FIX-003

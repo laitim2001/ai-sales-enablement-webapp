@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth-server'
 import { DocumentCategory, ProcessingStatus } from '@prisma/client'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
@@ -36,9 +36,22 @@ const UPLOAD_DIR = join(process.cwd(), 'uploads', 'knowledge-base')
 export async function POST(request: NextRequest) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析 FormData
@@ -136,8 +149,8 @@ export async function POST(request: NextRequest) {
               upload_timestamp: timestamp,
               user_agent: request.headers.get('user-agent')
             },
-            created_by: user.id,
-            updated_by: user.id,
+            created_by: payload.userId,
+            updated_by: payload.userId,
             processing_status: validatedMetadata.auto_process ?
               ProcessingStatus.PENDING : ProcessingStatus.COMPLETED
           }
@@ -207,7 +220,7 @@ export async function POST(request: NextRequest) {
                   file_path: filePath,
                   mime_type: mimeType,
                   file_size: file.size,
-                  user_id: user.id
+                  user_id: payload.userId
                 }
               }
             })
@@ -283,7 +296,20 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // 驗證用戶身份（可選，用於返回用戶特定的配置）
-    const user = await verifyToken(request)
+    // Extract token from request (optional for this endpoint)
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    let payload = null
+    if (token) {
+      try {
+        payload = verifyToken(token)
+      } catch {
+        // Optional auth, continue without user context
+      }
+    }
 
     const config = {
       supported_mime_types: SUPPORTED_MIME_TYPES,

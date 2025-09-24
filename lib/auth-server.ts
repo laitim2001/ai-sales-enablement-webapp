@@ -12,7 +12,7 @@ if (!JWT_SECRET) {
 }
 
 export interface JWTPayload {
-  userId: string
+  userId: number
   email: string
   role: string
   iat?: number
@@ -140,7 +140,7 @@ export async function authenticateUser(email: string, password: string): Promise
   })
 
   const token = generateToken({
-    id: user.id.toString(),
+    id: user.id,
     email: user.email,
     role: user.role
   })

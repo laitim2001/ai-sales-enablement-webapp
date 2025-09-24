@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
 import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth'
+import { verifyToken } from '@/lib/auth-server'
 import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'
 
 // 請求驗證 schemas
@@ -34,9 +34,22 @@ const QueryKnowledgeBaseSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析查詢參數
@@ -144,9 +157,22 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
-      throw AppError.unauthorized('Authentication required')
+    // Extract token from request
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
+      throw AppError.unauthorized('No authentication token provided')
+    }
+
+    // Verify the token
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('Invalid token payload')
     }
 
     // 解析請求數據
@@ -178,8 +204,8 @@ export async function POST(request: NextRequest) {
         data: {
           ...knowledgeBaseData,
           hash: contentHash,
-          created_by: user.id,
-          updated_by: user.id,
+          created_by: payload.userId,
+          updated_by: payload.userId,
           processing_status: knowledgeBaseData.content ?
             ProcessingStatus.PENDING : ProcessingStatus.COMPLETED
         },
@@ -259,7 +285,7 @@ export async function POST(request: NextRequest) {
           status: ProcessingStatus.PENDING,
           metadata: {
             content_length: validatedData.content.length,
-            user_id: user.id
+            user_id: payload.userId
           }
         }
       })
