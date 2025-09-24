@@ -1,60 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { authenticateUser, validateEmail } from '@/lib/auth'
+import { ApiErrorHandler, withErrorHandling, validateRequestBody, validateRequired } from '@/lib/api/error-handler'
+import { AppError } from '@/lib/errors'
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { email, password } = body
+async function loginHandler(request: NextRequest): Promise<NextResponse> {
+  const processingStartTime = Date.now()
 
-    // 輸入驗證
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      )
-    }
+  // 驗證請求體
+  const body = await validateRequestBody(request)
 
-    // Email 格式驗證
-    if (!validateEmail(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      )
-    }
+  // 驗證必要欄位
+  validateRequired(body, ['email', 'password'], {
+    email: 'Email',
+    password: 'Password'
+  })
 
-    // 用戶認證
-    const result = await authenticateUser(email.toLowerCase().trim(), password)
+  const { email, password } = body
 
-    if (!result) {
-      return NextResponse.json(
-        { error: 'Invalid email or password' },
-        { status: 401 }
-      )
-    }
+  // Email 格式驗證
+  if (!validateEmail(email)) {
+    throw AppError.validation('Invalid email format')
+  }
 
-    // 設置 HttpOnly Cookie（可選，提供額外安全性）
-    const response = NextResponse.json({
-      message: 'Login successful',
+  // 用戶認證
+  const result = await authenticateUser(email.toLowerCase().trim(), password)
+
+  if (!result) {
+    throw AppError.unauthorized('Invalid email or password')
+  }
+
+  // 創建成功響應
+  const response = ApiErrorHandler.createSuccessResponse(
+    {
       user: result.user,
       token: result.token
-    })
+    },
+    request,
+    processingStartTime,
+    'Login successful'
+  )
 
-    // 設置 Cookie（有效期與 JWT 相同）
-    response.cookies.set('auth-token', result.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 // 7 天（秒）
-    })
+  // 設置 Cookie（有效期與 JWT 相同）
+  response.cookies.set('auth-token', result.token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 7 * 24 * 60 * 60 // 7 天（秒）
+  })
 
-    return response
-
-  } catch (error) {
-    console.error('Login error:', error)
-
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
+  return response
 }
+
+export const POST = withErrorHandling(loginHandler)

@@ -25,9 +25,11 @@ model User {
   last_login    DateTime?
 
   // 關聯關係
-  customers     Customer[]
-  callRecords   CallRecord[]
-  proposals     Proposal[]
+  customers              Customer[]
+  callRecords            CallRecord[]
+  proposals              Proposal[]
+  createdKnowledgeBase   KnowledgeBase[] @relation("KnowledgeCreator")
+  updatedKnowledgeBase   KnowledgeBase[] @relation("KnowledgeUpdater")
 
   @@map("users")
   @@index([email, is_active], name: "IX_User_Email_Active")
@@ -137,7 +139,118 @@ model ProposalItem {
   @@index([proposal_id], name: "IX_ProposalItem_Proposal")
 }
 
-// 文檔模型
+// 知識庫文檔模型
+model KnowledgeBase {
+  id            Int                   @id @default(autoincrement())
+  title         String
+  content       String?               // 純文字內容（用於搜索）
+  file_path     String?               // 原始檔案路徑
+  file_size     Int?                  // 檔案大小 (bytes)
+  mime_type     String?               // MIME類型
+  hash          String?               @unique // 內容哈希，用於重複檢測
+  version       Int                   @default(1)
+  status        DocumentStatus        @default(ACTIVE)
+  category      DocumentCategory      @default(GENERAL)
+  source        String?               // 來源系統/路徑
+  author        String?               // 文檔作者
+  language      String?               @default("zh-TW") // 語言代碼
+  metadata      Json?                 // 額外元數據
+  processing_status ProcessingStatus  @default(PENDING)
+  processing_error  String?           // 處理錯誤訊息
+  created_at    DateTime              @default(now())
+  updated_at    DateTime              @updatedAt
+  created_by    Int?                  // 創建者ID
+  updated_by    Int?                  // 更新者ID
+
+  // 關聯關係
+  creator       User?                 @relation("KnowledgeCreator", fields: [created_by], references: [id])
+  updater       User?                 @relation("KnowledgeUpdater", fields: [updated_by], references: [id])
+  chunks        KnowledgeChunk[]      // 內容分塊
+  tags          KnowledgeTag[]        // 標籤關聯
+  processing_tasks ProcessingTask[]   // 處理任務
+
+  @@map("knowledge_base")
+  @@index([status, category], name: "IX_KB_Status_Category")
+  @@index([processing_status], name: "IX_KB_Processing_Status")
+  @@index([created_at], name: "IX_KB_Created")
+  @@index([hash], name: "IX_KB_Hash")
+  @@index([source, version], name: "IX_KB_Source_Version")
+}
+
+// 知識庫內容分塊模型（支援向量搜索）
+model KnowledgeChunk {
+  id                Int           @id @default(autoincrement())
+  knowledge_base_id Int
+  chunk_index       Int           // 在文檔中的順序
+  content           String        // 分塊內容
+  content_hash      String        // 內容哈希
+  vector_embedding  String?       // 向量嵌入（JSON格式儲存）
+  token_count       Int?          // Token數量
+  start_pos         Int?          // 在原文檔中的起始位置
+  end_pos           Int?          // 在原文檔中的結束位置
+  metadata          Json?         // 分塊元數據
+  created_at        DateTime      @default(now())
+
+  // 關聯關係
+  knowledge_base    KnowledgeBase @relation(fields: [knowledge_base_id], references: [id], onDelete: Cascade)
+
+  @@map("knowledge_chunks")
+  @@unique([knowledge_base_id, chunk_index], name: "UK_Chunk_KB_Index")
+  @@index([knowledge_base_id], name: "IX_Chunk_KB")
+  @@index([content_hash], name: "IX_Chunk_Hash")
+  // 向量相似度搜索索引（需要 pgvector 擴展）
+  @@index([vector_embedding], name: "IX_Chunk_Vector", type: Hash)
+}
+
+// 知識庫標籤模型
+model KnowledgeTag {
+  id             Int                   @id @default(autoincrement())
+  name           String                @unique
+  description    String?
+  color          String?               // 標籤顏色
+  parent_id      Int?                  // 父標籤ID (支援階層)
+  is_system      Boolean               @default(false) // 系統標籤
+  usage_count    Int                   @default(0) // 使用次數
+  created_at     DateTime              @default(now())
+  updated_at     DateTime              @updatedAt
+
+  // 關聯關係
+  parent         KnowledgeTag?         @relation("TagHierarchy", fields: [parent_id], references: [id])
+  children       KnowledgeTag[]        @relation("TagHierarchy")
+  knowledge_base KnowledgeBase[]       // 多對多關聯
+
+  @@map("knowledge_tags")
+  @@index([parent_id], name: "IX_Tag_Parent")
+  @@index([is_system, usage_count], name: "IX_Tag_System_Usage")
+}
+
+// 文檔處理任務模型
+model ProcessingTask {
+  id                Int              @id @default(autoincrement())
+  knowledge_base_id Int?
+  task_type         ProcessingType
+  status            ProcessingStatus @default(PENDING)
+  progress          Float            @default(0) // 0-1 的進度
+  total_items       Int?             // 總項目數
+  processed_items   Int?             // 已處理項目數
+  error_message     String?          // 錯誤訊息
+  error_details     Json?            // 詳細錯誤信息
+  started_at        DateTime?        // 開始時間
+  completed_at      DateTime?        // 完成時間
+  metadata          Json?            // 任務元數據
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @updatedAt
+
+  // 關聯關係
+  knowledge_base    KnowledgeBase?   @relation(fields: [knowledge_base_id], references: [id])
+
+  @@map("processing_tasks")
+  @@index([status, task_type], name: "IX_Task_Status_Type")
+  @@index([knowledge_base_id], name: "IX_Task_KB")
+  @@index([created_at], name: "IX_Task_Created")
+}
+
+// 文檔模型（保留原有功能，但與KnowledgeBase分開）
 model Document {
   id          Int          @id @default(autoincrement())
   customer_id Int?
@@ -294,4 +407,48 @@ enum InteractionType {
   DOCUMENT_VIEW
   PROPOSAL_VIEW
   OTHER
+}
+
+// 知識庫相關枚舉
+enum DocumentStatus {
+  ACTIVE      // 正常狀態
+  INACTIVE    // 已停用
+  ARCHIVED    // 已歸檔
+  DELETED     // 已刪除
+  DRAFT       // 草稿
+}
+
+enum DocumentCategory {
+  GENERAL          // 一般文檔
+  PRODUCT_SPEC     // 產品規格
+  SALES_MATERIAL   // 銷售資料
+  TECHNICAL_DOC    // 技術文檔
+  LEGAL_DOC        // 法律文件
+  TRAINING         // 培訓資料
+  FAQ              // 常見問題
+  CASE_STUDY       // 案例研究
+  WHITE_PAPER      // 白皮書
+  PRESENTATION     // 簡報
+  COMPETITOR       // 競爭對手資料
+  INDUSTRY_NEWS    // 行業新聞
+  INTERNAL         // 內部文檔
+}
+
+enum ProcessingStatus {
+  PENDING      // 等待處理
+  PROCESSING   // 處理中
+  COMPLETED    // 完成
+  FAILED       // 失敗
+  CANCELLED    // 已取消
+  RETRY        // 重試中
+}
+
+enum ProcessingType {
+  DOCUMENT_PARSE      // 文檔解析
+  VECTORIZATION       // 向量化處理
+  CONTENT_EXTRACTION  // 內容提取
+  METADATA_EXTRACTION // 元數據提取
+  DUPLICATE_CHECK     // 重複檢查
+  INDEX_UPDATE        // 索引更新
+  BATCH_IMPORT        // 批次導入
 }
