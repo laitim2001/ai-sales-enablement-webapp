@@ -47,12 +47,20 @@ export default function KnowledgePage({ searchParams }: PageProps) {
             管理您的文檔和知識資料，讓AI助手更好地協助您
           </p>
         </div>
-        <Link href="/dashboard/knowledge/upload">
-          <Button>
-            <PlusIcon className="h-4 w-4 mr-2" />
-            上傳文檔
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/dashboard/knowledge/create">
+            <Button variant="outline">
+              <PlusIcon className="h-4 w-4 mr-2" />
+              新建項目
+            </Button>
+          </Link>
+          <Link href="/dashboard/knowledge/upload">
+            <Button>
+              <PlusIcon className="h-4 w-4 mr-2" />
+              上傳文檔
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* 篩選器 */}
