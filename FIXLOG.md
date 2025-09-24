@@ -11,6 +11,7 @@
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-002: JWT Payload userId類型不一致](#fix-002-jwt-payload-userid類型不一致) |
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-003: authenticateUser函數userId類型錯誤](#fix-003-authenticateuser函數userid類型錯誤) |
+| 2025-09-25 | 🌐 路由/導航 | ✅ 已解決 | [FIX-004: Dashboard路由結構和導航404錯誤](#fix-004-dashboard路由結構和導航404錯誤) |
 
 ---
 
@@ -290,5 +291,161 @@ curl -X GET http://localhost:3007/api/auth/me \
 
 ---
 
-**最後更新**: 2025-09-24
-**下次建議檢查**: 當出現認證相關問題時參考FIX-001、FIX-002、FIX-003
+---
+
+## FIX-004: Dashboard路由結構和導航404錯誤
+
+### 📅 **修復日期**: 2025-09-25
+### 🎯 **問題級別**: 🔴 Critical
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **Dashboard重新整理跳轉問題**: 在dashboard頁面重新整理後，會自動跳轉回login頁面
+2. **導航404錯誤**: 點擊dashboard中的功能連結，如knowledge、search、tasks等，全部返回"404 | This page could not be found"
+3. **影響範圍**: 所有dashboard子頁面無法正常訪問，嚴重影響用戶體驗
+
+### 🔍 **根本原因分析**
+
+#### **核心問題**: Next.js 14 App Router 路由群組理解錯誤
+- **路由群組特性**: `(dashboard)` 括號語法是Next.js的路由群組(Route Groups)，**僅用於組織代碼，不會添加到URL路徑中**
+- **錯誤理解**: 以為 `app/(dashboard)/knowledge/page.tsx` 會對應到 `/dashboard/knowledge` 路徑
+- **實際情況**: `app/(dashboard)/knowledge/page.tsx` 實際對應到 `/knowledge` 路徑
+- **導致問題**: 用戶點擊 `/dashboard/knowledge` 時找不到對應的頁面文件
+
+#### **文件結構問題分析**
+```
+❌ 錯誤結構 (無法訪問/dashboard/knowledge):
+app/
+├── (dashboard)/           # 路由群組，不影響URL
+│   ├── knowledge/page.tsx # 實際路徑: /knowledge
+│   ├── search/page.tsx    # 實際路徑: /search
+│   └── layout.tsx         # layout for root level
+└── dashboard/
+    └── page.tsx           # 實際路徑: /dashboard
+
+✅ 正確結構 (可以訪問/dashboard/knowledge):
+app/
+└── dashboard/             # URL路徑: /dashboard
+    ├── knowledge/page.tsx # URL路徑: /dashboard/knowledge
+    ├── search/page.tsx    # URL路徑: /dashboard/search
+    ├── layout.tsx         # layout for /dashboard/*
+    └── page.tsx           # URL路徑: /dashboard
+```
+
+### 🛠️ **修復方案**
+
+#### **第一步: 重新組織文件結構**
+```bash
+# 將所有dashboard相關頁面從(dashboard)移動到dashboard/
+mv app/(dashboard)/knowledge/ app/dashboard/
+mv app/(dashboard)/search/ app/dashboard/
+mv app/(dashboard)/tasks/ app/dashboard/
+mv app/(dashboard)/settings/ app/dashboard/
+mv app/(dashboard)/layout.tsx app/dashboard/
+```
+
+#### **第二步: 清理舊的路由群組目錄**
+```bash
+# 刪除空的(dashboard)目錄避免路由衝突
+rmdir app/(dashboard)/
+```
+
+#### **第三步: 驗證文件結構**
+最終正確的文件結構:
+```
+app/dashboard/
+├── layout.tsx              # Dashboard layout
+├── page.tsx                # Dashboard 主頁
+├── knowledge/
+│   └── page.tsx            # /dashboard/knowledge
+├── search/
+│   └── page.tsx            # /dashboard/search
+├── tasks/
+│   └── page.tsx            # /dashboard/tasks
+└── settings/
+    └── page.tsx            # /dashboard/settings
+```
+
+### 🔧 **技術細節說明**
+
+#### **Next.js App Router 路由群組規則**
+1. **路由群組語法**: `(folderName)` 括號包圍的資料夾名稱
+2. **作用**: 僅用於程式碼組織和共享layout，**不會出現在URL中**
+3. **URL映射**: `app/(dashboard)/knowledge/page.tsx` → URL: `/knowledge`
+4. **正確用法**: 當你需要在同一層級組織多個功能模組，但不想在URL中體現群組名稱時使用
+
+#### **錯誤診斷過程**
+1. **初始假設**: 認為是JWT認證問題導致跳轉
+2. **發現問題**: 修復JWT後，404問題仍然存在
+3. **深入分析**: 檢查Next.js路由映射規則
+4. **根本發現**: 路由群組不會在URL中顯示，這是Next.js的核心特性
+
+### 📊 **修復文件清單**
+- ✅ 移動 `app/(dashboard)/layout.tsx` → `app/dashboard/layout.tsx`
+- ✅ 移動 `app/(dashboard)/knowledge/page.tsx` → `app/dashboard/knowledge/page.tsx`
+- ✅ 移動 `app/(dashboard)/search/page.tsx` → `app/dashboard/search/page.tsx`
+- ✅ 移動 `app/(dashboard)/tasks/page.tsx` → `app/dashboard/tasks/page.tsx`
+- ✅ 移動 `app/(dashboard)/settings/page.tsx` → `app/dashboard/settings/page.tsx`
+- ✅ 刪除空的 `app/(dashboard)/` 目錄
+
+### ✅ **驗證步驟**
+```bash
+# 測試所有dashboard路由
+curl -I http://localhost:3007/dashboard          # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/knowledge # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/search   # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/tasks    # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/settings # ✅ 200 OK
+```
+
+**用戶體驗測試**:
+1. ✅ Dashboard頁面重新整理不會跳轉到login頁面
+2. ✅ 所有dashboard導航連結正常工作
+3. ✅ JWT認證狀態正確維持
+
+### 📚 **學習要點**
+
+#### **Next.js App Router 路由系統核心概念**
+1. **路由群組 (Route Groups)**: `(name)` 僅用於組織，不影響URL
+2. **URL映射**: 資料夾名稱直接對應URL路徑
+3. **嵌套路由**: `app/dashboard/knowledge/page.tsx` = `/dashboard/knowledge`
+4. **Layout繼承**: 子路由自動繼承父級layout
+
+#### **路由群組的正確使用場景**
+```
+✅ 正確使用 - 同層級的功能分組:
+app/
+├── (marketing)/
+│   ├── about/page.tsx      # URL: /about
+│   └── contact/page.tsx    # URL: /contact
+└── (shop)/
+    ├── products/page.tsx   # URL: /products
+    └── cart/page.tsx       # URL: /cart
+
+❌ 錯誤使用 - 期望群組名出現在URL中:
+app/
+└── (dashboard)/            # 以為會產生 /dashboard/xxx
+    └── settings/page.tsx   # 實際是 /settings，不是 /dashboard/settings
+```
+
+### 🚫 **避免重蹈覆轍**
+- ❌ **不要**: 假設路由群組會出現在URL中
+- ❌ **不要**: 將需要URL路徑的功能放在路由群組中
+- ✅ **應該**: 需要URL路徑時直接使用資料夾名稱
+- ✅ **應該**: 路由群組僅用於程式碼組織，不用於URL結構
+- ✅ **應該**: 先理解Next.js路由映射規則再設計檔案結構
+
+### 🔄 **如果問題再次出現**
+1. 檢查檔案結構是否正確對應期望的URL路徑
+2. 確認沒有使用路由群組作為URL路徑的一部分
+3. 使用 `npm run build` 檢查路由編譯結果
+4. 清理 `.next` 快取並重新啟動開發服務器
+
+### 🌐 **相關資源**
+- [Next.js App Router 官方文檔](https://nextjs.org/docs/app/building-your-application/routing)
+- [Next.js Route Groups 說明](https://nextjs.org/docs/app/building-your-application/routing/route-groups)
+
+---
+
+**最後更新**: 2025-09-25
+**下次建議檢查**: 當出現路由導航404問題時，優先檢查檔案結構是否正確對應URL路徑，特別注意路由群組的使用

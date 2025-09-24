@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Route Test</title>
+</head>
+<body>
+    <h1>Dashboard Route Test</h1>
+    <div id="results"></div>
+
+    <script>
+        async function testRoutes() {
+            const results = document.getElementById('results');
+
+            // First login
+            try {
+                const loginResponse = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'admin@example.com',
+                        password: 'admin123'
+                    })
+                });
+
+                const loginResult = await loginResponse.json();
+
+                if (loginResult.success) {
+                    // Store token
+                    localStorage.setItem('auth-token', loginResult.data.token);
+
+                    results.innerHTML += '<p>✅ Login successful</p>';
+
+                    // Test dashboard routes by creating links
+                    const routes = [
+                        '/dashboard/knowledge',
+                        '/dashboard/search',
+                        '/dashboard/tasks',
+                        '/dashboard/settings'
+                    ];
+
+                    results.innerHTML += '<h2>Test Links:</h2>';
+                    routes.forEach(route => {
+                        results.innerHTML += `<p><a href="${route}" target="_blank">${route}</a></p>`;
+                    });
+                } else {
+                    results.innerHTML += '<p>❌ Login failed</p>';
+                }
+            } catch (error) {
+                results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        window.onload = testRoutes;
+    </script>
+</body>
+</html>

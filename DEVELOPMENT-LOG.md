@@ -6,6 +6,161 @@
 
 ---
 
+## 2025-09-25: Dashboard路由結構重大修復完成 🔧
+
+### 🎯 **任務概述**
+- 修復Dashboard頁面刷新後跳轉到login頁的問題
+- 解決Dashboard所有子頁面導航404錯誤
+- 完成對Next.js 14 App Router路由群組概念的重新理解
+- 建立正確的Dashboard路由結構
+
+### 🚨 **遇到的關鍵問題**
+1. **Dashboard重新整理跳轉問題**
+   - 症狀：在dashboard頁面重新整理後，自動跳轉回login頁面
+   - 用戶反映：即使修復JWT認證問題，dashboard重新整理仍會跳轉
+   - 影響：用戶無法正常停留在dashboard頁面
+
+2. **Dashboard導航404錯誤**
+   - 症狀：點擊dashboard中的任何功能連結（knowledge、search、tasks、settings）都返回"404 | This page could not be found"
+   - 具體URL：`http://localhost:3007/dashboard/knowledge` 等全部返回404
+   - 影響：Dashboard所有子功能無法訪問
+
+3. **路由群組概念誤解**
+   - 核心錯誤：誤解了Next.js 14 App Router的路由群組(Route Groups)概念
+   - 技術細節：以為`app/(dashboard)/knowledge/page.tsx`會對應到`/dashboard/knowledge`路徑
+   - 實際情況：路由群組`(dashboard)`僅用於組織代碼，**不會出現在URL路徑中**
+
+### 🔍 **根本原因分析**
+
+#### **Next.js App Router路由群組深度理解**
+```typescript
+// ❌ 錯誤理解
+app/(dashboard)/knowledge/page.tsx  // 以為對應 /dashboard/knowledge
+app/(dashboard)/search/page.tsx     // 以為對應 /dashboard/search
+
+// ✅ 實際情況
+app/(dashboard)/knowledge/page.tsx  // 實際對應 /knowledge
+app/(dashboard)/search/page.tsx     // 實際對應 /search
+
+// ✅ 正確結構（要實現 /dashboard/knowledge）
+app/dashboard/knowledge/page.tsx    // 對應 /dashboard/knowledge
+app/dashboard/search/page.tsx       // 對應 /dashboard/search
+```
+
+#### **文件結構問題對比**
+```
+❌ 問題結構：
+app/
+├── (dashboard)/           # 路由群組，不影響URL
+│   ├── knowledge/page.tsx # URL: /knowledge (不是 /dashboard/knowledge)
+│   ├── search/page.tsx    # URL: /search (不是 /dashboard/search)
+│   └── layout.tsx         # 只適用於根層級
+└── dashboard/
+    └── page.tsx           # URL: /dashboard
+
+✅ 修復後結構：
+app/
+└── dashboard/             # URL: /dashboard
+    ├── knowledge/page.tsx # URL: /dashboard/knowledge
+    ├── search/page.tsx    # URL: /dashboard/search
+    ├── layout.tsx         # 適用於 /dashboard/*
+    └── page.tsx           # URL: /dashboard
+```
+
+### 🛠️ **技術解決方案**
+
+#### 1. 文件結構重新組織 `#路由系統` `#Next.js`
+```bash
+# 將所有dashboard相關頁面從(dashboard)移動到dashboard/
+mv app/(dashboard)/knowledge/ app/dashboard/
+mv app/(dashboard)/search/ app/dashboard/
+mv app/(dashboard)/tasks/ app/dashboard/
+mv app/(dashboard)/settings/ app/dashboard/
+mv app/(dashboard)/layout.tsx app/dashboard/
+
+# 刪除空的路由群組目錄
+rmdir app/(dashboard)/
+```
+
+#### 2. 路由驗證測試 `#測試驗證`
+```bash
+# 測試所有dashboard路由
+curl -I http://localhost:3007/dashboard          # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/knowledge # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/search   # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/tasks    # ✅ 200 OK
+curl -I http://localhost:3007/dashboard/settings # ✅ 200 OK
+```
+
+#### 3. 創建缺失的子頁面 `#頁面開發`
+```typescript
+// 創建所有dashboard子頁面
+app/dashboard/search/page.tsx    // 搜索功能頁面
+app/dashboard/tasks/page.tsx     // 任務管理頁面
+app/dashboard/settings/page.tsx  // 設置頁面
+
+// 每個頁面都包含基本結構和功能占位符
+export default function SearchPage() {
+  return <div>AI 搜索引擎功能</div>
+}
+```
+
+#### 4. UI組件補充 `#前端開發`
+```typescript
+// 創建缺失的UI組件
+components/ui/tabs.tsx    // 標籤頁組件
+components/ui/switch.tsx  // 開關組件
+
+// 使用 Radix UI 實現，保持設計系統一致性
+import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as SwitchPrimitive from "@radix-ui/react-switch"
+```
+
+### 📁 **受影響的文件清單**
+- ✅ `app/dashboard/layout.tsx` (從(dashboard)移動)
+- ✅ `app/dashboard/knowledge/page.tsx` (從(dashboard)移動)
+- ✅ `app/dashboard/search/page.tsx` (新建)
+- ✅ `app/dashboard/tasks/page.tsx` (新建)
+- ✅ `app/dashboard/settings/page.tsx` (新建)
+- ✅ `components/ui/tabs.tsx` (新建)
+- ✅ `components/ui/switch.tsx` (新建)
+- ✅ `app/(dashboard)/` 目錄 (刪除)
+- ✅ `FIXLOG.md` (更新FIX-004)
+
+### 🎯 **重要架構決策**
+1. **路由設計原則**: URL結構應該直接對應檔案結構，避免使用路由群組作為URL路徑
+2. **組織vs功能分離**: 路由群組用於程式碼組織，實際URL路徑用資料夾名稱
+3. **一致性原則**: 所有dashboard相關功能統一放在`app/dashboard/`目錄下
+4. **漸進式開發**: 先建立正確的路由結構，再逐步完善功能實現
+
+### 📊 **修復驗證結果**
+- ✅ Dashboard頁面刷新：不再跳轉到login頁面
+- ✅ Knowledge頁面：`/dashboard/knowledge` 正常訪問
+- ✅ Search頁面：`/dashboard/search` 正常訪問
+- ✅ Tasks頁面：`/dashboard/tasks` 正常訪問
+- ✅ Settings頁面：`/dashboard/settings` 正常訪問
+- ✅ JWT認證：保持正常的認證狀態檢查
+
+### 🔄 **建立錯誤修復記錄系統**
+- 將此次修復記錄為`FIX-004`在`FIXLOG.md`中
+- 詳細記錄Next.js路由群組的正確使用方式
+- 建立避免類似錯誤的檢查清單和最佳實踐
+
+### 🎯 **經驗教訓**
+- **理解框架概念**: 深度理解框架特性比假設更重要，路由群組不等於URL路徑
+- **先修復架構再修復功能**: 底層路由結構錯誤會導致多個表面問題
+- **系統性解決**: 一個概念錯誤可能導致多個相關問題，需要系統性修復
+- **測試驗證重要性**: 每個修復都要通過實際URL測試驗證
+
+### 🚫 **避免重蹈覆轍**
+- ❌ **不要**: 假設路由群組會出現在URL中
+- ❌ **不要**: 將需要URL路徑的功能放在路由群組中
+- ✅ **應該**: 需要URL路徑時直接使用資料夾名稱
+- ✅ **應該**: 路由群組僅用於程式碼組織，不用於URL結構
+- ✅ **應該**: 先理解Next.js路由映射規則再設計檔案結構
+
+---
+
 ## 2025-09-24: 認證系統重大錯誤修復完成 🔧
 
 ### 🎯 **任務概述**

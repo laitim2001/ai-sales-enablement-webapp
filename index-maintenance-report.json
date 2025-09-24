@@ -1,64 +1,9 @@
 {
-  "timestamp": "2025-09-24T17:25:59.300Z",
-  "summary": {
-    "totalIssues": 7,
-    "highSeverity": 0,
-    "mediumSeverity": 7,
-    "lowSeverity": 0,
-    "suggestions": 41
-  },
-  "issues": [
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "mvp-implementation-checklist.md",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: mvp-implementation-checklist.md"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/upload/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/upload/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/[id]/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/[id]/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/[id]/edit/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/[id]/edit/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/layout.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/layout.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/dashboard/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/dashboard/page.tsx"
-    }
-  ],
-  "suggestions": [
+  "timestamp": "2025-09-24T17:25:59.305Z",
+  "processed": 0,
+  "skipped": 41,
+  "changes": [],
+  "pendingFiles": [
     {
       "type": "add_to_index",
       "file": "docs\\api\\knowledge-base-api.md",
