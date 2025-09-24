@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-09-24T08:52:13.835Z",
+  "timestamp": "2025-09-24T11:57:23.628Z",
   "summary": {
     "totalItems": 32,
-    "completedItems": 18,
-    "percentage": 56
+    "completedItems": 26,
+    "percentage": 81
   },
   "weeks": [
     {
@@ -54,7 +54,7 @@
         },
         {
           "name": "Knowledge Base 模型",
-          "completed": false
+          "completed": true
         },
         {
           "name": "Document 模型設計",
@@ -78,7 +78,7 @@
         },
         {
           "name": "API 測試腳本",
-          "completed": false
+          "completed": true
         }
       ]
     },
@@ -92,19 +92,19 @@
         },
         {
           "name": "登入頁面",
-          "completed": false
+          "completed": true
         },
         {
           "name": "註冊頁面",
-          "completed": false
+          "completed": true
         },
         {
           "name": "主儀表板布局",
-          "completed": false
+          "completed": true
         },
         {
           "name": "響應式導航",
-          "completed": false
+          "completed": true
         },
         {
           "name": "狀態管理設置",
@@ -116,7 +116,7 @@
         },
         {
           "name": "錯誤處理機制",
-          "completed": false
+          "completed": true
         }
       ]
     },
@@ -142,7 +142,7 @@
         },
         {
           "name": "向量化處理",
-          "completed": false
+          "completed": true
         },
         {
           "name": "Azure OpenAI 整合",

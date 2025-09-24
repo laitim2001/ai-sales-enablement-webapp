@@ -32,8 +32,10 @@ tailwind.config.js              # Tailwind CSS 配置
 docs/user-stories/MVP-PRIORITIES.md    # 24個用戶故事優先級
 docs/mvp-implementation-checklist.md   # 逐週執行清單
 docs/testing-strategy.md               # 測試策略
+docs/api/knowledge-base-api.md          # Knowledge Base API 完整文檔
 STARTUP-GUIDE.md                       # 服務啟動完整指南
 DEVELOPMENT-LOG.md                     # 開發討論和決策記錄
+DEPLOYMENT-GUIDE.md                    # 生產環境部署指南
 scripts/health-check.js               # 服務健康檢查腳本
 scripts/sync-mvp-checklist.js         # MVP進度自動同步腳本
 poc/run-all-tests.js                  # 技術驗證腳本
@@ -50,7 +52,15 @@ postcss.config.js                      # PostCSS 配置
 docs/security-standards.md     # 安全要求
 docs/front-end-spec.md         # UI/UX 規格
 .env.example                   # 環境配置範例
-docker-compose.dev.yml         # 開發環境
+.env.production.example        # 生產環境配置範例
+docker-compose.dev.yml         # 開發環境容器配置
+docker-compose.prod.yml        # 生產環境容器配置
+Dockerfile.prod                # 生產環境 Docker 配置
+.github/workflows/ci.yml       # CI 持續整合流程
+.github/workflows/deploy.yml   # 部署工作流程
+nginx/nginx.conf               # Nginx 反向代理配置
+monitoring/prometheus.yml      # Prometheus 監控配置
+healthcheck.js                 # 容器健康檢查腳本
 ```
 
 ---
@@ -155,10 +165,15 @@ npm run index:health       # 完整健康檢查
 | 開發計劃？ | `docs/mvp-development-plan.md` |
 | 用戶故事？ | `docs/user-stories/MVP-PRIORITIES.md` |
 | API 設計？ | `docs/api-specification.md` |
+| Knowledge Base API？ | `docs/api/knowledge-base-api.md` |
 | 資料庫？ | `prisma/schema.prisma` |
 | 如何測試？ | `docs/testing-strategy.md` |
+| 如何部署？ | `DEPLOYMENT-GUIDE.md` |
+| CI/CD 流程？ | `.github/workflows/ci.yml`, `.github/workflows/deploy.yml` |
+| 服務啟動？ | `STARTUP-GUIDE.md` |
 | 技術驗證？ | `poc/README.md` |
 | 環境設置？ | `.env.example` |
+| 開發記錄？ | `DEVELOPMENT-LOG.md` |
 | **完整文件索引？** | `PROJECT-INDEX.md` |
 | **索引維護方法？** | `INDEX-MAINTENANCE-GUIDE.md` |
 | **索引提醒設置？** | `docs/INDEX-REMINDER-SETUP.md` |

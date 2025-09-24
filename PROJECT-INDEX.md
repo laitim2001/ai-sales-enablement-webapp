@@ -73,7 +73,40 @@
 
 **重要文件**:
 
+- `docs/user-stories/index.md` - 用戶故事總索引
 - `docs/user-stories/MVP-PRIORITIES.md` - 所有故事的優先級分配
+
+#### Epic 1 詳細故事文件
+- `docs/user-stories/epic-1/story-1.1-project-initialization.md` - 項目初始化和開發環境設置
+- `docs/user-stories/epic-1/story-1.2-authentication-and-user-management.md` - 用戶認證和管理系統
+- `docs/user-stories/epic-1/story-1.3-knowledge-base-data-model.md` - 知識庫數據模型設計
+- `docs/user-stories/epic-1/story-1.4-ai-search-engine.md` - AI 智能搜索引擎
+- `docs/user-stories/epic-1/story-1.5-knowledge-base-management.md` - 知識庫管理功能
+- `docs/user-stories/epic-1/story-1.6-api-gateway-security.md` - API 閘道和安全控制
+
+#### Epic 2 詳細故事文件
+- `docs/user-stories/epic-2/story-2.1-crm-integration.md` - CRM 系統整合
+- `docs/user-stories/epic-2/story-2.2-customer-360-view.md` - 客戶 360 度視圖
+- `docs/user-stories/epic-2/story-2.3-meeting-preparation.md` - 會議準備助手
+- `docs/user-stories/epic-2/story-2.4-sales-dashboard.md` - 銷售儀表板
+- `docs/user-stories/epic-2/story-2.5-smart-reminders.md` - 智能提醒系統
+- `docs/user-stories/epic-2/story-2.6-offline-mode.md` - 離線模式功能
+
+#### Epic 3 詳細故事文件
+- `docs/user-stories/epic-3/story-3.1-proposal-template-management.md` - 提案範本管理
+- `docs/user-stories/epic-3/story-3.2-ai-content-generation.md` - AI 內容生成引擎
+- `docs/user-stories/epic-3/story-3.3-personalization-engine.md` - 個人化推薦引擎
+- `docs/user-stories/epic-3/story-3.4-proposal-workflow.md` - 提案工作流程
+- `docs/user-stories/epic-3/story-3.5-proposal-analytics.md` - 提案數據分析
+- `docs/user-stories/epic-3/story-3.6-multi-channel-distribution.md` - 多管道發布功能
+
+#### Epic 4 詳細故事文件
+- `docs/user-stories/epic-4/story-4.1-cloud-infrastructure.md` - 雲端基礎架構
+- `docs/user-stories/epic-4/story-4.2-cicd-pipeline.md` - CI/CD 流水線
+- `docs/user-stories/epic-4/story-4.3-monitoring-alerting.md` - 監控和告警系統
+- `docs/user-stories/epic-4/story-4.4-security-hardening.md` - 安全強化
+- `docs/user-stories/epic-4/story-4.5-performance-optimization.md` - 性能優化
+- `docs/user-stories/epic-4/story-4.6-user-training.md` - 用戶培訓
 
 ### 🗄️ prisma/ - 資料庫設計
 
@@ -212,7 +245,7 @@
 
 | 模組名稱                | 文件路徑                 | 用途說明                | 重要程度 |
 | ----------------------- | ------------------------ | ----------------------- | -------- |
-| **統一導出**      | `lib/ai/index.ts`      | AI 服務統一入口         | 🔴 極高  |
+| **統一導出**      | `lib/ai/index.ts`      | AI 服務統一入口和導出   | 🔴 極高  |
 | **OpenAI 客戶端** | `lib/ai/openai.ts`     | Azure OpenAI 連接和配置 | 🔴 極高  |
 | **向量嵌入**      | `lib/ai/embeddings.ts` | 文檔向量化和嵌入處理    | 🔴 極高  |
 | **聊天服務**      | `lib/ai/chat.ts`       | AI 聊天完成服務         | 🟡 高    |
@@ -311,8 +344,11 @@
 | -------------------- | ------------------------------------- | ----------------------------------------- |
 | **CI 工作流程**      | `.github/workflows/ci.yml`           | 持續集成流程 - 測試、構建、代碼品質檢查   |
 | **部署工作流程**     | `.github/workflows/deploy.yml`       | 持續部署流程 - 多環境部署和監控           |
+| **索引檢查流程**     | `.github/workflows/index-check.yml`  | 索引文件同步狀態自動檢查工作流程          |
 | **Nginx 配置**       | `nginx/nginx.conf`                    | 反向代理和負載均衡配置                    |
+| **SSL 憑證目錄**     | `nginx/ssl/`                          | SSL 憑證文件存放目錄                      |
 | **Prometheus 配置**  | `monitoring/prometheus.yml`           | 監控指標收集配置                          |
+| **Grafana 配置**     | `monitoring/grafana/`                 | Grafana 儀表板和數據源配置目錄            |
 
 ---
 

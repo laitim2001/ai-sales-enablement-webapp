@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   DocumentIcon,
   EyeIcon,
@@ -98,6 +99,8 @@ export function KnowledgeBaseList({ filters }: KnowledgeBaseListProps) {
   const [data, setData] = useState<KnowledgeBaseListResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,6 +136,71 @@ export function KnowledgeBaseList({ filters }: KnowledgeBaseListProps) {
 
     fetchData()
   }, [filters])
+
+  // 處理分頁導航
+  const handlePageChange = (newPage: number) => {
+    const current = new URLSearchParams(Array.from(searchParams.entries()))
+    current.set('page', newPage.toString())
+    const search = current.toString()
+    const query = search ? `?${search}` : ''
+    router.push(`/dashboard/knowledge${query}`)
+  }
+
+  // 處理刪除操作
+  const handleDelete = async (id: number) => {
+    if (!confirm('確定要刪除這個文檔嗎？此操作無法撤銷。')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/knowledge-base/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('刪除失敗')
+      }
+
+      // 重新載入數據
+      const fetchData = async () => {
+        setLoading(true)
+        setError(null)
+
+        try {
+          const params = new URLSearchParams()
+          Object.entries(filters).forEach(([key, value]) => {
+            if (value !== undefined && value !== '') {
+              params.append(key, value.toString())
+            }
+          })
+
+          const response = await fetch(`/api/knowledge-base?${params}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+          })
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch knowledge base items')
+          }
+
+          const result = await response.json()
+          setData(result)
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'An error occurred')
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      fetchData()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : '刪除失敗')
+    }
+  }
 
   if (loading) {
     return (
@@ -275,6 +343,7 @@ export function KnowledgeBaseList({ filters }: KnowledgeBaseListProps) {
                   variant="outline"
                   size="sm"
                   className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={() => handleDelete(item.id)}
                 >
                   <TrashIcon className="h-4 w-4 mr-1" />
                   刪除
@@ -292,12 +361,14 @@ export function KnowledgeBaseList({ filters }: KnowledgeBaseListProps) {
             <Button
               variant="outline"
               disabled={data.pagination.page === 1}
+              onClick={() => handlePageChange(data.pagination.page - 1)}
             >
               上一頁
             </Button>
             <Button
               variant="outline"
               disabled={data.pagination.page === data.pagination.pages}
+              onClick={() => handlePageChange(data.pagination.page + 1)}
             >
               下一頁
             </Button>
@@ -315,6 +386,7 @@ export function KnowledgeBaseList({ filters }: KnowledgeBaseListProps) {
                 variant="outline"
                 size="sm"
                 disabled={data.pagination.page === 1}
+                onClick={() => handlePageChange(data.pagination.page - 1)}
               >
                 上一頁
               </Button>
@@ -325,6 +397,7 @@ export function KnowledgeBaseList({ filters }: KnowledgeBaseListProps) {
                 variant="outline"
                 size="sm"
                 disabled={data.pagination.page === data.pagination.pages}
+                onClick={() => handlePageChange(data.pagination.page + 1)}
               >
                 下一頁
               </Button>
