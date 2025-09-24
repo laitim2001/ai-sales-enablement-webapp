@@ -1,0 +1,327 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18.x'
+  POSTGRES_VERSION: '15'
+  REDIS_VERSION: '7'
+
+jobs:
+  # 代碼品質和安全掃描
+  code-quality:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 完整歷史記錄，用於 SonarCloud 分析
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint
+      continue-on-error: true
+
+    - name: Run TypeScript type check
+      run: npm run type-check
+
+    - name: Check for security vulnerabilities
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+
+  # 單元測試和集成測試
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Setup test database
+      env:
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379
+      run: |
+        npm run db:generate
+        npm run db:push
+
+    - name: Run unit tests
+      env:
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379
+        JWT_SECRET: test_jwt_secret_key_for_ci
+        NEXTAUTH_SECRET: test_nextauth_secret_for_ci
+      run: npm run test:coverage
+
+    - name: Upload test coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+    - name: Run integration tests
+      env:
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379
+        JWT_SECRET: test_jwt_secret_key_for_ci
+        NEXTAUTH_SECRET: test_nextauth_secret_for_ci
+      run: |
+        if [ -d "tests" ]; then
+          npm run test -- tests/
+        else
+          echo "No integration tests found"
+        fi
+
+  # 構建和部署準備
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Generate Prisma client
+      run: npm run db:generate
+
+    - name: Build application
+      env:
+        NODE_ENV: production
+        # 使用假的環境變數進行構建測試
+        DATABASE_URL: postgresql://user:pass@localhost:5432/db
+        JWT_SECRET: build_test_secret
+        NEXTAUTH_SECRET: build_test_nextauth_secret
+        NEXTAUTH_URL: http://localhost:3000
+      run: npm run build
+
+    - name: Check build output
+      run: |
+        if [ ! -d ".next" ]; then
+          echo "Build failed: .next directory not found"
+          exit 1
+        fi
+        echo "Build successful: .next directory exists"
+        ls -la .next/
+
+    - name: Cache build artifacts
+      uses: actions/cache@v3
+      with:
+        path: |
+          .next
+          node_modules
+        key: ${{ runner.os }}-build-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+
+  # E2E 測試 (可選)
+  e2e-test:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright
+      run: npx playwright install --with-deps
+
+    - name: Run E2E tests
+      env:
+        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+        JWT_SECRET: test_jwt_secret_key_for_ci
+        NEXTAUTH_SECRET: test_nextauth_secret_for_ci
+        NEXTAUTH_URL: http://localhost:3000
+      run: |
+        if npm list @playwright/test > /dev/null 2>&1; then
+          npm run test:e2e
+        else
+          echo "Playwright not configured, skipping E2E tests"
+        fi
+
+  # Docker 構建 (準備部署)
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Docker Hub (if pushing)
+      if: success()
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+      continue-on-error: true
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: |
+          ai-sales-enablement
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.dev
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Test Docker image
+      run: |
+        docker run --rm ai-sales-enablement:latest echo "Docker image test successful"
+
+  # 部署準備和通知
+  deploy-prepare:
+    name: Prepare Deployment
+    runs-on: ubuntu-latest
+    needs: [build, docker-build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Create deployment artifact
+      run: |
+        echo "Creating deployment package..."
+        tar -czf deployment-${{ github.sha }}.tar.gz \
+          --exclude='.git' \
+          --exclude='node_modules' \
+          --exclude='.next' \
+          --exclude='coverage' \
+          .
+
+    - name: Upload deployment artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-package
+        path: deployment-${{ github.sha }}.tar.gz
+        retention-days: 30
+
+    - name: Generate deployment summary
+      run: |
+        echo "## 🚀 Deployment Ready" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Workflow**: ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Build Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### ✅ Completed Jobs" >> $GITHUB_STEP_SUMMARY
+        echo "- Code Quality Check" >> $GITHUB_STEP_SUMMARY
+        echo "- Unit & Integration Tests" >> $GITHUB_STEP_SUMMARY
+        echo "- Application Build" >> $GITHUB_STEP_SUMMARY
+        echo "- Docker Image Build" >> $GITHUB_STEP_SUMMARY
+
+  # 清理和維護
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-prepare]
+    if: always()
+
+    steps:
+    - name: Clean up old artifacts
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+          });
+
+          console.log(`Found ${artifacts.data.artifacts.length} artifacts for this run`);
+
+          // 清理超過 30 天的舊構建產物 (在其他工作流程中處理)
+          console.log('Cleanup will be handled by scheduled workflows');

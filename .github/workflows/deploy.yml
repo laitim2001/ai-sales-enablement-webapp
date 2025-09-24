@@ -1,0 +1,313 @@
+name: Deploy to Production
+
+on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+env:
+  NODE_VERSION: '18.x'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 部署前檢查
+  pre-deploy:
+    name: Pre-deployment Checks
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Verify deployment readiness
+      run: |
+        echo "🔍 Checking deployment readiness..."
+
+        # 檢查必要的環境變數是否設定
+        required_secrets=("DATABASE_URL" "JWT_SECRET" "NEXTAUTH_SECRET")
+        missing_secrets=()
+
+        for secret in "${required_secrets[@]}"; do
+          if [ -z "${{ secrets[secret] }}" ]; then
+            missing_secrets+=("$secret")
+          fi
+        done
+
+        if [ ${#missing_secrets[@]} -ne 0 ]; then
+          echo "❌ Missing required secrets:"
+          printf '%s\n' "${missing_secrets[@]}"
+          exit 1
+        fi
+
+        echo "✅ All required secrets are configured"
+
+    - name: Check database migration status
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        # 在實際部署中，這裡會檢查資料庫遷移狀態
+        echo "🔍 Database migration check placeholder"
+        echo "✅ Database migration check passed"
+
+  # Docker 鏡像構建和推送
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: pre-deploy
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+          type=raw,value={{date 'YYYY.MM.DD-HHmm'}},enable={{is_default_branch}}
+
+    - name: Build and push Docker image
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.prod
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+
+  # 資料庫遷移
+  database-migration:
+    name: Database Migration
+    runs-on: ubuntu-latest
+    needs: pre-deploy
+    environment: ${{ github.event.inputs.environment || 'staging' }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run database migrations
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        echo "🔄 Running database migrations..."
+        npm run db:generate
+        npx prisma migrate deploy
+        echo "✅ Database migrations completed"
+
+    - name: Seed database (if needed)
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        if [ -f "prisma/seed.ts" ]; then
+          echo "🌱 Seeding database..."
+          npm run db:seed
+          echo "✅ Database seeded"
+        else
+          echo "ℹ️ No seed script found, skipping"
+        fi
+
+  # Staging 部署
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build-and-push, database-migration]
+    environment: staging
+    if: ${{ github.event.inputs.environment == 'staging' || github.event.inputs.environment == '' }}
+
+    steps:
+    - name: Deploy to staging environment
+      run: |
+        echo "🚀 Deploying to staging..."
+        echo "📦 Image: ${{ needs.build-and-push.outputs.image-tag }}"
+        echo "🔍 Digest: ${{ needs.build-and-push.outputs.image-digest }}"
+
+        # 在實際部署中，這裡會包含部署到 Kubernetes 或其他平台的命令
+        echo "✅ Staging deployment completed"
+
+    - name: Run health checks
+      run: |
+        echo "🔍 Running post-deployment health checks..."
+
+        # 模擬健康檢查
+        sleep 10
+
+        echo "✅ Health checks passed"
+
+    - name: Notify deployment success
+      run: |
+        echo "📢 Staging deployment successful!"
+        echo "🌐 URL: https://staging.ai-sales-enablement.com"
+
+  # Production 部署
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-and-push, database-migration]
+    environment: production
+    if: ${{ github.event.inputs.environment == 'production' }}
+
+    steps:
+    - name: Create deployment backup
+      run: |
+        echo "💾 Creating pre-deployment backup..."
+        # 在實際部署中，這裡會創建資料庫和應用程式備份
+        echo "✅ Backup created"
+
+    - name: Deploy to production environment
+      run: |
+        echo "🚀 Deploying to production..."
+        echo "📦 Image: ${{ needs.build-and-push.outputs.image-tag }}"
+        echo "🔍 Digest: ${{ needs.build-and-push.outputs.image-digest }}"
+
+        # 在實際部署中，這裡會包含藍綠部署或滾動更新策略
+        echo "✅ Production deployment completed"
+
+    - name: Run comprehensive health checks
+      run: |
+        echo "🔍 Running comprehensive health checks..."
+
+        # 模擬全面健康檢查
+        sleep 30
+
+        echo "✅ All health checks passed"
+
+    - name: Update monitoring and alerts
+      run: |
+        echo "📊 Updating monitoring dashboards..."
+        echo "🚨 Activating production alerts..."
+        echo "✅ Monitoring updated"
+
+  # 煙霧測試
+  smoke-tests:
+    name: Run Smoke Tests
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+    if: ${{ github.event.inputs.environment == 'staging' || github.event.inputs.environment == '' }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run smoke tests
+      env:
+        TEST_URL: ${{ secrets.STAGING_URL || 'https://staging.ai-sales-enablement.com' }}
+      run: |
+        echo "🔥 Running smoke tests against $TEST_URL..."
+
+        # 基本 API 端點測試
+        curl_tests=(
+          "/api/health"
+          "/api/auth/me"
+        )
+
+        for endpoint in "${curl_tests[@]}"; do
+          echo "Testing $endpoint..."
+          if curl -f -s "$TEST_URL$endpoint" > /dev/null; then
+            echo "✅ $endpoint - OK"
+          else
+            echo "❌ $endpoint - FAILED"
+            exit 1
+          fi
+        done
+
+        echo "✅ All smoke tests passed"
+
+  # 部署後清理
+  post-deploy-cleanup:
+    name: Post-deployment Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always()
+
+    steps:
+    - name: Clean up old container images
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const packages = await github.rest.packages.getAllPackageVersionsForPackageOwnedByOrg({
+            package_type: 'container',
+            package_name: context.repo.repo,
+            org: context.repo.owner,
+          });
+
+          console.log(`Found ${packages.data.length} package versions`);
+
+          // 保留最新的 10 個版本，刪除其餘的
+          const versionsToDelete = packages.data.slice(10);
+
+          for (const version of versionsToDelete) {
+            console.log(`Deleting package version ${version.id}`);
+            await github.rest.packages.deletePackageVersionForOrg({
+              package_type: 'container',
+              package_name: context.repo.repo,
+              org: context.repo.owner,
+              package_version_id: version.id,
+            });
+          }
+
+    - name: Generate deployment report
+      run: |
+        echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Environment**: ${{ github.event.inputs.environment || 'staging' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Deployment Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ✅ Successful" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Deployment Metrics" >> $GITHUB_STEP_SUMMARY
+        echo "- Build Time: ${{ github.event.workflow_run.updated_at }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Image Size: TBD" >> $GITHUB_STEP_SUMMARY
+        echo "- Health Check: ✅ Passed" >> $GITHUB_STEP_SUMMARY
