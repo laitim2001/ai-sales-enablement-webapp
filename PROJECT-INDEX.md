@@ -108,6 +108,8 @@
 | **錯誤頁面** | `app/error.tsx` | 通用錯誤頁面 | 🟢 中 |
 | **知識庫列表** | `app/(dashboard)/knowledge/page.tsx` | 知識庫文檔列表頁面 | 🔴 極高 |
 | **知識庫上傳** | `app/(dashboard)/knowledge/upload/page.tsx` | 文檔上傳頁面 | 🟡 高 |
+| **文檔詳情** | `app/(dashboard)/knowledge/[id]/page.tsx` | 文檔預覽和詳細信息頁面 | 🟢 高 |
+| **文檔編輯** | `app/(dashboard)/knowledge/[id]/edit/page.tsx` | 文檔編輯頁面 | 🟢 高 |
 
 #### 🔐 認證相關頁面
 | 頁面類型 | 文件路徑 | 用途說明 | 重要程度 |
@@ -175,6 +177,8 @@
 | **知識庫列表** | `components/knowledge/knowledge-base-list.tsx` | 知識庫文檔列表顯示 | 🔴 極高 |
 | **篩選器** | `components/knowledge/knowledge-base-filters.tsx` | 文檔搜索和篩選組件 | 🟡 高 |
 | **文檔上傳** | `components/knowledge/knowledge-base-upload.tsx` | 文檔上傳和處理組件 | 🟡 高 |
+| **文檔預覽** | `components/knowledge/knowledge-document-view.tsx` | 文檔詳細信息預覽、內容和統計顯示 | 🟢 高 |
+| **文檔編輯** | `components/knowledge/knowledge-document-edit.tsx` | 文檔內容和屬性編輯表單 | 🟢 高 |
 
 
 ### 📚 lib/ - 核心模組庫
@@ -229,6 +233,9 @@
 | **登入測試** | `__tests__/api/auth/login.test.ts` | 用戶登入流程測試 | 🟡 高 |
 | **註冊測試** | `__tests__/api/auth/register.test.ts` | 用戶註冊流程測試 | 🟡 高 |
 | **錯誤處理測試** | `__tests__/lib/error-handling.test.ts` | 錯誤處理系統測試 | 🟡 高 |
+| **知識庫列表測試** | `__tests__/components/knowledge/knowledge-base-list.test.tsx` | 知識庫列表組件測試 | 🟡 高 |
+| **文檔預覽測試** | `__tests__/components/knowledge/knowledge-document-view.test.tsx` | 文檔預覽組件測試 | 🟢 高 |
+| **文檔編輯測試** | `__tests__/components/knowledge/knowledge-document-edit.test.tsx` | 文檔編輯組件測試 | 🟢 高 |
 
 #### 🔧 整合測試 (tests/)
 | 測試類別 | 文件路徑 | 用途說明 | 重要程度 |

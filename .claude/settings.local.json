@@ -15,7 +15,8 @@
       "Bash(node:*)",
       "Bash(npx prisma:*)",
       "Bash(python:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "ask": []
