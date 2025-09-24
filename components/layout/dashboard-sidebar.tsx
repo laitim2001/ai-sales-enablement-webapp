@@ -129,6 +129,12 @@ export function DashboardSidebar() {
           description: '產品資料和銷售材料'
         },
         {
+          name: '智能搜索',
+          href: '/dashboard/knowledge/search',
+          icon: Search,
+          description: 'AI驅動的智能文檔搜索'
+        },
+        {
           name: '文檔管理',
           href: '/dashboard/documents',
           icon: Archive,
