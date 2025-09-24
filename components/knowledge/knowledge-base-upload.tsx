@@ -16,6 +16,7 @@ interface UploadFile {
   status: 'pending' | 'uploading' | 'success' | 'error'
   progress: number
   error?: string
+  uploadedId?: number
 }
 
 const categoryOptions = [
@@ -69,25 +70,55 @@ export function KnowledgeBaseUpload() {
 
     const droppedFiles = Array.from(e.dataTransfer.files)
     addFiles(droppedFiles)
-  }, [])
+  }, [addFiles])
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files)
       addFiles(selectedFiles)
     }
+  }, [addFiles])
+
+  const addFiles = useCallback((newFiles: File[]) => {
+    const maxSize = 10 * 1024 * 1024 // 10MB
+
+    setFiles(prev => {
+      const uploadFiles: UploadFile[] = newFiles.map(file => {
+        const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
+        let status: 'pending' | 'error' = 'pending'
+        let error: string | undefined
+
+        // 檢查文件類型
+        if (!supportedTypes.includes(fileExtension)) {
+          status = 'error'
+          error = `不支援的檔案類型: ${fileExtension}`
+        }
+        // 檢查文件大小
+        else if (file.size > maxSize) {
+          status = 'error'
+          error = `檔案大小超過 10MB 限制 (${(file.size / 1024 / 1024).toFixed(1)}MB)`
+        }
+        // 檢查重複文件
+        else {
+          const existingFile = prev.find(f => f.file.name === file.name && f.file.size === file.size)
+          if (existingFile) {
+            status = 'error'
+            error = '檔案已存在於列表中'
+          }
+        }
+
+        return {
+          id: Math.random().toString(36).substr(2, 9),
+          file,
+          status,
+          progress: 0,
+          error
+        }
+      })
+
+      return [...prev, ...uploadFiles]
+    })
   }, [])
-
-  const addFiles = (newFiles: File[]) => {
-    const uploadFiles: UploadFile[] = newFiles.map(file => ({
-      id: Math.random().toString(36).substr(2, 9),
-      file,
-      status: 'pending',
-      progress: 0
-    }))
-
-    setFiles(prev => [...prev, ...uploadFiles])
-  }
 
   const removeFile = (id: string) => {
     setFiles(prev => prev.filter(f => f.id !== id))
@@ -104,6 +135,18 @@ export function KnowledgeBaseUpload() {
           : f
       ))
 
+      // 文件類型驗證
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
+      if (!supportedTypes.includes(fileExtension)) {
+        throw new Error(`不支援的檔案類型: ${fileExtension}`)
+      }
+
+      // 文件大小驗證 (10MB)
+      const maxSize = 10 * 1024 * 1024
+      if (file.size > maxSize) {
+        throw new Error('檔案大小超過 10MB 限制')
+      }
+
       // 準備表單數據
       const formData = new FormData()
       formData.append('file', file)
@@ -118,26 +161,64 @@ export function KnowledgeBaseUpload() {
 
       formData.append('metadata', JSON.stringify(metadata))
 
-      // 上傳檔案
-      const response = await fetch('/api/knowledge-base/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: formData
+      // 創建 XMLHttpRequest 來追蹤進度
+      return new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+
+        // 監聽上傳進度
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const progress = Math.round((event.loaded * 100) / event.total)
+            setFiles(prev => prev.map(f =>
+              f.id === uploadFile.id
+                ? { ...f, progress }
+                : f
+            ))
+          }
+        })
+
+        // 監聽完成
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const response = JSON.parse(xhr.responseText)
+
+              // 上傳成功
+              setFiles(prev => prev.map(f =>
+                f.id === uploadFile.id
+                  ? { ...f, status: 'success', progress: 100, uploadedId: response.data.id }
+                  : f
+              ))
+
+              resolve()
+            } catch (error) {
+              reject(new Error('回應格式錯誤'))
+            }
+          } else {
+            try {
+              const errorData = JSON.parse(xhr.responseText)
+              reject(new Error(errorData.error || '上傳失敗'))
+            } catch {
+              reject(new Error(`上傳失敗 (HTTP ${xhr.status})`))
+            }
+          }
+        })
+
+        // 監聽錯誤
+        xhr.addEventListener('error', () => {
+          reject(new Error('網路連接錯誤'))
+        })
+
+        // 監聽取消
+        xhr.addEventListener('abort', () => {
+          reject(new Error('上傳被取消'))
+        })
+
+        // 發送請求
+        xhr.open('POST', '/api/knowledge-base/upload')
+        xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('token')}`)
+        xhr.send(formData)
       })
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || 'Upload failed')
-      }
-
-      // 上傳成功
-      setFiles(prev => prev.map(f =>
-        f.id === uploadFile.id
-          ? { ...f, status: 'success', progress: 100 }
-          : f
-      ))
 
     } catch (error) {
       // 上傳失敗
@@ -151,14 +232,22 @@ export function KnowledgeBaseUpload() {
             }
           : f
       ))
+      throw error
     }
   }
 
   const uploadAllFiles = async () => {
     const pendingFiles = files.filter(f => f.status === 'pending')
 
-    // 並行上傳所有檔案
-    await Promise.all(pendingFiles.map(uploadFile))
+    if (pendingFiles.length === 0) return
+
+    try {
+      // 並行上傳所有檔案
+      await Promise.all(pendingFiles.map(uploadFile))
+    } catch (error) {
+      console.error('Some files failed to upload:', error)
+      // 即使有文件上傳失敗，也不影響其他文件的上傳狀態
+    }
   }
 
   const formatFileSize = (bytes: number) => {
@@ -171,6 +260,9 @@ export function KnowledgeBaseUpload() {
 
   const canUpload = files.length > 0 && files.some(f => f.status === 'pending')
   const allCompleted = files.length > 0 && files.every(f => f.status === 'success' || f.status === 'error')
+  const isUploading = files.some(f => f.status === 'uploading')
+  const successfulUploads = files.filter(f => f.status === 'success')
+  const hasErrors = files.some(f => f.status === 'error')
 
   return (
     <div className="space-y-6">
@@ -307,26 +399,50 @@ export function KnowledgeBaseUpload() {
 
       {/* 操作按鈕 */}
       <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-500">
-          {files.length > 0 && `${files.length} 個檔案`}
+        <div className="text-sm text-gray-500 space-y-1">
+          {files.length > 0 && (
+            <div>
+              {files.length} 個檔案
+              {successfulUploads.length > 0 && (
+                <span className="text-green-600 ml-2">
+                  ({successfulUploads.length} 上傳成功)
+                </span>
+              )}
+              {hasErrors && (
+                <span className="text-red-600 ml-2">
+                  ({files.filter(f => f.status === 'error').length} 失敗)
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex space-x-3">
-          {allCompleted && (
-            <Button
-              variant="outline"
-              onClick={() => router.push('/dashboard/knowledge')}
-            >
-              返回知識庫
-            </Button>
+          {allCompleted && successfulUploads.length > 0 && (
+            <>
+              {successfulUploads.length === 1 && (
+                <Button
+                  variant="outline"
+                  onClick={() => router.push(`/dashboard/knowledge/${successfulUploads[0].uploadedId}`)}
+                >
+                  查看文檔
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                onClick={() => router.push('/dashboard/knowledge')}
+              >
+                返回知識庫
+              </Button>
+            </>
           )}
 
           <Button
             onClick={uploadAllFiles}
-            disabled={!canUpload}
+            disabled={!canUpload || isUploading}
           >
             <DocumentArrowUpIcon className="h-4 w-4 mr-2" />
-            {files.some(f => f.status === 'uploading') ? '上傳中...' : '開始上傳'}
+            {isUploading ? '上傳中...' : '開始上傳'}
           </Button>
         </div>
       </div>
