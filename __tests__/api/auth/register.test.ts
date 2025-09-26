@@ -28,7 +28,7 @@ const mockJWT = require('jsonwebtoken')
 describe('/api/auth/register', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockBcrypt.hash.mockResolvedValue('hashed-password')
+    mockBcrypt.hash.mockResolvedValue('hashed-password' as any)
     mockJWT.sign.mockReturnValue('mock-jwt-token')
   })
 

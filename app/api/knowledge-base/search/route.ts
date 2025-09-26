@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     const { query, type, category, tags, limit, similarity_threshold, include_chunks } = validatedData
 
-    let results = []
+    let results: any[] = []
 
     if (type === 'text' || type === 'hybrid') {
       // 文本搜索

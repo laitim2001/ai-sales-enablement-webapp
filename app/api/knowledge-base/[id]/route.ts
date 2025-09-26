@@ -15,7 +15,8 @@ const UpdateKnowledgeBaseSchema = z.object({
   language: z.string().optional(),
   metadata: z.record(z.any()).optional(),
   tags: z.array(z.string()).optional(),
-  status: z.nativeEnum(DocumentStatus).optional()
+  status: z.nativeEnum(DocumentStatus).optional(),
+  processing_status: z.nativeEnum(ProcessingStatus).optional()
 })
 
 // GET /api/knowledge-base/[id] - 獲取單個知識庫項目

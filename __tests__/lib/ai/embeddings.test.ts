@@ -47,7 +47,7 @@ describe('Embeddings Service', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    mockCallAzureOpenAI.mockImplementation(async (operation) => {
+    mockCallAzureOpenAI.mockImplementation(async (operation: any) => {
       return await operation()
     })
   })

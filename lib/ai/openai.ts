@@ -1,5 +1,4 @@
-import { OpenAIApi } from '@azure/openai'
-import { DefaultAzureCredential } from '@azure/identity'
+import { OpenAIClient, AzureKeyCredential } from '@azure/openai'
 
 // Azure OpenAI 配置
 const AZURE_OPENAI_ENDPOINT = process.env.AZURE_OPENAI_ENDPOINT
@@ -15,15 +14,21 @@ if (!AZURE_OPENAI_ENDPOINT || !AZURE_OPENAI_API_KEY) {
 }
 
 // 創建 OpenAI 客戶端
-let openaiClient: OpenAIApi | null = null
+let openaiClient: OpenAIClient | null = null
 
-export function getOpenAIClient(): OpenAIApi {
+export function getOpenAIClient(): OpenAIClient {
   if (!openaiClient) {
-    openaiClient = new OpenAIApi({
-      endpoint: AZURE_OPENAI_ENDPOINT,
-      apiKey: AZURE_OPENAI_API_KEY,
-      apiVersion: AZURE_OPENAI_API_VERSION,
-    })
+    if (!AZURE_OPENAI_ENDPOINT || !AZURE_OPENAI_API_KEY) {
+      throw new Error('Missing required Azure OpenAI environment variables')
+    }
+
+    openaiClient = new OpenAIClient(
+      AZURE_OPENAI_ENDPOINT,
+      new AzureKeyCredential(AZURE_OPENAI_API_KEY),
+      {
+        apiVersion: AZURE_OPENAI_API_VERSION,
+      }
+    )
   }
   return openaiClient
 }
@@ -38,8 +43,8 @@ export const DEPLOYMENT_IDS = {
 export async function checkOpenAIStatus(): Promise<boolean> {
   try {
     const client = getOpenAIClient()
-    // 簡單的健康檢查 - 嘗試列出模型
-    await client.getModel(GPT4_DEPLOYMENT_ID)
+    // 簡單的健康檢查 - 嘗試生成一個簡單的嵌入
+    await client.getEmbeddings(EMBEDDINGS_DEPLOYMENT_ID, ['test'])
     return true
   } catch (error) {
     console.error('Azure OpenAI service check failed:', error)

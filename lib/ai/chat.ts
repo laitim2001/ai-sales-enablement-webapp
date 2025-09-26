@@ -69,20 +69,22 @@ export async function generateChatCompletion(
     const result = await callAzureOpenAI(async () => {
       const client = getOpenAIClient()
 
-      const response = await client.getChatCompletions({
-        model: DEPLOYMENT_IDS.GPT4,
-        messages: messages.map(msg => ({
+      const response = await client.getChatCompletions(
+        DEPLOYMENT_IDS.GPT4,
+        messages.map(msg => ({
           role: msg.role,
           content: msg.content,
           name: msg.name,
         })),
-        maxTokens,
-        temperature,
-        topP,
-        frequencyPenalty,
-        presencePenalty,
-        stop: stop.length > 0 ? stop : undefined,
-      })
+        {
+          maxTokens,
+          temperature,
+          topP,
+          frequencyPenalty,
+          presencePenalty,
+          stop: stop.length > 0 ? stop : undefined,
+        }
+      )
 
       if (!response.choices || response.choices.length === 0) {
         throw new Error('No response received from Azure OpenAI')
@@ -146,20 +148,22 @@ export async function generateStreamingChatCompletion(
     const streamResult = await callAzureOpenAI(async () => {
       const client = getOpenAIClient()
 
-      return client.streamChatCompletions({
-        model: DEPLOYMENT_IDS.GPT4,
-        messages: messages.map(msg => ({
+      return client.streamChatCompletions(
+        DEPLOYMENT_IDS.GPT4,
+        messages.map(msg => ({
           role: msg.role,
           content: msg.content,
           name: msg.name,
         })),
-        maxTokens,
-        temperature,
-        topP,
-        frequencyPenalty,
-        presencePenalty,
-        stop: stop.length > 0 ? stop : undefined,
-      })
+        {
+          maxTokens,
+          temperature,
+          topP,
+          frequencyPenalty,
+          presencePenalty,
+          stop: stop.length > 0 ? stop : undefined,
+        }
+      )
     })
 
     const stream = (async function* () {

@@ -4,11 +4,15 @@
 
 import { POST } from '@/app/api/auth/login/route'
 import { NextRequest } from 'next/server'
-import { authenticateUser } from '@/lib/auth'
+import { authenticateUser } from '@/lib/auth-server'
+import { validateEmail } from '@/lib/auth'
 
-// Mock the auth function
-jest.mock('@/lib/auth', () => ({
+// Mock the auth functions
+jest.mock('@/lib/auth-server', () => ({
   authenticateUser: jest.fn(),
+}))
+
+jest.mock('@/lib/auth', () => ({
   validateEmail: jest.fn(),
 }))
 
@@ -95,7 +99,12 @@ describe('/api/auth/login', () => {
       email: 'test@example.com',
       first_name: 'John',
       last_name: 'Doe',
-      role: 'SALES_REP'
+      role: 'SALES_REP' as const,
+      department: 'Sales',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date(),
+      last_login: new Date()
     }
     const mockToken = 'mock-jwt-token'
 
@@ -129,7 +138,12 @@ describe('/api/auth/login', () => {
       email: 'test@example.com',
       first_name: 'John',
       last_name: 'Doe',
-      role: 'SALES_REP'
+      role: 'SALES_REP' as const,
+      department: 'Sales',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date(),
+      last_login: new Date()
     }
     const mockToken = 'mock-jwt-token'
 
@@ -161,7 +175,12 @@ describe('/api/auth/login', () => {
       email: 'test@example.com',
       first_name: 'John',
       last_name: 'Doe',
-      role: 'SALES_REP'
+      role: 'SALES_REP' as const,
+      department: 'Sales',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date(),
+      last_login: new Date()
     }
     const mockToken = 'mock-jwt-token'
 

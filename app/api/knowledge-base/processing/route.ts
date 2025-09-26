@@ -344,8 +344,8 @@ export async function PUT(request: NextRequest) {
         updateData.started_at = new Date()
       }
 
-      if ([ProcessingStatus.COMPLETED, ProcessingStatus.FAILED, ProcessingStatus.CANCELLED]
-          .includes(validatedData.status) && !existingTask.completed_at) {
+      const finalStatuses = [ProcessingStatus.COMPLETED, ProcessingStatus.FAILED, ProcessingStatus.CANCELLED] as const
+      if (validatedData.status && finalStatuses.includes(validatedData.status as any) && !existingTask.completed_at) {
         updateData.completed_at = new Date()
       }
     }

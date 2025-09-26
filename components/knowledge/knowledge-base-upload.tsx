@@ -54,31 +54,6 @@ export function KnowledgeBaseUpload() {
   const [author, setAuthor] = useState('')
   const [isDragging, setIsDragging] = useState(false)
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }, [])
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }, [])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-
-    const droppedFiles = Array.from(e.dataTransfer.files)
-    addFiles(droppedFiles)
-  }, [addFiles])
-
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files)
-      addFiles(selectedFiles)
-    }
-  }, [addFiles])
-
   const addFiles = useCallback((newFiles: File[]) => {
     const maxSize = 10 * 1024 * 1024 // 10MB
 
@@ -119,6 +94,31 @@ export function KnowledgeBaseUpload() {
       return [...prev, ...uploadFiles]
     })
   }, [])
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }, [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+
+    const droppedFiles = Array.from(e.dataTransfer.files)
+    addFiles(droppedFiles)
+  }, [addFiles])
+
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files)
+      addFiles(selectedFiles)
+    }
+  }, [addFiles])
 
   const removeFile = (id: string) => {
     setFiles(prev => prev.filter(f => f.id !== id))

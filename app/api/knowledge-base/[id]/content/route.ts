@@ -63,7 +63,7 @@ export async function GET(
         const fileBuffer = await readFile(document.source)
         const mimeType = document.mime_type || 'text/plain'
 
-        return new NextResponse(fileBuffer, {
+        return new NextResponse(new Uint8Array(fileBuffer), {
           headers: {
             'Content-Type': mimeType,
             'Cache-Control': 'private, max-age=1800', // 緩存30分鐘

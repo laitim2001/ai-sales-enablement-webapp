@@ -1,6 +1,17 @@
 // AI 服務模組入口文件
 // 提供統一的 AI 功能接口
 
+// 導入所有AI相關類型
+import type {
+  EmbeddingResult,
+  ChatCompletionResult
+} from '@/types/ai'
+
+// 導入需要的函數
+import { generateEmbedding } from './embeddings'
+import { generateChatCompletion } from './chat'
+import { checkOpenAIStatus } from './openai'
+
 // OpenAI 客戶端和基礎設施
 export {
   getOpenAIClient,
@@ -104,8 +115,8 @@ export async function testAIServices(): Promise<{
   overall: boolean
 }> {
   const testResults = {
-    embedding: { success: false, result: undefined, error: undefined },
-    chat: { success: false, result: undefined, error: undefined },
+    embedding: { success: false, result: undefined as EmbeddingResult | undefined, error: undefined as string | undefined },
+    chat: { success: false, result: undefined as ChatCompletionResult | undefined, error: undefined as string | undefined },
     overall: false,
   }
 

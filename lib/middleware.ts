@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getUserFromToken } from './auth'
+import { getUserFromToken } from './auth-server'
 
 /**
  * 認證中間件

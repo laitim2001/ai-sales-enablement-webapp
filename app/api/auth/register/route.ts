@@ -4,11 +4,19 @@ import { validateEmail, validatePassword } from '@/lib/auth'
 import { ApiErrorHandler, withErrorHandling, validateRequestBody, validateRequired } from '@/lib/api/error-handler'
 import { AppError, ErrorType } from '@/lib/errors'
 
+interface RegisterRequestBody {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  department?: string
+}
+
 async function registerHandler(request: NextRequest): Promise<NextResponse> {
   const processingStartTime = Date.now()
 
   // 驗證請求體
-  const body = await validateRequestBody(request)
+  const body = await validateRequestBody<RegisterRequestBody>(request)
 
   // 驗證必要欄位
   validateRequired(body, ['email', 'password', 'firstName', 'lastName'], {

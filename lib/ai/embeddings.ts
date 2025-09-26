@@ -28,10 +28,10 @@ export async function generateEmbedding(text: string): Promise<EmbeddingResult> 
     const result = await callAzureOpenAI(async () => {
       const client = getOpenAIClient()
 
-      const response = await client.getEmbeddings({
-        input: [text.trim()],
-        model: DEPLOYMENT_IDS.EMBEDDINGS,
-      })
+      const response = await client.getEmbeddings(
+        DEPLOYMENT_IDS.EMBEDDINGS,
+        [text.trim()]
+      )
 
       if (!response.data || response.data.length === 0) {
         throw new Error('No embedding data received from Azure OpenAI')
@@ -99,10 +99,10 @@ export async function generateBatchEmbeddings(
       return callAzureOpenAI(async () => {
         const client = getOpenAIClient()
 
-        const response = await client.getEmbeddings({
-          input: batch,
-          model: DEPLOYMENT_IDS.EMBEDDINGS,
-        })
+        const response = await client.getEmbeddings(
+          DEPLOYMENT_IDS.EMBEDDINGS,
+          batch
+        )
 
         if (!response.data) {
           throw new Error('No embedding data received from Azure OpenAI')

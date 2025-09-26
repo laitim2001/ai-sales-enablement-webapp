@@ -114,6 +114,10 @@ export class AppError extends Error {
     return new AppError(message, ErrorType.VALIDATION_ERROR, 400, ErrorSeverity.LOW, true, context)
   }
 
+  static badRequest(message = 'Bad request', context?: ErrorContext): AppError {
+    return new AppError(message, ErrorType.INVALID_INPUT, 400, ErrorSeverity.LOW, true, context)
+  }
+
   static internal(message = 'Internal server error', context?: ErrorContext, originalError?: Error): AppError {
     return new AppError(message, ErrorType.INTERNAL_SERVER_ERROR, 500, ErrorSeverity.HIGH, true, context, originalError)
   }

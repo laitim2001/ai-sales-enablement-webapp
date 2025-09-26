@@ -21,7 +21,8 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(dir \"C:\\ai-sales-enablement-webapp\\app\\(dashboard)\")",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

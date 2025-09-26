@@ -66,7 +66,7 @@ export async function GET(
         const fileName = path.basename(document.source)
         const mimeType = document.mime_type || 'application/octet-stream'
 
-        return new NextResponse(fileBuffer, {
+        return new NextResponse(new Uint8Array(fileBuffer), {
           headers: {
             'Content-Type': mimeType,
             'Content-Disposition': `attachment; filename="${encodeURIComponent(fileName)}"`,

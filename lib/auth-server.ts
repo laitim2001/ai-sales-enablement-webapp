@@ -33,7 +33,7 @@ export function generateToken(user: Pick<User, 'id' | 'email' | 'role'>): string
     expiresIn: JWT_EXPIRES_IN,
     issuer: 'ai-sales-platform',
     audience: 'ai-sales-users'
-  })
+  } as jwt.SignOptions)
 }
 
 /**
@@ -107,7 +107,7 @@ export async function createUser(data: {
       password_hash: hashedPassword,
       first_name: data.firstName,
       last_name: data.lastName,
-      role: data.role || 'SALES_REP',
+      role: (data.role as any) || 'SALES_REP',
       department: data.department
     }
   })

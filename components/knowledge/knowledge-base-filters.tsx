@@ -63,7 +63,7 @@ export function KnowledgeBaseFilters({ initialFilters }: KnowledgeBaseFiltersPro
 
   // 檢查是否有高級篩選器激活
   useEffect(() => {
-    const hasAdvancedFilters = category || status || tags || sort !== 'updated_at' || order !== 'desc'
+    const hasAdvancedFilters = Boolean(category || status || tags || sort !== 'updated_at' || order !== 'desc')
     setShowAdvanced(hasAdvancedFilters)
   }, [category, status, tags, sort, order])
 

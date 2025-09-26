@@ -177,3 +177,61 @@ export const expectValidAPIResponse = (response: any) => {
   expect(response.metadata).toHaveProperty('timestamp')
   expect(response.metadata).toHaveProperty('processingTime')
 }
+
+// TestHelper class for comprehensive test utilities
+export class TestHelper {
+  constructor() {}
+
+  // Database operations
+  async clearDatabase() {
+    await clearDatabase()
+  }
+
+  // Mock data generators
+  createMockUser(overrides = {}) {
+    return createMockUser(overrides)
+  }
+
+  createMockCustomer(overrides = {}) {
+    return createMockCustomer(overrides)
+  }
+
+  createMockKnowledgeBase(overrides = {}) {
+    return createMockKnowledgeBase(overrides)
+  }
+
+  createMockProposal(overrides = {}) {
+    return createMockProposal(overrides)
+  }
+
+  // Mock Azure OpenAI responses
+  createMockEmbeddingResponse(texts: string[]) {
+    return createMockEmbeddingResponse(texts)
+  }
+
+  createMockChatResponse(message: string) {
+    return createMockChatResponse(message)
+  }
+
+  // Utilities
+  generateRandomString(length = 10) {
+    return generateRandomString(length)
+  }
+
+  generateRandomEmail() {
+    return generateRandomEmail()
+  }
+
+  // Assertions
+  expectValidJWT(token: string) {
+    return expectValidJWT(token)
+  }
+
+  expectValidEmbedding(embedding: number[], dimension = 1536) {
+    return expectValidEmbedding(embedding, dimension)
+  }
+
+  expectValidAPIResponse(response: any) {
+    return expectValidAPIResponse(response)
+  }
+}
