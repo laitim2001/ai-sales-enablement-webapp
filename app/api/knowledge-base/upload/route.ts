@@ -1,3 +1,67 @@
+/**
+ * ================================================================
+ * 檔案名稱: 知識庫文檔上傳API路由
+ * 檔案用途: AI銷售賦能平台的文檔上傳和處理核心API
+ * 開發階段: 生產環境就緒
+ * ================================================================
+ *
+ * 功能索引:
+ * 1. POST /api/knowledge-base/upload - 上傳文檔到知識庫（支援多種文件格式）
+ * 2. GET /api/knowledge-base/upload - 獲取上傳配置和支援的文件類型
+ *
+ * API規格:
+ * - 方法: POST, GET
+ * - 路徑: /api/knowledge-base/upload
+ * - 認證: JWT Token (Bearer Token或Cookie)
+ * - 權限: 已認證用戶
+ * - 請求格式: FormData (POST) / Query Params (GET)
+ * - 回應格式: 標準化JSON格式
+ *
+ * 支援文件類型:
+ * - 文本文件: .txt, .md, .html, .csv, .json
+ * - 文檔文件: .pdf, .doc, .docx
+ * - 大小限制: 10MB
+ *
+ * 業務特色:
+ * - 多格式支援: 支援常見的文檔和文本格式
+ * - 重複檢測: 使用SHA-256哈希防止重複文件
+ * - 自動處理: 支援自動文檔解析和向量化
+ * - 事務安全: 使用資料庫事務確保數據一致性
+ * - 文件管理: 安全的文件存儲和清理機制
+ * - 標籤系統: 支援文件上傳時自動標籤關聯
+ * - 元數據保存: 完整記錄文件來源和處理信息
+ *
+ * 技術特色:
+ * - FormData處理: 支援multipart/form-data格式
+ * - 文件驗證: 嚴格的文件類型和大小驗證
+ * - 安全存儲: 防止路徑遍歷和惡意文件
+ * - 自動清理: 錯誤時自動清理已上傳文件
+ * - 處理任務: 自動創建文檔處理和向量化任務
+ * - 並行處理: 支援多種文檔處理任務並行執行
+ *
+ * 安全考量:
+ * - 文件類型白名單驗證
+ * - 文件大小限制防止DoS攻擊
+ * - 安全的文件名處理，防止路徑注入
+ * - 重複文件檢測，防止存儲浪費
+ * - 用戶權限驗證確保操作安全
+ *
+ * 注意事項:
+ * - 上傳需要用戶認證
+ * - 文件會自動觸發解析和向量化處理
+ * - 重複文件會被自動檢測並拒絕
+ * - 支援的文件類型可通過GET請求查詢
+ * - 文件上傳失敗時會自動清理臨時文件
+ *
+ * 更新記錄:
+ * - Week 1: 基礎文件上傳功能
+ * - Week 2: 文件類型驗證和安全處理
+ * - Week 3: 自動處理任務創建
+ * - Week 4: 錯誤處理和文件清理優化
+ * - Week 5: 性能優化和用戶體驗改善
+ * ================================================================
+ */
+
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
@@ -8,35 +72,75 @@ import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
 
-// 文件上傳驗證 schema
+/**
+ * ================================================================
+ * 配置常量和驗證架構 - Configuration Constants & Validation Schemas
+ * ================================================================
+ */
+
+// 文件上傳元數據驗證架構
 const FileUploadSchema = z.object({
-  category: z.nativeEnum(DocumentCategory).default(DocumentCategory.GENERAL),
-  tags: z.array(z.string()).optional(),
-  author: z.string().optional(),
-  language: z.string().default('zh-TW'),
-  auto_process: z.boolean().default(true)
+  category: z.nativeEnum(DocumentCategory).default(DocumentCategory.GENERAL),  // 文檔分類，預設通用
+  tags: z.array(z.string()).optional(),                                       // 可選的標籤陣列
+  author: z.string().optional(),                                              // 可選的作者信息
+  language: z.string().default('zh-TW'),                                      // 文檔語言，預設繁體中文
+  auto_process: z.boolean().default(true)                                     // 是否自動處理，預設啟用
 })
 
-// 支持的文件類型
+// 支援的文件類型映射表（MIME類型 → 文件擴展名）
 const SUPPORTED_MIME_TYPES = {
-  'text/plain': 'txt',
-  'text/markdown': 'md',
-  'application/pdf': 'pdf',
-  'application/msword': 'doc',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
-  'text/html': 'html',
-  'text/csv': 'csv',
-  'application/json': 'json'
+  'text/plain': 'txt',                                                        // 純文本文件
+  'text/markdown': 'md',                                                      // Markdown文件
+  'application/pdf': 'pdf',                                                   // PDF文檔
+  'application/msword': 'doc',                                                // Word文檔（舊格式）
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',  // Word文檔（新格式）
+  'text/html': 'html',                                                        // HTML文件
+  'text/csv': 'csv',                                                          // CSV數據文件
+  'application/json': 'json'                                                  // JSON數據文件
 }
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
-const UPLOAD_DIR = join(process.cwd(), 'uploads', 'knowledge-base')
+// 安全限制配置
+const MAX_FILE_SIZE = 10 * 1024 * 1024                                       // 最大文件大小：10MB
+const UPLOAD_DIR = join(process.cwd(), 'uploads', 'knowledge-base')           // 文件上傳目錄
 
-// POST /api/knowledge-base/upload - 上傳文件到知識庫
+/**
+ * ================================================================
+ * POST /api/knowledge-base/upload - 上傳文件到知識庫
+ * ================================================================
+ *
+ * 功能說明:
+ * - 接收multipart/form-data格式的文件上傳
+ * - 支援多種文檔格式（txt, md, pdf, doc, docx, html, csv, json）
+ * - 自動文件驗證、重複檢測、安全存儲
+ * - 創建知識庫項目並觸發處理任務
+ * - 支援文件標籤和元數據管理
+ *
+ * 請求格式 (FormData):
+ * - file: File                    // 上傳的文件（必填）
+ * - metadata: JSON string         // 文件元數據（可選）
+ *   {
+ *     category?: DocumentCategory,  // 文檔分類
+ *     tags?: string[],              // 標籤陣列
+ *     author?: string,              // 作者信息
+ *     language?: string,            // 文檔語言
+ *     auto_process?: boolean        // 自動處理開關
+ *   }
+ *
+ * 回應格式:
+ * {
+ *   success: true,
+ *   data: {...},                  // 創建的知識庫項目
+ *   message: string
+ * }
+ */
 export async function POST(request: NextRequest) {
   try {
-    // 驗證用戶身份
-    // Extract token from request
+    /**
+     * ===== 第一步：用戶身份驗證 =====
+     * 標準JWT Token驗證流程
+     */
+
+    // 從Authorization Header或Cookie提取JWT Token
     let token = request.headers.get('authorization')?.replace('Bearer ', '')
 
     if (!token) {
@@ -47,28 +151,33 @@ export async function POST(request: NextRequest) {
       throw AppError.unauthorized('No authentication token provided')
     }
 
-    // Verify the token
+    // 驗證token並提取用戶信息
     const payload = verifyToken(token)
 
     if (!payload || typeof payload !== 'object' || !payload.userId) {
       throw AppError.unauthorized('Invalid token payload')
     }
 
-    // 解析 FormData
-    const formData = await request.formData()
-    const file = formData.get('file') as File
-    const metadataJson = formData.get('metadata') as string
+    /**
+     * ===== 第二步：解析FormData和文件驗證 =====
+     */
 
+    // 解析multipart/form-data請求
+    const formData = await request.formData()
+    const file = formData.get('file') as File                              // 上傳的文件
+    const metadataJson = formData.get('metadata') as string                // 文件元數據JSON
+
+    // 驗證文件是否存在
     if (!file) {
       throw AppError.validation('No file provided')
     }
 
-    // 驗證文件大小
+    // 驗證文件大小（防止DoS攻擊）
     if (file.size > MAX_FILE_SIZE) {
       throw AppError.validation(`File size exceeds limit of ${MAX_FILE_SIZE / 1024 / 1024}MB`)
     }
 
-    // 驗證文件類型
+    // 驗證文件類型（白名單驗證）
     const mimeType = file.type
     if (!Object.keys(SUPPORTED_MIME_TYPES).includes(mimeType)) {
       throw AppError.validation(

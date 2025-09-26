@@ -1,3 +1,60 @@
+/**
+ * ================================================================
+ * 檔案名稱: 知識庫單個項目操作API路由
+ * 檔案用途: AI銷售賦能平台的知識庫項目CRUD操作API
+ * 開發階段: 生產環境就緒
+ * ================================================================
+ *
+ * 功能索引:
+ * 1. GET /api/knowledge-base/[id] - 獲取單個知識庫項目詳情
+ * 2. PUT /api/knowledge-base/[id] - 更新知識庫項目
+ * 3. DELETE /api/knowledge-base/[id] - 刪除知識庫項目（軟刪除/硬刪除）
+ *
+ * API規格:
+ * - 方法: GET, PUT, DELETE
+ * - 路徑: /api/knowledge-base/[id]
+ * - 認證: JWT Token (Bearer Token或Cookie)
+ * - 權限: 已認證用戶
+ * - 參數: id (路徑參數，知識庫項目ID)
+ * - 回應: 標準化JSON格式
+ *
+ * 業務特色:
+ * - 詳細信息查詢: 包含分塊、處理任務、標籤等完整信息
+ * - 智能更新: 內容變更時自動觸發重新處理
+ * - 版本控制: 每次更新自動增加版本號
+ * - 標籤管理: 動態標籤關聯和使用次數統計
+ * - 軟刪除支援: 預設軟刪除，可選硬刪除
+ * - 事務安全: 使用資料庫事務確保操作原子性
+ * - 重複檢測: 更新時檢測內容重複
+ *
+ * 技術特色:
+ * - 動態include: 根據需要載入關聯數據
+ * - 差異檢測: 智能檢測內容變更
+ * - 並行操作: 標籤更新並行處理
+ * - 自動清理: 刪除時清理相關數據
+ * - 錯誤恢復: 操作失敗時自動回滾
+ *
+ * 安全考量:
+ * - ID驗證: 嚴格的數字ID格式驗證
+ * - 權限檢查: 確保用戶有操作權限
+ * - 數據完整性: 事務保證數據一致性
+ * - 軟刪除優先: 預設使用軟刪除保護數據
+ *
+ * 注意事項:
+ * - 所有操作都需要用戶認證
+ * - 內容更新會觸發重新向量化
+ * - 刪除操作支援軟刪除和硬刪除
+ * - 標籤更新會維護使用次數統計
+ *
+ * 更新記錄:
+ * - Week 1: 基礎CRUD操作
+ * - Week 2: 標籤系統整合
+ * - Week 3: 版本控制和處理任務
+ * - Week 4: 軟刪除和安全增強
+ * - Week 5: 性能優化和錯誤處理完善
+ * ================================================================
+ */
+
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
@@ -5,21 +62,54 @@ import { AppError } from '@/lib/errors'
 import { verifyToken } from '@/lib/auth-server'
 import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'
 
-// 請求驗證 schemas
+/**
+ * ================================================================
+ * 資料驗證架構 - Data Validation Schemas
+ * ================================================================
+ */
+
+// 更新知識庫項目的請求驗證架構（所有欄位都是可選的）
 const UpdateKnowledgeBaseSchema = z.object({
-  title: z.string().min(1).max(255).optional(),
-  content: z.string().optional(),
-  category: z.nativeEnum(DocumentCategory).optional(),
-  source: z.string().optional(),
-  author: z.string().optional(),
-  language: z.string().optional(),
-  metadata: z.record(z.any()).optional(),
-  tags: z.array(z.string()).optional(),
-  status: z.nativeEnum(DocumentStatus).optional(),
-  processing_status: z.nativeEnum(ProcessingStatus).optional()
+  title: z.string().min(1).max(255).optional(),                          // 可選的標題更新
+  content: z.string().optional(),                                        // 可選的內容更新
+  category: z.nativeEnum(DocumentCategory).optional(),                   // 可選的分類更新
+  source: z.string().optional(),                                         // 可選的來源更新
+  author: z.string().optional(),                                         // 可選的作者更新
+  language: z.string().optional(),                                       // 可選的語言更新
+  metadata: z.record(z.any()).optional(),                                // 可選的元數據更新
+  tags: z.array(z.string()).optional(),                                  // 可選的標籤更新
+  status: z.nativeEnum(DocumentStatus).optional(),                       // 可選的狀態更新
+  processing_status: z.nativeEnum(ProcessingStatus).optional()           // 可選的處理狀態更新
 })
 
-// GET /api/knowledge-base/[id] - 獲取單個知識庫項目
+/**
+ * ================================================================
+ * GET /api/knowledge-base/[id] - 獲取單個知識庫項目詳情
+ * ================================================================
+ *
+ * 功能說明:
+ * - 查詢指定ID的知識庫項目完整信息
+ * - 包含創建者、更新者、標籤、分塊、處理任務等關聯數據
+ * - 提供分塊統計和處理狀態信息
+ * - 支援詳細的項目元數據查詢
+ *
+ * 路徑參數:
+ * - id: number - 知識庫項目ID
+ *
+ * 回應格式:
+ * {
+ *   success: true,
+ *   data: {
+ *     id, title, content, category, status, ...
+ *     creator: { id, first_name, last_name, email },
+ *     updater: { id, first_name, last_name, email },
+ *     tags: [{ id, name, color, description }],
+ *     chunks: [{ id, chunk_index, content, ... }],
+ *     processing_tasks: [{ id, task_type, status, ... }],
+ *     _count: { chunks: number }
+ *   }
+ * }
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
