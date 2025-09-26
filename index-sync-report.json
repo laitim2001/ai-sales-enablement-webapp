@@ -1,63 +1,13 @@
 {
-  "timestamp": "2025-09-24T17:31:28.088Z",
+  "timestamp": "2025-09-26T17:12:01.696Z",
   "summary": {
-    "totalIssues": 7,
+    "totalIssues": 0,
     "highSeverity": 0,
-    "mediumSeverity": 7,
+    "mediumSeverity": 0,
     "lowSeverity": 0,
-    "suggestions": 41
+    "suggestions": 47
   },
-  "issues": [
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "mvp-implementation-checklist.md",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: mvp-implementation-checklist.md"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/upload/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/upload/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/[id]/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/[id]/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/knowledge/[id]/edit/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/knowledge/[id]/edit/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/layout.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/layout.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "app/(dashboard)/dashboard/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: app/(dashboard)/dashboard/page.tsx"
-    }
-  ],
+  "issues": [],
   "suggestions": [
     {
       "type": "add_to_index",
@@ -114,6 +64,22 @@
       "severity": "low",
       "message": "建議將重要文件加入索引: docs\\mvp-implementation-checklist.md",
       "modifiedTime": "2025-09-24T17:27:28.951Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "docs\\performance-audit-2025.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\performance-audit-2025.md",
+      "modifiedTime": "2025-09-26T16:04:09.117Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "docs\\performance-implementation-guide.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\performance-implementation-guide.md",
+      "modifiedTime": "2025-09-26T16:11:29.411Z"
     },
     {
       "type": "add_to_index",
@@ -381,11 +347,37 @@
     },
     {
       "type": "add_to_index",
+      "file": "docs\\week5-development-plan.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\week5-development-plan.md",
+      "modifiedTime": "2025-09-26T16:13:16.079Z"
+    },
+    {
+      "type": "add_to_index",
       "file": "lib\\ai\\index.ts",
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\ai\\index.ts",
-      "modifiedTime": "2025-09-24T09:46:31.016Z"
+      "modifiedTime": "2025-09-26T15:11:52.306Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "e2e-test-summary.md",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: e2e-test-summary.md"
+    },
+    {
+      "type": "add_to_index",
+      "file": "playwright.config.ts",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: playwright.config.ts"
+    },
+    {
+      "type": "add_to_index",
+      "file": "test-execution-report.md",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: test-execution-report.md"
     }
   ]
 }

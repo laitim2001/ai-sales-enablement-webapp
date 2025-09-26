@@ -22,7 +22,11 @@
       "Bash(git push:*)",
       "Bash(dir \"C:\\ai-sales-enablement-webapp\\app\\(dashboard)\")",
       "Bash(rm:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(tasklist)",
+      "Bash(docker stop:*)"
     ],
     "deny": [],
     "ask": []

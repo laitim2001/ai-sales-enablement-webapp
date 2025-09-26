@@ -5,16 +5,33 @@ import { AppError } from '@/lib/errors'
 import { verifyToken } from '@/lib/auth-server'
 import { generateEmbedding } from '@/lib/ai/embeddings'
 import { DocumentCategory, DocumentStatus } from '@prisma/client'
+import { vectorSearchEngine, VectorSearchOptions, SearchPreferences } from '@/lib/search/vector-search'
 
-// 搜索請求驗證 schema
+// 增強的搜索請求驗證 schema - Week 5 優化
 const SearchKnowledgeBaseSchema = z.object({
   query: z.string().min(1, 'Search query is required'),
   type: z.enum(['text', 'semantic', 'hybrid']).default('hybrid'),
+
+  // 基本搜索參數
   category: z.nativeEnum(DocumentCategory).optional(),
   tags: z.array(z.string()).optional(),
   limit: z.number().int().min(1).max(50).default(10),
   similarity_threshold: z.number().min(0).max(1).default(0.7),
-  include_chunks: z.boolean().default(true)
+  include_chunks: z.boolean().default(true),
+
+  // Week 5 新增的高級搜索選項
+  search_algorithm: z.enum(['cosine', 'euclidean', 'hybrid']).optional(),
+  time_decay: z.boolean().default(true),
+  use_cache: z.boolean().default(true),
+
+  // 用戶偏好設置
+  user_preferences: z.object({
+    preferred_categories: z.array(z.nativeEnum(DocumentCategory)).optional(),
+    recent_activity_weight: z.number().min(0).max(1).optional(),
+    author_preferences: z.array(z.string()).optional(),
+    tag_preferences: z.array(z.string()).optional(),
+    language_preference: z.string().optional()
+  }).optional()
 })
 
 // POST /api/knowledge-base/search - 搜索知識庫
@@ -43,39 +60,85 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = SearchKnowledgeBaseSchema.parse(body)
 
-    const { query, type, category, tags, limit, similarity_threshold, include_chunks } = validatedData
+    const {
+      query,
+      type,
+      category,
+      tags,
+      limit,
+      similarity_threshold,
+      include_chunks,
+      search_algorithm,
+      time_decay,
+      use_cache,
+      user_preferences
+    } = validatedData
 
     let results: any[] = []
+    let searchMetadata: any = {}
 
-    if (type === 'text' || type === 'hybrid') {
-      // 文本搜索
-      const textResults = await performTextSearch(query, category, tags, limit)
-      results = [...textResults]
-    }
-
+    // Week 5 優化：使用新的向量搜索引擎進行語義和混合搜索
     if (type === 'semantic' || type === 'hybrid') {
-      // 語義搜索
       try {
-        const semanticResults = await performSemanticSearch(
+        // 構建向量搜索選項
+        const vectorSearchOptions: VectorSearchOptions = {
           query,
+          limit,
+          threshold: similarity_threshold,
+          searchType: search_algorithm || 'hybrid',
+          timeDecay: time_decay,
+          useCache: use_cache,
           category,
           tags,
-          limit,
-          similarity_threshold
-        )
+          includeChunks: include_chunks,
+          userPreferences: user_preferences as SearchPreferences
+        }
+
+        // 執行增強的向量搜索
+        const vectorSearchResult = await vectorSearchEngine.search(vectorSearchOptions)
 
         if (type === 'hybrid') {
-          // 合併和去重結果
-          results = mergeSearchResults(results, semanticResults, limit)
+          // 混合搜索：結合文本搜索和向量搜索
+          const textResults = await performTextSearch(query, category, tags, Math.floor(limit / 2))
+          results = mergeEnhancedSearchResults(textResults, vectorSearchResult.results, limit)
+          searchMetadata = {
+            ...vectorSearchResult.metadata,
+            hybridSearch: true,
+            textResultsCount: textResults.length,
+            vectorResultsCount: vectorSearchResult.results.length
+          }
         } else {
-          results = semanticResults
+          // 純語義搜索
+          results = vectorSearchResult.results
+          searchMetadata = {
+            ...vectorSearchResult.metadata,
+            hybridSearch: false
+          }
         }
+
       } catch (embeddingError) {
-        console.warn('Semantic search failed, falling back to text search:', embeddingError)
+        console.warn('Enhanced vector search failed, falling back to legacy search:', embeddingError)
+
+        // 降級到原有的搜索邏輯
         if (type === 'semantic') {
-          // 如果純語義搜索失敗，返回文本搜索結果
-          results = await performTextSearch(query, category, tags, limit)
+          results = await performLegacySemanticSearch(query, category, tags, limit, similarity_threshold)
+        } else {
+          const textResults = await performTextSearch(query, category, tags, limit)
+          const legacySemanticResults = await performLegacySemanticSearch(query, category, tags, limit, similarity_threshold)
+          results = mergeSearchResults(textResults, legacySemanticResults, limit)
         }
+
+        searchMetadata = {
+          fallbackMode: true,
+          errorMessage: 'Enhanced search unavailable, using legacy mode'
+        }
+      }
+    } else {
+      // 純文本搜索
+      results = await performTextSearch(query, category, tags, limit)
+      searchMetadata = {
+        searchType: 'text',
+        hybridSearch: false
       }
     }
 
@@ -111,6 +174,7 @@ export async function POST(request: NextRequest) {
       }))
     }
 
+    // Week 5 增強響應格式 - 包含詳細的搜索元數據
     return NextResponse.json({
       success: true,
       data: results,
@@ -118,7 +182,19 @@ export async function POST(request: NextRequest) {
         query,
         search_type: type,
         total_results: results.length,
-        similarity_threshold: type !== 'text' ? similarity_threshold : undefined
+        similarity_threshold: type !== 'text' ? similarity_threshold : undefined,
+
+        // Week 5 新增的搜索元數據
+        search_algorithm: search_algorithm || 'hybrid',
+        time_decay_enabled: time_decay,
+        cache_enabled: use_cache,
+        user_preferences_applied: !!user_preferences,
+
+        // 性能和搜索質量指標
+        ...searchMetadata,
+
+        // 搜索建議（如果結果少於預期）
+        suggestions: results.length < Math.floor(limit / 2) ? await generateSearchSuggestions(query) : undefined
       }
     })
 
@@ -450,4 +526,231 @@ function cosineSimilarity(vecA: number[], vecB: number[]): number {
   }
 
   return dotProduct / (normA * normB)
+}
+
+// Week 5 新增函數 - 增強搜索結果合併
+function mergeEnhancedSearchResults(textResults: any[], vectorResults: any[], limit: number): any[] {
+  const mergedMap = new Map()
+
+  // 添加向量搜索結果（優先級較高）
+  vectorResults.forEach(result => {
+    mergedMap.set(result.id, {
+      ...result,
+      search_scores: {
+        semantic: result.similarity,
+        relevance: result.relevanceScore
+      },
+      search_score: result.relevanceScore,
+      search_type: 'enhanced_semantic'
+    })
+  })
+
+  // 添加文本搜索結果
+  textResults.forEach(result => {
+    const normalizedTextScore = Math.min(result.search_score / 20, 1)
+
+    if (mergedMap.has(result.id)) {
+      const existing = mergedMap.get(result.id)
+      existing.search_scores.text = normalizedTextScore
+
+      // 增強混合評分：語義60% + 相關性20% + 文本20%
+      existing.search_score = (existing.search_scores.semantic * 0.6) +
+                             (existing.search_scores.relevance * 0.2) +
+                             (normalizedTextScore * 0.2)
+      existing.search_type = 'enhanced_hybrid'
+    } else {
+      mergedMap.set(result.id, {
+        ...result,
+        search_scores: { text: normalizedTextScore },
+        search_score: normalizedTextScore,
+        search_type: 'text'
+      })
+    }
+  })
+
+  // 排序並返回
+  return Array.from(mergedMap.values())
+    .sort((a, b) => b.search_score - a.search_score)
+    .slice(0, limit)
+}
+
+// Week 5 新增函數 - 降級到原有語義搜索（重命名避免衝突）
+async function performLegacySemanticSearch(
+  query: string,
+  category?: DocumentCategory,
+  tags?: string[],
+  limit: number = 10,
+  similarity_threshold: number = 0.7
+) {
+  // 保留原有的 performSemanticSearch 邏輯作為降級方案
+  const queryEmbedding = await generateEmbedding(query)
+
+  if (!queryEmbedding || !queryEmbedding.embedding) {
+    throw new Error('Failed to generate query embedding')
+  }
+
+  const baseWhere: any = {
+    status: { in: [DocumentStatus.ACTIVE, DocumentStatus.DRAFT] }
+  }
+
+  if (category) {
+    baseWhere.category = category
+  }
+
+  if (tags && tags.length > 0) {
+    baseWhere.tags = {
+      some: {
+        name: { in: tags }
+      }
+    }
+  }
+
+  const chunks = await prisma.knowledgeChunk.findMany({
+    where: {
+      knowledge_base: baseWhere,
+      vector_embedding: { not: null }
+    },
+    include: {
+      knowledge_base: {
+        include: {
+          creator: {
+            select: { id: true, first_name: true, last_name: true }
+          },
+          tags: {
+            select: { id: true, name: true, color: true }
+          }
+        }
+      }
+    },
+    orderBy: { chunk_index: 'asc' }
+  })
+
+  const scoredChunks: any[] = []
+
+  for (const chunk of chunks) {
+    if (!chunk.vector_embedding) continue
+
+    let chunkEmbedding: number[]
+    try {
+      chunkEmbedding = JSON.parse(chunk.vector_embedding)
+    } catch (e) {
+      continue
+    }
+
+    if (chunkEmbedding.length !== queryEmbedding.embedding.length) {
+      continue
+    }
+
+    const similarity = cosineSimilarity(queryEmbedding.embedding, chunkEmbedding)
+
+    if (similarity >= similarity_threshold) {
+      scoredChunks.push({
+        ...chunk,
+        similarity_score: similarity
+      })
+    }
+
+    if (scoredChunks.length >= limit * 3) {
+      break
+    }
+  }
+
+  scoredChunks.sort((a, b) => b.similarity_score - a.similarity_score)
+
+  const groupedByKB = new Map()
+  scoredChunks.forEach(chunk => {
+    const kbId = chunk.knowledge_base.id
+    if (!groupedByKB.has(kbId) ||
+        groupedByKB.get(kbId).similarity_score < chunk.similarity_score) {
+      groupedByKB.set(kbId, chunk)
+    }
+  })
+
+  return Array.from(groupedByKB.values())
+    .slice(0, limit)
+    .map(chunk => ({
+      ...chunk.knowledge_base,
+      search_score: chunk.similarity_score,
+      search_type: 'legacy_semantic',
+      best_chunk: {
+        id: chunk.id,
+        content: chunk.content,
+        chunk_index: chunk.chunk_index,
+        similarity_score: chunk.similarity_score
+      }
+    }))
+}
+
+// Week 5 新增函數 - 智能搜索建議
+async function generateSearchSuggestions(originalQuery: string): Promise<string[]> {
+  try {
+    // 基於常見搜索模式生成建議
+    const suggestions: string[] = []
+
+    // 1. 查找相似的標籤
+    const popularTags = await prisma.knowledgeTag.findMany({
+      where: {
+        usage_count: { gt: 0 }
+      },
+      orderBy: {
+        usage_count: 'desc'
+      },
+      take: 10,
+      select: {
+        name: true
+      }
+    })
+
+    // 2. 查找相關分類的常見詞彙
+    const categories = await prisma.knowledgeBase.groupBy({
+      by: ['category'],
+      _count: {
+        category: true
+      },
+      orderBy: {
+        _count: {
+          category: 'desc'
+        }
+      },
+      take: 5
+    })
+
+    // 3. 生成搜索建議
+    const queryWords = originalQuery.toLowerCase().split(/\s+/)
+
+    // 添加標籤建議
+    popularTags.forEach(tag => {
+      if (tag.name.toLowerCase().includes(queryWords[0]) ||
+          queryWords.some(word => tag.name.toLowerCase().includes(word))) {
+        suggestions.push(`標籤: ${tag.name}`)
+      }
+    })
+
+    // 添加分類建議
+    categories.forEach(category => {
+      const categoryName = category.category.toLowerCase()
+      if (queryWords.some(word => categoryName.includes(word) || word.includes(categoryName))) {
+        suggestions.push(`分類: ${category.category}`)
+      }
+    })
+
+    // 添加通用建議
+    if (suggestions.length < 3) {
+      suggestions.push(
+        `試試 "${originalQuery} 文檔"`,
+        `試試 "${originalQuery} 教程"`,
+        `試試 "${originalQuery} 規格"`
+      )
+    }
+
+    return suggestions.slice(0, 5)
+
+  } catch (error) {
+    console.warn('Failed to generate search suggestions:', error)
+    return [
+      '試試更具體的關鍵詞',
+      '檢查拼寫是否正確',
+      '使用同義詞或相關詞彙'
+    ]
+  }
 }

@@ -1,7 +1,42 @@
-// 客戶端安全的認證工具 - 不包含 JWT_SECRET
+/**
+ * ================================================================
+ * 檔案名稱: 客戶端認證工具庫
+ * 檔案用途: AI銷售賦能平台的客戶端安全認證驗證功能
+ * 開發階段: 開發完成
+ * ================================================================
+ *
+ * 功能索引:
+ * 1. validatePassword() - 密碼強度驗證
+ * 2. validateEmail() - Email格式驗證
+ *
+ * 安全特色:
+ * - 客戶端安全設計: 不包含JWT_SECRET等敏感資訊
+ * - 密碼安全策略: 8字符最低長度，包含大小寫、數字、特殊字符
+ * - Email格式驗證: 使用正則表達式進行嚴格驗證
+ * - 前端即時驗證: 提供用戶友善的即時反饋
+ *
+ * 注意事項:
+ * - 此檔案僅包含客戶端安全的驗證邏輯
+ * - 所有敏感操作應在服務端進行
+ * - 驗證結果僅供前端顯示，最終驗證以服務端為準
+ *
+ * 更新記錄:
+ * - Week 1: 初始版本，基礎密碼和Email驗證
+ * ================================================================
+ */
 
 /**
- * 密碼強度驗證
+ * 密碼強度驗證函數
+ *
+ * 驗證密碼是否符合安全要求：
+ * - 至少8個字符
+ * - 包含大寫字母
+ * - 包含小寫字母
+ * - 包含數字
+ * - 包含特殊字符
+ *
+ * @param password - 待驗證的密碼
+ * @returns 包含驗證結果和錯誤訊息的物件
  */
 export function validatePassword(password: string): {
   isValid: boolean
@@ -9,22 +44,27 @@ export function validatePassword(password: string): {
 } {
   const errors: string[] = []
 
+  // 檢查密碼長度（最低8字符）
   if (password.length < 8) {
     errors.push('密碼長度至少需要 8 個字符')
   }
 
+  // 檢查是否包含大寫字母
   if (!/[A-Z]/.test(password)) {
     errors.push('密碼必須包含至少一個大寫字母')
   }
 
+  // 檢查是否包含小寫字母
   if (!/[a-z]/.test(password)) {
     errors.push('密碼必須包含至少一個小寫字母')
   }
 
+  // 檢查是否包含數字
   if (!/\d/.test(password)) {
     errors.push('密碼必須包含至少一個數字')
   }
 
+  // 檢查是否包含特殊字符
   if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
     errors.push('密碼必須包含至少一個特殊字符')
   }
@@ -36,9 +76,16 @@ export function validatePassword(password: string): {
 }
 
 /**
- * Email 格式驗證
+ * Email格式驗證函數
+ *
+ * 使用正則表達式驗證Email地址格式是否正確
+ * 檢查基本的Email結構：用戶名@域名.頂級域名
+ *
+ * @param email - 待驗證的Email地址
+ * @returns 布林值，true表示格式正確，false表示格式錯誤
  */
 export function validateEmail(email: string): boolean {
+  // Email正則表達式：檢查基本的用戶名@域名.頂級域名格式
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
 }
