@@ -263,7 +263,7 @@ export function DocumentPreview({
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    {csvData[0]?.map((header, index) => (
+                    {csvData[0]?.map((header: string, index: number) => (
                       <th key={index} className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {header}
                       </th>
@@ -271,9 +271,9 @@ export function DocumentPreview({
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {csvData.slice(1, 21).map((row, rowIndex) => (
+                  {csvData.slice(1, 21).map((row: string[], rowIndex: number) => (
                     <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      {row.map((cell, cellIndex) => (
+                      {row.map((cell: string, cellIndex: number) => (
                         <td key={cellIndex} className="px-4 py-2 text-sm text-gray-900">
                           {cell}
                         </td>

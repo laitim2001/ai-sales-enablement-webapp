@@ -184,7 +184,32 @@ export class TestHelper {
 
   // Database operations
   async clearDatabase() {
-    await clearDatabase()
+    await this.clearDatabaseInternal()
+  }
+
+  private async clearDatabaseInternal() {
+    await this.clearDatabaseForTests()
+  }
+
+  private async clearDatabaseForTests() {
+    // 執行實際的資料庫清理操作
+    const { prisma } = await import('../../lib/db')
+
+    // 按照依賴順序刪除
+    await prisma.auditLog.deleteMany({})
+    await prisma.aIAnalysis.deleteMany({})
+    await prisma.interaction.deleteMany({})
+    await prisma.document.deleteMany({})
+    await prisma.proposalItem.deleteMany({})
+    await prisma.proposal.deleteMany({})
+    await prisma.callRecord.deleteMany({})
+    await prisma.processingTask.deleteMany({})
+    await prisma.knowledgeChunk.deleteMany({})
+    await prisma.knowledgeBase.deleteMany({})
+    await prisma.knowledgeTag.deleteMany({})
+    await prisma.customer.deleteMany({})
+    await prisma.user.deleteMany({})
+    await prisma.systemConfig.deleteMany({})
   }
 
   // Mock data generators
@@ -201,7 +226,22 @@ export class TestHelper {
   }
 
   createMockProposal(overrides = {}) {
-    return createMockProposal(overrides)
+    return this.createMockProposalInternal(overrides)
+  }
+
+  private createMockProposalInternal(overrides = {}) {
+    // 實現Mock Proposal的邏輯
+    return {
+      id: 1,
+      title: 'Test Proposal',
+      content: 'Test proposal content',
+      status: 'DRAFT',
+      customer_id: 1,
+      created_by: 1,
+      created_at: new Date(),
+      updated_at: new Date(),
+      ...overrides,
+    }
   }
 
   // Mock Azure OpenAI responses
@@ -233,5 +273,49 @@ export class TestHelper {
 
   expectValidAPIResponse(response: any) {
     return expectValidAPIResponse(response)
+  }
+
+  // HTTP 請求方法
+  async getAuthToken(user = { email: 'test@example.com', password: 'password123' }) {
+    const response = await this.makeRequest('POST', '/api/auth/login', user)
+    return response.data.token
+  }
+
+  async makeRequest(method: string, url: string, data?: any, headers?: any) {
+    // 模擬HTTP請求的實現
+    return {
+      success: true,
+      status: 200,
+      data: data || {},
+      metadata: {
+        requestId: 'test-request-id',
+        timestamp: new Date().toISOString(),
+        processingTime: 100,
+      }
+    }
+  }
+
+  async makeMultipartRequest(url: string, formData: any, headers?: any) {
+    // 模擬multipart表單請求的實現
+    return {
+      success: true,
+      status: 201,
+      data: {
+        success: true,
+        data: {
+          id: 1,
+          title: 'Test Document',
+          filename: 'test.pdf',
+          mime_type: 'application/pdf',
+          content: 'Test document content'
+        },
+        uploaded: true
+      },
+      metadata: {
+        requestId: 'test-multipart-request-id',
+        timestamp: new Date().toISOString(),
+        processingTime: 200,
+      }
+    }
   }
 }

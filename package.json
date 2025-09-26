@@ -19,6 +19,17 @@
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "test:e2e:knowledge": "tsx e2e/run-knowledge-tests.ts",
+    "test:e2e:knowledge:navigation": "tsx e2e/run-knowledge-tests.ts -- --suite navigation",
+    "test:e2e:knowledge:main": "tsx e2e/run-knowledge-tests.ts -- --suite main",
+    "test:e2e:knowledge:create": "tsx e2e/run-knowledge-tests.ts -- --suite create",
+    "test:e2e:knowledge:upload": "tsx e2e/run-knowledge-tests.ts -- --suite upload",
+    "test:e2e:knowledge:search": "tsx e2e/run-knowledge-tests.ts -- --suite search",
+    "test:e2e:knowledge:details": "tsx e2e/run-knowledge-tests.ts -- --suite details",
+    "test:e2e:knowledge:edit": "tsx e2e/run-knowledge-tests.ts -- --suite edit",
+    "test:e2e:knowledge:performance": "tsx e2e/run-knowledge-tests.ts -- --suite performance",
+    "test:e2e:knowledge:integration": "tsx e2e/run-knowledge-tests.ts -- --suite integration",
+    "test:e2e:knowledge:quick": "playwright test e2e/knowledge-base/navigation.spec.ts e2e/knowledge-base/main-page.spec.ts --workers=2",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "docker:prod": "docker-compose up",
     "poc:test": "cd poc && node run-all-tests.js",
@@ -52,7 +63,7 @@
     "db:deploy": "npm run db:generate && npm run db:migrate:deploy",
     "health-check": "node healthcheck.js",
     "deploy:staging": "echo 'Deploying to staging...' && npm run docker:prod:build && npm run docker:prod:up",
-    "deploy:production": "echo 'Deploying to production...' && npm run db:deploy && npm run docker:prod:build && npm run docker:prod:up"
+    "deploy:production": "echo 'Deploying to production..' && npm run db:deploy && npm run docker:prod:build && npm run docker:prod:up"
   },
   "dependencies": {
     "@azure/openai": "^1.0.0-beta.12",

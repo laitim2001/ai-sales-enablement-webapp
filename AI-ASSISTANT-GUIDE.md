@@ -44,6 +44,8 @@ README.md                              # 項目說明
 app/layout.tsx                         # Next.js 根布局
 lib/auth.ts                            # JWT 認證系統
 lib/db.ts                              # 資料庫連接配置
+types/ai.ts                            # AI 服務 TypeScript 類型定義
+types/index.ts                         # 統一類型導出入口
 .eslintrc.json                         # ESLint 配置
 postcss.config.js                      # PostCSS 配置
 ```
@@ -175,6 +177,7 @@ npm run index:health       # 完整健康檢查
 | 技術驗證？ | `poc/README.md` |
 | 環境設置？ | `.env.example` |
 | 開發記錄？ | `DEVELOPMENT-LOG.md` |
+| **TypeScript 類型？** | `types/ai.ts`, `types/index.ts` |
 | **完整文件索引？** | `PROJECT-INDEX.md` |
 | **索引維護方法？** | `INDEX-MAINTENANCE-GUIDE.md` |
 | **索引提醒設置？** | `docs/INDEX-REMINDER-SETUP.md` |

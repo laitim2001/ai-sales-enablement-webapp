@@ -30,6 +30,7 @@ interface RegisterFormErrors {
   firstName?: string
   lastName?: string
   department?: string
+  role?: string
   general?: string
 }
 

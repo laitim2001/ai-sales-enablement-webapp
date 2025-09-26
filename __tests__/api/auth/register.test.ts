@@ -9,7 +9,10 @@ import bcrypt from 'bcryptjs'
 
 // Mock dependencies
 jest.mock('@prisma/client')
-jest.mock('bcryptjs')
+jest.mock('bcryptjs', () => ({
+  hash: jest.fn(),
+  compare: jest.fn(),
+}))
 jest.mock('jsonwebtoken')
 
 const mockPrisma = {
@@ -28,7 +31,7 @@ const mockJWT = require('jsonwebtoken')
 describe('/api/auth/register', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockBcrypt.hash.mockResolvedValue('hashed-password' as any)
+    ;(mockBcrypt.hash as jest.Mock).mockResolvedValue('hashed-password')
     mockJWT.sign.mockReturnValue('mock-jwt-token')
   })
 
