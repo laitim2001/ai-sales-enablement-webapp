@@ -27,7 +27,7 @@
  *
  * 【技術特點】
  * • 自動HTTP 404狀態碼 - Next.js自動處理
- * • 靜態生成 - 快速載入，無需服務端渲染
+ * • 客戶端互動 - 包含onclick事件處理器
  * • SEO友好 - 搜尋引擎正確識別404狀態
  * • 響應式設計 - 適配各種螢幕尺寸
  *
@@ -38,10 +38,12 @@
  *
  * 【開發注意】
  * • not-found.tsx會自動返回HTTP 404狀態碼
- * • 不需要'use client'指令，是服務端組件
+ * • 需要'use client'指令，因為包含事件處理器
  * • 確保提供有用的導航選項
  * • 考慮添加搜尋功能或常用頁面連結
  */
+
+'use client'
 
 import Link from 'next/link'                           // Next.js路由連結組件
 import { Button } from '@/components/ui/button'        // UI按鈕組件
@@ -52,6 +54,7 @@ import { Home, ArrowLeft, Search, FileQuestion } from 'lucide-react'  // 圖示�
  *
  * 當用戶訪問不存在的路由時顯示的頁面
  * 自動返回HTTP 404狀態碼，對SEO友好
+ * 包含客戶端互動功能（返回上一頁按鈕）
  *
  * @returns 404錯誤頁面的JSX元素
  */

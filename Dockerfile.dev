@@ -4,11 +4,14 @@ FROM node:18-alpine
 # 設定工作目錄
 WORKDIR /app
 
-# 安裝系統依賴
+# 安裝系統依賴，包含SSL相容性庫
 RUN apk add --no-cache \
     postgresql-client \
     curl \
-    git
+    git \
+    openssl \
+    openssl-dev \
+    libc6-compat
 
 # 複製 package 文件
 COPY package*.json ./

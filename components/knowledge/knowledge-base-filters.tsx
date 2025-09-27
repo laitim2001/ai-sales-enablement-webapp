@@ -1,3 +1,74 @@
+/**
+ * ================================================================
+ * AI銷售賦能平台 - 知識庫篩選器組件 (/components/knowledge/knowledge-base-filters.tsx)
+ * ================================================================
+ *
+ * 【組件功能】
+ * 提供知識庫文檔的多維度篩選和搜索功能，包括搜索框、類別篩選、狀態篩選、
+ * 標籤篩選、排序功能等，並支持URL同步和高級篩選器展開收起。
+ *
+ * 【主要職責】
+ * • 搜索功能 - 支持文檔標題、內容、標籤的全文搜索
+ * • 類別篩選 - 根據文檔類別(PRODUCT_SPEC、SALES_MATERIAL等)篩選
+ * • 狀態篩選 - 根據文檔狀態(ACTIVE、INACTIVE、ARCHIVED等)篩選
+ * • 排序控制 - 支持按更新時間、創建時間、標題等欄位排序
+ * • 標籤篩選 - 支持多標籤篩選功能
+ * • URL同步 - 篩選條件與URL參數同步，支持書籤和分享
+ * • 狀態管理 - 管理當前激活的篩選條件和顯示狀態
+ * • 清除功能 - 提供一鍵清除所有篩選條件的功能
+ *
+ * 【Props介面】
+ * • initialFilters - KnowledgeBaseFiltersProps - 初始篩選條件
+ *   - page: number - 當前頁碼
+ *   - limit: number - 每頁顯示數量
+ *   - category?: string - 可選的類別篩選
+ *   - status?: string - 可選的狀態篩選
+ *   - search?: string - 可選的搜索關鍵字
+ *   - tags?: string - 可選的標籤篩選
+ *   - sort: string - 排序欄位
+ *   - order: 'asc' | 'desc' - 排序方向
+ *
+ * 【狀態管理】
+ * • search - 搜索關鍵字狀態
+ * • category - 選中的類別篩選
+ * • status - 選中的狀態篩選
+ * • tags - 標籤篩選字符串
+ * • sort - 當前排序欄位
+ * • order - 當前排序方向
+ * • showAdvanced - 高級篩選器展開狀態
+ *
+ * 【用戶互動】
+ * • 搜索提交 - 表單提交觸發搜索
+ * • 篩選器變更 - 下拉選單變更即時更新URL
+ * • 高級篩選器切換 - 顯示/隱藏高級篩選選項
+ * • 標籤操作 - 顯示當前篩選標籤並支持單獨移除
+ * • 清除操作 - 一鍵清除所有篩選條件
+ *
+ * 【渲染邏輯】
+ * • 基礎搜索框 - 始終顯示，支持即時輸入
+ * • 高級篩選器 - 根據showAdvanced狀態條件顯示
+ * • 篩選標籤 - 有激活篩選條件時顯示標籤列表
+ * • 清除按鈕 - 有激活篩選條件時顯示
+ *
+ * 【Hook使用】
+ * • useRouter - Next.js路由器，用於URL導航
+ * • useSearchParams - 獲取當前URL查詢參數
+ * • useState - 管理各種篩選條件的本地狀態
+ * • useEffect - 檢測高級篩選器激活狀態
+ *
+ * 【相關檔案】
+ * • /components/knowledge/knowledge-base-list.tsx - 接收篩選條件的列表組件
+ * • /app/dashboard/knowledge/page.tsx - 父頁面組件
+ * • /api/knowledge-base - 後端API端點
+ *
+ * 【開發注意】
+ * • URL參數同步 - 所有篩選變更都會更新URL並重置到第一頁
+ * • 性能優化 - 使用即時篩選，避免不必要的API請求
+ * • 狀態同步 - 組件狀態與URL參數保持同步
+ * • 用戶體驗 - 提供視覺化的篩選標籤和清除功能
+ * • 響應式設計 - 在不同螢幕尺寸下適當調整佈局
+ */
+
 'use client'
 
 import { useState, useEffect } from 'react'

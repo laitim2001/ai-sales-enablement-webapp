@@ -1,18 +1,37 @@
 /**
- * AI 銷售賦能平台 - 性能監控和優化驗證系統
- * Performance Monitoring and Optimization Validation System
+ * ================================================================
+ * AI銷售賦能平台 - 性能監控和優化驗證系統 (/lib/monitoring/performance-monitor.ts)
+ * ================================================================
  *
- * 功能特色 Features:
- * 1. 實時性能監控 - Real-time performance monitoring
- * 2. 搜索性能分析 - Search performance analysis
- * 3. 緩存效率監控 - Cache efficiency monitoring
- * 4. API響應時間追蹤 - API response time tracking
- * 5. 資源使用監控 - Resource usage monitoring
- * 6. 性能優化建議 - Performance optimization recommendations
- * 7. 性能報告生成 - Performance report generation
- * 8. 異常檢測和警報 - Anomaly detection and alerts
+ * 【檔案功能】
+ * 提供全面的性能監控、分析和優化建議功能，專注於AI銷售平台的關鍵性能指標追蹤。
+ * 支援實時監控、歷史分析、異常檢測和智能優化建議，確保系統最佳性能表現。
  *
- * Week 5 開發階段 - Task 5.5: 性能監控和優化驗證
+ * 【主要職責】
+ * • 實時性能監控 - 追蹤API響應時間、吞吐量、錯誤率等核心指標
+ * • 搜索性能分析 - 監控AI搜索功能的響應時間、準確度和用戶滿意度
+ * • 緩存效率監控 - 追蹤記憶體和Redis緩存的命中率、響應時間和使用效率
+ * • 資源使用監控 - 監控CPU、記憶體使用情況和系統負載狀態
+ * • 異常檢測警報 - 智能檢測性能異常並觸發即時警報和通知
+ * • 性能優化建議 - 基於數據分析提供具體的性能優化建議和實施指導
+ * • 系統健康評估 - 綜合評估各組件健康狀態並提供整體系統評分
+ * • 性能報告生成 - 自動生成詳細的性能分析報告和趨勢圖表
+ *
+ * 【技術實現】
+ * • Zod數據驗證 - 確保性能指標數據的格式正確性和一致性
+ * • 時序數據管理 - 高效的時間序列數據儲存和查詢機制
+ * • 統計算法引擎 - 支援百分位數、平均值、趨勢分析等統計計算
+ * • 智能閾值檢測 - 動態調整的性能閾值和多級警報機制
+ * • 批次數據處理 - 高效的批次指標收集和聚合處理
+ * • 記憶體優化管理 - 自動清理過期數據，防止記憶體洩漏
+ * • 報告生成引擎 - 靈活的報告模板和多格式輸出支援
+ * • 採樣策略控制 - 可配置的數據採樣率，平衡性能監控和系統負載
+ *
+ * 【相關檔案】
+ * • /lib/performance/monitor.ts - 基礎性能監控，與本檔案功能互補
+ * • /lib/cache/vector-cache.ts - 向量緩存系統，提供緩存性能數據
+ * • /lib/api/error-handler.ts - API錯誤處理，提供錯誤率統計
+ * • /components/admin/PerformanceDashboard.tsx - 性能監控界面組件
  */
 
 import { z } from 'zod'
@@ -178,7 +197,20 @@ export class PerformanceMonitorService {
   }
 
   /**
-   * 記錄性能指標 - Record performance metric
+   * 記錄性能指標
+   *
+   * 接收並處理單個性能指標，包含數據驗證、儲存、警報檢查和聚合處理。
+   * 支援採樣率控制，在高負載情況下可降低監控開銷。
+   *
+   * 處理流程:
+   * 1. 採樣率檢查 - 根據配置決定是否記錄此指標
+   * 2. 數據補全和驗證 - 添加ID和時間戳，驗證數據格式
+   * 3. 指標分類儲存 - 按類型和服務進行分類儲存
+   * 4. 警報條件檢查 - 即時檢測是否超過預設閾值
+   * 5. 數據聚合處理 - 按不同時間間隔進行數據聚合
+   * 6. 記憶體管理 - 自動清理過期數據避免記憶體溢出
+   *
+   * @param metric 性能指標數據（不含ID和時間戳）
    */
   async recordMetric(metric: Omit<PerformanceMetric, 'id' | 'timestamp'>): Promise<void> {
     try {

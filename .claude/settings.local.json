@@ -27,7 +27,13 @@
       "Bash(findstr:*)",
       "Bash(tasklist)",
       "Bash(docker stop:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git stash:*)",
+      "Bash(docker:*)",
+      "Read(//c//**)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(npx playwright test:*)"
     ],
     "deny": [],
     "ask": []

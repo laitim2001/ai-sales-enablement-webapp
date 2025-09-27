@@ -1,92 +1,39 @@
 {
-  /**
-   * ================================================================
-   * AI銷售賦能平台 - TypeScript配置檔案 (tsconfig.json)
-   * ================================================================
-   *
-   * 【檔案功能】
-   * 此檔案是TypeScript編譯器的配置檔案，定義TypeScript代碼的編譯選項和行為
-   * 配置類型檢查、模組解析、輸出格式等編譯相關設定
-   *
-   * 【主要配置區塊】
-   * • compilerOptions: 編譯器選項，控制編譯行為和輸出
-   * • include: 指定需要編譯的檔案和目錄
-   * • exclude: 指定需要排除的檔案和目錄
-   * • plugins: 啟用的TypeScript插件
-   *
-   * 【編譯目標】
-   * • ES5兼容性 - 支援較舊的瀏覽器
-   * • 嚴格模式 - 啟用所有嚴格類型檢查
-   * • Next.js優化 - 專門為Next.js框架優化的配置
-   * • 開發體驗 - 快速編譯和熱重載支援
-   *
-   * 【路徑映射】
-   * • @/* - 項目根目錄別名，簡化導入路徑
-   * • @/components/* - 組件目錄別名
-   * • @/lib/* - 工具庫目錄別名
-   * • @/app/* - 應用程式目錄別名
-   *
-   * 【相關檔案】
-   * • next.config.js - Next.js配置，需要與TS配置協調
-   * • .eslintrc.json - ESLint配置，依賴TypeScript解析
-   * • package.json - 包含TypeScript依賴和腳本
-   */
-
-  // TypeScript編譯器選項配置
   "compilerOptions": {
-    // === 編譯目標和輸出配置 ===
-    "target": "es5",                    // 編譯目標 - ES5兼容性，支援較舊瀏覽器
-    "lib": ["dom", "dom.iterable", "es6"],  // 包含的庫類型定義
-    "noEmit": true,                     // 不輸出編譯檔案 - Next.js自行處理編譯
-
-    // === 模組系統配置 ===
-    "module": "esnext",                 // 模組格式 - ES2022模組語法
-    "moduleResolution": "bundler",      // 模組解析策略 - 現代打包工具兼容
-    "esModuleInterop": true,            // 啟用ES模組互操作性
-    "resolveJsonModule": true,          // 允許導入JSON檔案
-    "isolatedModules": true,            // 確保每個檔案都可以獨立編譯
-
-    // === JavaScript兼容性 ===
-    "allowJs": true,                    // 允許編譯JavaScript檔案
-    "skipLibCheck": true,               // 跳過庫檔案類型檢查 - 提升編譯速度
-
-    // === 類型檢查配置 ===
-    "strict": true,                     // 啟用所有嚴格類型檢查選項
-
-    // === React和JSX配置 ===
-    "jsx": "preserve",                  // 保留JSX語法 - 讓Next.js處理JSX轉換
-
-    // === 增量編譯和效能 ===
-    "incremental": true,                // 啟用增量編譯 - 提升重新編譯速度
-
-    // === Next.js整合 ===
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "es6"],
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "jsx": "preserve",
+    "incremental": true,
     "plugins": [
       {
-        "name": "next"                  // Next.js TypeScript插件 - 提供Next.js特定類型支援
+        "name": "next"
       }
     ],
-
-    // === 路徑映射配置 ===
-    "baseUrl": ".",                     // 基礎URL - 項目根目錄
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],                   // @/ 映射到項目根目錄
-      "@/components/*": ["./components/*"],  // @/components/ 映射到components目錄
-      "@/lib/*": ["./lib/*"],           // @/lib/ 映射到lib目錄
-      "@/app/*": ["./app/*"]            // @/app/ 映射到app目錄
+      "@/*": ["./*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/app/*": ["./app/*"]
     }
   },
-
-  // 包含在編譯中的檔案和目錄
   "include": [
-    "next-env.d.ts",                    // Next.js環境類型定義
-    "types/**/*.d.ts",                  // 自定義類型定義檔案
-    "**/*.ts",                          // 所有TypeScript檔案
-    "**/*.tsx",                         // 所有React TypeScript檔案
-    ".next/types/**/*.ts"               // Next.js生成的類型檔案
+    "next-env.d.ts",
+    "types/**/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
-
-  // 排除在編譯外的檔案和目錄
   "exclude": [
-    "node_modules"                      // 排除第三方依賴包
+    "node_modules"
   ]
 }

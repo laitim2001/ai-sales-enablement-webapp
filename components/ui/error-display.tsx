@@ -1,3 +1,99 @@
+/**
+ * ================================================================
+ * AI銷售賦能平台 - 錯誤顯示組件 (/components/ui/error-display.tsx)
+ * ================================================================
+ *
+ * 【組件功能】
+ * 統一的錯誤顯示組件，提供友善的錯誤訊息展示和處理機制，
+ * 支援多種錯誤類型、詳細資訊顯示、重試機制和中文化錯誤訊息
+ *
+ * 【主要職責】
+ * • 統一錯誤顯示界面 - 一致的錯誤展示標準和樣式
+ * • 錯誤訊息中文化 - 將技術錯誤轉換為用戶友善的中文提示
+ * • 多種錯誤類型支持 - 錯誤、警告、嚴重錯誤等不同級別
+ * • 詳細資訊展示 - 可選的技術詳情、狀態碼、請求ID等
+ * • 操作按鈕支持 - 重試、關閉等使用者操作
+ * • 快捷錯誤組件 - 提供常見場景的簡化版本
+ *
+ * 【Props介面】
+ * • error - ErrorObject - 錯誤物件，包含 type、message、statusCode 等
+ * • title - string - 自定義錯誤標題
+ * • variant - 'error' | 'warning' | 'destructive' - 錯誤類型變體
+ * • showDetails - boolean - 是否顯示技術詳細資訊
+ * • onRetry - () => void - 重試回調函數
+ * • onDismiss - () => void - 關閉回調函數
+ * • className - string - 額外的 CSS 類名
+ *
+ * 【使用範例】
+ * ```tsx
+ * // 基本錯誤顯示
+ * <ErrorDisplay
+ *   error={{
+ *     message: "Failed to fetch data",
+ *     statusCode: 500,
+ *     timestamp: new Date().toISOString()
+ *   }}
+ *   onRetry={() => refetchData()}
+ *   onDismiss={() => setShowError(false)}
+ * />
+ *
+ * // 警告類型錯誤
+ * <ErrorDisplay
+ *   error={{ message: "權限即將到期" }}
+ *   variant="warning"
+ *   title="注意事項"
+ * />
+ *
+ * // 顯示詳細資訊的錯誤
+ * <ErrorDisplay
+ *   error={{
+ *     type: "NetworkError",
+ *     message: "Connection timeout",
+ *     statusCode: 408,
+ *     requestId: "req_123456"
+ *   }}
+ *   showDetails={true}
+ * />
+ *
+ * // 簡化版本 - 快速錯誤顯示
+ * <SimpleError
+ *   message="載入失敗"
+ *   onRetry={() => reload()}
+ * />
+ *
+ * // 載入錯誤版本
+ * <LoadingError
+ *   resource="客戶資料"
+ *   onRetry={() => refetchCustomers()}
+ * />
+ *
+ * // 表單錯誤版本
+ * <FormError
+ *   errors={["姓名不能為空", "電子郵件格式不正確"]}
+ *   onDismiss={() => clearErrors()}
+ * />
+ * ```
+ *
+ * 【技術實現】
+ * • 錯誤訊息中文化 - 自動識別常見錯誤並轉換為中文提示
+ * • 圖標系統 - 根據錯誤類型顯示對應圖標 (AlertTriangle, XCircle, AlertCircle)
+ * • 樣式變體 - 支援不同的顏色主題 (黃色警告、紅色錯誤)
+ * • 條件渲染 - 智能顯示/隱藏詳細資訊和操作按鈕
+ * • 時間格式化 - 自動格式化時間戳為本地時間
+ * • HTTP 狀態碼處理 - 針對常見狀態碼提供特定提示
+ *
+ * 【快捷組件】
+ * • SimpleError - 最小化錯誤顯示，僅包含訊息和重試按鈕
+ * • LoadingError - 專用於數據載入失敗的錯誤顯示
+ * • FormError - 專用於表單驗證錯誤的列表顯示
+ *
+ * 【相關檔案】
+ * • @/components/ui/button - 重試和關閉按鈕組件
+ * • @/components/ui/alert - 基礎警告容器組件
+ * • @/lib/utils - cn 工具函數用於樣式合併
+ * • lucide-react - 錯誤圖標組件
+ */
+
 'use client'
 
 import { AlertTriangle, XCircle, AlertCircle, RefreshCw, X } from 'lucide-react'

@@ -1,3 +1,73 @@
+/**
+ * ================================================================
+ * AI銷售賦能平台 - 文檔預覽組件 (/components/knowledge/document-preview.tsx)
+ * ================================================================
+ *
+ * 【組件功能】
+ * 提供多種文件格式的在線預覽功能，支持PDF、HTML、CSV、JSON、Markdown、
+ * 純文字等格式，提供安全的預覽環境和下載功能，支持動態預覽類型判斷。
+ *
+ * 【主要職責】
+ * • 預覽類型判斷 - 根據MIME類型或文件擴展名判斷預覽模式
+ * • 文件內容加載 - 從API獲取文件內容進行預覽
+ * • 多格式支持 - 支持文本、HTML、CSV、JSON、Markdown、PDF等格式
+ * • Markdown渲染 - 將Markdown語法轉換為HTML進行顯示
+ * • CSV表格解析 - 解析CSV文件為表格格式顯示
+ * • 安全預覽 - HTML內容在沙盒模式下預覽
+ * • 下載功能 - 提供原文件下載鏈接
+ * • 錯誤處理 - 處理不支持的格式和加載錯誤
+ *
+ * 【Props介面】
+ * • documentId - number - 文檔的唯一識別碼
+ * • mimeType? - string - 文件MIME類型
+ * • fileName? - string - 文件名稱(用於擴展名判斷)
+ * • source? - string - 文件來源路徑
+ * • content? - string - 文件內容(可直接傳入)
+ *
+ * 【狀態管理】
+ * • preview - PreviewState - 預覽狀態物件
+ *   - loading: boolean - 內容加載狀態
+ *   - error: string | null - 錯誤訊息
+ *   - previewData: any - 預覽數據
+ *   - previewType: 'text' | 'html' | 'csv' | 'json' | 'markdown' | 'pdf' | 'unsupported' - 預覽類型
+ *
+ * 【用戶互動】
+ * • 動態預覽 - 根據文件類型自動選擇適當的預覽模式
+ * • 下載操作 - 點擊下載原文件
+ * • 重新加載 - 加載失敗時提供重試功能
+ * • 表格瀏覽 - CSV表格支持水平滾動瀏覽
+ *
+ * 【渲染邏輯】
+ * • 預覽類型識別 - 標記當前預覽的文件類型
+ * • 下載控制 - 顯示下載鏈接和按鈕
+ * • 加載狀態 - 顯示加載動畫和進度
+ * • 錯誤狀態 - 顯示錯誤訊息和重試按鈕
+ * • 內容顯示 - 根據文件類型選擇合適的展示方式
+ *
+ * 【Hook使用】
+ * • useState - 管理預覽狀態和數據
+ * • useEffect - 監聆props變化並觸發預覽類型判斷
+ *
+ * 【副作用處理】
+ * • 文件加載 - 從/api/knowledge-base/[id]/content端點獲取文件內容
+ * • CSV解析 - 使用自定義解析器處理CSV格式
+ * • Markdown渲染 - 使用正則表達式進行基本的Markdown轉換
+ * • 錯誤處理 - 捕獲和展示網路和解析錯誤
+ *
+ * 【相關檔案】
+ * • /api/knowledge-base/[id]/content - 文件內容獲取API端點
+ * • /api/knowledge-base/[id]/download - 文件下載API端點
+ * • /components/knowledge/knowledge-document-view.tsx - 父組件
+ *
+ * 【開發注意】
+ * • 安全性 - HTML內容使用iframe沙盒模式預覽
+ * • 性能優化 - 大型CSV文件只顯示前20行數據
+ * • 用戶體驗 - 提供明確的錯誤訊息和操作指引
+ * • 格式支持 - 根據需要擴展支持的文件格式
+ * • 內容限制 - 適當限制預覽內容的長度和複雜度
+ * • 記憶體管理 - 清理不需要的預覽數據和對象引用
+ */
+
 'use client'
 
 import { useState, useEffect } from 'react'

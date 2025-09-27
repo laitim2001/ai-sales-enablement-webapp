@@ -1,15 +1,33 @@
 /**
- * 向量嵌入緩存系統 - Vector Embedding Cache System
- * 提供Redis分散式緩存和記憶體緩存的雙層緩存架構
- * Provides dual-layer caching architecture with Redis distributed cache and memory cache
+ * ================================================================
+ * AI銷售賦能平台 - 向量嵌入緩存系統 (/lib/cache/vector-cache.ts)
+ * ================================================================
  *
- * 功能特點 Features:
- * 1. 雙層緩存 (記憶體 + Redis) - Dual-layer caching (Memory + Redis)
- * 2. 批次緩存操作 - Batch cache operations
- * 3. 智能緩存失效 - Intelligent cache invalidation
- * 4. 性能監控 - Performance monitoring
- * 5. 緩存預熱 - Cache warming
- * 6. 壓縮存儲 - Compressed storage
+ * 【檔案功能】
+ * 提供Redis分散式緩存和記憶體緩存的雙層緩存架構，專門用於AI向量嵌入的高效儲存和檢索。
+ * 支援文本向量嵌入的緩存管理，大幅提升AI搜索和相似性比較的性能表現。
+ *
+ * 【主要職責】
+ * • 雙層緩存架構 - 記憶體快取(L1) + Redis分散式快取(L2)，確保最佳存取效能
+ * • 向量嵌入管理 - 支援各種AI模型的向量嵌入儲存，包含完整的元數據
+ * • 批次操作優化 - 提供批次讀寫功能，減少網路往返提升整體效能
+ * • 智能壓縮儲存 - 自動壓縮大型向量數據，節省儲存空間和網路頻寬
+ * • 性能監控統計 - 追蹤緩存命中率、響應時間、壓縮效果等關鍵指標
+ * • 緩存策略管理 - 支援TTL過期、LRU淘汰、預熱等多種緩存策略
+ *
+ * 【技術實現】
+ * • Redis連接管理 - 使用ioredis實現穩定的Redis連接，支援重連和錯誤處理
+ * • 記憶體緩存優化 - Map-based LRU緩存，自動清理過期項目避免記憶體洩漏
+ * • 數據壓縮算法 - gzip壓縮大於1KB的數據，自動計算壓縮效益
+ * • Zod數據驗證 - 確保向量數據格式正確性，防止錯誤數據污染
+ * • 批次處理引擎 - Promise.all並行處理，提供詳細的成功/失敗統計
+ * • 性能指標收集 - 實時統計命中率、響應時間、儲存效率等關鍵性能指標
+ *
+ * 【相關檔案】
+ * • /lib/ai/embeddings.ts - AI向量嵌入生成服務，本緩存系統的主要客戶端
+ * • /lib/ai/search.ts - 語義搜索服務，使用緩存的向量進行相似性計算
+ * • /lib/monitoring/performance-monitor.ts - 性能監控系統，收集緩存性能數據
+ * • /components/search/SearchInterface.tsx - 搜索界面組件，受益於緩存加速
  */
 
 import Redis from 'ioredis';
@@ -142,7 +160,16 @@ export class VectorCacheService {
   }
 
   /**
-   * 初始化Redis連接 - Initialize Redis connection
+   * 初始化Redis連接
+   *
+   * 建立與Redis服務器的連接，設置事件監聽器處理連接狀態變化。
+   * 包含自動重連機制和錯誤處理，確保緩存服務的穩定性。
+   *
+   * 功能特色:
+   * - 自動連接測試和狀態追蹤
+   * - 完整的事件監聽和日誌記錄
+   * - 優雅的錯誤處理和降級策略
+   * - 支援連接失敗時的記憶體緩存模式
    */
   private async initializeRedis(): Promise<void> {
     try {

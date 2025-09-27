@@ -306,9 +306,9 @@ export default function LoginPage() {
                     disabled={isLoading}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4" />  {/* 隱藏密碼圖示 */}
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-4 w-4" />     {/* 顯示密碼圖示 */}
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 </div>

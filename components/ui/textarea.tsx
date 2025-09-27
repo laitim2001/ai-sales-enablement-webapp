@@ -1,3 +1,174 @@
+/**
+ * ================================================================
+ * AI銷售賦能平台 - 文本區域組件 (/components/ui/textarea.tsx)
+ * ================================================================
+ *
+ * 【組件功能】
+ * 多行文本輸入組件，提供可調整大小的文本編輯區域，
+ * 支援豐富的樣式主題、無障礙特性和響應式設計
+ *
+ * 【主要職責】
+ * • 多行文本輸入 - 提供大段文字編輯功能
+ * • 自適應尺寸 - 支援最小高度和自動調整大小
+ * • 無障礙支持 - 完整的鍵盤導航和屏幕閱讀器支持
+ * • 樣式一致性 - 與其他表單控件保持統一的設計語言
+ * • 狀態處理 - 支援禁用、聚焦、錯誤等各種狀態
+ * • 主題整合 - 支援系統主題和自定義樣式
+ *
+ * 【Props介面】
+ * • 繼承自 HTMLTextAreaElement 的所有原生屬性
+ * • className - string - 額外的 CSS 類名
+ * • placeholder - string - 佔位符文字
+ * • value - string - 文本內容 (受控)
+ * • defaultValue - string - 預設文本內容 (非受控)
+ * • onChange - (event: ChangeEvent<HTMLTextAreaElement>) => void - 內容變更回調
+ * • disabled - boolean - 是否禁用
+ * • readOnly - boolean - 是否唯讀
+ * • rows - number - 顯示行數
+ * • cols - number - 顯示列數
+ * • maxLength - number - 最大字符長度
+ * • resize - 'none' | 'both' | 'horizontal' | 'vertical' - 調整大小方向
+ *
+ * 【使用範例】
+ * ```tsx
+ * // 基本文本區域
+ * <div className="space-y-2">
+ *   <Label htmlFor="description">描述</Label>
+ *   <Textarea
+ *     id="description"
+ *     placeholder="請輸入詳細描述..."
+ *   />
+ * </div>
+ *
+ * // 受控文本區域
+ * const [content, setContent] = useState('')
+ * <Textarea
+ *   value={content}
+ *   onChange={(e) => setContent(e.target.value)}
+ *   placeholder="請輸入內容"
+ * />
+ *
+ * // 指定行數和最大長度
+ * <Textarea
+ *   rows={5}
+ *   maxLength={500}
+ *   placeholder="最多輸入 500 個字符"
+ * />
+ *
+ * // 禁用調整大小
+ * <Textarea
+ *   className="resize-none"
+ *   placeholder="固定大小的文本區域"
+ * />
+ *
+ * // 表單中的文本區域
+ * <form className="space-y-4">
+ *   <div>
+ *     <Label htmlFor="feedback">意見回饋</Label>
+ *     <Textarea
+ *       id="feedback"
+ *       name="feedback"
+ *       placeholder="請分享您的意見和建議..."
+ *       required
+ *     />
+ *   </div>
+ *   <div>
+ *     <Label htmlFor="comments">備註</Label>
+ *     <Textarea
+ *       id="comments"
+ *       name="comments"
+ *       rows={3}
+ *       placeholder="選填項目"
+ *     />
+ *   </div>
+ * </form>
+ *
+ * // 帶字符計數的文本區域
+ * const [message, setMessage] = useState('')
+ * const maxLength = 280
+ * <div className="space-y-2">
+ *   <Label htmlFor="message">訊息</Label>
+ *   <Textarea
+ *     id="message"
+ *     value={message}
+ *     onChange={(e) => setMessage(e.target.value)}
+ *     maxLength={maxLength}
+ *     placeholder="輸入您的訊息..."
+ *   />
+ *   <div className="text-sm text-muted-foreground text-right">
+ *     {message.length}/{maxLength} 字符
+ *   </div>
+ * </div>
+ *
+ * // 自動調整高度的文本區域 (需要額外的 hook)
+ * const textareaRef = useRef<HTMLTextAreaElement>(null)
+ * useEffect(() => {
+ *   if (textareaRef.current) {
+ *     textareaRef.current.style.height = 'auto'
+ *     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+ *   }
+ * }, [content])
+ *
+ * <Textarea
+ *   ref={textareaRef}
+ *   value={content}
+ *   onChange={(e) => setContent(e.target.value)}
+ *   className="resize-none overflow-hidden"
+ *   placeholder="此文本區域會自動調整高度"
+ * />
+ *
+ * // 錯誤狀態的文本區域
+ * <div className="space-y-2">
+ *   <Label htmlFor="error-textarea">必填欄位</Label>
+ *   <Textarea
+ *     id="error-textarea"
+ *     className="border-destructive focus-visible:ring-destructive"
+ *     placeholder="此欄位為必填"
+ *   />
+ *   <p className="text-sm text-destructive">請填寫此欄位</p>
+ * </div>
+ * ```
+ *
+ * 【技術實現】
+ * • 原生 HTML textarea - 基於標準 HTML 元素構建
+ * • Tailwind CSS 樣式 - 完整的設計系統整合
+ * • forwardRef 支持 - 支援 ref 轉發和 DOM 操作
+ * • 最小高度設定 - min-h-[80px] 確保足夠的顯示空間
+ * • 響應式設計 - 適配不同螢幕尺寸的佈局
+ * • 狀態樣式 - focus-visible、disabled 等狀態的視覺反饋
+ * • 邊框系統 - 統一的邊框樣式和圓角設計
+ *
+ * 【樣式特性】
+ * • 80px 最小高度 - 確保多行文字的合理顯示空間
+ * • 圓角邊框 - rounded-md 提供現代化外觀
+ * • 內邊距 - px-3 py-2 提供舒適的編輯空間
+ * • 字體大小 - text-sm 保持與其他表單控件一致
+ * • 焦點環 - focus-visible:ring-2 提供清晰的焦點指示
+ * • 佔位符樣式 - text-muted-foreground 的柔和提示文字
+ * • 禁用樣式 - 降低不透明度和禁用指標
+ *
+ * 【無障礙性特性】
+ * • 語義化標記 - 正確的 textarea 元素語義
+ * • 鍵盤導航 - 支援 Tab 鍵和方向鍵導航
+ * • 標籤關聯 - 與 Label 組件的正確 id/htmlFor 關聯
+ * • 焦點管理 - 清晰的焦點指示和順序
+ * • 屏幕閱讀器支持 - 正確的內容朗讀和狀態通告
+ * • ARIA 屬性 - 支援 aria-describedby、aria-invalid 等屬性
+ *
+ * 【常見用途】
+ * • 意見回饋表單 - 用戶評論、建議收集
+ * • 內容編輯 - 文章、描述、備註等長文本編輯
+ * • 訊息發送 - 聊天室、留言板等通訊功能
+ * • 設定配置 - JSON 配置、代碼片段等技術內容
+ * • 資料輸入 - 地址、簡介等結構化文本資料
+ *
+ * 【相關檔案】
+ * • @/lib/utils - cn 工具函數用於樣式合併
+ * • @/components/ui/label - 標籤組件，常與文本區域一起使用
+ * • 表單相關組件 - Input、Button、Form 等表單組件
+ * • 主題配置 - CSS 變數定義邊框、焦點環等樣式
+ */
+
 import * as React from "react"
 import { cn } from "@/lib/utils"
 

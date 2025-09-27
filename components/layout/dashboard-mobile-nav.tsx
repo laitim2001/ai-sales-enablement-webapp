@@ -55,7 +55,7 @@
  * <>
  *   <DashboardMobileNav />
  *   <main className="lg:pl-64">
- *     {/* 主內容 */}
+ *     // 主內容
  *   </main>
  * </>
  * ```
@@ -376,17 +376,16 @@ export function DashboardMobileNav() {
                             {section.items.map((item) => {
                               const isActive = pathname === item.href
                               return (
-                                <Link
-                                  key={item.name}
-                                  href={item.href}
-                                  className={cn(
-                                    'group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-                                    isActive
-                                      ? 'bg-blue-50 text-blue-700 shadow-sm'
-                                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                                  )}
-                                  onClick={() => setSidebarOpen(false)}
-                                >
+                                <div key={item.name} onClick={() => setSidebarOpen(false)}>
+                                  <Link
+                                    href={item.href}
+                                    className={cn(
+                                      'group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+                                      isActive
+                                        ? 'bg-blue-50 text-blue-700 shadow-sm'
+                                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                                    )}
+                                  >
                                   <div className="flex items-center space-x-3">
                                     <item.icon
                                       className={cn(
@@ -411,6 +410,7 @@ export function DashboardMobileNav() {
                                     </span>
                                   )}
                                 </Link>
+                                </div>
                               )
                             })}
                           </div>
@@ -424,17 +424,16 @@ export function DashboardMobileNav() {
                         {bottomNavigation.map((item) => {
                           const isActive = pathname === item.href
                           return (
-                            <Link
-                              key={item.name}
-                              href={item.href}
-                              className={cn(
-                                'group flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-                                isActive
-                                  ? 'bg-gray-100 text-gray-900'
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                              )}
-                              onClick={() => setSidebarOpen(false)}
-                            >
+                            <div key={item.name} onClick={() => setSidebarOpen(false)}>
+                              <Link
+                                href={item.href}
+                                className={cn(
+                                  'group flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+                                  isActive
+                                    ? 'bg-gray-100 text-gray-900'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                )}
+                              >
                               <item.icon
                                 className={cn(
                                   'mr-3 h-5 w-5 shrink-0',
@@ -445,6 +444,7 @@ export function DashboardMobileNav() {
                               />
                               <span className="truncate">{item.name}</span>
                             </Link>
+                            </div>
                           )
                         })}
                       </div>

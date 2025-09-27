@@ -124,9 +124,8 @@ export default function RootLayout({
       lang="zh-TW"                    // 設定文檔語言為繁體中文
       suppressHydrationWarning        // 抑制SSR/CSR水合警告，用於主題切換等場景
     >
-      <head />  {/* Next.js自動填充head內容，包含metadata */}
-
-      <body className={inter.className}>  {/* 應用Inter字體類名 */}
+      <head />
+      <body className={inter.className}>
         {/* 認證狀態管理Provider - 包裹整個應用程式以提供認證上下文 */}
         <AuthProvider>
           {children}  {/* 渲染子頁面內容 */}

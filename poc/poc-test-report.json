@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-09-23T16:58:34.188Z",
-  "overallSuccess": false,
+  "timestamp": "2025-09-27T15:20:49.166Z",
+  "overallSuccess": true,
   "testResults": {
     "dynamics365": {
       "authentication": true,
@@ -20,9 +20,9 @@
         "384": {
           "insert": {
             "success": true,
-            "totalTime": 470,
-            "recordsPerSecond": 212.76595744680853,
-            "avgTimePerRecord": 4.7
+            "totalTime": 405,
+            "recordsPerSecond": 246.91358024691357,
+            "avgTimePerRecord": 4.05
           },
           "search": {
             "success": true,
@@ -35,14 +35,14 @@
         "768": {
           "insert": {
             "success": true,
-            "totalTime": 458,
-            "recordsPerSecond": 218.34061135371178,
-            "avgTimePerRecord": 4.58
+            "totalTime": 434,
+            "recordsPerSecond": 230.4147465437788,
+            "avgTimePerRecord": 4.34
           },
           "search": {
             "success": true,
-            "avgSearchTime": 1,
-            "minSearchTime": 1,
+            "avgSearchTime": 0.8,
+            "minSearchTime": 0,
             "maxSearchTime": 1,
             "performance": "excellent"
           }
@@ -50,31 +50,60 @@
         "1536": {
           "insert": {
             "success": true,
-            "totalTime": 5042,
-            "recordsPerSecond": 19.833399444664817,
-            "avgTimePerRecord": 50.42
+            "totalTime": 5017,
+            "recordsPerSecond": 19.932230416583614,
+            "avgTimePerRecord": 50.17
           },
           "search": {
             "success": true,
-            "avgSearchTime": 48.8,
-            "minSearchTime": 44,
-            "maxSearchTime": 50,
+            "avgSearchTime": 48.2,
+            "minSearchTime": 42,
+            "maxSearchTime": 51,
             "performance": "excellent"
           }
         }
       }
     },
     "azureOpenAI": {
-      "connection": false,
-      "models": {},
-      "costProjection": {}
+      "connection": true,
+      "models": {
+        "gpt-35-turbo": [],
+        "gpt-4": [],
+        "text-embedding-ada-002": []
+      },
+      "costProjection": {
+        "monthly": 71.515,
+        "annual": 858.1800000000001,
+        "budgetUsage": 0.85818,
+        "breakdown": {
+          "search": 8.14,
+          "proposal": 63.36,
+          "embedding": 0.15,
+          "embeddingUpdates": 0.015000000000000001
+        },
+        "recommendations": [
+          "實施使用量分析，識別高成本用戶或功能",
+          "定期審查和優化 prompt 設計，提高 token 效率"
+        ]
+      }
     },
-    "overallSuccess": false
+    "overallSuccess": true
   },
   "summary": {
     "dynamics365": true,
     "pgvector": true,
-    "azureOpenAI": false
+    "azureOpenAI": true
   },
-  "recommendations": []
+  "recommendations": [
+    {
+      "priority": "high",
+      "category": "development",
+      "action": "開始 Epic 1 - 基礎平台開發"
+    },
+    {
+      "priority": "medium",
+      "category": "monitoring",
+      "action": "設置成本監控和預算告警"
+    }
+  ]
 }
