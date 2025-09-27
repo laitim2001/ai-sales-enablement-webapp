@@ -1,17 +1,76 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { prisma } from '@/lib/db'
-import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth-server'
+/**
+ * ================================================================
+ * AI銷售賦能平台 - 標籤管理API (app/api/knowledge-base/tags/route.ts)
+ * ================================================================
+ *
+ * 【檔案功能】
+ * 提供知識庫標籤系統的完整管理功能，支援階層式標籤結構、
+ * 使用統計追蹤和標籤生命週期管理的RESTful API端點
+ *
+ * 【主要職責】
+ * • 標籤CRUD操作 - 創建、讀取、更新、刪除標籤
+ * • 階層式標籤管理 - 支援父子標籤關係和層次結構
+ * • 使用統計追蹤 - 記錄標籤使用次數和實際關聯統計
+ * • 標籤關聯管理 - 處理標籤與知識庫項目的多對多關係
+ * • 數據完整性維護 - 防止循環引用和孤立標籤處理
+ *
+ * 【API規格】
+ * • GET /api/knowledge-base/tags - 獲取標籤列表
+ *   參數: hierarchical, usage, parent_id
+ *   回應: { success, data[] } - 支援扁平或階層式結構
+ * • POST /api/knowledge-base/tags - 創建新標籤
+ *   參數: { name, description, color, parent_id }
+ *   回應: { success, data, message }
+ * • PUT /api/knowledge-base/tags/[id] - 更新標籤
+ *   參數: { name, description, color, parent_id }
+ *   回應: { success, data, message }
+ * • DELETE /api/knowledge-base/tags/[id] - 刪除標籤
+ *   參數: force (查詢參數)
+ *   回應: { success, message } 或使用確認提示
+ *
+ * 【使用場景】
+ * • 內容分類組織 - 為知識庫文檔提供多維度標籤分類
+ * • 標籤系統管理 - 管理介面的標籤維護和組織
+ * • 搜索和篩選 - 基於標籤的內容發現和篩選功能
+ * • 使用分析統計 - 了解標籤使用情況和流行趨勢
+ * • 內容治理 - 清理未使用標籤和標籤結構重組
+ *
+ * 【相關檔案】
+ * • lib/auth-server.ts - 用戶身份驗證
+ * • lib/errors.ts - 錯誤處理和分類
+ * • lib/db.ts - 數據庫連接和操作
+ * • prisma/schema.prisma - KnowledgeTag數據模型定義
+ *
+ * 【開發注意】
+ * • 支援階層式標籤結構，防止循環引用
+ * • 實現軟刪除機制，避免強制刪除使用中的標籤
+ * • 提供使用統計功能，區分記錄的和實際的使用次數
+ * • 標籤名稱具備唯一性約束
+ * • 支援顏色標籤用於視覺化區分
+ * • 刪除時檢查子標籤和關聯文檔
+ */
 
-// 標籤創建驗證 schema
+import { NextRequest, NextResponse } from 'next/server'    // Next.js請求和回應處理
+import { z } from 'zod'                                   // 資料驗證架構
+import { prisma } from '@/lib/db'                         // 數據庫連接實例
+import { AppError } from '@/lib/errors'                   // 應用錯誤處理
+import { verifyToken } from '@/lib/auth-server'           // JWT令牌驗證
+
+/**
+ * 標籤創建驗證架構
+ * 定義創建新標籤時的必要和可選欄位
+ */
 const CreateTagSchema = z.object({
-  name: z.string().min(1, 'Tag name is required').max(50, 'Tag name too long'),
-  description: z.string().optional(),
-  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color format').optional(),
-  parent_id: z.number().int().positive().optional()
+  name: z.string().min(1, 'Tag name is required').max(50, 'Tag name too long'),           // 標籤名稱（1-50字符）
+  description: z.string().optional(),                                                     // 標籤描述（可選）
+  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Invalid color format').optional(),      // 十六進制顏色代碼（可選）
+  parent_id: z.number().int().positive().optional()                                       // 父標籤ID（可選，用於階層結構）
 })
 
+/**
+ * 標籤更新驗證架構
+ * 所有欄位皆為可選，用於部分更新操作
+ */
 const UpdateTagSchema = CreateTagSchema.partial()
 
 // GET /api/knowledge-base/tags - 獲取標籤列表

@@ -1,44 +1,107 @@
-import { getOpenAIClient, DEPLOYMENT_IDS, callAzureOpenAI, AzureOpenAIError } from './openai'
+/**
+ * ================================================================
+ * AI銷售賦能平台 - AI聊天對話工具 (lib/ai/chat.ts)
+ * ================================================================
+ *
+ * 【檔案功能】
+ * 提供完整的AI聊天對話功能，包含一般聊天、流式聊天、銷售助手專用對話
+ * 以及銷售提案自動生成等AI驅動的銷售賦能功能
+ *
+ * 【主要職責】
+ * • 聊天對話管理 - 處理用戶與AI助手的對話交互
+ * • 流式回應 - 提供即時的流式聊天體驗
+ * • 銷售場景專用 - 專門為銷售團隊優化的AI助手
+ * • 對話歷史管理 - 維護和管理對話上下文
+ * • 提案自動生成 - 基於客戶和產品資訊生成銷售提案
+ * • Azure OpenAI整合 - 封裝Azure OpenAI API調用
+ *
+ * 【功能特色】
+ * • 多種對話模式 - 支援同步和異步流式對話
+ * • 上下文感知 - 維護完整的對話歷史和上下文
+ * • 銷售專業化 - 針對銷售場景的專用提示詞和邏輯
+ * • Token使用優化 - 智能管理Token使用量和成本
+ * • 錯誤處理 - 完善的錯誤處理和重試機制
+ * • 個性化配置 - 支援溫度、最大Token等參數調整
+ *
+ * 【使用場景】
+ * • 客戶諮詢對話 - AI助手回答客戶問題
+ * • 銷售策略建議 - 為銷售團隊提供專業建議
+ * • 提案自動生成 - 快速生成個性化銷售提案
+ * • 產品介紹輔助 - 協助銷售人員介紹產品
+ * • 客戶異議處理 - 提供異議處理建議和話術
+ *
+ * 【相關檔案】
+ * • lib/ai/openai.ts - Azure OpenAI客戶端和基礎功能
+ * • lib/ai/embeddings.ts - 文本嵌入和語義搜索
+ * • types/ai.ts - AI相關的TypeScript類型定義
+ * • app/api/chat/* - 聊天相關的API路由
+ *
+ * 【開發注意】
+ * • 使用Azure OpenAI GPT-4模型提供高質量回應
+ * • 實現對話歷史管理避免上下文丟失
+ * • 支援流式和非流式兩種回應模式
+ * • 包含銷售場景專用的系統提示詞
+ * • 提供Token使用量追蹤和成本控制
+ * • 實現錯誤重試和降級處理機制
+ */
 
-// 對話配置
-const DEFAULT_MAX_TOKENS = 4000
-const DEFAULT_TEMPERATURE = 0.7
-const DEFAULT_TOP_P = 0.95
+import { getOpenAIClient, DEPLOYMENT_IDS, callAzureOpenAI, AzureOpenAIError } from './openai'  // Azure OpenAI客戶端和工具
 
+// 對話配置常數 - Chat Configuration Constants
+const DEFAULT_MAX_TOKENS = 4000      // 預設最大Token數量，平衡回應質量和成本
+const DEFAULT_TEMPERATURE = 0.7     // 預設溫度值，平衡創造性和準確性
+const DEFAULT_TOP_P = 0.95          // 預設Top-P值，控制回應的多樣性
+
+/**
+ * 聊天訊息介面定義
+ * 定義聊天對話中單一訊息的結構
+ */
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant'
-  content: string
-  name?: string
+  role: 'system' | 'user' | 'assistant'  // 訊息角色：系統提示/用戶輸入/AI回應
+  content: string                         // 訊息內容文本
+  name?: string                          // 可選的發送者名稱識別
 }
 
+/**
+ * 聊天完成選項介面
+ * 定義調用AI模型時的各種參數配置
+ */
 export interface ChatCompletionOptions {
-  maxTokens?: number
-  temperature?: number
-  topP?: number
-  frequencyPenalty?: number
-  presencePenalty?: number
-  stop?: string[]
-  stream?: boolean
+  maxTokens?: number         // 最大Token數量限制
+  temperature?: number       // 溫度值(0-2)，控制回應的隨機性和創造性
+  topP?: number             // Top-P值(0-1)，控制選詞的範圍
+  frequencyPenalty?: number // 頻率懲罰(-2到2)，降低重複內容
+  presencePenalty?: number  // 存在懲罰(-2到2)，鼓勵討論新話題
+  stop?: string[]           // 停止序列，遇到時停止生成
+  stream?: boolean          // 是否使用流式回應
 }
 
+/**
+ * 聊天完成結果介面
+ * 定義AI回應的完整結構和元數據
+ */
 export interface ChatCompletionResult {
-  message: string
-  role: 'assistant'
-  finishReason: string | null
-  usage: {
-    promptTokens: number
-    completionTokens: number
-    totalTokens: number
+  message: string           // AI生成的回應訊息
+  role: 'assistant'        // 固定為助手角色
+  finishReason: string | null  // 完成原因(完成/長度限制/停止序列等)
+  usage: {                 // Token使用量統計
+    promptTokens: number      // 輸入提示Token數量
+    completionTokens: number  // 生成回應Token數量
+    totalTokens: number       // 總Token使用量
   }
-  model: string
+  model: string            // 使用的AI模型識別
 }
 
+/**
+ * 流式聊天結果介面
+ * 定義流式回應的結構，支援即時內容傳輸
+ */
 export interface StreamingChatResult {
-  stream: AsyncIterable<{
-    content?: string
-    finishReason?: string | null
+  stream: AsyncIterable<{              // 異步可迭代的內容流
+    content?: string                    // 增量內容片段
+    finishReason?: string | null        // 流結束原因
   }>
-  usage: Promise<{
+  usage: Promise<{                     // 使用量統計Promise（流結束後可用）
     promptTokens: number
     completionTokens: number
     totalTokens: number
@@ -47,6 +110,14 @@ export interface StreamingChatResult {
 
 /**
  * 生成聊天回應
+ *
+ * 調用Azure OpenAI API生成AI助手的回應，支援多種參數配置
+ * 處理完整的對話上下文並返回結構化的回應結果
+ *
+ * @param messages - 聊天訊息陣列，包含系統提示、用戶輸入和對話歷史
+ * @param options - 可選的生成參數配置，如溫度、最大Token等
+ * @returns Promise<ChatCompletionResult> - 包含AI回應和使用量統計的完整結果
+ * @throws AzureOpenAIError - 當API調用失敗或回應無效時拋出錯誤
  */
 export async function generateChatCompletion(
   messages: ChatMessage[],

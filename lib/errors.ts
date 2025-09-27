@@ -1,5 +1,57 @@
-// 統一錯誤處理系統
+/**
+ * ================================================================
+ * 檔案名稱: 統一錯誤處理系統
+ * 檔案用途: AI銷售賦能平台的核心錯誤處理框架
+ * 開發階段: 生產就緒
+ * ================================================================
+ *
+ * 功能索引:
+ * 1. ErrorType - 錯誤類型枚舉，涵蓋所有業務場景
+ * 2. ErrorSeverity - 錯誤嚴重性分級系統
+ * 3. AppError - 統一錯誤類別，支援結構化錯誤資訊
+ * 4. ErrorClassifier - 錯誤分類器，自動識別和轉換原始錯誤
+ * 5. ErrorLogger - 錯誤記錄器，支援開發和生產環境不同策略
+ * 6. ErrorMetrics - 錯誤統計收集器，用於系統監控
+ *
+ * 技術特色/核心特色:
+ * - 分層錯誤處理: 支援操作性vs程序性錯誤分離
+ * - 自動錯誤分類: 智能識別Prisma、JWT、網路等常見錯誤
+ * - 安全回應轉換: 自動過濾敏感資訊的客戶端回應
+ * - 結構化日誌: 統一的錯誤日誌格式，便於監控和分析
+ * - 錯誤統計: 即時錯誤指標收集，支援系統健康監控
+ * - 環境適配: 開發/生產環境不同的錯誤處理策略
+ *
+ * 依賴關係:
+ * - Prisma: 資料庫錯誤自動分類和處理
+ * - JWT: JSON Web Token錯誤自動識別
+ * - Azure OpenAI: AI服務錯誤特殊處理
+ * - Zod: 輸入驗證錯誤自動轉換
+ *
+ * 注意事項:
+ * - 生產環境下自動隱藏敏感錯誤資訊
+ * - 所有錯誤都會自動分配Request ID用於追蹤
+ * - 高嚴重性錯誤會觸發額外的監控和通知
+ * - 錯誤統計需要定期重置以避免記憶體累積
+ *
+ * 更新記錄:
+ * - Week 1: 建立基礎錯誤類型和AppError類別
+ * - Week 2: 新增ErrorClassifier自動分類功能
+ * - Week 3: 實作ErrorLogger和錯誤統計系統
+ * - Week 4: 新增AI服務專用錯誤類型和處理
+ * ================================================================
+ */
 
+/**
+ * 錯誤類型枚舉
+ *
+ * 定義了AI銷售賦能平台中所有可能出現的錯誤類型，
+ * 按功能領域分組，便於錯誤處理和統計分析。
+ *
+ * 使用範例:
+ * ```typescript
+ * throw new AppError('用戶未登入', ErrorType.UNAUTHORIZED)
+ * ```
+ */
 export enum ErrorType {
   // 認證錯誤
   UNAUTHORIZED = 'UNAUTHORIZED',
@@ -49,6 +101,18 @@ export enum ErrorType {
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
 }
 
+/**
+ * 錯誤嚴重性分級枚舉
+ *
+ * 用於對錯誤進行嚴重性分級，影響日誌記錄策略、
+ * 監控警報級別和錯誤處理優先級。
+ *
+ * 分級標準:
+ * - LOW: 一般性錯誤，不影響核心功能（如驗證失敗）
+ * - MEDIUM: 中等錯誤，可能影響用戶體驗（如認證過期）
+ * - HIGH: 嚴重錯誤，影響系統功能（如資料庫連接失敗）
+ * - CRITICAL: 關鍵錯誤，可能導致系統無法運作
+ */
 export enum ErrorSeverity {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
@@ -56,6 +120,24 @@ export enum ErrorSeverity {
   CRITICAL = 'CRITICAL',
 }
 
+/**
+ * 錯誤上下文接口
+ *
+ * 包含錯誤發生時的環境資訊，用於錯誤追蹤、
+ * 調試和分析。所有欄位都是可選的，但建議
+ * 在API請求中盡可能提供完整資訊。
+ *
+ * 使用範例:
+ * ```typescript
+ * const context: ErrorContext = {
+ *   userId: 'user123',
+ *   requestId: 'req_1234567890',
+ *   path: '/api/users',
+ *   method: 'POST',
+ *   timestamp: new Date()
+ * }
+ * ```
+ */
 export interface ErrorContext {
   userId?: string
   requestId?: string
@@ -66,6 +148,37 @@ export interface ErrorContext {
   additional?: Record<string, any>
 }
 
+/**
+ * 應用程式錯誤類別
+ *
+ * 繼承自原生Error類別，提供結構化的錯誤處理功能。
+ * 這是平台的核心錯誤類別，所有業務邏輯錯誤都應該
+ * 使用此類別或其子類別。
+ *
+ * 核心特色:
+ * - 支援錯誤類型和嚴重性分級
+ * - 提供錯誤上下文追蹤
+ * - 自動生成客戶端安全回應
+ * - 支援原始錯誤鏈式追蹤
+ * - 區分操作性錯誤和程序性錯誤
+ *
+ * 使用範例:
+ * ```typescript
+ * // 基本用法
+ * throw new AppError('資源不存在', ErrorType.NOT_FOUND, 404)
+ *
+ * // 完整用法
+ * throw new AppError(
+ *   '資料庫連接失敗',
+ *   ErrorType.DATABASE_ERROR,
+ *   500,
+ *   ErrorSeverity.HIGH,
+ *   true,
+ *   context,
+ *   originalError
+ * )
+ * ```
+ */
 export class AppError extends Error {
   public readonly type: ErrorType
   public readonly severity: ErrorSeverity
@@ -97,7 +210,19 @@ export class AppError extends Error {
     Error.captureStackTrace(this, AppError)
   }
 
-  // 便捷方法創建常見錯誤
+  /**
+   * 靜態便捷方法：創建常見錯誤
+   *
+   * 提供一系列靜態方法來快速創建常見的錯誤類型，
+   * 減少重複代碼並確保錯誤參數的一致性。
+   */
+
+  /**
+   * 創建未授權錯誤 (401)
+   * @param message 錯誤訊息，預設為 'Unauthorized'
+   * @param context 錯誤上下文
+   * @returns AppError實例
+   */
   static unauthorized(message = 'Unauthorized', context?: ErrorContext): AppError {
     return new AppError(message, ErrorType.UNAUTHORIZED, 401, ErrorSeverity.MEDIUM, true, context)
   }
@@ -130,7 +255,19 @@ export class AppError extends Error {
     return new AppError(message, ErrorType.RATE_LIMIT_EXCEEDED, 429, ErrorSeverity.MEDIUM, true, context)
   }
 
-  // 轉換為安全的客戶端響應
+  /**
+   * 轉換為安全的客戶端響應
+   *
+   * 將錯誤轉換為可以安全傳送給客戶端的格式。
+   * 自動過濾敏感資訊，只在操作性錯誤時顯示詳細訊息。
+   *
+   * 安全特性:
+   * - 非操作性錯誤會顯示通用訊息
+   * - 自動包含時間戳和請求ID
+   * - 不會洩露伺服器內部資訊
+   *
+   * @returns 客戶端安全的錯誤回應對象
+   */
   toClientResponse(): {
     error: {
       type: string
@@ -151,7 +288,19 @@ export class AppError extends Error {
     }
   }
 
-  // 轉換為日誌格式
+  /**
+   * 轉換為結構化日誌格式
+   *
+   * 將錯誤轉換為適合日誌系統的結構化格式。
+   * 包含完整的錯誤資訊和上下文，用於監控和分析。
+   *
+   * 日誌級別對應:
+   * - CRITICAL/HIGH → error
+   * - MEDIUM → warn
+   * - LOW → info
+   *
+   * @returns 結構化的日誌對象
+   */
   toLogFormat(): {
     level: string
     message: string
@@ -185,7 +334,32 @@ export class AppError extends Error {
   }
 }
 
-// 錯誤分類器 - 從原始錯誤創建 AppError
+/**
+ * 錯誤分類器
+ *
+ * 自動識別和轉換各種原始錯誤為統一的AppError格式。
+ * 支援多種第三方庫和服務的錯誤模式識別。
+ *
+ * 支援的錯誤類型:
+ * - Prisma資料庫錯誤 (P2002, P2025等)
+ * - JWT認證錯誤 (JsonWebTokenError, TokenExpiredError)
+ * - 網路連接錯誤 (ECONNREFUSED, ETIMEDOUT等)
+ * - Azure OpenAI服務錯誤
+ * - 文件處理錯誤
+ * - 輸入驗證錯誤 (Zod, ValidationError)
+ *
+ * 使用範例:
+ * ```typescript
+ * try {
+ *   // 可能拋出各種錯誤的操作
+ *   await riskyOperation()
+ * } catch (error) {
+ *   const appError = ErrorClassifier.classify(error, context)
+ *   await ErrorLogger.log(appError)
+ *   throw appError
+ * }
+ * ```
+ */
 export class ErrorClassifier {
   static classify(error: any, context?: ErrorContext): AppError {
     if (error instanceof AppError) {
@@ -331,7 +505,26 @@ export class ErrorClassifier {
   }
 }
 
-// 錯誤記錄器
+/**
+ * 錯誤記錄器
+ *
+ * 提供智能的錯誤記錄功能，支援開發和生產環境的
+ * 不同記錄策略。自動過濾不重要的錯誤，避免日誌噪音。
+ *
+ * 記錄策略:
+ * - 開發環境：控制台彩色輸出
+ * - 生產環境：結構化JSON輸出，可整合外部日誌服務
+ *
+ * 過濾規則:
+ * - 只記錄操作性錯誤或CRITICAL級別錯誤
+ * - 自動聚合相似錯誤，避免重複記錄
+ *
+ * 整合支援:
+ * - Sentry：錯誤監控和警報
+ * - LogRocket：用戶會話錄製
+ * - CloudWatch：AWS日誌服務
+ * - 自定義日誌端點
+ */
 export class ErrorLogger {
   private static shouldLog(error: AppError): boolean {
     // 只記錄操作性錯誤或高嚴重性錯誤
@@ -368,7 +561,14 @@ export class ErrorLogger {
     }
   }
 
-  // 批量記錄錯誤（用於分析）
+  /**
+   * 批量記錄錯誤
+   *
+   * 用於分析場景，一次記錄多個錯誤。
+   * 適用於批量操作失敗、錯誤統計分析等情況。
+   *
+   * @param errors 錯誤陣列
+   */
   static async logBatch(errors: AppError[]): Promise<void> {
     const loggableErrors = errors.filter(this.shouldLog)
 
@@ -395,7 +595,15 @@ export class ErrorLogger {
   }
 }
 
-// 錯誤處理中間件輔助函數
+/**
+ * 創建錯誤上下文
+ *
+ * 從HTTP請求中提取錯誤上下文資訊，用於錯誤追蹤。
+ * 自動生成請求ID（如果不存在），提取路徑、方法等資訊。
+ *
+ * @param request HTTP請求對象（可選）
+ * @returns 錯誤上下文對象
+ */
 export function createErrorContext(request?: any): ErrorContext {
   return {
     requestId: request?.headers?.get('x-request-id') || generateRequestId(),
@@ -410,7 +618,36 @@ function generateRequestId(): string {
   return `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
 }
 
-// 錯誤統計收集器（用於監控）
+/**
+ * 錯誤統計收集器
+ *
+ * 收集和分析錯誤指標，用於系統健康監控和
+ * 錯誤趨勢分析。提供即時統計和歷史數據。
+ *
+ * 功能特色:
+ * - 按錯誤類型統計發生次數
+ * - 提供時間範圍內的統計摘要
+ * - 支援統計重置，避免記憶體累積
+ * - 可整合監控儀表板
+ *
+ * 使用範例:
+ * ```typescript
+ * // 記錄錯誤
+ * ErrorMetrics.increment(ErrorType.DATABASE_ERROR)
+ *
+ * // 獲取統計
+ * const stats = ErrorMetrics.getStats()
+ * console.log(`總錯誤數: ${stats.total}`)
+ *
+ * // 重置統計（通常在定時任務中執行）
+ * ErrorMetrics.reset()
+ * ```
+ *
+ * 注意事項:
+ * - 建議定期重置統計以避免記憶體洩漏
+ * - 在高流量系統中考慮使用外部統計服務
+ * - 統計數據不會持久化，重啟後會丟失
+ */
 export class ErrorMetrics {
   private static errorCounts = new Map<string, number>()
   private static lastReset = new Date()

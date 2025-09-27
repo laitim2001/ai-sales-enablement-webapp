@@ -166,7 +166,16 @@ export interface DocumentProcessingResult {
   }
 }
 
-// 搜索和相似度類型
+/**
+ * 搜索和相似度類型
+ * 用於語意搜索和相似度比較功能
+ */
+
+/**
+ * 相似度搜索結果
+ *
+ * 包含搜索命中的文檔和相似度分數。
+ */
 export interface SimilaritySearchResult {
   document: {
     id: string

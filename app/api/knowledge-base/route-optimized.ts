@@ -1,42 +1,104 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { prisma } from '@/lib/db'
-import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth-server'
-import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'
-import { cacheService, CacheKeyGenerator } from '@/lib/cache/redis-client'
-import { withPerformanceTracking } from '@/lib/performance/monitor'
+/**
+ * ================================================================
+ * AI銷售賦能平台 - 優化版知識庫API (app/api/knowledge-base/route-optimized.ts)
+ * ================================================================
+ *
+ * 【檔案功能】
+ * 提供高性能、具備緩存機制的知識庫管理RESTful API端點
+ * 專注於查詢優化、緩存策略和性能監控的進階版本
+ *
+ * 【主要職責】
+ * • 優化查詢性能 - 使用Redis緩存和查詢優化技術
+ * • 知識庫列表管理 - 支援複雜篩選、排序和分頁功能
+ * • 文檔創建優化 - 批量標籤處理和重複內容檢測
+ * • 緩存策略管理 - 多層緩存和自動失效機制
+ * • 性能監控追蹤 - 請求處理時間和效能指標收集
+ *
+ * 【API規格】
+ * • GET /api/knowledge-base - 獲取知識庫列表（優化版）
+ *   參數: page, limit, category, status, search, tags, sort, order
+ *   回應: { success, data[], pagination, meta }
+ *   緩存: 5分鐘列表緩存，支援條件緩存
+ * • POST /api/knowledge-base - 創建知識庫項目（優化版）
+ *   參數: { title, content, category, tags, metadata }
+ *   回應: { success, data, message }
+ *   功能: 重複檢測、批量標籤處理、自動處理任務
+ *
+ * 【使用場景】
+ * • 高流量文檔瀏覽 - 緩存機制提升響應速度
+ * • 複雜查詢需求 - 多條件篩選和全文搜索
+ * • 批量文檔操作 - 優化的創建和更新流程
+ * • 性能敏感應用 - 需要快速響應的前端介面
+ * • 大規模部署 - 支援高併發和負載均衡
+ *
+ * 【相關檔案】
+ * • lib/cache/redis-client.ts - Redis緩存服務
+ * • lib/performance/monitor.ts - 性能監控包裝器
+ * • lib/auth-server.ts - 身份驗證服務
+ * • lib/errors.ts - 統一錯誤處理
+ *
+ * 【開發注意】
+ * • 使用多層緩存策略：列表(5分鐘)、項目(10分鐘)、搜索(15分鐘)
+ * • 實現內容哈希重複檢測，避免重複文檔
+ * • 支援批量標籤操作，減少數據庫查詢次數
+ * • 包含性能追蹤和監控功能
+ * • 提供Cache-Control標頭優化客戶端緩存
+ * • 使用事務確保數據一致性
+ */
 
-// 請求驗證 schemas
+import { NextRequest, NextResponse } from 'next/server'              // Next.js請求和回應處理
+import { z } from 'zod'                                             // 資料驗證架構
+import { prisma } from '@/lib/db'                                   // 數據庫連接實例
+import { AppError } from '@/lib/errors'                             // 應用錯誤處理
+import { verifyToken } from '@/lib/auth-server'                     // JWT令牌驗證
+import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'  // 文檔相關枚舉
+import { cacheService, CacheKeyGenerator } from '@/lib/cache/redis-client'  // Redis緩存服務
+import { withPerformanceTracking } from '@/lib/performance/monitor'          // 性能監控包裝器
+
+/**
+ * 知識庫項目創建驗證架構
+ * 定義創建新知識庫項目時的必要和可選欄位
+ */
 const CreateKnowledgeBaseSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255, 'Title too long'),
-  content: z.string().optional(),
-  category: z.nativeEnum(DocumentCategory).default(DocumentCategory.GENERAL),
-  source: z.string().optional(),
-  author: z.string().optional(),
-  language: z.string().default('zh-TW'),
-  metadata: z.record(z.any()).optional(),
-  tags: z.array(z.string()).optional()
+  title: z.string().min(1, 'Title is required').max(255, 'Title too long'),    // 文檔標題（必填）
+  content: z.string().optional(),                                              // 文檔內容（可選）
+  category: z.nativeEnum(DocumentCategory).default(DocumentCategory.GENERAL),  // 文檔分類（預設GENERAL）
+  source: z.string().optional(),                                               // 來源路徑（可選）
+  author: z.string().optional(),                                               // 作者資訊（可選）
+  language: z.string().default('zh-TW'),                                       // 語言設定（預設繁中）
+  metadata: z.record(z.any()).optional(),                                      // 自定義元數據（可選）
+  tags: z.array(z.string()).optional()                                         // 標籤列表（可選）
 })
 
+/**
+ * 知識庫項目更新驗證架構
+ * 所有欄位皆為可選，用於部分更新操作
+ */
 const UpdateKnowledgeBaseSchema = CreateKnowledgeBaseSchema.partial()
 
+/**
+ * 知識庫查詢參數驗證架構
+ * 支援分頁、篩選、搜索和排序功能
+ */
 const QueryKnowledgeBaseSchema = z.object({
-  page: z.string().transform(val => parseInt(val, 10)).default('1'),
-  limit: z.string().transform(val => Math.min(parseInt(val, 10), 100)).default('20'), // 限制最大返回數量
-  category: z.nativeEnum(DocumentCategory).optional(),
-  status: z.nativeEnum(DocumentStatus).optional(),
-  search: z.string().optional(),
-  tags: z.string().optional(),
-  sort: z.enum(['created_at', 'updated_at', 'title']).default('updated_at'),
-  order: z.enum(['asc', 'desc']).default('desc')
+  page: z.string().transform(val => parseInt(val, 10)).default('1'),                      // 頁碼（預設1）
+  limit: z.string().transform(val => Math.min(parseInt(val, 10), 100)).default('20'),     // 每頁數量（最大100，預設20）
+  category: z.nativeEnum(DocumentCategory).optional(),                                    // 分類篩選
+  status: z.nativeEnum(DocumentStatus).optional(),                                       // 狀態篩選
+  search: z.string().optional(),                                                         // 搜索關鍵字
+  tags: z.string().optional(),                                                           // 標籤篩選（逗號分隔）
+  sort: z.enum(['created_at', 'updated_at', 'title']).default('updated_at'),            // 排序欄位
+  order: z.enum(['asc', 'desc']).default('desc')                                        // 排序方向
 })
 
-// 緩存配置
+/**
+ * 緩存存活時間配置
+ * 針對不同類型的數據設定不同的緩存時間
+ */
 const CACHE_TTL = {
-  LIST: 5 * 60, // 5分鐘
-  ITEM: 10 * 60, // 10分鐘
-  SEARCH: 15 * 60, // 15分鐘
+  LIST: 5 * 60,      // 列表緩存：5分鐘
+  ITEM: 10 * 60,     // 單項緩存：10分鐘
+  SEARCH: 15 * 60,   // 搜索結果緩存：15分鐘
 }
 
 // GET /api/knowledge-base - 獲取知識庫列表（優化版）

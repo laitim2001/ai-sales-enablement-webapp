@@ -319,5 +319,9 @@ export function calculateCosineSimilarity(vectorA: number[], vectorB: number[]):
   return dotProduct / (magnitudeA * magnitudeB)
 }
 
-// 導出常量
+/**
+ * 導出系統常數
+ *
+ * 提供給外部模組使用的關鍵配置參數。
+ */
 export { EMBEDDING_DIMENSION, MAX_CHUNK_SIZE }

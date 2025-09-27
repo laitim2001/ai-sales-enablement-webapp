@@ -26,7 +26,8 @@
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(tasklist)",
-      "Bash(docker stop:*)"
+      "Bash(docker stop:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

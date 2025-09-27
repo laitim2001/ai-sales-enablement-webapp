@@ -1,19 +1,74 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
-import { AppError } from '@/lib/errors'
-import { verifyToken } from '@/lib/auth-server'
-import { existsSync } from 'fs'
-import { readFile } from 'fs/promises'
-import path from 'path'
+/**
+ * ================================================================
+ * AI銷售賦能平台 - 知識庫下載API (app/api/knowledge-base/[id]/download/route.ts)
+ * ================================================================
+ *
+ * 【檔案功能】
+ * 提供知識庫文檔的下載功能，支援原始檔案下載和內容導出
+ * 根據文檔類型自動設定適當的檔案名稱和MIME類型
+ *
+ * 【主要職責】
+ * • 檔案下載服務 - 提供原始檔案的直接下載功能
+ * • 內容導出功能 - 將數據庫內容導出為對應格式檔案
+ * • MIME類型識別 - 根據檔案類型設定正確的Content-Type
+ * • 檔案名稱處理 - 自動生成安全的下載檔案名稱
+ * • 下載標頭管理 - 設定適當的Content-Disposition等標頭
+ *
+ * 【API規格】
+ * • GET /api/knowledge-base/[id]/download - 下載文檔檔案
+ *   路徑參數: id (文檔ID)
+ *   回應格式: 二進制檔案內容
+ *   標頭: Content-Type, Content-Disposition, Content-Length, Cache-Control
+ *   狀態碼: 200 (成功) | 404 (未找到) | 401 (未授權) | 500 (伺服器錯誤)
+ *
+ * 【使用場景】
+ * • 文檔備份下載 - 用戶下載原始文檔進行備份
+ * • 離線查看需求 - 下載文檔供離線閱讀使用
+ * • 檔案分享傳輸 - 將知識庫內容分享給外部用戶
+ * • 數據遷移導出 - 批量導出知識庫內容進行遷移
+ * • 內容歸檔保存 - 長期保存重要文檔的原始格式
+ *
+ * 【相關檔案】
+ * • lib/auth-server.ts - 用戶身份驗證
+ * • lib/errors.ts - 錯誤處理和分類
+ * • lib/db.ts - 數據庫連接和查詢
+ * • fs/promises - Node.js檔案系統操作
+ * • path - Node.js路徑處理模組
+ *
+ * 【開發注意】
+ * • 支援多種檔案格式：HTML、Markdown、JSON、CSV、純文字
+ * • 實現安全的檔案名稱編碼，避免特殊字符問題
+ * • 提供1小時檔案緩存提升下載效能
+ * • 原始檔案優先，內容導出為備用方案
+ * • 只允許下載ACTIVE和DRAFT狀態的文檔
+ * • 自動根據MIME類型推斷檔案副檔名
+ */
 
-// GET /api/knowledge-base/[id]/download - 下載知識庫文檔原文件
+import { NextRequest, NextResponse } from 'next/server'    // Next.js請求和回應處理
+import { prisma } from '@/lib/db'                         // 數據庫連接實例
+import { AppError } from '@/lib/errors'                   // 應用錯誤處理
+import { verifyToken } from '@/lib/auth-server'           // JWT令牌驗證
+import { existsSync } from 'fs'                           // 同步檔案存在檢查
+import { readFile } from 'fs/promises'                    // 異步檔案讀取
+import path from 'path'                                   // 路徑處理工具
+
+/**
+ * GET /api/knowledge-base/[id]/download - 下載知識庫文檔原文件
+ *
+ * 根據文檔ID提供檔案下載功能，優先返回原始檔案，
+ * 如果原始檔案不存在則導出數據庫內容為對應格式
+ *
+ * @param request - Next.js請求對象
+ * @param params - 路徑參數，包含文檔ID
+ * @returns 檔案下載回應或錯誤信息
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    // 驗證用戶身份
-    // Extract token from request
+    // 從請求中提取並驗證用戶身份令牌
+    // 支援Authorization header和cookie兩種方式
     let token = request.headers.get('authorization')?.replace('Bearer ', '')
 
     if (!token) {
@@ -24,7 +79,7 @@ export async function GET(
       throw AppError.unauthorized('No authentication token provided')
     }
 
-    // Verify the token
+    // 驗證JWT令牌並獲取用戶資訊
     const payload = verifyToken(token)
 
     if (!payload || typeof payload !== 'object' || !payload.userId) {

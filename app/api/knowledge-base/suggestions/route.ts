@@ -1,50 +1,105 @@
 /**
- * AI 銷售賦能平台 - 搜索建議 API 端點
- * Search Suggestions API Endpoint
+ * ================================================================
+ * AI銷售賦能平台 - 知識庫搜索建議API (app/api/knowledge-base/suggestions/route.ts)
+ * ================================================================
  *
- * 提供實時搜索建議、自動補全和相關搜索功能
- * Provides real-time search suggestions, auto-completion, and related search functionality
+ * 【檔案功能】
+ * 提供智能搜索建議系統的RESTful API端點，包含實時搜索建議、
+ * 自動補全、相關搜索、使用記錄追蹤和統計分析等功能
+ *
+ * 【主要職責】
+ * • 實時搜索建議 - 基於用戶輸入提供智能搜索建議
+ * • 自動補全功能 - 快速自動補全用戶輸入的搜索詞
+ * • 相關搜索推薦 - 根據搜索歷史推薦相關搜索詞
+ * • 使用行為追蹤 - 記錄用戶搜索行為和使用統計
+ * • 個性化建議 - 基於用戶歷史提供個性化搜索建議
+ * • 多語言支援 - 支援多語言搜索建議和自動檢測
+ * • 拼寫糾錯 - 提供智能拼寫錯誤糾正功能
+ *
+ * 【API規格】
+ * • GET /api/knowledge-base/suggestions - 獲取搜索建議
+ *   參數: q/query, userId, language, category, limit, includeTypes, excludeTypes
+ *   回應: { success, data, meta }
+ * • POST /api/knowledge-base/suggestions - 複雜建議操作
+ *   actions: suggestions, autocomplete, record, related
+ *   回應: 根據action類型返回對應數據
+ * • DELETE /api/knowledge-base/suggestions - 清理過期數據
+ *   權限: 管理員權限
+ * • PATCH /api/knowledge-base/suggestions - 獲取統計信息
+ *   權限: 認證用戶
+ *
+ * 【使用場景】
+ * • 搜索框自動補全 - 用戶輸入時的實時建議
+ * • 搜索結果優化 - 提供相關搜索詞擴展結果
+ * • 用戶體驗改善 - 拼寫糾錯和智能建議
+ * • 搜索行為分析 - 了解用戶搜索模式和熱門詞彙
+ * • 個性化推薦 - 基於歷史行為的個性化搜索建議
+ *
+ * 【相關檔案】
+ * • lib/search/search-suggestions.ts - 搜索建議服務核心邏輯
+ * • lib/errors.ts - 錯誤處理和分類
+ * • @clerk/nextjs - 用戶身份驗證
+ * • crypto - UUID生成和安全功能
+ *
+ * 【開發注意】
+ * • 支援多種建議類型：completion, related, popular, personalized, correction, category
+ * • 實現30分鐘緩存機制提升響應速度
+ * • 提供詳細的請求ID和處理時間追蹤
+ * • 支援語言自動檢測和多語言建議
+ * • 包含用戶個性化和使用統計功能
+ * • 實現優雅的錯誤處理和日誌記錄
  *
  * Week 5 開發階段 - Task 5.4: 實時搜索建議系統 API
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import crypto from 'crypto'
-import { getSearchSuggestionService, SuggestionRequest } from '@/lib/search/search-suggestions'
-import { AppError } from '@/lib/errors'
-import { auth } from '@clerk/nextjs'
+import { NextRequest, NextResponse } from 'next/server'              // Next.js請求和回應處理
+import { z } from 'zod'                                             // 資料驗證架構
+import crypto from 'crypto'                                         // 加密和UUID生成
+import { getSearchSuggestionService, SuggestionRequest } from '@/lib/search/search-suggestions'  // 搜索建議服務
+import { AppError } from '@/lib/errors'                             // 應用錯誤處理
+import { auth } from '@clerk/nextjs'                                // Clerk身份驗證
 
-// 請求架構驗證 - Request Schema Validation
+/**
+ * 搜索建議請求驗證架構
+ * 用於驗證GET和POST請求中的搜索建議參數
+ */
 const SuggestionRequestSchema = z.object({
-  query: z.string().min(1).max(200),
-  userId: z.string().optional(),
-  language: z.enum(['zh-TW', 'zh-CN', 'en', 'auto']).optional().default('auto'),
-  category: z.string().optional(),
-  limit: z.number().min(1).max(20).optional().default(10),
-  includeTypes: z.array(z.enum(['completion', 'related', 'popular', 'personalized', 'correction', 'category'])).optional(),
-  excludeTypes: z.array(z.enum(['completion', 'related', 'popular', 'personalized', 'correction', 'category'])).optional(),
-  context: z.object({
-    previousQueries: z.array(z.string()).optional(),
-    currentPage: z.string().optional(),
-    userProfile: z.record(z.any()).optional(),
+  query: z.string().min(1).max(200),                                                              // 搜索查詢字串（1-200字符）
+  userId: z.string().optional(),                                                                  // 用戶ID（可選）
+  language: z.enum(['zh-TW', 'zh-CN', 'en', 'auto']).optional().default('auto'),                // 語言設定（預設自動檢測）
+  category: z.string().optional(),                                                               // 分類篩選（可選）
+  limit: z.number().min(1).max(20).optional().default(10),                                      // 建議數量限制（1-20，預設10）
+  includeTypes: z.array(z.enum(['completion', 'related', 'popular', 'personalized', 'correction', 'category'])).optional(),  // 包含的建議類型
+  excludeTypes: z.array(z.enum(['completion', 'related', 'popular', 'personalized', 'correction', 'category'])).optional(),  // 排除的建議類型
+  context: z.object({                                                                           // 上下文信息（可選）
+    previousQueries: z.array(z.string()).optional(),                                            // 之前的搜索記錄
+    currentPage: z.string().optional(),                                                         // 當前頁面
+    userProfile: z.record(z.any()).optional(),                                                  // 用戶偏好設定
   }).optional(),
 })
 
+/**
+ * 自動補全請求驗證架構
+ * 用於快速自動補全功能的參數驗證
+ */
 const AutoCompleteRequestSchema = z.object({
-  query: z.string().min(1).max(100),
-  userId: z.string().optional(),
-  limit: z.number().min(1).max(10).optional().default(5),
-  includePopular: z.boolean().optional().default(true),
+  query: z.string().min(1).max(100),                                                           // 查詢字串（1-100字符）
+  userId: z.string().optional(),                                                               // 用戶ID（可選）
+  limit: z.number().min(1).max(10).optional().default(5),                                     // 補全建議數量（1-10，預設5）
+  includePopular: z.boolean().optional().default(true),                                       // 是否包含熱門搜索（預設true）
 })
 
+/**
+ * 使用記錄驗證架構
+ * 用於記錄用戶搜索行為和統計分析
+ */
 const UsageRecordSchema = z.object({
-  query: z.string().min(1).max(200),
-  userId: z.string().optional(),
-  category: z.string().optional(),
-  success: z.boolean().optional(),
-  clicked: z.boolean().optional(),
-  resultCount: z.number().optional(),
+  query: z.string().min(1).max(200),                                                           // 搜索查詢字串
+  userId: z.string().optional(),                                                               // 用戶ID（可選）
+  category: z.string().optional(),                                                             // 搜索分類（可選）
+  success: z.boolean().optional(),                                                             // 搜索是否成功（可選）
+  clicked: z.boolean().optional(),                                                             // 是否點擊結果（可選）
+  resultCount: z.number().optional(),                                                          // 結果數量（可選）
 })
 
 // 搜索建議服務實例 - Search suggestion service instance

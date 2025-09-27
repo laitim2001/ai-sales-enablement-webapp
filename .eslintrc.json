@@ -1,12 +1,59 @@
 {
+  /**
+   * ================================================================
+   * AI銷售賦能平台 - ESLint配置檔案 (.eslintrc.json)
+   * ================================================================
+   *
+   * 【檔案功能】
+   * 此檔案定義ESLint代碼檢查工具的配置規則，用於維護代碼品質和一致性
+   * 集成Next.js和TypeScript的最佳實踐，確保代碼符合現代開發標準
+   *
+   * 【主要作用】
+   * • 代碼品質檢查 - 檢測潛在錯誤和問題
+   * • 代碼風格統一 - 確保團隊代碼風格一致
+   * • 最佳實踐執行 - 強制執行React和TypeScript最佳實踐
+   * • 開發體驗優化 - 在IDE中即時顯示問題和建議
+   *
+   * 【配置說明】
+   * • extends: 繼承的規則集，包含Next.js和TypeScript官方推薦
+   * • parser: 指定解析器，用於理解TypeScript語法
+   * • plugins: 啟用的插件，提供額外的檢查規則
+   * • rules: 自定義規則，覆蓋或補充預設規則
+   *
+   * 【執行時機】
+   * • 編輯器即時檢查 - VS Code等IDE即時顯示錯誤
+   * • Git提交前檢查 - 通過pre-commit hooks執行
+   * • CI/CD流程檢查 - 在構建過程中驗證代碼品質
+   * • 手動執行 - npm run lint命令觸發檢查
+   *
+   * 【相關檔案】
+   * • package.json - 包含ESLint依賴和lint腳本
+   * • .gitignore - 忽略node_modules等不需要檢查的檔案
+   * • tsconfig.json - TypeScript配置，與ESLint協同工作
+   */
+
+  // 繼承的配置集 - 提供基礎的檢查規則
   "extends": [
-    "next/core-web-vitals",
-    "@typescript-eslint/recommended"
+    "next/core-web-vitals",          // Next.js官方規則集，包含React和Web Vitals最佳實踐
+    "@typescript-eslint/recommended" // TypeScript官方推薦規則，檢查TS特有問題
   ],
+
+  // TypeScript解析器 - 讓ESLint能夠理解TypeScript語法
   "parser": "@typescript-eslint/parser",
+
+  // 啟用的插件 - 提供額外的檢查功能
   "plugins": ["@typescript-eslint"],
+
+  // 自定義規則配置 - 根據項目需求調整檢查嚴格程度
   "rules": {
-    "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/no-explicit-any": "warn"
+    // TypeScript相關規則
+    "@typescript-eslint/no-unused-vars": "error",  // 禁止未使用的變數 (錯誤級別)
+    "@typescript-eslint/no-explicit-any": "warn"   // 警告使用any類型 (警告級別)
+
+    // 可根據需要添加更多自定義規則:
+    // "@typescript-eslint/explicit-function-return-type": "warn",  // 要求明確函數返回類型
+    // "@typescript-eslint/no-console": "warn",                     // 警告使用console
+    // "react-hooks/exhaustive-deps": "error",                      // 檢查useEffect依賴
+    // "import/order": ["error", { "groups": ["builtin", "external", "internal"] }]  // 導入順序
   }
 }

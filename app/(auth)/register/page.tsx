@@ -1,3 +1,47 @@
+/**
+ * ================================================================
+ * 檔案名稱: Register Page
+ * 檔案用途: AI銷售賦能平台的用戶註冊頁面
+ * 開發階段: 生產就緒
+ * ================================================================
+ *
+ * 功能索引:
+ * 1. 用戶註冊 - 處理新用戶帳戶創建流程
+ * 2. 表單驗證 - 多欄位即時驗證(姓名、郵件、密碼、確認密碼)
+ * 3. 部門角色選擇 - 下拉選單選擇用戶部門和系統角色
+ * 4. 密碼安全性 - 密碼強度驗證和確認密碼比對
+ * 5. 錯誤處理 - 全面的客戶端和伺服器端錯誤處理
+ * 6. 響應式設計 - 適配各種裝置螢幕尺寸的註冊表單
+ * 7. 法律條款 - 內建服務條款和隱私政策同意機制
+ *
+ * 組件特色:
+ * - 多步驟驗證: 即時驗證每個輸入欄位，提供友好的用戶體驗
+ * - 雙密碼設計: 密碼和確認密碼均支援顯示/隱藏切換
+ * - 組織結構: 支援部門和角色選擇，方便企業用戶管理
+ * - 視覺區分: 綠色主題配色，與登入頁面形成視覺差異
+ * - 智能驗證: 使用專業的密碼強度驗證規則
+ * - 無障礙設計: 完整的標籤、鍵盤導航和螢幕閱讀器支援
+ *
+ * 依賴組件:
+ * - useAuth: 認證狀態管理Hook(註冊功能)
+ * - UI組件: Button, Input, Label, Card, Select等基礎組件
+ * - FormError: 統一的錯誤訊息顯示組件
+ * - 驗證函數: validateEmail, validatePassword
+ *
+ * 注意事項:
+ * - 使用'use client'指令，運行在客戶端
+ * - 註冊成功後自動重導向至儀表板
+ * - 支援企業級角色權限系統
+ * - 必須同意條款才能提交註冊
+ *
+ * 更新記錄:
+ * - Week 1: 建立基礎註冊表單和驗證邏輯
+ * - Week 2: 新增部門角色選擇功能
+ * - Week 3: 整合密碼強度驗證和確認機制
+ * - Week 4: 優化響應式設計和用戶體驗
+ * ================================================================
+ */
+
 'use client'
 
 import { useState } from 'react'
@@ -13,27 +57,30 @@ import { ErrorDisplay, FormError } from '@/components/ui/error-display'
 import { useAuth } from '@/hooks/use-auth'
 import { validateEmail, validatePassword } from '@/lib/auth'
 
+// 註冊表單資料的型別定義
 interface RegisterFormData {
-  email: string
-  password: string
-  confirmPassword: string
-  firstName: string
-  lastName: string
-  department?: string
-  role?: string
+  email: string           // 用戶電子郵件地址
+  password: string        // 用戶密碼
+  confirmPassword: string // 確認密碼
+  firstName: string       // 用戶名字
+  lastName: string        // 用戶姓氏
+  department?: string     // 用戶部門(可選)
+  role?: string          // 用戶角色(可選)
 }
 
+// 註冊表單錯誤訊息的型別定義
 interface RegisterFormErrors {
-  email?: string
-  password?: string
-  confirmPassword?: string
-  firstName?: string
-  lastName?: string
-  department?: string
-  role?: string
-  general?: string
+  email?: string          // 電子郵件欄位錯誤
+  password?: string       // 密碼欄位錯誤
+  confirmPassword?: string // 確認密碼欄位錯誤
+  firstName?: string      // 名字欄位錯誤
+  lastName?: string       // 姓氏欄位錯誤
+  department?: string     // 部門欄位錯誤
+  role?: string          // 角色欄位錯誤
+  general?: string       // 一般性錯誤訊息
 }
 
+// 部門選項常數定義 - 用於下拉選單
 const DEPARTMENTS = [
   { value: 'sales', label: '銷售部' },
   { value: 'marketing', label: '行銷部' },
@@ -45,6 +92,7 @@ const DEPARTMENTS = [
   { value: 'other', label: '其他' }
 ]
 
+// 用戶角色選項常數定義 - 對應系統權限等級
 const USER_ROLES = [
   { value: 'SALES_REP', label: '銷售代表' },
   { value: 'SALES_MANAGER', label: '銷售經理' },
@@ -53,22 +101,46 @@ const USER_ROLES = [
   { value: 'ADMIN', label: '系統管理員' }
 ]
 
+/**
+ * 註冊頁面主組件
+ *
+ * 提供完整的用戶註冊功能，包括多欄位驗證、部門角色選擇和錯誤處理。
+ * 支援企業級用戶管理需求。
+ *
+ * @returns 註冊頁面的完整JSX結構
+ */
 export default function RegisterPage() {
+  // === 狀態管理 ===
+
+  // 表單資料狀態 - 儲存所有註冊相關的用戶輸入
   const [formData, setFormData] = useState<RegisterFormData>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    department: '',
-    role: 'SALES_REP'
+    email: '',              // 初始化為空
+    password: '',           // 初始化為空
+    confirmPassword: '',    // 初始化為空
+    firstName: '',          // 初始化為空
+    lastName: '',           // 初始化為空
+    department: '',         // 初始化為空
+    role: 'SALES_REP'      // 預設為銷售代表角色
   })
+
+  // 錯誤狀態 - 儲存各欄位的驗證錯誤訊息
   const [errors, setErrors] = useState<RegisterFormErrors>({})
+
+  // 載入狀態 - 控制提交按鈕和表單的禁用狀態
   const [isLoading, setIsLoading] = useState(false)
+
+  // 密碼可見性狀態 - 控制主密碼輸入框的顯示模式
   const [showPassword, setShowPassword] = useState(false)
+
+  // 確認密碼可見性狀態 - 控制確認密碼輸入框的顯示模式
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  // === Hook依賴 ===
+
+  // Next.js路由器，用於註冊成功後的頁面導航
   const router = useRouter()
+
+  // 認證Hook，提供註冊功能
   const { register } = useAuth()
 
   const validateForm = (): boolean => {
