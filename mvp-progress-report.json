@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-09-27T16:31:45.483Z",
+  "timestamp": "2025-09-28T00:30:00.000Z",
   "summary": {
-    "totalItems": 32,
-    "completedItems": 26,
-    "percentage": 81
+    "totalItems": 38,
+    "completedItems": 32,
+    "percentage": 84
   },
   "weeks": [
     {
@@ -154,7 +154,67 @@
         },
         {
           "name": "基礎搜索功能",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "week": 5,
+      "title": "用戶界面完善",
+      "items": [
+        {
+          "name": "個人資料管理",
+          "completed": true
+        },
+        {
+          "name": "主題切換功能",
+          "completed": true
+        },
+        {
+          "name": "多語言支持",
+          "completed": true
+        },
+        {
+          "name": "通知系統",
+          "completed": true
+        },
+        {
+          "name": "快捷鍵支持",
           "completed": false
+        },
+        {
+          "name": "離線功能支持",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 6,
+      "title": "搜索增強和自然語言處理",
+      "items": [
+        {
+          "name": "語義查詢處理器 (GPT-4)",
+          "completed": true
+        },
+        {
+          "name": "上下文結果增強器",
+          "completed": true
+        },
+        {
+          "name": "搜索分析和日誌系統",
+          "completed": true
+        },
+        {
+          "name": "增強版搜索UI",
+          "completed": true
+        },
+        {
+          "name": "多輪對話支援",
+          "completed": true
+        },
+        {
+          "name": "實時搜索建議",
+          "completed": true
         }
       ]
     }
