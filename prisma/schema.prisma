@@ -28,6 +28,7 @@ model User {
   customers              Customer[]
   callRecords            CallRecord[]
   proposals              Proposal[]
+  salesOpportunities     SalesOpportunity[]
   createdKnowledgeBase   KnowledgeBase[] @relation("KnowledgeCreator")
   updatedKnowledgeBase   KnowledgeBase[] @relation("KnowledgeUpdater")
 
@@ -51,12 +52,22 @@ model Customer {
   created_at         DateTime        @default(now())
   updated_at         DateTime        @updatedAt
 
+  // CRM 整合欄位
+  external_id        String?         // 外部系統的 ID (如 Dynamics 365 Account ID)
+  external_source    String?         // 外部系統來源 (如 "dynamics365")
+  external_created_at DateTime?      // 外部系統的創建時間
+  external_updated_at DateTime?      // 外部系統的最後更新時間
+  sync_status        SyncStatus?     @default(PENDING) // 同步狀態
+  last_sync_at       DateTime?       // 最後同步時間
+
   // 關聯關係
   assignedUser       User?           @relation(fields: [assigned_user_id], references: [id])
   callRecords        CallRecord[]
   proposals          Proposal[]
+  salesOpportunities SalesOpportunity[]
   documents          Document[]
   interactions       Interaction[]
+  contacts           CustomerContact[] // 客戶聯絡人
 
   @@map("customers")
   // 核心查詢索引（基於第18章架構設計）
@@ -64,6 +75,9 @@ model Customer {
   @@index([status, assigned_user_id], name: "IX_Customer_Status_User")
   @@index([industry, company_size], name: "IX_Customer_Industry_Size")
   @@index([created_at], name: "IX_Customer_Created")
+  // CRM 整合索引
+  @@index([external_id, external_source], name: "IX_Customer_External")
+  @@index([sync_status, last_sync_at], name: "IX_Customer_Sync")
 }
 
 // 通話記錄模型
@@ -451,4 +465,109 @@ enum ProcessingType {
   DUPLICATE_CHECK     // 重複檢查
   INDEX_UPDATE        // 索引更新
   BATCH_IMPORT        // 批次導入
+}
+
+// CRM 同步狀態枚舉
+enum SyncStatus {
+  PENDING             // 待同步
+  IN_PROGRESS         // 同步中
+  COMPLETED           // 同步完成
+  FAILED              // 同步失敗
+  CONFLICT            // 資料衝突
+  SKIPPED             // 跳過同步
+}
+
+// 客戶聯絡人模型 (對應 Dynamics 365 Contact)
+model CustomerContact {
+  id                 Int             @id @default(autoincrement())
+  customer_id        Int             // 所屬客戶 ID
+  first_name         String
+  last_name          String
+  full_name          String          // 完整姓名 (計算欄位)
+  email              String?
+  phone              String?
+  mobile             String?
+  job_title          String?
+  department         String?
+  is_primary         Boolean         @default(false) // 是否為主要聯絡人
+  is_active          Boolean         @default(true)
+  notes              String?
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
+
+  // CRM 整合欄位
+  external_id        String?         // 外部系統的 ID (如 Dynamics 365 Contact ID)
+  external_source    String?         // 外部系統來源
+  external_created_at DateTime?      // 外部系統的創建時間
+  external_updated_at DateTime?      // 外部系統的最後更新時間
+  sync_status        SyncStatus?     @default(PENDING)
+  last_sync_at       DateTime?
+
+  // 關聯關係
+  customer           Customer        @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  callRecords        CallRecord[]
+  interactions       Interaction[]
+
+  @@map("customer_contacts")
+  // 核心查詢索引
+  @@index([customer_id, is_primary], name: "IX_Contact_Customer_Primary")
+  @@index([email, is_active], name: "IX_Contact_Email_Active")
+  @@index([full_name, customer_id], name: "IX_Contact_Name_Customer")
+  // CRM 整合索引
+  @@index([external_id, external_source], name: "IX_Contact_External")
+  @@index([sync_status, last_sync_at], name: "IX_Contact_Sync")
+}
+
+// 銷售機會模型 (對應 Dynamics 365 Opportunity)
+model SalesOpportunity {
+  id                 Int             @id @default(autoincrement())
+  customer_id        Int             // 相關客戶 ID
+  contact_id         Int?            // 相關聯絡人 ID
+  assigned_user_id   Int?            // 負責業務代表
+  name               String          // 機會名稱
+  description        String?         // 機會描述
+  estimated_value    Decimal?        @db.Decimal(15, 2) // 預估價值
+  estimated_close_date DateTime?     // 預估結案日期
+  close_probability  Float?          // 結案機率 (0-100)
+  stage              String?         // 銷售階段
+  status             OpportunityStatus @default(OPEN)
+  actual_close_date  DateTime?       // 實際結案日期
+  actual_value       Decimal?        @db.Decimal(15, 2) // 實際成交金額
+  lost_reason        String?         // 失敗原因
+  notes              String?
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
+
+  // CRM 整合欄位
+  external_id        String?         // 外部系統的 ID (如 Dynamics 365 Opportunity ID)
+  external_source    String?         // 外部系統來源
+  external_created_at DateTime?      // 外部系統的創建時間
+  external_updated_at DateTime?      // 外部系統的最後更新時間
+  sync_status        SyncStatus?     @default(PENDING)
+  last_sync_at       DateTime?
+
+  // 關聯關係
+  customer           Customer        @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  contact            CustomerContact? @relation(fields: [contact_id], references: [id])
+  assignedUser       User?           @relation(fields: [assigned_user_id], references: [id])
+  proposals          Proposal[]
+
+  @@map("sales_opportunities")
+  // 核心查詢索引
+  @@index([customer_id, status], name: "IX_Opportunity_Customer_Status")
+  @@index([assigned_user_id, status], name: "IX_Opportunity_User_Status")
+  @@index([estimated_close_date, status], name: "IX_Opportunity_CloseDate_Status")
+  @@index([stage, status], name: "IX_Opportunity_Stage_Status")
+  // CRM 整合索引
+  @@index([external_id, external_source], name: "IX_Opportunity_External")
+  @@index([sync_status, last_sync_at], name: "IX_Opportunity_Sync")
+}
+
+// 銷售機會狀態枚舉
+enum OpportunityStatus {
+  OPEN                // 進行中
+  WON                 // 已成交
+  LOST                // 已失敗
+  SUSPENDED           // 暫停
+  CANCELLED           // 已取消
 }
