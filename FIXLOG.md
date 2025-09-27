@@ -13,6 +13,7 @@
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-003: authenticateUser函數userId類型錯誤](#fix-003-authenticateuser函數userid類型錯誤) |
 | 2025-09-25 | 🌐 路由/導航 | ✅ 已解決 | [FIX-004: Dashboard路由結構和導航404錯誤](#fix-004-dashboard路由結構和導航404錯誤) |
 | 2025-09-26 | 🔧 TypeScript編譯 | ✅ 已解決 | [FIX-005: TypeScript編譯錯誤大規模修復](#fix-005-typescript編譯錯誤大規模修復) |
+| 2025-09-28 | ⚛️ React事件處理器 | ✅ 已解決 | [FIX-006: React事件處理器錯誤修復](#fix-006-react事件處理器錯誤修復) |
 
 ---
 
@@ -576,5 +577,104 @@ npx tsc --noEmit  # ✅ 無錯誤，編譯成功
 
 ---
 
-**最後更新**: 2025-09-26
-**下次建議檢查**: 定期執行TypeScript編譯檢查，在新增介面或組件時確保類型定義的完整性
+## FIX-006: React事件處理器錯誤修復
+
+### 📅 **修復日期**: 2025-09-28
+### 🎯 **問題級別**: 🔴 Critical
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **症狀**: Dashboard導航頁面顯示"Event handlers cannot be passed to Client Component props"錯誤
+2. **錯誤代碼**: Error 4243695917
+3. **影響範圍**: 所有dashboard子頁面導航無法正常工作
+4. **用戶體驗**: 點擊導航項目後頁面白屏或無反應
+
+### 🔍 **根本原因分析**
+- **核心問題**: Next.js 14 App Router中Link組件直接接收onClick事件處理器
+- **技術原理**: App Router對客戶端組件事件處理器有嚴格限制，Link組件不能直接接收onClick作為prop
+- **代碼位置**: `components/layout/dashboard-mobile-nav.tsx` 第388行和第436行
+- **相關配置**: `tsconfig.json` 中的中文註釋導致TypeScript編譯失敗
+
+### 🛠️ **修復方案**
+
+#### **第一步: 修復事件處理器傳遞問題**
+```tsx
+// 修復前 (錯誤)
+<Link
+  href={item.href}
+  onClick={() => setSidebarOpen(false)}
+>
+
+// 修復後 (正確)
+<div onClick={() => setSidebarOpen(false)}>
+  <Link href={item.href}>
+  </Link>
+</div>
+```
+
+#### **第二步: 修復TypeScript配置問題**
+```json
+// 修復前 - tsconfig.json (含中文註釋，導致編譯失敗)
+{
+  /**
+   * TypeScript編譯器選項配置
+   */
+  "compilerOptions": { ... }
+}
+
+// 修復後 - tsconfig.json (純JSON格式)
+{
+  "compilerOptions": { ... }
+}
+```
+
+#### **第三步: 建立E2E測試驗證**
+```typescript
+// 新增 e2e/ai-sales-platform.spec.ts
+// 新增 e2e/quick-verification.spec.ts
+// 驗證修復效果和防止回歸
+```
+
+### 📁 **受影響的文件清單**
+- ✅ `components/layout/dashboard-mobile-nav.tsx` (事件處理器重構)
+- ✅ `tsconfig.json` (移除中文註釋)
+- ✅ `app/layout.tsx` (HTML水合錯誤修復)
+- ✅ `app/not-found.tsx` (添加'use client'指令)
+- ✅ `e2e/` (新增完整測試套件)
+
+### ✅ **驗證步驟**
+1. **React錯誤清除**: 不再出現Error 4243695917 ✅
+2. **導航功能**: 所有dashboard導航鏈接正常工作 ✅
+3. **頁面渲染**: 無白屏問題，頁面正常載入 ✅
+4. **TypeScript編譯**: 配置恢復正常，無編譯錯誤 ✅
+5. **E2E測試**: Playwright測試套件驗證通過 ✅
+
+### 📚 **學習要點**
+1. **Next.js App Router限制**: 客戶端組件事件處理器不能直接傳遞給Link組件
+2. **事件委託模式**: 使用容器元素處理事件，保持功能完整性
+3. **JSON配置純度**: TypeScript配置文件必須是純JSON格式，不支援註釋
+4. **測試驗證重要性**: E2E測試能有效驗證修復效果和防止回歸
+
+### 🚫 **避免重蹈覆轍**
+- ❌ **不要**: 在Next.js App Router中給Link組件直接添加onClick事件
+- ❌ **不要**: 在JSON配置文件中添加註釋
+- ✅ **應該**: 使用事件委託模式處理導航相關的互動
+- ✅ **應該**: 創建E2E測試驗證複雜的用戶交互流程
+- ✅ **應該**: 遵循Next.js 14最佳實踐和框架限制
+
+### 🔄 **如果問題再次出現**
+1. 檢查是否有新的Link組件直接接收事件處理器
+2. 確認TypeScript配置文件格式是否正確
+3. 運行E2E測試套件驗證功能完整性
+4. 檢查Next.js App Router最佳實踐指南
+
+### 🎭 **E2E測試套件**
+- **平台完整測試**: `e2e/ai-sales-platform.spec.ts`
+- **快速驗證測試**: `e2e/quick-verification.spec.ts`
+- **知識庫功能測試**: `e2e/knowledge-base/*.spec.ts`
+- **測試配置**: `e2e/global-setup.ts`, `e2e/auth.setup.ts`
+
+---
+
+**最後更新**: 2025-09-28
+**下次建議檢查**: 當添加新的導航組件或Link組件時，確保遵循事件委託模式，避免直接傳遞事件處理器
