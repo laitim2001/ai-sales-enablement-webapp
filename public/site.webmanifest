@@ -1,0 +1,31 @@
+{
+  "name": "AI 銷售賦能平台",
+  "short_name": "AI 銷售平台",
+  "description": "專為銷售團隊打造的 AI 驅動銷售賦能平台，提升銷售效率和客戶體驗",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["business", "productivity", "sales"],
+  "lang": "zh-TW",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "id": "ai-sales-enablement-platform"
+}
