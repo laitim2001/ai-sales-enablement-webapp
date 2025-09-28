@@ -65,6 +65,7 @@
 | **性能審計報告**   | `docs/performance-audit-2025.md`       | 2025年性能優化分析   | 🟡 高    |
 | **性能實施指南**   | `docs/performance-implementation-guide.md` | 性能優化實施指南 | 🟡 高    |
 | **Week 5開發計劃** | `docs/week5-development-plan.md`        | AI搜索引擎開發規劃   | 🟡 高    |
+| **Azure OpenAI設置指南** | `docs/azure-openai-setup-guide.md` | Azure OpenAI完整配置指南 | 🟡 高    |
 
 ### 🔍 lib/search/ - Week 5 智能搜索系統
 
@@ -184,6 +185,8 @@
 | **CRM 整合** | `poc/dynamics-365-test.js`         | Dynamics 365 API 連接測試      |
 | **向量搜索** | `poc/pgvector-performance-test.js` | PostgreSQL + pgvector 性能測試 |
 | **AI 服務**  | `poc/azure-openai-cost-test.js`    | Azure OpenAI 成本和性能測試    |
+| **AI 基礎測試** | `poc/azure-openai-basic-test.js`   | Azure OpenAI 基礎連接測試      |
+| **Dynamics 模擬測試** | `poc/test-dynamics-mock.js`       | Dynamics 365 模擬模式測試      |
 | **統合測試** | `poc/run-all-tests.js`             | 執行所有 POC 測試的主控制器    |
 | **POC 說明** | `poc/README.md`                    | POC 測試使用指南               |
 
@@ -238,6 +241,8 @@
 | API 類別           | 端點路徑                    | 用途說明             | 重要程度 |
 | ------------------ | --------------------------- | -------------------- | -------- |
 | **健康檢查** | `app/api/health/route.ts` | API 服務健康狀態檢查 | 🟢 中    |
+| **Catch-All路由** | `app/api/[...slug]/route.ts` | API 404處理，統一JSON響應格式 | 🟡 高    |
+| **Dynamics 365模擬** | `app/api/mock/dynamics365/[...path]/route.ts` | Dynamics 365模擬API端點 | 🟡 高    |
 
 ##### 🔐 認證 API (app/api/auth/)
 
@@ -337,6 +342,7 @@
 | 模組名稱           | 文件路徑                     | 用途說明               | 重要程度 |
 | ------------------ | ---------------------------- | ---------------------- | -------- |
 | **錯誤處理** | `lib/api/error-handler.ts` | API 統一錯誤處理中間件 | 🟡 高    |
+| **響應助手** | `lib/api/response-helper.ts` | 統一API響應格式模組，標準化JSON輸出 | 🟡 高    |
 
 #### 💾 資料庫模組 (lib/db/)
 
