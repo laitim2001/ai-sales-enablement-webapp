@@ -43,6 +43,12 @@ scripts/run-integration-tests.ts       # 系統整合測試執行腳本
 poc/run-all-tests.js                  # 技術驗證腳本
 README.md                              # 項目說明
 app/layout.tsx                         # Next.js 根布局
+app/dashboard/page.tsx                 # 主儀表板頁面
+app/dashboard/customers/page.tsx       # 客戶管理頁面
+app/dashboard/search/page.tsx          # 全局AI智能搜索頁面
+app/dashboard/proposals/page.tsx       # 提案管理頁面
+app/dashboard/tasks/page.tsx           # 任務管理頁面
+app/dashboard/settings/page.tsx        # 系統設置頁面
 lib/auth.ts                            # JWT 認證系統
 lib/db.ts                              # 資料庫連接配置
 lib/middleware.ts                      # 認證與速率限制中間件系統

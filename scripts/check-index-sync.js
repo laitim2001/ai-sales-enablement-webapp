@@ -308,7 +308,14 @@ class IndexSyncChecker {
       /^.*\.spec\.(js|ts)$/,
       /^.*\.test\.(js|ts)$/,
       /^index\.(js|ts|tsx)$/,
-      /^.*\.md$/
+      /^.*\.md$/,
+      // Next.js 頁面文件模式
+      /^page\.(js|ts|tsx)$/,
+      /^layout\.(js|ts|tsx)$/,
+      /^loading\.(js|ts|tsx)$/,
+      /^error\.(js|ts|tsx)$/,
+      /^not-found\.(js|ts|tsx)$/,
+      /^route\.(js|ts)$/
     ];
 
     // 檢查重要文件名
