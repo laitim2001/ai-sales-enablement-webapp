@@ -34,7 +34,10 @@
       "Bash(tail:*)",
       "Bash(wc:*)",
       "Bash(npx playwright test:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(Get-Process node)",
+      "Bash(Stop-Process -Force)",
+      "Bash(Stop-Process -Force -Id 8624)"
     ],
     "deny": [],
     "ask": []
