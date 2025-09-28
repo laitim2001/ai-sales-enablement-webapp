@@ -8,14 +8,14 @@
  * 5. 預估月度成本
  */
 
-require('dotenv').config();
+require('dotenv').config({ path: '.env.local' });
 const axios = require('axios');
 
 class AzureOpenAIPOC {
   constructor() {
     this.endpoint = process.env.AZURE_OPENAI_ENDPOINT;
     this.apiKey = process.env.AZURE_OPENAI_API_KEY;
-    this.apiVersion = '2024-02-01';
+    this.apiVersion = process.env.AZURE_OPENAI_API_VERSION || '2024-12-01-preview';
 
     // 模型定價（每1K tokens，美元）
     this.pricing = {
@@ -40,8 +40,9 @@ class AzureOpenAIPOC {
     console.log('🔗 測試 Azure OpenAI API 連接...');
 
     try {
-      // 測試簡單的 completion 請求
-      const response = await this.makeRequest('gpt-4o', {
+      // 測試簡單的 completion 請求 - 使用環境變數中配置的部署名稱
+      const gpt4DeploymentId = process.env.AZURE_OPENAI_DEPLOYMENT_ID_GPT4 || 'gpt-4o';
+      const response = await this.makeRequest(gpt4DeploymentId, {
         messages: [{ role: 'user', content: '測試連接，請回覆"連接成功"' }],
         max_tokens: 10,
         temperature: 0
@@ -352,12 +353,13 @@ class AzureOpenAIPOC {
         throw new Error('API 連接失敗，無法繼續測試');
       }
 
-      // 2. 測試文本生成 (GPT-3.5 和 GPT-4)
-      this.testResults.models['gpt-35-turbo'] = await this.testTextGeneration('gpt-35-turbo');
-      this.testResults.models['gpt-4'] = await this.testTextGeneration('gpt-4');
+      // 2. 測試文本生成 (使用實際可用的部署)
+      const gpt4DeploymentId = process.env.AZURE_OPENAI_DEPLOYMENT_ID_GPT4 || 'gpt-4o';
+      this.testResults.models[gpt4DeploymentId] = await this.testTextGeneration(gpt4DeploymentId);
 
-      // 3. 測試 embedding 生成
-      this.testResults.models['text-embedding-ada-002'] = await this.testEmbedding();
+      // 3. 測試 embedding 生成 (使用實際可用的部署)
+      const embeddingDeploymentId = process.env.AZURE_OPENAI_DEPLOYMENT_ID_EMBEDDINGS || 'text-embedding-ada-002';
+      this.testResults.models[embeddingDeploymentId] = await this.testEmbedding(embeddingDeploymentId);
 
       // 4. 成本預估
       this.testResults.costProjection = await this.projectMonthlyCost();

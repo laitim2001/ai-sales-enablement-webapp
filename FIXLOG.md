@@ -14,6 +14,7 @@
 | 2025-09-25 | 🌐 路由/導航 | ✅ 已解決 | [FIX-004: Dashboard路由結構和導航404錯誤](#fix-004-dashboard路由結構和導航404錯誤) |
 | 2025-09-26 | 🔧 TypeScript編譯 | ✅ 已解決 | [FIX-005: TypeScript編譯錯誤大規模修復](#fix-005-typescript編譯錯誤大規模修復) |
 | 2025-09-28 | ⚛️ React事件處理器 | ✅ 已解決 | [FIX-006: React事件處理器錯誤修復](#fix-006-react事件處理器錯誤修復) |
+| 2025-09-28 | 🌐 API路由/響應 | ✅ 已解決 | [FIX-007: API端點返回HTML而非JSON格式修復](#fix-007-api端點返回html而非json格式修復) |
 
 ---
 
@@ -676,5 +677,164 @@ npx tsc --noEmit  # ✅ 無錯誤，編譯成功
 
 ---
 
+## FIX-007: API端點返回HTML而非JSON格式修復
+
+### 📅 **修復日期**: 2025-09-28
+### 🎯 **問題級別**: 🔴 Critical
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **症狀**: 訪問不存在的API端點返回HTML格式的404頁面而非JSON格式
+2. **具體表現**:
+   ```bash
+   curl /api/nonexistent
+   # 返回完整的HTML 404頁面而不是JSON錯誤響應
+   ```
+3. **影響範圍**: 所有API 404錯誤都返回HTML，破壞前端錯誤處理邏輯
+4. **用戶體驗**: 前端無法正確解析API錯誤，導致錯誤處理失效
+
+### 🔍 **根本原因分析**
+- **核心問題**: Next.js 14 App Router中缺少catch-all API路由處理未匹配請求
+- **技術原理**: 當API請求沒有匹配的路由時，Next.js返回默認的HTML 404頁面
+- **設計缺陷**: 沒有為API路徑設置專門的404錯誤處理機制
+- **標準違反**: REST API應該統一返回JSON格式響應，不應混合HTML
+
+### 🛠️ **修復方案**
+
+#### **第一步: 創建Catch-All API路由**
+```typescript
+// 文件: app/api/[...slug]/route.ts (新建)
+import { NextRequest, NextResponse } from 'next/server'
+import { createApiErrorResponse } from '@/lib/api/response-helper'
+import { AppError, ErrorType, ErrorSeverity } from '@/lib/errors'
+
+// 支援所有HTTP方法的404處理
+export async function GET(request: NextRequest, { params }: { params: { slug: string[] } }) {
+  const requestPath = `/api/${params.slug.join('/')}`
+  const requestId = request.headers.get('X-Request-ID') || 'unknown'
+
+  const error = new AppError('API端點不存在', ErrorType.NOT_FOUND, 404)
+  return createApiErrorResponse(error, { requestId, requestPath, method: 'GET' })
+}
+
+// POST, PUT, DELETE, PATCH 方法同樣處理
+```
+
+#### **第二步: 創建統一API響應格式系統**
+```typescript
+// 文件: lib/api/response-helper.ts (新建)
+import { NextResponse } from 'next/server'
+import { AppError } from '@/lib/errors'
+
+// 統一的API響應格式
+export interface ApiSuccessResponse<T = any> {
+  success: true
+  data: T
+  metadata: ApiMetadata
+}
+
+export interface ApiErrorResponse {
+  success: false
+  error: {
+    type: string
+    message: string
+    statusCode: number
+    timestamp: string
+  }
+  metadata: ApiMetadata
+}
+
+// 標準化響應創建函數
+export function createApiSuccessResponse<T>(data: T, metadata: Partial<ApiMetadata> = {}) {
+  return NextResponse.json({
+    success: true,
+    data,
+    metadata: { timestamp: new Date().toISOString(), ...metadata }
+  })
+}
+
+export function createApiErrorResponse(error: AppError | string, metadata: Partial<ApiMetadata> = {}) {
+  // 統一錯誤響應格式的實現
+}
+```
+
+#### **第三步: 修復相關編譯錯誤**
+```typescript
+// 修復React組件語法錯誤
+// components/layout/dashboard-mobile-nav.tsx
+// 修復map函數語法: })} → })
+
+// 修復註釋中的特殊字符
+// lib/cache/redis-client.ts, lib/middleware.ts, lib/performance/monitor.ts
+// /**/*.ts → /route.ts
+
+// 修復AppError構造函數參數順序和類型導入
+```
+
+#### **第四步: 安裝缺失依賴**
+```bash
+npm install ioredis @radix-ui/react-checkbox @clerk/nextjs
+```
+
+### 🧪 **驗證測試**
+```bash
+# 測試API 404響應格式
+curl -s http://localhost:3001/api/nonexistent
+# ✅ 返回: {"success":false,"error":{"type":"NOT_FOUND","message":"API端點不存在"...}}
+
+curl -s http://localhost:3001/api/test/unknown/endpoint
+# ✅ 返回: 正確JSON格式，支援多層路徑
+
+curl -s -X POST http://localhost:3001/api/test/post
+# ✅ 返回: POST方法正確處理
+
+curl -s http://localhost:3001/api/health
+# ✅ 返回: 現有API端點不受影響
+```
+
+### 📁 **受影響的文件清單**
+- ✅ `app/api/[...slug]/route.ts` (新建) - Catch-all API路由
+- ✅ `lib/api/response-helper.ts` (新建) - 統一響應格式系統
+- ✅ `components/layout/dashboard-mobile-nav.tsx` (修復) - React語法錯誤
+- ✅ `app/not-found.tsx` (修復) - Button組件事件處理器
+- ✅ `lib/search/query-processor.ts` (修復) - 陣列語法錯誤
+- ✅ `lib/cache/redis-client.ts` (修復) - 註釋特殊字符
+- ✅ `lib/middleware.ts` (修復) - 註釋特殊字符
+- ✅ `lib/performance/monitor.ts` (修復) - 註釋特殊字符
+- ✅ `package.json` (更新) - 新增依賴包
+
+### 🏗️ **架構改進價值**
+1. **REST API合規**: 所有API端點統一返回JSON格式
+2. **錯誤追蹤**: 每個API錯誤包含唯一請求ID和時間戳
+3. **開發體驗**: 前端可以正確處理和解析API錯誤
+4. **監控友好**: 標準化錯誤格式便於日誌分析和監控
+5. **系統穩定性**: 統一錯誤處理提高整體可靠性
+
+### 📚 **學習要點**
+1. **API設計原則**: REST API應該統一返回JSON格式，不應混合HTML響應
+2. **Next.js路由優先級**: 具體路由 > 動態路由 > Catch-all路由
+3. **錯誤處理標準化**: 使用統一的錯誤響應格式和助手函數
+4. **編譯錯誤預防**: 注意註釋中的特殊字符和語法一致性
+
+### 🚫 **避免重蹈覆轍**
+- ❌ **不要**: 讓API端點返回HTML格式的錯誤響應
+- ❌ **不要**: 在註釋中使用可能導致編譯錯誤的特殊字符
+- ✅ **應該**: 為API路由設置完整的catch-all處理機制
+- ✅ **應該**: 使用統一的響應格式助手函數
+- ✅ **應該**: 定期測試API端點的錯誤響應格式
+
+### 🔄 **如果問題再次出現**
+1. 檢查是否有新的API路由沒有proper 404處理
+2. 確認catch-all路由的文件結構是否正確
+3. 驗證NextResponse.json的使用是否一致
+4. 測試所有HTTP方法的404響應格式
+
+### 🎯 **相關修復**
+- 本次修復同時解決了FIX-006中提到的React事件處理器問題
+- 清理了多個文件中的編譯錯誤和語法問題
+- 建立了統一的API響應格式標準
+
+---
+
 **最後更新**: 2025-09-28
-**下次建議檢查**: 當添加新的導航組件或Link組件時，確保遵循事件委託模式，避免直接傳遞事件處理器
+**下次建議檢查**: 當添加新的API路由時，確保遵循統一的響應格式，使用response-helper工具函數

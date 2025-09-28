@@ -33,7 +33,8 @@
       "Read(//c//**)",
       "Bash(tail:*)",
       "Bash(wc:*)",
-      "Bash(npx playwright test:*)"
+      "Bash(npx playwright test:*)",
+      "Bash(npx tsx:*)"
     ],
     "deny": [],
     "ask": []

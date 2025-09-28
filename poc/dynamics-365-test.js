@@ -12,10 +12,11 @@ const { v4: uuidv4 } = require('uuid');
 
 class Dynamics365POC {
   constructor() {
-    this.tenantId = process.env.AZURE_TENANT_ID;
-    this.clientId = process.env.AZURE_CLIENT_ID;
-    this.clientSecret = process.env.AZURE_CLIENT_SECRET;
-    this.crmUrl = process.env.DYNAMICS_CRM_URL;
+    // 使用統一的環境變數名稱，與主要代碼保持一致
+    this.tenantId = process.env.DYNAMICS_365_TENANT_ID;
+    this.clientId = process.env.DYNAMICS_365_CLIENT_ID;
+    this.clientSecret = process.env.DYNAMICS_365_CLIENT_SECRET;
+    this.crmUrl = process.env.DYNAMICS_365_RESOURCE;
     this.accessToken = null;
   }
 
@@ -208,7 +209,7 @@ class Dynamics365POC {
 // 如果直接執行此腳本
 if (require.main === module) {
   // 檢查必要的環境變數
-  const requiredEnvs = ['AZURE_TENANT_ID', 'AZURE_CLIENT_ID', 'AZURE_CLIENT_SECRET', 'DYNAMICS_CRM_URL'];
+  const requiredEnvs = ['DYNAMICS_365_TENANT_ID', 'DYNAMICS_365_CLIENT_ID', 'DYNAMICS_365_CLIENT_SECRET', 'DYNAMICS_365_RESOURCE'];
   const missingEnvs = requiredEnvs.filter(env => !process.env[env]);
 
   if (missingEnvs.length > 0) {

@@ -104,16 +104,27 @@ export class Dynamics365ApiError extends Error {
 export class Dynamics365Client {
   private baseUrl: string;
   private apiVersion: string = 'v9.2';
+  private isMockMode: boolean;
 
   constructor() {
-    this.baseUrl = process.env.DYNAMICS_365_RESOURCE!.replace(/\/$/, '');
+    // 檢查是否啟用模擬模式
+    this.isMockMode = process.env.DYNAMICS_365_MODE === 'mock' ||
+                      process.env.DYNAMICS_365_MOCK_ENABLED === 'true';
 
-    if (!this.baseUrl) {
-      throw new Dynamics365ApiError(
-        '缺少 DYNAMICS_365_RESOURCE 環境變數',
-        500,
-        'MISSING_CONFIG'
-      );
+    if (this.isMockMode) {
+      console.log('🎭 Dynamics 365 模擬模式已啟用');
+      // 簡化：直接使用 3002，這是當前開發服務器運行的端口
+      this.baseUrl = 'http://localhost:3002/api/mock/dynamics365'; // 模擬端點
+    } else {
+      this.baseUrl = process.env.DYNAMICS_365_RESOURCE!.replace(/\/$/, '');
+
+      if (!this.baseUrl) {
+        throw new Dynamics365ApiError(
+          '缺少 DYNAMICS_365_RESOURCE 環境變數',
+          500,
+          'MISSING_CONFIG'
+        );
+      }
     }
   }
 
@@ -129,11 +140,18 @@ export class Dynamics365Client {
     options: RequestInit = {}
   ): Promise<any> {
     try {
-      // 獲取認證標頭
-      const authHeaders = await getDynamics365AuthHeaders();
+      let authHeaders = {};
+      let url: string;
 
-      // 建構完整的 URL
-      const url = `${this.baseUrl}/api/data/${this.apiVersion}/${endpoint}`;
+      if (this.isMockMode) {
+        // 模擬模式：跳過認證，使用模擬端點
+        url = `${this.baseUrl}/${endpoint}`;
+        console.log(`🎭 [Mock] ${options.method || 'GET'} ${url}`);
+      } else {
+        // 生產模式：獲取認證標頭
+        authHeaders = await getDynamics365AuthHeaders();
+        url = `${this.baseUrl}/api/data/${this.apiVersion}/${endpoint}`;
+      }
 
       // 設置預設標頭
       const headers = {

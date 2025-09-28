@@ -66,6 +66,7 @@
 | **性能實施指南**   | `docs/performance-implementation-guide.md` | 性能優化實施指南 | 🟡 高    |
 | **Week 5開發計劃** | `docs/week5-development-plan.md`        | AI搜索引擎開發規劃   | 🟡 高    |
 | **Azure OpenAI設置指南** | `docs/azure-openai-setup-guide.md` | Azure OpenAI完整配置指南 | 🟡 高    |
+| **Dynamics 365設置指南** | `docs/dynamics365-setup-guide.md` | Dynamics 365完整配置指南 | 🟡 高    |
 
 ### 🔍 lib/search/ - Week 5 智能搜索系統
 
