@@ -136,3 +136,9 @@ docs/build/
 output/
 reports/
 exports/
+# Test reports (may contain sensitive information)
+test-reports/
+*test-report*.json
+*test-report*.md
+integration-test-*.json
+integration-test-*.md
