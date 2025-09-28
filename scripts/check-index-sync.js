@@ -110,14 +110,111 @@ class IndexSyncChecker {
 
     console.log(`📝 添加 ${filePath} 到 ${targetIndex}`);
 
-    // 這裡可以實現自動添加邏輯
-    // 為了安全起見，目前只是記錄建議
-    this.suggestions.push({
-      type: 'auto_fix_suggestion',
-      file: filePath,
-      targetIndex: targetIndex,
-      message: `建議添加到 ${targetIndex}：${filePath}`
-    });
+    try {
+      if (targetIndex === 'PROJECT-INDEX.md') {
+        await this.addToProjectIndex(filePath);
+      } else {
+        await this.addToAssistantGuide(filePath);
+      }
+
+      console.log(`✅ 成功添加 ${filePath} 到 ${targetIndex}`);
+    } catch (error) {
+      console.log(`❌ 添加失敗: ${error.message}`);
+      this.suggestions.push({
+        type: 'auto_fix_failed',
+        file: filePath,
+        targetIndex: targetIndex,
+        message: `自動添加失敗，建議手動添加到 ${targetIndex}：${filePath}`
+      });
+    }
+  }
+
+  /**
+   * 添加文件到 PROJECT-INDEX.md
+   */
+  async addToProjectIndex(filePath) {
+    const indexPath = path.join(this.projectRoot, 'PROJECT-INDEX.md');
+    if (!fs.existsSync(indexPath)) return;
+
+    const content = fs.readFileSync(indexPath, 'utf-8');
+
+    // 查找合適的插入位置 - 在 "### 🟢 參考 (需要時查看)" 部分之前
+    const insertMarker = '### 🟢 參考 (需要時查看)';
+    const insertIndex = content.indexOf(insertMarker);
+
+    if (insertIndex === -1) {
+      throw new Error('找不到適當的插入位置');
+    }
+
+    // 生成新的條目
+    const fileName = path.basename(filePath, '.md');
+    const description = this.getFileDescription(filePath);
+    const importance = this.getDisplayImportance(filePath);
+    const newEntry = `| **${fileName}** | \`${filePath}\` | ${description} | ${importance} |\n`;
+
+    // 在插入點之前找到表格結束位置
+    const beforeInsert = content.substring(0, insertIndex);
+    const lastTableIndex = beforeInsert.lastIndexOf('|');
+    const insertPosition = beforeInsert.lastIndexOf('\n', lastTableIndex) + 1;
+
+    const newContent = content.substring(0, insertPosition) +
+                      newEntry +
+                      content.substring(insertPosition);
+
+    fs.writeFileSync(indexPath, newContent);
+  }
+
+  /**
+   * 添加文件到 AI-ASSISTANT-GUIDE.md
+   */
+  async addToAssistantGuide(filePath) {
+    const indexPath = path.join(this.projectRoot, 'AI-ASSISTANT-GUIDE.md');
+    if (!fs.existsSync(indexPath)) return;
+
+    const content = fs.readFileSync(indexPath, 'utf-8');
+
+    // 查找 "### 🟡 重要 (常用)" 部分的插入位置
+    const insertMarker = '### 🟢 參考 (需要時查看)';
+    const insertIndex = content.indexOf(insertMarker);
+
+    if (insertIndex === -1) {
+      throw new Error('找不到適當的插入位置');
+    }
+
+    // 生成新的條目
+    const description = this.getFileDescription(filePath);
+    const newEntry = `${filePath}     # ${description}\n`;
+
+    // 在插入點之前找到合適位置
+    const insertPosition = content.lastIndexOf('\n```\n', insertIndex);
+
+    const newContent = content.substring(0, insertPosition) +
+                      newEntry +
+                      content.substring(insertPosition);
+
+    fs.writeFileSync(indexPath, newContent);
+  }
+
+  /**
+   * 獲取文件描述
+   */
+  getFileDescription(filePath) {
+    const descriptions = {
+      'DEVELOPMENT-SERVICE-MANAGEMENT.md': '開發服務管理指南',
+      'e2e-test-summary.md': 'E2E測試執行摘要',
+      'test-execution-report.md': '測試執行報告',
+      'playwright.config.ts': 'Playwright測試配置'
+    };
+
+    return descriptions[path.basename(filePath)] || '項目相關文檔';
+  }
+
+  /**
+   * 獲取顯示重要程度
+   */
+  getDisplayImportance(filePath) {
+    const importance = this.getFileImportance(filePath);
+    return importance === 'high' ? '🟡 高' : '🟢 中';
   }
 
   /**
@@ -129,7 +226,16 @@ class IndexSyncChecker {
       /.*\.config\.(js|ts|json)$/,
       /package\.json$/,
       /schema\.prisma$/,
-      /(docs|src)\/.*\.md$/
+      /(docs|src)\/.*\.md$/,
+      // 根目錄重要開發文檔
+      /^[A-Z][A-Z-]*\.md$/,  // 大寫開頭的根目錄.md文件
+      /^(DEVELOPMENT|DEPLOYMENT|SETUP|GUIDE|CHANGELOG|CONTRIBUTING|FIXLOG|INDEX).*\.md$/,
+      // 測試相關重要文件
+      /.*test.*\.md$/,
+      /.*test.*\.config\.(js|ts)$/,
+      /playwright\.config\.(js|ts)$/,
+      /jest\.config\.(js|ts)$/,
+      /vitest\.config\.(js|ts)$/
     ];
 
     if (highImportancePatterns.some(pattern => pattern.test(filePath))) {
