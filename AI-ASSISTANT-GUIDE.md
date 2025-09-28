@@ -39,6 +39,7 @@ DEPLOYMENT-GUIDE.md                    # 生產環境部署指南
 FIXLOG.md                              # 問題修復記錄和解決方案庫
 scripts/health-check.js               # 服務健康檢查腳本
 scripts/sync-mvp-checklist.js         # MVP進度自動同步腳本
+scripts/run-integration-tests.ts       # 系統整合測試執行腳本
 poc/run-all-tests.js                  # 技術驗證腳本
 README.md                              # 項目說明
 app/layout.tsx                         # Next.js 根布局
@@ -48,6 +49,8 @@ lib/middleware.ts                      # 認證與速率限制中間件系統
 lib/middleware/rate-limiter.ts         # API速率限制核心實現
 lib/monitoring/connection-monitor.ts   # 系統連接狀態監控服務
 lib/monitoring/monitor-init.ts         # 監控系統初始化與生命周期管理
+tests/integration/crm-integration.test.ts    # CRM整合測試套件
+tests/integration/system-integration.test.ts # 系統級整合測試套件
 types/ai.ts                            # AI 服務 TypeScript 類型定義
 types/index.ts                         # 統一類型導出入口
 .eslintrc.json                         # ESLint 配置
@@ -151,6 +154,9 @@ npm run index:check
 # AI 助手可以建議用戶運行
 npm run index:check        # 檢查索引同步狀態
 npm run index:health       # 完整健康檢查
+npm run test:integration   # 執行完整系統整合測試
+npm run test:integration:crm    # 執行CRM整合測試
+npm run test:integration:system # 執行系統級整合測試
 ```
 
 ### 📊 索引擴展觸發條件
