@@ -50,7 +50,6 @@
     "index:check": "node scripts/check-index-sync.js",
     "index:check:incremental": "node scripts/check-index-sync.js --incremental",
     "index:check:auto-fix": "node scripts/check-index-sync.js --auto-fix",
-    "index:update": "node scripts/index-maintenance.js",
     "index:watch": "node scripts/index-watcher.js",
     "index:health": "npm run index:check",
     "mvp:check": "node scripts/sync-mvp-checklist.js",
