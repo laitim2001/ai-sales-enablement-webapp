@@ -439,11 +439,15 @@ class IndexSyncChecker {
   isFileInIndex(filePath) {
     const indexFiles = ['AI-ASSISTANT-GUIDE.md', 'PROJECT-INDEX.md'];
 
+    // 標準化路徑格式，統一使用正斜線
+    const normalizedPath = filePath.replace(/\\/g, '/');
+
     for (const indexFile of indexFiles) {
       const indexPath = path.join(this.projectRoot, indexFile);
       if (fs.existsSync(indexPath)) {
         const content = fs.readFileSync(indexPath, 'utf-8');
-        if (content.includes(filePath)) {
+        // 檢查標準化路徑或原始路徑
+        if (content.includes(normalizedPath) || content.includes(filePath)) {
           return true;
         }
       }
