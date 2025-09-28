@@ -211,7 +211,7 @@ export function PerformanceDashboard() {
       setLoading(true)
       const response = await fetch('/api/admin/performance-metrics', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
         },
       })
 

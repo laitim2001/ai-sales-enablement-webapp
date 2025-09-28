@@ -211,7 +211,7 @@ export function KnowledgeDocumentView({ documentId }: KnowledgeDocumentViewProps
 
       const response = await fetch(`/api/knowledge-base/${documentId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
         },
       })
 
@@ -246,7 +246,7 @@ export function KnowledgeDocumentView({ documentId }: KnowledgeDocumentViewProps
       const response = await fetch(`/api/knowledge-base/${documentId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
         },
       })
 

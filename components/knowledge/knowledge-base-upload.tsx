@@ -291,7 +291,7 @@ export function KnowledgeBaseUpload() {
 
         // 發送請求
         xhr.open('POST', '/api/knowledge-base/upload')
-        xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('token')}`)
+        xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('auth-token')}`)
         xhr.send(formData)
       })
 

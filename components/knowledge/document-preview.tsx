@@ -154,7 +154,7 @@ export function DocumentPreview({
 
       const response = await fetch(`/api/knowledge-base/${documentId}/content`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
         }
       })
 

@@ -399,7 +399,7 @@ export function KnowledgeBaseListOptimized({ filters }: KnowledgeBaseListProps) 
 
       const response = await fetch(`/api/knowledge-base?${params}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
         },
       })
 
@@ -442,7 +442,7 @@ export function KnowledgeBaseListOptimized({ filters }: KnowledgeBaseListProps) 
       const response = await fetch(`/api/knowledge-base/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
         },
       })
 

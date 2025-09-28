@@ -154,7 +154,7 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
 
       const response = await fetch(`/api/knowledge-base/${documentId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
         },
       })
 
@@ -216,7 +216,7 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
         },
         body: JSON.stringify(updateData)
       })
