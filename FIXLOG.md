@@ -8,6 +8,9 @@
 
 | 日期 | 問題類型 | 狀態 | 描述 |
 |------|----------|------|------|
+| 2025-09-28 | 🔍 搜索API/Prisma | ✅ 已解決 | [FIX-012: 搜索API 500錯誤 - Prisma查詢和OpenAI導入問題](#fix-012-搜索api-500錯誤-prisma查詢和openai導入問題) |
+| 2025-09-28 | ⚛️ React/緩存 | ✅ 已解決 | [FIX-011: React事件處理器錯誤 - Next.js緩存問題](#fix-011-react事件處理器錯誤-nextjs緩存問題) |
+| 2025-09-28 | 🌐 API路由/緩存 | ✅ 已解決 | [FIX-010: Catch-all API路由返回HTML問題 - Next.js緩存清理](#fix-010-catch-all-api路由返回html問題-nextjs緩存清理) |
 | 2025-09-28 | 🔑 認證/LocalStorage | ✅ 已解決 | [FIX-009: 認證Token Key不一致導致API 401錯誤](#fix-009-認證token-key不一致導致api-401錯誤) |
 | 2025-09-28 | 🔄 Webpack/模塊 | ✅ 已解決 | [FIX-008: Webpack循環序列化和模塊加載錯誤](#fix-008-webpack循環序列化和模塊加載錯誤) |
 | 2025-09-28 | 🌐 API路由/響應 | ✅ 已解決 | [FIX-007: API端點返回HTML而非JSON格式修復](#fix-007-api端點返回html而非json格式修復) |
@@ -20,8 +23,10 @@
 
 ## 🔍 快速搜索
 - **認證問題**: FIX-009, FIX-001, FIX-002, FIX-003
-- **前端問題**: FIX-008, FIX-006, FIX-004
-- **API問題**: FIX-007, FIX-004
+- **前端問題**: FIX-011, FIX-008, FIX-006, FIX-004
+- **API問題**: FIX-012, FIX-010, FIX-007, FIX-004
+- **Next.js緩存問題**: FIX-011, FIX-010
+- **搜索/Prisma問題**: FIX-012
 - **TypeScript問題**: FIX-005
 
 ## 📝 維護指南
@@ -33,6 +38,139 @@
 ---
 
 # 詳細修復記錄 (最新在上)
+
+## FIX-012: 搜索API 500錯誤 - Prisma查詢和OpenAI導入問題
+
+### 📅 **修復日期**: 2025-09-28
+### 🎯 **問題級別**: 🟡 High
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **CRM搜索API 500錯誤**: `/api/search/crm` 端點返回內部服務器錯誤
+2. **Prisma查詢錯誤**: `Unknown argument 'contains'` - 在枚舉類型字段上使用contains操作符
+3. **OpenAI導入錯誤**: `openaiClient is not exported from '@/lib/ai/openai'` - 導入不存在的導出
+
+### 🔍 **根本原因分析**
+1. **Prisma類型錯誤**: 在`CallOutcome`枚舉類型字段上使用了`contains`操作符
+2. **API導入錯誤**: 嘗試導入不存在的`openaiClient`，實際導出的是`getOpenAIClient()`函數
+
+### 🛠️ **修復步驟**
+1. **修復Prisma查詢**:
+   ```typescript
+   // 移除在枚舉字段上的contains操作
+   const whereConditions: any = {
+     OR: [
+       { summary: { contains: query, mode: 'insensitive' } },
+       { action_items: { contains: query, mode: 'insensitive' } }
+       // 移除: { outcome: { contains: query, mode: 'insensitive' } }
+     ]
+   };
+   ```
+
+2. **修復OpenAI導入**:
+   ```typescript
+   // 修復導入語句
+   import { getOpenAIClient } from '@/lib/ai/openai'
+
+   // 修復使用方式
+   const openaiClient = getOpenAIClient()
+   const response = await openaiClient.chat.completions.create({...})
+   ```
+
+### ✅ **驗證結果**
+- CRM搜索API返回200狀態碼，正常工作
+- 搜索查詢成功返回JSON格式結果
+- 無編譯時導入錯誤
+
+### 📚 **經驗總結**
+- 枚舉類型字段不能使用`contains`操作符，只能使用`equals`或`in`
+- 檢查API文件的實際導出內容，避免導入不存在的函數
+- Prisma查詢需要根據字段類型選擇合適的操作符
+
+---
+
+## FIX-011: React事件處理器錯誤 - Next.js緩存問題
+
+### 📅 **修復日期**: 2025-09-28
+### 🎯 **問題級別**: 🟢 Medium
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **React事件處理器錯誤**: "Event handlers cannot be passed to Client Component props"
+2. **控制台報告**: Error 4243695917 在HTML響應中出現
+
+### 🔍 **根本原因分析**
+- 之前的修復已經正確實施（添加`'use client'`指令），但Next.js緩存導致修復未生效
+- `.next`緩存目錄保留了舊的編譯結果
+
+### 🛠️ **修復步驟**
+1. **清除Next.js緩存**: `rm -rf .next`
+2. **重啟開發服務器**: `npm run dev`
+3. **驗證所有頁面**: 測試首頁、dashboard、404頁面
+
+### ✅ **驗證結果**
+- 所有頁面正常載入，無React事件處理器錯誤
+- 首頁: 200狀態碼
+- Dashboard: 200狀態碼
+- 404頁面: 正常顯示
+
+### 📚 **經驗總結**
+- Next.js緩存可能導致修復不立即生效
+- 遇到無法解釋的問題時，優先清除`.next`緩存
+- 確保測試所有相關頁面和組件
+
+---
+
+## FIX-010: Catch-all API路由返回HTML問題 - Next.js緩存清理
+
+### 📅 **修復日期**: 2025-09-28
+### 🎯 **問題級別**: 🟡 High
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **API響應格式錯誤**: `/api/nonexistent` 返回HTML 404頁面而非JSON錯誤響應
+2. **catch-all路由失效**: `app/api/[...slug]/route.ts` 文件存在但未被觸發
+
+### 🔍 **根本原因分析**
+- catch-all API路由文件存在且實現正確
+- Next.js `.next`緩存目錄導致新增的路由未被識別
+- 緩存中的路由表未更新
+
+### 🛠️ **修復步驟**
+1. **清除Next.js緩存**:
+   ```bash
+   rm -rf .next
+   ```
+2. **重啟開發服務器**:
+   ```bash
+   npm run dev
+   ```
+3. **測試API端點**:
+   - `/api/nonexistent` → 返回JSON 404
+   - `/api/testing/deep/path` → 返回JSON 404
+
+### ✅ **驗證結果**
+```json
+{
+  "success": false,
+  "error": {
+    "type": "NOT_FOUND",
+    "message": "API端點不存在",
+    "statusCode": 404
+  },
+  "metadata": {
+    "requestPath": "/api/nonexistent",
+    "method": "GET"
+  }
+}
+```
+
+### 📚 **經驗總結**
+- Next.js App Router的動態路由需要重啟才能識別
+- 新增API路由後建議清除緩存確保路由表更新
+- catch-all路由是API統一錯誤處理的最佳實踐
+
+---
 
 ## FIX-009: 認證Token Key不一致導致API 401錯誤
 

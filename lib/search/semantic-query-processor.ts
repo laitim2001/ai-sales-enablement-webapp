@@ -39,7 +39,7 @@
  * Week 6 開發階段 - Task 6.1: 自然語言查詢處理增強
  */
 
-import { openaiClient } from '@/lib/ai/openai'
+import { getOpenAIClient } from '@/lib/ai/openai'
 import { generateEmbedding } from '@/lib/ai/embeddings'
 import { QueryProcessor, SearchIntent, ParsedQuery } from './query-processor'
 import { getVectorCache } from '@/lib/cache/vector-cache'
@@ -339,6 +339,7 @@ export class SemanticQueryProcessor {
     const prompt = this.buildAnalysisPrompt(query, baseAnalysis, context)
 
     try {
+      const openaiClient = getOpenAIClient()
       const response = await openaiClient.chat.completions.create({
         model: 'gpt-4',
         messages: [
@@ -523,6 +524,7 @@ export class SemanticQueryProcessor {
     try {
       const contextQueries = context.previousQueries.slice(-3).map(pq => pq.query).join('\n')
 
+      const openaiClient = getOpenAIClient()
       const response = await openaiClient.chat.completions.create({
         model: 'gpt-4',
         messages: [

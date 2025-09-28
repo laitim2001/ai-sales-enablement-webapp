@@ -575,8 +575,9 @@ export class CrmSearchAdapter {
     const whereConditions: any = {
       OR: [
         { summary: { contains: query, mode: 'insensitive' } },
-        { action_items: { contains: query, mode: 'insensitive' } },
-        { outcome: { contains: query, mode: 'insensitive' } }
+        { action_items: { contains: query, mode: 'insensitive' } }
+        // 注意：outcome是枚舉類型，不能使用contains操作符
+        // 如果需要搜索outcome，應該使用精確匹配或in操作符
       ]
     };
 

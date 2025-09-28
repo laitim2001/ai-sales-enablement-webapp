@@ -6,9 +6,80 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
-- [最新修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
+- [API穩定性修復 (2025-09-28 16:26)](#🔧-2025-09-28-1626-api穩定性修復-緩存和搜索問題解決-✅)
+- [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## 🔧 2025-09-28 (16:26): API穩定性修復 - 緩存和搜索問題解決 ✅
+
+### 🎯 **會話概述**
+- 系統性解決API穩定性問題，包括catch-all路由、React事件處理器和搜索API錯誤
+- 修復Next.js緩存導致的路由和組件問題
+- 解決Prisma查詢和OpenAI導入錯誤，恢復搜索功能正常運行
+- 完善FIXLOG文檔記錄，為未來問題排查提供參考
+
+### ✅ **主要修復成果**
+
+#### **1. Catch-all API路由修復** 🌐
+- **問題根因**:
+  - `/api/nonexistent` 返回HTML 404頁面而非JSON響應
+  - `app/api/[...slug]/route.ts` 文件存在但未被觸發
+  - Next.js `.next`緩存目錄導致新路由未被識別
+- **解決方案**:
+  - 清除Next.js緩存: `rm -rf .next`
+  - 重啟開發服務器確保路由表更新
+- **修復效果**:
+  - API統一返回JSON格式錯誤響應
+  - catch-all路由正常工作，提供標準化API錯誤處理
+
+#### **2. React事件處理器錯誤解決** ⚛️
+- **問題現象**:
+  - "Event handlers cannot be passed to Client Component props" 錯誤
+  - Error 4243695917 在HTML響應中出現
+- **根本原因**:
+  - 之前的修復（`'use client'`指令）已正確實施
+  - Next.js緩存保留了舊的編譯結果，導致修復未生效
+- **解決方案**:
+  - 清除`.next`緩存並重啟服務器
+  - 測試所有頁面（首頁、dashboard、404頁面）
+- **修復效果**: 所有頁面正常載入，無React事件處理器錯誤
+
+#### **3. 搜索API 500錯誤修復** 🔍
+- **問題根因**:
+  - **Prisma查詢錯誤**: 在`CallOutcome`枚舉類型字段上使用`contains`操作符
+  - **OpenAI導入錯誤**: 嘗試導入不存在的`openaiClient`，實際導出為`getOpenAIClient()`
+- **解決方案**:
+  ```typescript
+  // 1. 修復Prisma查詢 - 移除枚舉字段的contains操作
+  const whereConditions: any = {
+    OR: [
+      { summary: { contains: query, mode: 'insensitive' } },
+      { action_items: { contains: query, mode: 'insensitive' } }
+      // 移除: { outcome: { contains: query, mode: 'insensitive' } }
+    ]
+  };
+
+  // 2. 修復OpenAI導入
+  import { getOpenAIClient } from '@/lib/ai/openai'
+  const openaiClient = getOpenAIClient()
+  ```
+- **修復效果**:
+  - CRM搜索API返回200狀態碼，正常運行
+  - 搜索查詢成功返回JSON格式結果
+
+### 📝 **技術總結**
+1. **Next.js緩存管理**: 定期清除`.next`緩存可避免路由和組件更新不生效
+2. **Prisma查詢類型**: 枚舉類型字段僅支持`equals`和`in`操作符，不支援`contains`
+3. **API導入檢查**: 導入前確認實際導出內容，避免運行時錯誤
+4. **系統穩定性**: 統一的API錯誤處理提升用戶體驗和調試效率
+
+### 🔄 **下一步計劃**
+- 繼續監控API穩定性
+- 完善錯誤處理和日誌記錄
+- 準備生產環境部署前的最終測試
 
 ---
 
