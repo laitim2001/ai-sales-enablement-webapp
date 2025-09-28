@@ -1,292 +1,463 @@
 {
-  "timestamp": "2025-09-28T14:30:00.000Z",
-  "summary": {
-    "totalItems": 45,
-    "completedItems": 43,
-    "percentage": 95,
-    "status": "品質優化階段",
-    "note": "MVP 核心功能超出預期完成，進入穩定性改善階段"
-  },
-  "actualAchievements": {
-    "dashboardPages": 16,
-    "apiEndpoints": 25,
-    "coreLibraries": 22,
-    "testSuites": 8,
-    "documentationFiles": 35
-  },
-  "phases": [
+  "projectName": "AI Sales Enablement Platform",
+  "description": "AI銷售賦能平台 - MVP開發進度追蹤",
+  "lastUpdated": "2025-09-28T14:30:00.000Z",
+  "progressHistory": [
     {
-      "phase": "Sprint 1",
-      "title": "基礎架構設置 (第 1-2 週)",
-      "status": "completed",
-      "completionPercentage": 100,
-      "items": [
+      "timestamp": "2025-09-27T16:31:45.483Z",
+      "summary": {
+        "totalItems": 32,
+        "completedItems": 26,
+        "percentage": 81,
+        "status": "週4-5實施階段",
+        "note": "知識庫和AI搜索功能開發中"
+      },
+      "weeks": [
         {
-          "name": "Next.js 14 項目創建",
-          "completed": true
+          "week": 1,
+          "title": "項目初始化和環境設置",
+          "items": [
+            {
+              "name": "Next.js 14 項目創建",
+              "completed": true
+            },
+            {
+              "name": "TypeScript 配置",
+              "completed": true
+            },
+            {
+              "name": "Tailwind CSS 設置",
+              "completed": true
+            },
+            {
+              "name": "ESLint 和 Prettier 配置",
+              "completed": true
+            },
+            {
+              "name": "Docker 開發環境",
+              "completed": true
+            },
+            {
+              "name": "PostgreSQL + pgvector 設置",
+              "completed": true
+            },
+            {
+              "name": "Prisma ORM 配置",
+              "completed": true
+            },
+            {
+              "name": "環境變數管理",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "TypeScript 配置",
-          "completed": true
+          "week": 2,
+          "title": "核心資料模型和API架構",
+          "items": [
+            {
+              "name": "User 模型設計",
+              "completed": true
+            },
+            {
+              "name": "Knowledge Base 模型",
+              "completed": true
+            },
+            {
+              "name": "Document 模型設計",
+              "completed": true
+            },
+            {
+              "name": "JWT 認證系統",
+              "completed": true
+            },
+            {
+              "name": "用戶註冊 API",
+              "completed": true
+            },
+            {
+              "name": "用戶登入 API",
+              "completed": true
+            },
+            {
+              "name": "資料庫遷移",
+              "completed": true
+            },
+            {
+              "name": "API 測試腳本",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "Tailwind CSS 設置",
-          "completed": true
+          "week": 3,
+          "title": "前端基礎架構",
+          "items": [
+            {
+              "name": "UI 組件庫基礎",
+              "completed": true
+            },
+            {
+              "name": "登入頁面",
+              "completed": true
+            },
+            {
+              "name": "註冊頁面",
+              "completed": true
+            },
+            {
+              "name": "主儀表板布局",
+              "completed": true
+            },
+            {
+              "name": "響應式導航",
+              "completed": true
+            },
+            {
+              "name": "狀態管理設置",
+              "completed": true
+            },
+            {
+              "name": "表單驗證",
+              "completed": true
+            },
+            {
+              "name": "錯誤處理機制",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "ESLint 和 Prettier 配置",
-          "completed": true
-        },
-        {
-          "name": "Docker 開發環境",
-          "completed": true
-        },
-        {
-          "name": "PostgreSQL + pgvector 設置",
-          "completed": true
-        },
-        {
-          "name": "Prisma ORM 配置",
-          "completed": true
-        },
-        {
-          "name": "環境變數管理",
-          "completed": true
-        },
-        {
-          "name": "CI/CD 流程設置",
-          "completed": true
+          "week": 4,
+          "title": "知識庫管理功能",
+          "items": [
+            {
+              "name": "知識庫列表頁面",
+              "completed": false
+            },
+            {
+              "name": "知識庫創建表單",
+              "completed": false
+            },
+            {
+              "name": "文檔上傳功能",
+              "completed": false
+            },
+            {
+              "name": "文檔處理 API",
+              "completed": false
+            },
+            {
+              "name": "向量化處理",
+              "completed": true
+            },
+            {
+              "name": "Azure OpenAI 整合",
+              "completed": true
+            },
+            {
+              "name": "文檔預覽組件",
+              "completed": false
+            },
+            {
+              "name": "基礎搜索功能",
+              "completed": false
+            }
+          ]
         }
       ]
     },
     {
-      "phase": "Sprint 2",
-      "title": "認證與知識庫基礎 (第 3-4 週)",
-      "status": "completed",
-      "completionPercentage": 100,
-      "items": [
+      "timestamp": "2025-09-28T14:30:00.000Z",
+      "summary": {
+        "totalItems": 45,
+        "completedItems": 43,
+        "percentage": 95,
+        "status": "品質優化階段",
+        "note": "MVP 核心功能超出預期完成，進入穩定性改善階段"
+      },
+      "actualAchievements": {
+        "dashboardPages": 16,
+        "apiEndpoints": 25,
+        "coreLibraries": 22,
+        "testSuites": 8,
+        "documentationFiles": 35
+      },
+      "phases": [
         {
-          "name": "用戶認證系統 (JWT)",
-          "completed": true
+          "phase": "Sprint 1",
+          "title": "基礎架構設置 (第 1-2 週)",
+          "status": "completed",
+          "completionPercentage": 100,
+          "items": [
+            {
+              "name": "Next.js 14 項目創建",
+              "completed": true
+            },
+            {
+              "name": "TypeScript 配置",
+              "completed": true
+            },
+            {
+              "name": "Tailwind CSS 設置",
+              "completed": true
+            },
+            {
+              "name": "ESLint 和 Prettier 配置",
+              "completed": true
+            },
+            {
+              "name": "Docker 開發環境",
+              "completed": true
+            },
+            {
+              "name": "PostgreSQL + pgvector 設置",
+              "completed": true
+            },
+            {
+              "name": "Prisma ORM 配置",
+              "completed": true
+            },
+            {
+              "name": "環境變數管理",
+              "completed": true
+            },
+            {
+              "name": "CI/CD 流程設置",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "保護路由中間件",
-          "completed": true
+          "phase": "Sprint 2",
+          "title": "認證與知識庫基礎 (第 3-4 週)",
+          "status": "completed",
+          "completionPercentage": 100,
+          "items": [
+            {
+              "name": "用戶認證系統 (JWT)",
+              "completed": true
+            },
+            {
+              "name": "保護路由中間件",
+              "completed": true
+            },
+            {
+              "name": "知識庫數據模型",
+              "completed": true
+            },
+            {
+              "name": "基礎 API 端點",
+              "completed": true
+            },
+            {
+              "name": "前端布局和導航",
+              "completed": true
+            },
+            {
+              "name": "UI 組件庫",
+              "completed": true
+            },
+            {
+              "name": "數據庫遷移",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "知識庫數據模型",
-          "completed": true
+          "phase": "Sprint 3",
+          "title": "AI 搜索引擎 (第 5-6 週)",
+          "status": "completed",
+          "completionPercentage": 100,
+          "items": [
+            {
+              "name": "向量搜索引擎核心",
+              "completed": true
+            },
+            {
+              "name": "智能查詢處理器",
+              "completed": true
+            },
+            {
+              "name": "結果排序系統",
+              "completed": true
+            },
+            {
+              "name": "搜索建議系統",
+              "completed": true
+            },
+            {
+              "name": "向量緩存系統",
+              "completed": true
+            },
+            {
+              "name": "Azure OpenAI 整合",
+              "completed": true
+            },
+            {
+              "name": "性能監控系統",
+              "completed": true
+            },
+            {
+              "name": "搜索 API 端點",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "基礎 API 端點",
-          "completed": true
+          "phase": "Sprint 4",
+          "title": "CRM 整合 (第 7-8 週)",
+          "status": "completed",
+          "completionPercentage": 100,
+          "items": [
+            {
+              "name": "Dynamics 365 API 客戶端",
+              "completed": true
+            },
+            {
+              "name": "OAuth 2.0 認證流程",
+              "completed": true
+            },
+            {
+              "name": "客戶360度視圖組件",
+              "completed": true
+            },
+            {
+              "name": "CRM 搜索適配器",
+              "completed": true
+            },
+            {
+              "name": "CRM 數據同步",
+              "completed": true
+            },
+            {
+              "name": "模擬環境支持",
+              "completed": true
+            },
+            {
+              "name": "CRM 整合測試",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "前端布局和導航",
-          "completed": true
+          "phase": "Sprint 5",
+          "title": "AI 提案生成 (第 9-10 週)",
+          "status": "completed",
+          "completionPercentage": 100,
+          "items": [
+            {
+              "name": "AI 提案生成引擎",
+              "completed": true
+            },
+            {
+              "name": "提案範本管理系統",
+              "completed": true
+            },
+            {
+              "name": "個人化推薦引擎",
+              "completed": true
+            },
+            {
+              "name": "提案工作流程",
+              "completed": true
+            },
+            {
+              "name": "提案編輯器",
+              "completed": true
+            },
+            {
+              "name": "提案預覽和導出",
+              "completed": true
+            }
+          ]
         },
         {
-          "name": "UI 組件庫",
-          "completed": true
+          "phase": "Sprint 6",
+          "title": "品質優化和系統整合 (第 11-12 週)",
+          "status": "in_progress",
+          "completionPercentage": 85,
+          "items": [
+            {
+              "name": "前端性能優化",
+              "completed": false,
+              "note": "循環序列化問題需修復"
+            },
+            {
+              "name": "API 穩定性改善",
+              "completed": false,
+              "note": "503/401 錯誤需修復"
+            },
+            {
+              "name": "健康檢查系統優化",
+              "completed": false
+            },
+            {
+              "name": "測試覆蓋率提升",
+              "completed": true
+            },
+            {
+              "name": "文檔完善",
+              "completed": true
+            },
+            {
+              "name": "部署流程優化",
+              "completed": true
+            },
+            {
+              "name": "監控和警報系統",
+              "completed": false
+            }
+          ]
+        }
+      ],
+      "technicalAchievements": {
+        "frontend": {
+          "pages": 16,
+          "components": "50+",
+          "features": ["響應式設計", "主題切換", "多語言支持", "錯誤處理"]
+        },
+        "backend": {
+          "apiEndpoints": 25,
+          "authentication": "JWT + OAuth 2.0",
+          "database": "PostgreSQL + pgvector",
+          "caching": "Redis + 記憶體雙層"
+        },
+        "ai": {
+          "searchEngine": "企業級向量搜索",
+          "proposalGeneration": "GPT-4 驅動",
+          "embeddingService": "Azure OpenAI",
+          "caching": "智能向量緩存"
+        },
+        "integration": {
+          "crm": "Dynamics 365 完整整合",
+          "monitoring": "8種性能指標",
+          "testing": "單元 + 整合測試",
+          "deployment": "Docker + CI/CD"
+        }
+      },
+      "currentPriorities": [
+        {
+          "priority": "高",
+          "task": "修復前端循環序列化錯誤",
+          "impact": "用戶體驗"
         },
         {
-          "name": "數據庫遷移",
-          "completed": true
+          "priority": "高",
+          "task": "修復 API 503/401 錯誤",
+          "impact": "系統穩定性"
+        },
+        {
+          "priority": "中",
+          "task": "優化健康檢查端點",
+          "impact": "監控完整性"
+        },
+        {
+          "priority": "中",
+          "task": "改善測試穩定性",
+          "impact": "開發效率"
         }
       ]
-    },
-    {
-      "phase": "Sprint 3",
-      "title": "AI 搜索引擎 (第 5-6 週)",
-      "status": "completed",
-      "completionPercentage": 100,
-      "items": [
-        {
-          "name": "向量搜索引擎核心",
-          "completed": true
-        },
-        {
-          "name": "智能查詢處理器",
-          "completed": true
-        },
-        {
-          "name": "結果排序系統",
-          "completed": true
-        },
-        {
-          "name": "搜索建議系統",
-          "completed": true
-        },
-        {
-          "name": "向量緩存系統",
-          "completed": true
-        },
-        {
-          "name": "Azure OpenAI 整合",
-          "completed": true
-        },
-        {
-          "name": "性能監控系統",
-          "completed": true
-        },
-        {
-          "name": "搜索 API 端點",
-          "completed": true
-        }
-      ]
-    },
-    {
-      "phase": "Sprint 4",
-      "title": "CRM 整合 (第 7-8 週)",
-      "status": "completed",
-      "completionPercentage": 100,
-      "items": [
-        {
-          "name": "Dynamics 365 API 客戶端",
-          "completed": true
-        },
-        {
-          "name": "OAuth 2.0 認證流程",
-          "completed": true
-        },
-        {
-          "name": "客戶360度視圖組件",
-          "completed": true
-        },
-        {
-          "name": "CRM 搜索適配器",
-          "completed": true
-        },
-        {
-          "name": "CRM 數據同步",
-          "completed": true
-        },
-        {
-          "name": "模擬環境支持",
-          "completed": true
-        },
-        {
-          "name": "CRM 整合測試",
-          "completed": true
-        }
-      ]
-    },
-    {
-      "phase": "Sprint 5",
-      "title": "AI 提案生成 (第 9-10 週)",
-      "status": "completed",
-      "completionPercentage": 100,
-      "items": [
-        {
-          "name": "AI 提案生成引擎",
-          "completed": true
-        },
-        {
-          "name": "提案範本管理系統",
-          "completed": true
-        },
-        {
-          "name": "個人化推薦引擎",
-          "completed": true
-        },
-        {
-          "name": "提案工作流程",
-          "completed": true
-        },
-        {
-          "name": "提案編輯器",
-          "completed": true
-        },
-        {
-          "name": "提案預覽和導出",
-          "completed": true
-        }
-      ]
-    },
-    {
-      "phase": "Sprint 6",
-      "title": "品質優化和系統整合 (第 11-12 週)",
-      "status": "in_progress",
-      "completionPercentage": 85,
-      "items": [
-        {
-          "name": "前端性能優化",
-          "completed": false,
-          "note": "循環序列化問題需修復"
-        },
-        {
-          "name": "API 穩定性改善",
-          "completed": false,
-          "note": "503/401 錯誤需修復"
-        },
-        {
-          "name": "健康檢查系統優化",
-          "completed": false
-        },
-        {
-          "name": "測試覆蓋率提升",
-          "completed": true
-        },
-        {
-          "name": "文檔完善",
-          "completed": true
-        },
-        {
-          "name": "部署流程優化",
-          "completed": true
-        },
-        {
-          "name": "監控和警報系統",
-          "completed": false
-        }
-      ]
-    }
-  ],
-  "technicalAchievements": {
-    "frontend": {
-      "pages": 16,
-      "components": "50+",
-      "features": ["響應式設計", "主題切換", "多語言支持", "錯誤處理"]
-    },
-    "backend": {
-      "apiEndpoints": 25,
-      "authentication": "JWT + OAuth 2.0",
-      "database": "PostgreSQL + pgvector",
-      "caching": "Redis + 記憶體雙層"
-    },
-    "ai": {
-      "searchEngine": "企業級向量搜索",
-      "proposalGeneration": "GPT-4 驅動",
-      "embeddingService": "Azure OpenAI",
-      "caching": "智能向量緩存"
-    },
-    "integration": {
-      "crm": "Dynamics 365 完整整合",
-      "monitoring": "8種性能指標",
-      "testing": "單元 + 整合測試",
-      "deployment": "Docker + CI/CD"
-    }
-  },
-  "currentPriorities": [
-    {
-      "priority": "高",
-      "task": "修復前端循環序列化錯誤",
-      "impact": "用戶體驗"
-    },
-    {
-      "priority": "高",
-      "task": "修復 API 503/401 錯誤",
-      "impact": "系統穩定性"
-    },
-    {
-      "priority": "中",
-      "task": "優化健康檢查端點",
-      "impact": "監控完整性"
-    },
-    {
-      "priority": "中",
-      "task": "改善測試穩定性",
-      "impact": "開發效率"
     }
   ],
   "nextMilestones": [
@@ -300,5 +471,12 @@
       "targetDate": "2025-11-01",
       "requirements": ["生產環境部署", "監控系統完善", "用戶培訓"]
     }
-  ]
+  ],
+  "metadata": {
+    "projectStartDate": "2025-09-01",
+    "mvpTargetDate": "2025-10-15",
+    "developmentTeamSize": "5-7人",
+    "architecture": "Next.js 14 全棧",
+    "keyTechnologies": ["Next.js 14", "PostgreSQL", "pgvector", "Azure OpenAI", "Dynamics 365"]
+  }
 }

@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-09-28T06:13:54.567Z",
+  "timestamp": "2025-09-28T15:16:41.301Z",
   "summary": {
     "totalIssues": 0,
     "highSeverity": 0,
     "mediumSeverity": 0,
     "lowSeverity": 0,
-    "suggestions": 47
+    "suggestions": 49
   },
   "issues": [],
   "suggestions": [
@@ -32,6 +32,22 @@
       "severity": "low",
       "message": "建議將重要文件加入索引: docs\\architecture.md",
       "modifiedTime": "2025-09-23T13:46:59.260Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "docs\\azure-openai-setup-guide.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\azure-openai-setup-guide.md",
+      "modifiedTime": "2025-09-28T06:43:00.822Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "docs\\dynamics365-setup-guide.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\dynamics365-setup-guide.md",
+      "modifiedTime": "2025-09-28T06:30:20.933Z"
     },
     {
       "type": "add_to_index",
@@ -63,7 +79,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: docs\\mvp-implementation-checklist.md",
-      "modifiedTime": "2025-09-27T16:31:45.496Z"
+      "modifiedTime": "2025-09-28T15:12:46.821Z"
     },
     {
       "type": "add_to_index",
