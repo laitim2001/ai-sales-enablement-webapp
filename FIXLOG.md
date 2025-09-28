@@ -1,24 +1,38 @@
 # 🔧 AI 銷售賦能平台 - 修復日誌
 
 > **目的**: 記錄所有重要問題的修復過程，防止重複犯錯，提供問題排查指南
+> **重要**: ⚠️ **新的修復記錄必須添加在索引表和詳細內容的最頂部** - 保持時間倒序排列（最新在上）
+> **格式**: `FIX-XXX: 問題簡述`，編號遞增，詳細內容按編號倒序排列
 
----
-
-## 📋 修復記錄索引
+## 📋 修復記錄索引 (最新在上)
 
 | 日期 | 問題類型 | 狀態 | 描述 |
 |------|----------|------|------|
-| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
-| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-002: JWT Payload userId類型不一致](#fix-002-jwt-payload-userid類型不一致) |
-| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-003: authenticateUser函數userId類型錯誤](#fix-003-authenticateuser函數userid類型錯誤) |
-| 2025-09-25 | 🌐 路由/導航 | ✅ 已解決 | [FIX-004: Dashboard路由結構和導航404錯誤](#fix-004-dashboard路由結構和導航404錯誤) |
-| 2025-09-26 | 🔧 TypeScript編譯 | ✅ 已解決 | [FIX-005: TypeScript編譯錯誤大規模修復](#fix-005-typescript編譯錯誤大規模修復) |
-| 2025-09-28 | ⚛️ React事件處理器 | ✅ 已解決 | [FIX-006: React事件處理器錯誤修復](#fix-006-react事件處理器錯誤修復) |
-| 2025-09-28 | 🌐 API路由/響應 | ✅ 已解決 | [FIX-007: API端點返回HTML而非JSON格式修復](#fix-007-api端點返回html而非json格式修復) |
-| 2025-09-28 | 🔄 Webpack/模塊 | ✅ 已解決 | [FIX-008: Webpack循環序列化和模塊加載錯誤](#fix-008-webpack循環序列化和模塊加載錯誤) |
 | 2025-09-28 | 🔑 認證/LocalStorage | ✅ 已解決 | [FIX-009: 認證Token Key不一致導致API 401錯誤](#fix-009-認證token-key不一致導致api-401錯誤) |
+| 2025-09-28 | 🔄 Webpack/模塊 | ✅ 已解決 | [FIX-008: Webpack循環序列化和模塊加載錯誤](#fix-008-webpack循環序列化和模塊加載錯誤) |
+| 2025-09-28 | 🌐 API路由/響應 | ✅ 已解決 | [FIX-007: API端點返回HTML而非JSON格式修復](#fix-007-api端點返回html而非json格式修復) |
+| 2025-09-28 | ⚛️ React事件處理器 | ✅ 已解決 | [FIX-006: React事件處理器錯誤修復](#fix-006-react事件處理器錯誤修復) |
+| 2025-09-26 | 🔧 TypeScript編譯 | ✅ 已解決 | [FIX-005: TypeScript編譯錯誤大規模修復](#fix-005-typescript編譯錯誤大規模修復) |
+| 2025-09-25 | 🌐 路由/導航 | ✅ 已解決 | [FIX-004: Dashboard路由結構和導航404錯誤](#fix-004-dashboard路由結構和導航404錯誤) |
+| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-003: authenticateUser函數userId類型錯誤](#fix-003-authenticateuser函數userid類型錯誤) |
+| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-002: JWT Payload userId類型不一致](#fix-002-jwt-payload-userid類型不一致) |
+| 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
+
+## 🔍 快速搜索
+- **認證問題**: FIX-009, FIX-001, FIX-002, FIX-003
+- **前端問題**: FIX-008, FIX-006, FIX-004
+- **API問題**: FIX-007, FIX-004
+- **TypeScript問題**: FIX-005
+
+## 📝 維護指南
+- **新增修復記錄**: 在索引表頂部添加新條目，在詳細記錄頂部添加完整內容
+- **編號規則**: 按時間順序遞增 (FIX-010, FIX-011...)
+- **狀態標記**: ✅已解決 / 🔄進行中 / ❌未解決
+- **問題級別**: 🔴Critical / 🟡High / 🟢Medium / 🔵Low
 
 ---
+
+# 詳細修復記錄 (最新在上)
 
 ## FIX-009: 認證Token Key不一致導致API 401錯誤
 
@@ -139,6 +153,8 @@ npm run dev
 - ✅ 頁面渲染性能改善
 
 ---
+
+# 歷史修復記錄 (按編號順序)
 
 ## FIX-001: JWT_SECRET客戶端訪問錯誤
 
