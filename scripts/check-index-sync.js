@@ -527,15 +527,24 @@ class IndexSyncChecker {
   saveReportToFile() {
     const report = {
       timestamp: new Date().toISOString(),
+      checkerVersion: "2.0.0", // 修復路徑匹配問題後的版本
+      systemInfo: {
+        platform: process.platform,
+        nodeVersion: process.version,
+        workingDirectory: this.projectRoot
+      },
       summary: {
         totalIssues: this.issues.length,
         highSeverity: this.issues.filter(i => i.severity === 'high').length,
         mediumSeverity: this.issues.filter(i => i.severity === 'medium').length,
         lowSeverity: this.issues.filter(i => i.severity === 'low').length,
-        suggestions: this.suggestions.length
+        suggestions: this.suggestions.length,
+        indexFilesChecked: ['AI-ASSISTANT-GUIDE.md', 'PROJECT-INDEX.md'],
+        status: this.issues.length === 0 && this.suggestions.length === 0 ? 'perfect_sync' : 'needs_attention'
       },
       issues: this.issues,
-      suggestions: this.suggestions
+      suggestions: this.suggestions,
+      lastUpdated: new Date().toISOString()
     };
 
     const reportPath = path.join(this.projectRoot, 'index-sync-report.json');

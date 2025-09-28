@@ -505,6 +505,7 @@
 | **主索引**          | `PROJECT-INDEX.md`              | 📍 當前文件 - AI 助手導航指南                      |
 | **維護指南**        | `INDEX-MAINTENANCE-GUIDE.md`    | 索引維護策略和自動化工具                           |
 | **提醒設置**        | `docs/INDEX-REMINDER-SETUP.md`  | 索引同步提醒系統設置指南                           |
+| **同步檢查報告**    | `index-sync-report.json`        | 索引同步狀態檢查報告，記錄問題和建議               |
 
 ### 🚀 CI/CD 和部署配置
 
