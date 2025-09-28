@@ -24,8 +24,8 @@
  * 【相關檔案】
  * • /lib/auth-server.ts - 伺服器端認證邏輯，提供token驗證功能
  * • /lib/api/error-handler.ts - API錯誤處理系統，處理認證相關錯誤
- * • /app/api/*/route.ts - 各API路由檔案，使用中間件保護敏感端點
- * • /components/auth/* - 前端認證組件，配合中間件實現完整認證流程
+ * • /app/api/route.ts - 各API路由檔案，使用中間件保護敏感端點
+ * • /components/auth/ - 前端認證組件，配合中間件實現完整認證流程
  */
 
 import { NextRequest, NextResponse } from 'next/server'

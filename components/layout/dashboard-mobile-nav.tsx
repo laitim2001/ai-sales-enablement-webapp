@@ -376,41 +376,41 @@ export function DashboardMobileNav() {
                             {section.items.map((item) => {
                               const isActive = pathname === item.href
                               return (
-                                <div key={item.name} onClick={() => setSidebarOpen(false)}>
-                                  <Link
-                                    href={item.href}
+                                <Link
+                                  key={item.name}
+                                  href={item.href}
+                                  onClick={() => setSidebarOpen(false)}
+                                  className={cn(
+                                    'group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+                                    isActive
+                                      ? 'bg-blue-50 text-blue-700 shadow-sm'
+                                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                                  )}
+                                >
+                                <div className="flex items-center space-x-3">
+                                  <item.icon
                                     className={cn(
-                                      'group flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+                                      'h-5 w-5 shrink-0',
                                       isActive
-                                        ? 'bg-blue-50 text-blue-700 shadow-sm'
-                                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                                        ? 'text-blue-600'
+                                        : 'text-gray-400 group-hover:text-gray-600'
+                                    )}
+                                  />
+                                  <span className="truncate">{item.name}</span>
+                                </div>
+                                {item.badge && (
+                                  <span
+                                    className={cn(
+                                      'rounded-full px-2 py-1 text-xs font-medium',
+                                      item.badge === 'NEW'
+                                        ? 'bg-green-100 text-green-700'
+                                        : 'bg-gray-100 text-gray-600'
                                     )}
                                   >
-                                  <div className="flex items-center space-x-3">
-                                    <item.icon
-                                      className={cn(
-                                        'h-5 w-5 shrink-0',
-                                        isActive
-                                          ? 'text-blue-600'
-                                          : 'text-gray-400 group-hover:text-gray-600'
-                                      )}
-                                    />
-                                    <span className="truncate">{item.name}</span>
-                                  </div>
-                                  {item.badge && (
-                                    <span
-                                      className={cn(
-                                        'rounded-full px-2 py-1 text-xs font-medium',
-                                        item.badge === 'NEW'
-                                          ? 'bg-green-100 text-green-700'
-                                          : 'bg-gray-100 text-gray-600'
-                                      )}
-                                    >
-                                      {item.badge}
-                                    </span>
-                                  )}
-                                </Link>
-                                </div>
+                                    {item.badge}
+                                  </span>
+                                )}
+                              </Link>
                               )
                             })}
                           </div>
@@ -424,27 +424,27 @@ export function DashboardMobileNav() {
                         {bottomNavigation.map((item) => {
                           const isActive = pathname === item.href
                           return (
-                            <div key={item.name} onClick={() => setSidebarOpen(false)}>
-                              <Link
-                                href={item.href}
-                                className={cn(
-                                  'group flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-                                  isActive
-                                    ? 'bg-gray-100 text-gray-900'
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                                )}
-                              >
-                              <item.icon
-                                className={cn(
-                                  'mr-3 h-5 w-5 shrink-0',
-                                  isActive
-                                    ? 'text-gray-600'
-                                    : 'text-gray-400 group-hover:text-gray-600'
-                                )}
-                              />
-                              <span className="truncate">{item.name}</span>
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              onClick={() => setSidebarOpen(false)}
+                              className={cn(
+                                'group flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+                                isActive
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                              )}
+                            >
+                            <item.icon
+                              className={cn(
+                                'mr-3 h-5 w-5 shrink-0',
+                                isActive
+                                  ? 'text-gray-600'
+                                  : 'text-gray-400 group-hover:text-gray-600'
+                              )}
+                            />
+                            <span className="truncate">{item.name}</span>
                             </Link>
-                            </div>
                           )
                         })}
                       </div>

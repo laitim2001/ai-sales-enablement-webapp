@@ -22,7 +22,7 @@ docs/architecture.md            # 技術架構 (Next.js 14 全棧)
 docs/mvp-development-plan.md     # 12週開發計劃
 docs/api-specification.md       # API 端點規格
 prisma/schema.prisma            # 資料庫設計
-package.json                    # 依賴包與腳本配置 (已修復tRPC v10兼容性)
+package.json                    # 依賴包與腳本配置 (已修復tRPC v10兼容性，新增ioredis/@radix-ui/@clerk)
 next.config.js                  # Next.js 配置
 tailwind.config.js              # Tailwind CSS 配置
 ```
@@ -63,6 +63,8 @@ docs/security-standards.md     # 安全要求
 docs/front-end-spec.md         # UI/UX 規格
 components/admin/system-monitor.tsx   # 系統監控管理界面
 app/api/health/route.ts               # 系統健康檢查API
+app/api/[...slug]/route.ts           # API catch-all路由，處理404錯誤返回JSON格式
+lib/api/response-helper.ts           # 統一API響應格式助手模組
 app/api/proposal-templates/           # 提案範本管理API群組
 app/dashboard/proposals/              # 提案管理前端頁面群組
 .env.example                   # 環境配置範例

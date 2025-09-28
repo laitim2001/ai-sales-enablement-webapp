@@ -98,14 +98,14 @@ export default function NotFound() {
           </Link>
 
           {/* 返回上一頁按鈕 */}
-          <Button
-            variant="outline"
+          <button
+            type="button"
             onClick={() => window.history.back()}
-            className="w-full"
+            className="inline-flex items-center justify-center w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             返回上一頁
-          </Button>
+          </button>
 
           {/* 可選：搜尋按鈕 - 可以連結到搜尋頁面或開啟搜尋功能 */}
           <Link href="/search" className="block w-full">

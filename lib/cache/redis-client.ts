@@ -40,9 +40,9 @@
  *
  * 【相關檔案】
  * • lib/db.ts - 資料庫操作，緩存的資料來源
- * • app/api/*/route.ts - API路由，緩存的使用者
+ * • app/api/route.ts - API路由，緩存的使用者
  * • lib/auth.ts - 認證服務，會話緩存
- * • components/knowledge/* - 前端組件，緩存數據展示
+ * • components/knowledge/ - 前端組件，緩存數據展示
  *
  * 【開發注意】
  * • 使用IORedis提供高性能Redis客戶端

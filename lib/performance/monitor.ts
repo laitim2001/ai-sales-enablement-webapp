@@ -30,7 +30,7 @@
  * 【相關檔案】
  * • /lib/monitoring/performance-monitor.ts - 高階性能監控系統，提供更豐富的分析功能
  * • /lib/api/error-handler.ts - API錯誤處理系統，可整合性能監控
- * • /app/api/*/route.ts - 各API路由檔案，使用withPerformanceTracking中間件
+ * • /app/api/route.ts - 各API路由檔案，使用withPerformanceTracking中間件
  * • /components/admin/PerformanceDashboard.tsx - 性能監控界面，展示收集的數據
  */
 

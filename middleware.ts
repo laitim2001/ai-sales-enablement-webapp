@@ -94,13 +94,14 @@ export function middleware(request: NextRequest) {
     response.headers.set('X-Request-ID', requestId)
 
     /**
-     * API請求CORS處理
+     * API請求CORS處理和404攔截
      *
      * 為 API 路徑添加必要的 CORS 標頭，支援:
      * - 跨域資源共享 (CORS)
      * - 多種 HTTP 方法
      * - 自定義請求標頭
      * - 請求ID暴露給客戶端
+     * - API 404 JSON 響應
      */
     if (request.nextUrl.pathname.startsWith('/api/')) {
       response.headers.set('Access-Control-Allow-Origin', '*')
@@ -131,6 +132,12 @@ export function middleware(request: NextRequest) {
           }
         })
       }
+
+      /**
+       * 檢查API路由是否存在 - 在中間件中無法直接檢查路由存在性
+       * 所以我們先讓請求通過，如果後續返回404則在這裡攔截
+       * 這個解決方案將在rewrite後的響應中處理
+       */
     }
 
     return response

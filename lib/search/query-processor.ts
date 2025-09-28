@@ -668,7 +668,7 @@ export class QueryProcessor {
       ['培訓', DocumentCategory.TRAINING],
       ['教育', DocumentCategory.TRAINING],
       ['常見問題', DocumentCategory.FAQ],
-      '問答', DocumentCategory.FAQ],
+      ['問答', DocumentCategory.FAQ],
       ['案例', DocumentCategory.CASE_STUDY],
       ['研究', DocumentCategory.CASE_STUDY],
       ['白皮書', DocumentCategory.WHITE_PAPER],
