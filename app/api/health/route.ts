@@ -1,77 +1,265 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 系統健康檢查API (app/api/health/route.ts)
- * ================================================================
+ * 系統健康檢查 API 路由
  *
- * 【檔案功能】
- * 提供系統健康狀態檢查的RESTful API端點，用於監控系統運行狀態
- * 主要檢查數據庫連接狀態和系統基本運行狀況
+ * 功能：
+ * - 提供系統整體健康狀態
+ * - 各服務連接狀態監控
+ * - 性能指標統計
+ * - 健康檢查端點
  *
- * 【主要職責】
- * • 數據庫連接檢查 - 驗證PostgreSQL數據庫連接是否正常
- * • 系統狀態回報 - 返回系統整體健康狀態信息
- * • 監控支援 - 為外部監控系統提供健康檢查端點
- * • 故障診斷 - 在系統異常時提供錯誤信息
- *
- * 【API規格】
- * • 路由: GET /api/health
- * • 成功回應: { status: 'healthy', database: 'connected', timestamp: ISO時間 }
- * • 失敗回應: { status: 'unhealthy', database: 'disconnected', error: 錯誤信息, timestamp: ISO時間 }
- * • HTTP狀態碼: 200 (正常) | 500 (異常)
- *
- * 【使用場景】
- * • 負載均衡器健康檢查
- * • 監控系統狀態探測
- * • 部署後的系統驗證
- * • 故障排除和診斷
- *
- * 【相關檔案】
- * • lib/db.ts - 數據庫連接管理
- * • 外部監控系統配置
- *
- * 【開發注意】
- * • 使用簡單的SELECT 1查詢測試數據庫連接
- * • 避免複雜查詢影響性能
- * • 提供詳細的錯誤信息便於診斷
- * • 包含時間戳便於追蹤
+ * 作者：Claude Code
+ * 創建時間：2025-09-28
  */
 
-import { NextResponse } from 'next/server'    // Next.js回應處理
-import { prisma } from '@/lib/db'             // 數據庫連接實例
+import { NextRequest, NextResponse } from 'next/server';
+import { getConnectionMonitor, quickHealthCheck, ServiceType, ConnectionStatus } from '@/lib/monitoring/connection-monitor';
 
 /**
- * 系統健康檢查API端點
+ * 獲取系統健康狀態
  *
- * 執行系統健康狀態檢查，主要驗證數據庫連接狀態
- * 提供標準化的健康檢查回應格式供監控系統使用
- *
- * @returns {NextResponse} 包含系統狀態信息的JSON回應
+ * @param request HTTP請求對象
+ * @returns JSON格式的健康狀態
  */
-export async function GET() {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    // 執行簡單的數據庫查詢測試連接狀態
-    // 使用 SELECT 1 是最輕量的連接測試方式
-    await prisma.$queryRaw`SELECT 1`
+    const { searchParams } = new URL(request.url);
+    const detailed = searchParams.get('detailed') === 'true';
+    const service = searchParams.get('service') as ServiceType;
 
-    // 返回成功的健康檢查結果
+    // 如果請求特定服務
+    if (service && Object.values(ServiceType).includes(service)) {
+      const monitor = getConnectionMonitor();
+      const serviceHealth = monitor.getServiceHealth(service);
+
+      if (!serviceHealth) {
+        return NextResponse.json({
+          success: false,
+          error: 'SERVICE_NOT_FOUND',
+          message: '服務不存在'
+        }, { status: 404 });
+      }
+
+      // 執行實時檢查
+      const realtimeCheck = await monitor.checkServiceHealth(service);
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          service,
+          currentStatus: serviceHealth,
+          realtimeCheck,
+          isHealthy: realtimeCheck.status === ConnectionStatus.HEALTHY
+        },
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // 獲取系統整體健康狀態
+    const systemHealth = await quickHealthCheck();
+
+    // 基本響應
+    const response = {
+      success: true,
+      data: {
+        status: systemHealth.overallStatus,
+        healthy: systemHealth.overallStatus === ConnectionStatus.HEALTHY,
+        summary: {
+          total: systemHealth.totalServices,
+          healthy: systemHealth.healthyServices,
+          degraded: systemHealth.degradedServices,
+          down: systemHealth.downServices
+        },
+        timestamp: systemHealth.timestamp
+      }
+    };
+
+    // 詳細響應
+    if (detailed) {
+      (response.data as any).services = systemHealth.services.map(service => ({
+        name: service.service,
+        status: service.status,
+        lastCheck: service.lastCheck,
+        responseTime: service.averageResponseTime,
+        errorCount: service.errorCount,
+        uptime: formatUptime(service.uptime),
+        lastError: service.lastError
+      }));
+
+      // 添加性能指標
+      (response.data as any).metrics = {
+        averageResponseTime: calculateAverageResponseTime(systemHealth.services),
+        totalUptime: calculateTotalUptime(systemHealth.services),
+        errorRate: calculateErrorRate(systemHealth.services)
+      };
+    }
+
+    // 根據健康狀態設置HTTP狀態碼
+    const httpStatus = getHttpStatusFromHealth(systemHealth.overallStatus);
+
+    return NextResponse.json(response, { status: httpStatus });
+
+  } catch (error: any) {
+    console.error('健康檢查失敗:', error);
+
     return NextResponse.json({
-      status: 'healthy',              // 系統狀態：健康
-      database: 'connected',          // 數據庫狀態：已連接
-      timestamp: new Date().toISOString()  // 檢查時間戳（ISO格式）
-    })
-  } catch (error) {
-    // 記錄健康檢查失敗的詳細錯誤信息
-    console.error('Health check failed:', error)
+      success: false,
+      error: 'HEALTH_CHECK_FAILED',
+      message: '健康檢查失敗',
+      details: error.message
+    }, { status: 500 });
+  }
+}
 
-    // 返回失敗的健康檢查結果，包含錯誤詳情
-    return NextResponse.json(
-      {
-        status: 'unhealthy',           // 系統狀態：不健康
-        database: 'disconnected',     // 數據庫狀態：連接失敗
-        error: error instanceof Error ? error.message : 'Unknown error',  // 錯誤信息
-        timestamp: new Date().toISOString()  // 檢查時間戳（ISO格式）
-      },
-      { status: 500 }  // HTTP 500 Internal Server Error
-    )
+/**
+ * 觸發健康檢查
+ *
+ * @param request HTTP請求對象
+ * @returns 執行結果
+ */
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    const { service, action } = await request.json();
+
+    const monitor = getConnectionMonitor();
+
+    if (action === 'check') {
+      // 執行健康檢查
+      if (service && Object.values(ServiceType).includes(service)) {
+        // 檢查特定服務
+        const result = await monitor.checkServiceHealth(service);
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            service,
+            result,
+            message: `${service} 服務檢查完成`
+          },
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        // 檢查所有服務
+        const promises = Object.values(ServiceType).map(async (svc) => {
+          try {
+            const result = await monitor.checkServiceHealth(svc);
+            return { service: svc, result, success: true };
+          } catch (error: any) {
+            return { service: svc, error: error.message, success: false };
+          }
+        });
+
+        const results = await Promise.all(promises);
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            results,
+            message: '所有服務檢查完成'
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+
+    if (action === 'reset' && service) {
+      // 重置服務錯誤計數
+      if (Object.values(ServiceType).includes(service)) {
+        monitor.resetServiceErrors(service);
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            service,
+            message: `${service} 服務錯誤計數已重置`
+          },
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+
+    return NextResponse.json({
+      success: false,
+      error: 'INVALID_ACTION',
+      message: '無效的操作或參數'
+    }, { status: 400 });
+
+  } catch (error: any) {
+    console.error('健康檢查操作失敗:', error);
+
+    return NextResponse.json({
+      success: false,
+      error: 'OPERATION_FAILED',
+      message: '操作失敗',
+      details: error.message
+    }, { status: 500 });
+  }
+}
+
+/**
+ * 根據健康狀態獲取HTTP狀態碼
+ */
+function getHttpStatusFromHealth(status: ConnectionStatus): number {
+  switch (status) {
+    case ConnectionStatus.HEALTHY:
+      return 200;
+    case ConnectionStatus.DEGRADED:
+      return 206; // Partial Content
+    case ConnectionStatus.DOWN:
+      return 503; // Service Unavailable
+    case ConnectionStatus.UNKNOWN:
+    default:
+      return 503;
+  }
+}
+
+/**
+ * 計算平均響應時間
+ */
+function calculateAverageResponseTime(services: any[]): number {
+  if (services.length === 0) return 0;
+
+  const total = services.reduce((sum, service) => sum + service.averageResponseTime, 0);
+  return Math.round(total / services.length);
+}
+
+/**
+ * 計算總運行時間
+ */
+function calculateTotalUptime(services: any[]): string {
+  if (services.length === 0) return '0s';
+
+  const totalMs = services.reduce((sum, service) => sum + service.uptime, 0);
+  return formatUptime(totalMs);
+}
+
+/**
+ * 計算錯誤率
+ */
+function calculateErrorRate(services: any[]): number {
+  if (services.length === 0) return 0;
+
+  const totalErrors = services.reduce((sum, service) => sum + service.errorCount, 0);
+  const totalChecks = services.length * 100; // 假設每個服務進行了100次檢查
+
+  return totalChecks > 0 ? Math.round((totalErrors / totalChecks) * 100 * 100) / 100 : 0;
+}
+
+/**
+ * 格式化運行時間
+ */
+function formatUptime(ms: number): string {
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) {
+    return `${days}d ${hours % 24}h ${minutes % 60}m`;
+  } else if (hours > 0) {
+    return `${hours}h ${minutes % 60}m`;
+  } else if (minutes > 0) {
+    return `${minutes}m ${seconds % 60}s`;
+  } else {
+    return `${seconds}s`;
   }
 }

@@ -44,6 +44,10 @@ README.md                              # 項目說明
 app/layout.tsx                         # Next.js 根布局
 lib/auth.ts                            # JWT 認證系統
 lib/db.ts                              # 資料庫連接配置
+lib/middleware.ts                      # 認證與速率限制中間件系統
+lib/middleware/rate-limiter.ts         # API速率限制核心實現
+lib/monitoring/connection-monitor.ts   # 系統連接狀態監控服務
+lib/monitoring/monitor-init.ts         # 監控系統初始化與生命周期管理
 types/ai.ts                            # AI 服務 TypeScript 類型定義
 types/index.ts                         # 統一類型導出入口
 .eslintrc.json                         # ESLint 配置
@@ -54,6 +58,10 @@ postcss.config.js                      # PostCSS 配置
 ```
 docs/security-standards.md     # 安全要求
 docs/front-end-spec.md         # UI/UX 規格
+components/admin/system-monitor.tsx   # 系統監控管理界面
+app/api/health/route.ts               # 系統健康檢查API
+app/api/proposal-templates/           # 提案範本管理API群組
+app/dashboard/proposals/              # 提案管理前端頁面群組
 .env.example                   # 環境配置範例
 .env.production.example        # 生產環境配置範例
 docker-compose.dev.yml         # 開發環境容器配置

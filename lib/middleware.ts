@@ -30,6 +30,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getUserFromToken } from './auth-server'
+import { createRateLimit, RateLimitPresets } from './middleware/rate-limiter'
 
 /**
  * 認證中間件
@@ -144,3 +145,132 @@ export const requireSalesTeam = requireRole(['ADMIN', 'SALES_MANAGER', 'SALES_RE
  * 適用於基本功能、個人資料、一般查詢等操作。
  */
 export const requireUser = requireRole(['ADMIN', 'SALES_MANAGER', 'SALES_REP', 'USER'])
+
+/**
+ * ================================================================
+ * 速率限制中間件集成
+ * ================================================================
+ */
+
+/**
+ * AI API速率限制中間件
+ *
+ * 針對AI相關API端點進行嚴格的速率限制，防止濫用和過度消耗資源。
+ * 限制：每分鐘最多10次請求
+ */
+export const aiApiRateLimit = createRateLimit(RateLimitPresets.AI_API)
+
+/**
+ * 一般API速率限制中間件
+ *
+ * 針對一般API端點進行中等程度的速率限制。
+ * 限制：每分鐘最多60次請求
+ */
+export const generalApiRateLimit = createRateLimit(RateLimitPresets.GENERAL_API)
+
+/**
+ * 檔案上傳速率限制中間件
+ *
+ * 針對檔案上傳端點進行寬鬆的速率限制。
+ * 限制：每分鐘最多5次上傳
+ */
+export const fileUploadRateLimit = createRateLimit(RateLimitPresets.FILE_UPLOAD)
+
+/**
+ * 認證嘗試速率限制中間件
+ *
+ * 針對登入和認證端點進行嚴格的速率限制，防止暴力破解攻擊。
+ * 限制：每15分鐘最多5次嘗試
+ */
+export const authAttemptRateLimit = createRateLimit(RateLimitPresets.AUTH_ATTEMPT)
+
+/**
+ * 搜索API速率限制中間件
+ *
+ * 針對搜索相關API端點進行中等程度的速率限制。
+ * 限制：每分鐘最多30次搜索
+ */
+export const searchApiRateLimit = createRateLimit(RateLimitPresets.SEARCH_API)
+
+/**
+ * 組合中間件執行器
+ *
+ * 用於組合多個中間件函數，按順序執行並在任意中間件失敗時返回錯誤。
+ *
+ * 使用方式:
+ * ```typescript
+ * const authAndRateLimit = combineMiddleware([
+ *   authMiddleware,
+ *   (req, user) => generalApiRateLimit(req)
+ * ])
+ * ```
+ *
+ * @param middlewares 中間件函數陣列
+ * @returns 組合後的中間件執行器
+ */
+export function combineMiddleware(
+  middlewares: Array<(request: NextRequest, user?: any) => Promise<NextResponse | { response?: NextResponse; user?: any } | null>>
+) {
+  return async (request: NextRequest): Promise<{ response?: NextResponse; user?: any }> => {
+    let user: any = null
+
+    for (const middleware of middlewares) {
+      const result = await middleware(request, user)
+
+      // 如果中間件返回錯誤響應，立即返回
+      if (result && 'response' in result && result.response) {
+        return { response: result.response }
+      }
+
+      // 如果中間件返回NextResponse（如速率限制），立即返回
+      if (result instanceof NextResponse) {
+        return { response: result }
+      }
+
+      // 如果中間件返回用戶資訊，保存以供後續中間件使用
+      if (result && 'user' in result && result.user) {
+        user = result.user
+      }
+    }
+
+    return { user }
+  }
+}
+
+/**
+ * 預定義的中間件組合
+ */
+
+/**
+ * 認證 + 一般API速率限制
+ */
+export const authWithGeneralRateLimit = combineMiddleware([
+  authMiddleware,
+  (req) => generalApiRateLimit(req)
+])
+
+/**
+ * 認證 + AI API速率限制
+ */
+export const authWithAiRateLimit = combineMiddleware([
+  authMiddleware,
+  (req) => aiApiRateLimit(req)
+])
+
+/**
+ * 認證 + 管理員權限 + 一般速率限制
+ */
+export const adminWithRateLimit = combineMiddleware([
+  authMiddleware,
+  (req, user) => requireAdmin(req, user),
+  (req) => generalApiRateLimit(req)
+])
+
+/**
+ * 認證 + 銷售團隊權限 + 一般速率限制
+ */
+export const salesWithRateLimit = combineMiddleware([
+  authMiddleware,
+  (req, user) => requireSalesTeam(req, user),
+  (req) => generalApiRateLimit(req)
+])

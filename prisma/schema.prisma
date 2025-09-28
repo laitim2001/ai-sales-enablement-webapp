@@ -32,6 +32,14 @@ model User {
   createdKnowledgeBase   KnowledgeBase[] @relation("KnowledgeCreator")
   updatedKnowledgeBase   KnowledgeBase[] @relation("KnowledgeUpdater")
 
+  // Sprint 5: AI提案生成相關關聯
+  createdTemplates       ProposalTemplate[] @relation("TemplateCreator")
+  updatedTemplates       ProposalTemplate[] @relation("TemplateUpdater")
+  proposalGenerations    ProposalGeneration[] @relation("ProposalGenerator")
+  createdAIConfigs       AIGenerationConfig[] @relation("AIConfigCreator")
+  updatedAIConfigs       AIGenerationConfig[] @relation("AIConfigUpdater")
+  userAIConfigs          AIGenerationConfig[] @relation("UserAIConfig")
+
   @@map("users")
   @@index([email, is_active], name: "IX_User_Email_Active")
   @@index([role, department], name: "IX_User_Role_Department")
@@ -68,6 +76,7 @@ model Customer {
   documents          Document[]
   interactions       Interaction[]
   contacts           CustomerContact[] // 客戶聯絡人
+  proposalGenerations ProposalGeneration[]
 
   @@map("customers")
   // 核心查詢索引（基於第18章架構設計）
@@ -84,6 +93,7 @@ model Customer {
 model CallRecord {
   id           Int           @id @default(autoincrement())
   customer_id  Int
+  contact_id   Int?          // 關聯的聯絡人ID
   user_id      Int
   call_date    DateTime
   duration     Int?          // 通話時長（秒）
@@ -97,6 +107,7 @@ model CallRecord {
 
   // 關聯關係
   customer     Customer     @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  contact      CustomerContact? @relation(fields: [contact_id], references: [id])
   user         User         @relation(fields: [user_id], references: [id])
 
   @@map("call_records")
@@ -111,6 +122,7 @@ model CallRecord {
 model Proposal {
   id           Int            @id @default(autoincrement())
   customer_id  Int
+  opportunity_id Int?         // 關聯的銷售機會ID
   user_id      Int
   title        String
   description  String?
@@ -125,8 +137,10 @@ model Proposal {
 
   // 關聯關係
   customer     Customer       @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  opportunity  SalesOpportunity? @relation(fields: [opportunity_id], references: [id])
   user         User           @relation(fields: [user_id], references: [id])
   items        ProposalItem[]
+  generations  ProposalGeneration[]
 
   @@map("proposals")
   // 提案查詢優化索引
@@ -289,6 +303,7 @@ model Document {
 model Interaction {
   id          Int             @id @default(autoincrement())
   customer_id Int
+  contact_id  Int?            // 關聯的聯絡人ID
   type        InteractionType
   description String
   metadata    Json?           // 存儲額外的互動數據
@@ -296,6 +311,7 @@ model Interaction {
 
   // 關聯關係
   customer    Customer        @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  contact     CustomerContact? @relation(fields: [contact_id], references: [id])
 
   @@map("interactions")
   @@index([customer_id, type, created_at], name: "IX_Interaction_Customer_Type")
@@ -507,6 +523,7 @@ model CustomerContact {
   customer           Customer        @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   callRecords        CallRecord[]
   interactions       Interaction[]
+  opportunities      SalesOpportunity[]
 
   @@map("customer_contacts")
   // 核心查詢索引
@@ -570,4 +587,207 @@ enum OpportunityStatus {
   LOST                // 已失敗
   SUSPENDED           // 暫停
   CANCELLED           // 已取消
+}
+
+// ================================================================
+// Sprint 5: AI 提案生成相關模型
+// ================================================================
+
+// 提案範本模型
+// 功能：
+// - 儲存可重用的提案範本
+// - 支援動態變數和佔位符
+// - 範本版本控制和權限管理
+// - 範本分類和標籤系統
+// 作者：Claude Code
+// 創建時間：2025-09-28
+model ProposalTemplate {
+  id            String            @id @default(cuid())  // 使用CUID更適合分散式系統
+  name          String                                  // 範本名稱
+  description   String?                                 // 範本描述
+  category      TemplateCategory                        // 範本分類
+  content       String                                  // 範本內容 (支援Handlebars語法)
+  variables     Json                                    // 範本變數定義 {"company_name": {"type": "text", "required": true}}
+  version       Int               @default(1)           // 版本號
+  is_active     Boolean           @default(true)        // 是否啟用
+  is_default    Boolean           @default(false)       // 是否為預設範本
+  usage_count   Int               @default(0)           // 使用次數
+
+  // 權限和管理
+  created_by    Int                                     // 創建者ID
+  updated_by    Int?                                    // 最後更新者ID
+  organization  String?                                 // 組織/部門範圍
+  access_level  TemplateAccess    @default(PRIVATE)     // 訪問權限
+
+  // 時間戳
+  created_at    DateTime          @default(now())
+  updated_at    DateTime          @updatedAt
+
+  // 關聯關係
+  creator       User              @relation("TemplateCreator", fields: [created_by], references: [id])
+  updater       User?             @relation("TemplateUpdater", fields: [updated_by], references: [id])
+  generations   ProposalGeneration[]                    // 使用此範本生成的提案
+
+  @@map("proposal_templates")
+  @@index([category, is_active], name: "IX_Template_Category_Active")
+  @@index([created_by, access_level], name: "IX_Template_Creator_Access")
+  @@index([usage_count], name: "IX_Template_Usage")
+  @@index([organization, access_level], name: "IX_Template_Org_Access")
+}
+
+// 提案生成記錄模型
+// 功能：
+// - 記錄每次AI提案生成的過程和結果
+// - 支援再生成和內容優化
+// - 追蹤生成參數和效果
+// - 提供生成歷史和版本管理
+// 作者：Claude Code
+// 創建時間：2025-09-28
+model ProposalGeneration {
+  id            String            @id @default(cuid())
+  template_id   String                                  // 使用的範本ID
+  proposal_id   Int?                                    // 關聯的提案ID (可選)
+  customer_id   Int?                                    // 目標客戶ID (可選)
+
+  // 生成內容
+  title         String                                  // 提案標題
+  content       String                                  // 生成的內容
+  formatted_content String?                            // 格式化後的內容 (HTML/PDF)
+
+  // 生成參數
+  parameters    Json                                    // 生成參數 JSON
+  variables     Json                                    // 範本變數值
+  ai_model      String            @default("gpt-4")     // 使用的AI模型
+  ai_settings   Json?                                   // AI生成設置
+
+  // 生成狀態
+  status        GenerationStatus  @default(GENERATING)
+  progress      Float             @default(0)           // 生成進度 0-100
+  error_message String?                                 // 錯誤信息
+
+  // 品質指標
+  quality_score Float?                                  // 內容品質評分 0-100
+  relevance_score Float?                                // 相關性評分 0-100
+  user_rating   Int?                                    // 用戶評分 1-5
+  user_feedback String?                                 // 用戶反饋
+
+  // 效能指標
+  generation_time_ms Int?                              // 生成耗時 (毫秒)
+  token_usage   Json?                                   // Token使用情況
+
+  // 管理信息
+  generated_by  Int                                     // 生成者ID
+  regenerated_from String?                             // 重新生成來源ID
+  generation_version Int            @default(1)        // 生成版本
+
+  // 時間戳
+  created_at    DateTime          @default(now())
+  completed_at  DateTime?                              // 完成時間
+  updated_at    DateTime          @updatedAt
+
+  // 關聯關係
+  template      ProposalTemplate  @relation(fields: [template_id], references: [id])
+  proposal      Proposal?         @relation(fields: [proposal_id], references: [id])
+  customer      Customer?         @relation(fields: [customer_id], references: [id])
+  generator     User              @relation("ProposalGenerator", fields: [generated_by], references: [id])
+  parent        ProposalGeneration? @relation("GenerationVersions", fields: [regenerated_from], references: [id])
+  children      ProposalGeneration[] @relation("GenerationVersions")
+
+  @@map("proposal_generations")
+  @@index([template_id, status], name: "IX_Generation_Template_Status")
+  @@index([customer_id, created_at], name: "IX_Generation_Customer_Date")
+  @@index([generated_by, status], name: "IX_Generation_User_Status")
+  @@index([status, created_at], name: "IX_Generation_Status_Date")
+  @@index([quality_score], name: "IX_Generation_Quality")
+}
+
+// AI生成設置模型
+// 功能：
+// - 儲存AI生成的全局和用戶特定設置
+// - 管理提示工程模板
+// - 配置模型參數和行為
+// 作者：Claude Code
+// 創建時間：2025-09-28
+model AIGenerationConfig {
+  id            String            @id @default(cuid())
+  name          String                                  // 配置名稱
+  description   String?                                 // 配置描述
+  config_type   AIConfigType                          // 配置類型
+
+  // AI模型設置
+  model_name    String            @default("gpt-4")     // AI模型名稱
+  temperature   Float             @default(0.7)         // 創造性參數
+  max_tokens    Int               @default(2000)        // 最大Token數
+  top_p         Float             @default(1.0)         // 核心採樣參數
+  frequency_penalty Float         @default(0.0)         // 頻率懲罰
+  presence_penalty Float          @default(0.0)         // 存在懲罰
+
+  // 提示工程
+  system_prompt String?                                 // 系統提示
+  user_prompt_template String?                         // 用戶提示模板
+  prompt_variables Json?                               // 提示變數定義
+
+  // 適用範圍
+  user_id       Int?                                    // 用戶特定配置
+  organization  String?                                 // 組織範圍
+  is_default    Boolean           @default(false)       // 是否為預設配置
+  is_active     Boolean           @default(true)        // 是否啟用
+
+  // 管理信息
+  created_by    Int                                     // 創建者ID
+  updated_by    Int?                                    // 更新者ID
+  created_at    DateTime          @default(now())
+  updated_at    DateTime          @updatedAt
+
+  // 關聯關係
+  creator       User              @relation("AIConfigCreator", fields: [created_by], references: [id])
+  updater       User?             @relation("AIConfigUpdater", fields: [updated_by], references: [id])
+  user          User?             @relation("UserAIConfig", fields: [user_id], references: [id])
+
+  @@map("ai_generation_configs")
+  @@index([config_type, is_active], name: "IX_AIConfig_Type_Active")
+  @@index([user_id, is_default], name: "IX_AIConfig_User_Default")
+  @@index([organization, is_active], name: "IX_AIConfig_Org_Active")
+}
+
+// ================================================================
+// 提案生成相關枚舉
+// ================================================================
+
+// 範本分類枚舉
+enum TemplateCategory {
+  SALES_PROPOSAL      // 銷售提案
+  PRODUCT_DEMO        // 產品演示
+  SERVICE_PROPOSAL    // 服務提案
+  PRICING_QUOTE       // 價格報價
+  TECHNICAL_PROPOSAL  // 技術提案
+  PARTNERSHIP         // 合作提案
+  RENEWAL             // 續約提案
+  CUSTOM              // 自定義
+}
+
+// 範本訪問權限枚舉
+enum TemplateAccess {
+  PRIVATE             // 私人 (僅創建者)
+  TEAM                // 團隊 (同部門)
+  ORGANIZATION        // 組織 (全公司)
+  PUBLIC              // 公開 (所有用戶)
+}
+
+// 生成狀態枚舉
+enum GenerationStatus {
+  GENERATING          // 生成中
+  COMPLETED           // 已完成
+  FAILED              // 失敗
+  CANCELLED           // 已取消
+  PENDING_REVIEW      // 待審核
+  APPROVED            // 已批准
+}
+
+// AI配置類型枚舉
+enum AIConfigType {
+  GLOBAL              // 全局配置
+  USER                // 用戶配置
+  TEMPLATE            // 範本配置
+  ORGANIZATION        // 組織配置
 }
