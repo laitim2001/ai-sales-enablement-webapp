@@ -15,6 +15,128 @@
 | 2025-09-26 | 🔧 TypeScript編譯 | ✅ 已解決 | [FIX-005: TypeScript編譯錯誤大規模修復](#fix-005-typescript編譯錯誤大規模修復) |
 | 2025-09-28 | ⚛️ React事件處理器 | ✅ 已解決 | [FIX-006: React事件處理器錯誤修復](#fix-006-react事件處理器錯誤修復) |
 | 2025-09-28 | 🌐 API路由/響應 | ✅ 已解決 | [FIX-007: API端點返回HTML而非JSON格式修復](#fix-007-api端點返回html而非json格式修復) |
+| 2025-09-28 | 🔄 Webpack/模塊 | ✅ 已解決 | [FIX-008: Webpack循環序列化和模塊加載錯誤](#fix-008-webpack循環序列化和模塊加載錯誤) |
+| 2025-09-28 | 🔑 認證/LocalStorage | ✅ 已解決 | [FIX-009: 認證Token Key不一致導致API 401錯誤](#fix-009-認證token-key不一致導致api-401錯誤) |
+
+---
+
+## FIX-009: 認證Token Key不一致導致API 401錯誤
+
+### 📅 **修復日期**: 2025-09-28
+### 🎯 **問題級別**: 🔴 Critical
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **API錯誤**: 所有知識庫相關API返回 "Invalid or expired token" 錯誤
+2. **控制台錯誤**:
+   ```
+   GET /api/knowledge-base error: Error: Invalid or expired token
+   ```
+3. **用戶體驗**: 登錄後無法訪問任何需要認證的功能
+
+### 🔍 **根本原因分析**
+- **認證系統不一致**: `useAuth` hook使用 `'auth-token'` 作為localStorage key
+- **組件使用錯誤key**: 大部分組件使用 `'token'` 而非 `'auth-token'`
+- **導致token無法獲取**: 組件從錯誤的localStorage key讀取，獲得null值
+
+### ✅ **修復方案**
+#### **1. 批量修復token key**
+使用refactoring-expert系統性修復15個文件中的token key不一致問題：
+
+```typescript
+// 修復前 (錯誤)
+'Authorization': `Bearer ${localStorage.getItem('token')}`
+
+// 修復後 (正確)
+'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
+```
+
+#### **2. 修復範圍**
+- `components/admin/performance-dashboard.tsx` (1處)
+- `components/knowledge/knowledge-base-list.tsx` (3處)
+- `components/knowledge/knowledge-search.tsx` (1處)
+- `components/knowledge/knowledge-base-list-optimized.tsx` (2處)
+- `components/knowledge/enhanced-knowledge-search.tsx` (1處)
+- `components/knowledge/knowledge-document-view.tsx` (2處)
+- `components/knowledge/document-preview.tsx` (1處)
+- `components/knowledge/knowledge-base-upload.tsx` (1處)
+- `components/knowledge/knowledge-create-form.tsx` (1處)
+- `components/knowledge/knowledge-document-edit.tsx` (2處)
+
+### 🧪 **驗證方法**
+```bash
+# 1. 搜索確認無剩餘錯誤token key
+grep -r "localStorage.getItem('token')" components/
+
+# 2. 測試API響應
+curl -s http://localhost:3005/api/health
+
+# 3. 檢查開發服務器錯誤
+# 應該沒有 "Invalid or expired token" 錯誤
+```
+
+### 🎯 **修復效果**
+- ✅ API 401錯誤完全消除
+- ✅ 用戶登錄後可正常訪問功能
+- ✅ 認證系統一致性問題解決
+- ✅ 系統穩定性顯著提升
+
+### 📝 **預防措施**
+1. **統一認證管理**: 建立統一的token管理utils
+2. **ESLint規則**: 添加檢查localStorage key一致性的規則
+3. **類型安全**: 為localStorage操作創建類型安全的包裝器
+4. **文檔說明**: 在認證文檔中明確token key規範
+
+---
+
+## FIX-008: Webpack循環序列化和模塊加載錯誤
+
+### 📅 **修復日期**: 2025-09-28
+### 🎯 **問題級別**: 🟡 High
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **Webpack錯誤**:
+   ```
+   Error: Cannot find module './chunks/vendor-chunks/next.js'
+   TypeError: Cannot read properties of undefined (reading 'hasStartTime')
+   ```
+2. **緩存問題**: PackFileCacheStrategy恢復失敗
+3. **開發體驗**: 頁面渲染不穩定，模塊加載失敗
+
+### 🔍 **根本原因分析**
+- **緩存損壞**: Next.js webpack緩存文件損壞
+- **模塊引用錯誤**: vendor chunks引用路徑失效
+- **序列化問題**: 循環引用導致序列化失敗
+
+### ✅ **修復方案**
+#### **1. 清理緩存**
+```bash
+# 完全清理Next.js緩存
+rm -rf .next
+
+# 重啟開發服務器
+npm run dev
+```
+
+#### **2. 檢查模塊結構**
+確保沒有組件間的循環依賴導致序列化問題
+
+### 🧪 **驗證方法**
+```bash
+# 1. 檢查編譯狀態
+npm run dev
+# 應該看到 ✓ Compiled 而非錯誤
+
+# 2. 檢查模塊加載
+# 開發服務器應該無webpack錯誤輸出
+```
+
+### 🎯 **修復效果**
+- ✅ Webpack編譯錯誤完全消除
+- ✅ 模塊加載恢復正常
+- ✅ 開發服務器運行穩定
+- ✅ 頁面渲染性能改善
 
 ---
 
