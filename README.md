@@ -51,6 +51,9 @@ AI 銷售賦能平台是一個全棧 Web 應用程式，結合了人工智能、
 
 ## 🚀 快速開始
 
+> **🤖 自動化環境設置 (推薦新開發者)**: 
+> 如果這是您第一次設置此項目，請跳轉到 [自動化設置](#-自動化環境設置) 部分獲得更簡單的體驗。
+
 ### 前置要求
 - Node.js 18.0+
 - npm 8.0+
@@ -210,6 +213,72 @@ vercel --prod
 ### Azure App Service 部署
 查看詳細部署指南：[docs/deployment-guide.md](docs/deployment-guide.md)
 
+## 🤖 自動化環境設置
+
+> **新開發者必讀！** 我們提供了自動化工具來解決常見的環境設置問題。
+
+### 🔧 自動化環境檢查與修復
+
+如果您在新電腦上設置此項目或遇到任何環境問題：
+
+```bash
+# 1. 首先克隆項目
+git clone <repository-url>
+cd ai-sales-enablement-webapp-main
+
+# 2. 運行環境檢查（診斷所有問題）
+npm run env:check
+
+# 3. 自動修復所有發現的問題
+npm run fix:all
+
+# 4. 啟動開發服務器
+npm run dev
+```
+
+### 🛠️ 可用的自動化命令
+
+#### 環境檢查工具
+```bash
+npm run env:setup        # 完整環境設置和檢查
+npm run env:check        # 只檢查，不修復
+npm run env:auto-fix     # 自動修復發現的問題
+```
+
+#### 快速修復工具
+```bash
+npm run fix:all          # 完整修復流程（推薦）
+npm run fix:deps         # 只修復依賴問題
+npm run fix:env          # 只修復環境變數
+npm run fix:restart      # 重啟服務
+npm run fix:diagnose     # 快速診斷問題
+```
+
+### 🚨 常見問題自動解決
+
+我們的自動化工具可以解決以下常見問題：
+
+| 問題 | 症狀 | 自動修復命令 |
+|------|------|-------------|
+| **依賴包缺失** | `Module not found: Can't resolve '@radix-ui/react-checkbox'` | `npm run fix:deps` |
+| **資料庫連接錯誤** | `Can't reach database server at localhost:5432` | `npm run fix:env` |
+| **環境變數配置錯誤** | 各種連接失敗 | `npm run fix:env` |
+| **端口被占用** | `Port 3000 is in use` | 正常行為，會自動使用 3001 |
+| **Docker 服務未啟動** | 資料庫連接失敗 | `npm run fix:all` |
+
+### 📋 完整新開發者指南
+
+如需詳細的步驟說明，請查看：
+- **[新開發者設置指南](docs/NEW-DEVELOPER-SETUP-GUIDE.md)** - 包含完整的故障排除和最佳實踐
+
+### 💡 設計理念
+
+我們創建這些自動化工具是因為：
+- **消除重複工作**: 避免每次在新電腦上設置時都要手動除錯
+- **標準化環境**: 確保所有開發者都有一致的環境配置
+- **快速診斷**: 一鍵診斷和修復常見的環境問題
+- **新手友好**: 讓新開發者能在 15 分鐘內開始開發
+
 ## 📚 文檔
 
 - [架構設計](docs/architecture.md)
@@ -217,6 +286,7 @@ vercel --prod
 - [測試策略](docs/testing-strategy.md)
 - [用戶故事](docs/user-stories/)
 - [安全標準](docs/security-standards.md)
+- **[新開發者設置指南](docs/NEW-DEVELOPER-SETUP-GUIDE.md)** ⭐
 
 ## 🤝 貢獻指南
 

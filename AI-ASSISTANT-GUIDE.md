@@ -33,6 +33,7 @@ docs/user-stories/MVP-PRIORITIES.md    # 24個用戶故事優先級
 docs/mvp-implementation-checklist.md   # 逐週執行清單
 docs/testing-strategy.md               # 測試策略
 docs/api/knowledge-base-api.md          # Knowledge Base API 完整文檔
+docs/NEW-DEVELOPER-SETUP-GUIDE.md      # 新開發者環境自動化設置指南
 STARTUP-GUIDE.md                       # 服務啟動完整指南
 DEVELOPMENT-LOG.md                     # 開發討論和決策記錄
 DEPLOYMENT-GUIDE.md                    # 生產環境部署指南

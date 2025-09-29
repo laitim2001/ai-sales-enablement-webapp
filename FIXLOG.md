@@ -8,6 +8,7 @@
 
 | 日期 | 問題類型 | 狀態 | 描述 |
 |------|----------|------|------|
+| 2025-09-29 | 📦 依賴管理/環境 | ✅ 已解決 | [FIX-014: 新電腦環境依賴缺失問題和自動化工具創建](#fix-014-新電腦環境依賴缺失問題和自動化工具創建) |
 | 2025-09-29 | 🔧 開發環境/緩存 | ✅ 已解決 | [FIX-013: 開發環境清理和site.webmanifest缺失問題](#fix-013-開發環境清理和sitewebmanifest缺失問題) |
 | 2025-09-28 | 🔍 搜索API/Prisma | ✅ 已解決 | [FIX-012: 搜索API 500錯誤 - Prisma查詢和OpenAI導入問題](#fix-012-搜索api-500錯誤-prisma查詢和openai導入問題) |
 | 2025-09-28 | ⚛️ React/緩存 | ✅ 已解決 | [FIX-011: React事件處理器錯誤 - Next.js緩存問題](#fix-011-react事件處理器錯誤-nextjs緩存問題) |
@@ -23,6 +24,7 @@
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
 
 ## 🔍 快速搜索
+- **環境/依賴問題**: FIX-014, FIX-013
 - **認證問題**: FIX-009, FIX-001, FIX-002, FIX-003
 - **前端問題**: FIX-011, FIX-008, FIX-006, FIX-004
 - **API問題**: FIX-012, FIX-010, FIX-007, FIX-004
@@ -39,6 +41,136 @@
 ---
 
 # 詳細修復記錄 (最新在上)
+
+## FIX-014: 新電腦環境依賴缺失問題和自動化工具創建
+
+### 📅 **修復日期**: 2025-09-29
+### 🎯 **問題級別**: 🔴 High
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題描述**
+
+**症狀**:
+- 在新電腦上下載項目後，執行 `npm run dev` 出現模組缺失錯誤
+- 錯誤信息：`Module not found: Can't resolve '@radix-ui/react-checkbox'`
+- 儀表板頁面編譯失敗，無法正常訪問
+- 登錄功能正常，但依賴UI組件的頁面出現500錯誤
+
+**影響範圍**:
+- 新開發者在新電腦上設置項目時會遇到此問題
+- 儀表板客戶頁面 (`/dashboard/customers`) 無法訪問
+- 其他使用缺失UI組件的頁面也會受影響
+
+**根本原因**:
+- 新電腦上首次執行 `npm install` 時，部分依賴包安裝不完整
+- 可能原因：網路不穩定、npm緩存問題、防火牆設定、Node.js版本差異
+- GitHub版本代碼正常，原電腦環境正常，問題出現在環境同步
+
+### 🔧 **修復方案**
+
+#### **1. 立即修復 (清理重新安裝)**
+
+```bash
+# 停止所有Node.js進程
+Get-Process -Name "node" | Stop-Process -Force
+
+# 清理node_modules和package-lock.json
+Remove-Item -Recurse -Force "node_modules"
+Remove-Item -Force "package-lock.json"
+
+# 清理npm緩存
+npm cache clean --force
+
+# 重新安裝依賴
+npm install
+```
+
+#### **2. 長期解決方案 (自動化工具)**
+
+**創建自動化環境設置工具**:
+
+1. **`scripts/environment-setup.js`** (653行)
+   - 全面環境檢查：Node.js版本、端口可用性、Docker服務、環境變數、依賴完整性
+   - 自動修復：依賴重裝、環境變數修正、服務啟動
+   - 詳細報告：問題診斷和修復建議
+   - 智能警報：可配置閾值和多級別嚴重性分類
+
+2. **`scripts/quick-fix.js`** (348行)
+   - 快速修復工具：一鍵解決常見問題
+   - 模組化設計：支援只修復特定類型問題
+   - 智能診斷：快速評估系統健康狀態
+
+3. **新npm命令系統**:
+   ```bash
+   # 環境檢查
+   npm run env:setup        # 完整環境設置和檢查
+   npm run env:check        # 只檢查，不修復
+   npm run env:auto-fix     # 自動修復發現的問題
+   
+   # 快速修復
+   npm run fix:all          # 完整修復流程（推薦）
+   npm run fix:deps         # 只修復依賴問題
+   npm run fix:env          # 只修復環境變數
+   npm run fix:restart      # 重啟服務
+   npm run fix:diagnose     # 快速診斷問題
+   ```
+
+4. **`docs/NEW-DEVELOPER-SETUP-GUIDE.md`** (278行)
+   - 15分鐘快速設置目標
+   - 完整故障排除流程圖
+   - 最佳實踐和檢查清單
+   - 自動化工具使用指南
+
+### ✅ **修復效果驗證**
+
+**測試結果**:
+- ✅ 登錄功能測試成功（200狀態碼）
+- ✅ 儀表板頁面正常訪問，不再出現模組缺失錯誤
+- ✅ 服務在端口3000穩定運行
+- ✅ 所有關鍵依賴包正確安裝：`@radix-ui/react-checkbox`, `@azure/msal-node`, `@clerk/nextjs`
+
+**自動化工具測試**:
+- ✅ `npm run fix:diagnose` 顯示 6/6 項目正常
+- ✅ 環境檢查工具正確識別Node.js版本、Docker服務狀態
+- ✅ 快速修復工具能自動處理常見環境問題
+
+### 🎯 **預防措施**
+
+#### **未來新電腦設置流程**:
+```bash
+# 1. 克隆項目
+git clone <repository-url>
+cd ai-sales-enablement-webapp-main
+
+# 2. 一鍵環境檢查和修復
+npm run fix:all
+
+# 3. 啟動開發服務器
+npm run dev
+```
+
+**預期結果**:
+- ✅ 15分鐘內完成所有設置
+- ✅ 零手動除錯工作
+- ✅ 自動安裝完整依賴
+- ✅ 自動修正環境變數
+- ✅ 自動檢查Docker服務
+
+### 📝 **經驗教訓**
+
+1. **自動化優先**: 所有常見環境問題都應該有自動化解決方案
+2. **環境同步複雜性**: 不同電腦間的環境差異比預期更常見
+3. **文檔驅動**: 完整的設置指南確保一致的開發體驗
+4. **工具先行**: 環境檢查工具能在問題發生前發現潛在風險
+
+### 📁 **相關文件**
+- `scripts/environment-setup.js` - 智能環境檢查和診斷工具
+- `scripts/quick-fix.js` - 快速修復工具
+- `docs/NEW-DEVELOPER-SETUP-GUIDE.md` - 新開發者設置指南
+- `README.md` - 更新自動化環境設置說明
+- `package.json` - 新增自動化工具命令
+
+---
 
 ## FIX-013: 開發環境清理和site.webmanifest缺失問題
 
