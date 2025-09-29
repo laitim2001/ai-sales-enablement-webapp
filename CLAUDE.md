@@ -789,6 +789,12 @@ Edit(file_path="existing_feature.py", old_string="...", new_string="...")
 
 ---
 
+# 📝 項目維護提醒
+
+> **💡 注意**：AI助手強制維護檢查清單已移至 `AI-ASSISTANT-GUIDE.md` 文件頂部，確保AI助手優先讀取和遵循。
+
+---
+
 <!-- CLAUDE_CODE_INIT_END -->
 <!-- This marker indicates the end of the initialization template -->
 <!-- Claude Code: After successful initialization, this entire file should be deleted -->

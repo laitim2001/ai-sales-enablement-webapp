@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-09-29T09:31:05.332Z",
+  "timestamp": "2025-09-29T17:52:10.359Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
-    "nodeVersion": "v22.17.0",
-    "workingDirectory": "C:\\Users\\CLai03\\AI Project\\ai-sales-enablement-webapp-main"
+    "nodeVersion": "v22.19.0",
+    "workingDirectory": "C:\\ai-sales-enablement-webapp"
   },
   "summary": {
     "totalIssues": 0,
@@ -22,12 +22,10 @@
   "suggestions": [
     {
       "type": "add_to_index",
-      "file": "docs\\NEW-DEVELOPER-SETUP-GUIDE.md",
-      "importance": "medium",
+      "file": "Cai-sales-enablement-webapptempREADME.md",
       "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\NEW-DEVELOPER-SETUP-GUIDE.md",
-      "modifiedTime": "2025-09-29T08:42:44.958Z"
+      "message": "建議將重要文件加入索引: Cai-sales-enablement-webapptempREADME.md"
     }
   ],
-  "lastUpdated": "2025-09-29T09:31:05.337Z"
+  "lastUpdated": "2025-09-29T17:52:10.360Z"
 }
