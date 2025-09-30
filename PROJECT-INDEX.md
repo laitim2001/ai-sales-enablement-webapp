@@ -56,6 +56,7 @@
 | **MVP Phase 1 開發計劃** | `docs/mvp-development-plan.md`   | MVP Phase 1完整開發計劃（✅已100%完成） | 🔴 極高  |
 | **MVP Phase 1 實施清單** | `docs/mvp-implementation-checklist.md` | MVP Phase 1實施進度追蹤（✅已100%完成） | 🟡 高    |
 | **MVP Phase 2 開發計劃** | `docs/mvp2-development-plan.md`  | MVP Phase 2完整開發計劃（14週，A+C混合方案） | 🔴 極高  |
+| **MVP Phase 2 實施清單** | `docs/mvp2-implementation-checklist.md` | MVP Phase 2實施進度追蹤（14週，54項檢查清單） | 🔴 極高  |
 | **MVP Phase 2 用戶故事映射** | `docs/mvp2-user-stories-mapping.md` | MVP Phase 2的9個功能詳細規劃和優先級 | 🔴 極高  |
 | **未來創新功能記錄** | `docs/future-innovations.md`     | 選項B創新功能（實時語音助理等）完整藍圖 | 🟡 高    |
 | **規劃總結**       | `docs/planning-summary.md`             | 項目規劃總結文檔     | 🟡 高    |
