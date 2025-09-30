@@ -1,143 +1,166 @@
 /**
  * ================================================================
- * 檔案名稱: Next.js中間件
- * 檔案用途: AI銷售賦能平台的請求處理和路由保護中間件
- * 開發階段: 生產就緒
+ * AI銷售賦能平台 - API網關中間件 (middleware.ts)
  * ================================================================
  *
- * 功能索引:
- * 1. 請求ID生成 - 為每個請求自動生成唯一追蹤ID
- * 2. CORS處理 - 跨域請求支援和預檢處理
- * 3. 錯誤記錄 - 中間件級別錯誤自動記錄
- * 4. 路徑過濾 - 智能過濾靜態資源和系統檔案
+ * 【檔案功能】
+ * Next.js全局中間件，實現完整的API網關功能層。
+ * 提供請求追蹤、CORS處理、安全頭部和路由匹配。
  *
- * 技術特色/核心特色:
- * - 請求追蹤: 自動生成唯一請求ID用於端到端追蹤
- * - CORS安全: 支援當代網頁應用的跨域請求
- * - 錯誤復原: 中間件錯誤不會阻擋正常請求
- * - 性能優化: 智能過濾靜態資源以減少處理負擔
- * - 結構化日誌: 整合統一錯誤處理系統
+ * 【主要職責】
+ * • 請求追蹤 - 為每個請求生成唯一ID
+ * • CORS處理 - 跨域請求支援和預檢處理
+ * • 安全頭部 - CSP、HSTS等安全策略
+ * • 路由匹配 - 智能路由分發和配置
+ * • 錯誤處理 - 統一的錯誤記錄和響應
  *
- * 依賴關係:
- * - Next.js 13+: 中間件系統和請求/回應處理
- * - @/lib/errors: 統一錯誤處理和記錄系統
+ * 【技術實現】
+ * • Edge Runtime - 邊緣計算支援
+ * • Modular Design - 模塊化中間件組合
+ * • Type Safety - TypeScript類型保護
+ * • Performance - 高效的路由匹配和緩存
+ * • Security - OWASP推薦的安全實踐
  *
- * 注意事項:
- * - 中間件在Edge Runtime中執行，有部分API限制
- * - CORS配置需要根據實際生產環境調整
- * - 過濾規則需要定期檢查和更新
- * - 異步錯誤記錄不會影響請求性能
+ * 【架構層次】
+ * Layer 1 (Edge): 請求ID、CORS、安全頭部
+ * Layer 2 (Auth): JWT、Azure AD、API Key (在lib/middleware.ts)
+ * Layer 3 (Rate Limit): 多層速率限制 (在lib/middleware.ts)
+ * Layer 4 (Routing): 路由匹配和分發
+ * Layer 5 (Business Logic): API路由處理器
  *
- * 使用範例:
- * ```typescript
- * // 中間件自動為所有請求添加X-Request-ID標頭
- * fetch('/api/users', {
- *   headers: {
- *     'X-Request-ID': 'req_1234567890_abc123' // 自動添加
- *   }
- * })
+ * 【相關檔案】
+ * • lib/middleware/request-id.ts - 請求ID生成器
+ * • lib/middleware/route-matcher.ts - 路由匹配器
+ * • lib/middleware/cors.ts - CORS中間件
+ * • lib/middleware/security-headers.ts - 安全頭部中間件
+ * • lib/middleware/routing-config.ts - 路由配置
+ * • lib/middleware.ts - 認證和速率限制中間件
+ * • docs/api-gateway-architecture.md - 架構設計文檔
  *
- * // 支援跨域請求
- * fetch('http://localhost:3000/api/data', {
- *   method: 'POST',
- *   headers: { 'Content-Type': 'application/json' }
- * })
- * ```
- *
- * 更新記錄:
- * - Week 1: 建立基礎中間件結構和請求ID生成
- * - Week 2: 新增CORS支援和預檢處理
- * - Week 3: 整合統一錯誤處理系統
- * - Week 4: 優化性能和過濾規則
+ * 【更新記錄】
+ * - MVP Phase 1: 基礎中間件和請求追蹤
+ * - MVP Phase 2 Sprint 1: API網關核心架構實現
+ *   - 請求ID生成系統
+ *   - 路由匹配器和配置
+ *   - CORS中間件
+ *   - 安全頭部中間件
  * ================================================================
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createErrorContext, ErrorLogger, AppError } from '@/lib/errors'
+import { getOrGenerateRequestId } from '@/lib/middleware/request-id'
+import { createRouteMatcher } from '@/lib/middleware/route-matcher'
+import { createCorsMiddleware } from '@/lib/middleware/cors'
+import { createSecurityHeaders, SecurityPresets } from '@/lib/middleware/security-headers'
+import { getRouteConfigs } from '@/lib/middleware/routing-config'
+
+/**
+ * 初始化中間件組件
+ *
+ * 創建路由匹配器、CORS處理器和安全頭部處理器實例。
+ * 使用環境感知配置確保開發和生產環境的正確行為。
+ */
+const routeMatcher = createRouteMatcher(getRouteConfigs(), {
+  enableCache: true,
+  cacheSize: 1000,
+  caseSensitive: false
+})
+
+const corsMiddleware = createCorsMiddleware({
+  // 環境感知配置將自動應用
+  credentials: true,
+  maxAge: 86400
+})
+
+const securityHeaders = createSecurityHeaders(
+  process.env.NODE_ENV === 'production'
+    ? SecurityPresets.production
+    : SecurityPresets.development
+)
 
 /**
  * Next.js 中間件主函數
  *
- * 處理所有進入請求，提供跨域支援、請求追蹤
- * 和錯誤記錄功能。
+ * 實現完整的API網關Edge Layer功能。
  *
  * 處理流程:
- * 1. 生成唯一請求ID
- * 2. 設定基本回應標頭
- * 3. 處理API路徑的CORS配置
- * 4. 處理OPTIONS預檢請求
- * 5. 錯誤處理和記錄
+ * 1. 生成唯一請求ID (支援客戶端ID)
+ * 2. 路由匹配和配置查找
+ * 3. CORS處理 (預檢請求和實際請求)
+ * 4. 安全頭部應用
+ * 5. 請求追蹤頭部設置
+ * 6. 錯誤處理和記錄
  *
  * @param request 進入的HTTP請求
- * @returns 處理後的回應或修改後的請求
+ * @returns 處理後的響應
  */
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   try {
-    /**
-     * 生成唯一請求ID
-     *
-     * 為每個請求生成唯一的追蹤ID，用於:
-     * - 日誌追蹤和關聯
-     * - 錯誤報告和調試
-     * - 分散式系統追蹤
-     * - API調用铈追蹤
-     */
-    const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+    // ================================================================
+    // Layer 1: 請求ID生成
+    // ================================================================
+    const requestId = getOrGenerateRequestId(request, {
+      strategy: process.env.NODE_ENV === 'production' ? 'uuid' : 'short',
+      prefix: process.env.NODE_ENV === 'production' ? 'prod-' : 'dev-',
+      acceptClientId: process.env.NODE_ENV !== 'production'
+    })
 
-    /**
-     * 創建基礎回應並設定追蹤標頭
-     *
-     * 所有回應都會包含 X-Request-ID 標頭，
-     * 方便客戶端和日誌系統追蹤。
-     */
-    const response = NextResponse.next()
+    // ================================================================
+    // Layer 2: 路由匹配
+    // ================================================================
+    const pathname = request.nextUrl.pathname
+    const routeMatch = routeMatcher.match(pathname)
+
+    // 創建基礎響應
+    let response = NextResponse.next()
+
+    // ================================================================
+    // Layer 3: CORS處理
+    // ================================================================
+    if (pathname.startsWith('/api/')) {
+      // 使用路由特定的CORS配置（如果有）
+      const corsOptions = routeMatch.config?.cors
+        ? {
+            origins: routeMatch.config.cors.origins,
+            methods: routeMatch.config.cors.methods,
+            credentials: routeMatch.config.cors.credentials
+          }
+        : undefined
+
+      // 應用CORS
+      response = corsMiddleware.handle(request, response)
+
+      // 如果是OPTIONS預檢請求，直接返回
+      if (request.method === 'OPTIONS') {
+        return response
+      }
+    }
+
+    // ================================================================
+    // Layer 4: 安全頭部
+    // ================================================================
+    response = securityHeaders.apply(response)
+
+    // ================================================================
+    // Layer 5: 請求追蹤頭部
+    // ================================================================
     response.headers.set('X-Request-ID', requestId)
 
-    /**
-     * API請求CORS處理和404攔截
-     *
-     * 為 API 路徑添加必要的 CORS 標頭，支援:
-     * - 跨域資源共享 (CORS)
-     * - 多種 HTTP 方法
-     * - 自定義請求標頭
-     * - 請求ID暴露給客戶端
-     * - API 404 JSON 響應
-     */
-    if (request.nextUrl.pathname.startsWith('/api/')) {
-      response.headers.set('Access-Control-Allow-Origin', '*')
-      response.headers.set(
-        'Access-Control-Allow-Methods',
-        'GET, POST, PUT, DELETE, PATCH, OPTIONS'
-      )
-      response.headers.set(
-        'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, X-Requested-With, X-Request-ID'
-      )
-      response.headers.set('Access-Control-Expose-Headers', 'X-Request-ID')
-
-      /**
-       * 處理 CORS 預檢請求
-       *
-       * 瀏覽器在發送跨域請求前會送OPTIONS請求
-       * 以檢查權限。這裡直接返回授權回應。
-       */
-      if (request.method === 'OPTIONS') {
-        return new Response(null, {
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, X-Request-ID',
-            'X-Request-ID': requestId,
-          }
-        })
+    // 如果匹配到路由，添加路由元數據
+    if (routeMatch.matched && routeMatch.config) {
+      response.headers.set('X-Route-Name', routeMatch.config.name || 'unknown')
+      if (routeMatch.version) {
+        response.headers.set('X-API-Version', routeMatch.version)
       }
+    }
 
-      /**
-       * 檢查API路由是否存在 - 在中間件中無法直接檢查路由存在性
-       * 所以我們先讓請求通過，如果後續返回404則在這裡攔截
-       * 這個解決方案將在rewrite後的響應中處理
-       */
+    // ================================================================
+    // Layer 6: 開發環境調試信息
+    // ================================================================
+    if (process.env.NODE_ENV === 'development') {
+      response.headers.set('X-Middleware-Version', '2.0.0')
+      response.headers.set('X-Route-Matched', String(routeMatch.matched))
     }
 
     return response
@@ -146,15 +169,11 @@ export function middleware(request: NextRequest) {
     /**
      * 中間件錯誤處理
      *
-     * 當中間件本身發生錯誤時，我們采取寬鬆策略:
-     * 1. 記錄錯誤以供後續分析
-     * 2. 不阻擋正常請求的處理
-     * 3. 在回應中標記錯誤狀態
-     * 4. 異步記錄以保持性能
+     * 采取寬鬆策略：記錄錯誤但不阻擋請求。
      */
     const context = createErrorContext(request)
     const appError = new AppError(
-      'Middleware processing error',
+      'API Gateway middleware processing error',
       undefined,
       500,
       undefined,
@@ -163,26 +182,15 @@ export function middleware(request: NextRequest) {
       error instanceof Error ? error : new Error(String(error))
     )
 
-    /**
-     * 異步錯誤記錄
-     *
-     * 使用異步方式記錄錯誤，確保:
-     * - 不會阻塞當前請求的處理
-     * - 日誌記錄失敗不會影響正常功能
-     * - 提供備用的錯誤記錄機制
-     */
-    ErrorLogger.log(appError).catch(logError => {
+    // 異步錯誤記錄
+    ErrorLogger.log(appError).catch((logError) => {
       console.error('Failed to log middleware error:', logError)
     })
 
-    /**
-     * 繼續請求處理並標記錯誤
-     *
-     * 即使中間件出錯，也要允許請求繼續。
-     * 添加 X-Middleware-Error 標頭供下遊系統參考。
-     */
+    // 繼續請求處理並標記錯誤
     const response = NextResponse.next()
     response.headers.set('X-Middleware-Error', 'true')
+    response.headers.set('X-Error-Message', 'Internal middleware error')
     return response
   }
 }
