@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [Request Validation 測試完成 (2025-09-30 21:45)](#✅-2025-09-30-2145-request-validation-測試完成-43-tests-passing-✅)
 - [API Gateway Stage 2 開發啟動 (2025-09-30 17:30)](#🚀-2025-09-30-1730-api-gateway-stage-2-開發啟動-rate-limiting--api-versioning-🔄)
 - [API Gateway測試100%達成 (2025-09-30 23:45)](#🎉-2025-09-30-2345-api-gateway測試100達成-141141-tests-passing-✅)
 - [測試修復: NextRequest/Jest 相容性 (2025-09-30 21:15)](#🐛-2025-09-30-2115-測試修復-nextjest-相容性問題解決-✅)
@@ -22,6 +23,238 @@
 - [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## ✅ 2025-09-30 (21:45): Request Validation 測試完成 (43 Tests Passing) ✅
+
+### 🎯 **會話概述**
+- **主要成就**: 為 Request Validation 中間件創建完整測試套件
+- **測試覆蓋率**: 43/43 tests passing (100%)
+- **總體進度**: API Gateway Stage 2 - 3/4 核心中間件完成
+
+### 📦 **已完成功能**
+
+#### **1. Request Validation 測試套件 (43 tests)**
+```typescript
+// __tests__/lib/middleware/request-validator.test.ts
+
+describe('Request Validator Middleware', () => {
+  // ✅ Body 驗證 (4 tests)
+  //    - JSON 解析、schema 驗證、無效格式處理、可選欄位
+
+  // ✅ Query Parameters 驗證 (4 tests)
+  //    - 類型轉換、驗證、空值處理
+
+  // ✅ URL Parameters 驗證 (3 tests)
+  //    - UUID 驗證、多參數支援
+
+  // ✅ Headers 驗證 (3 tests)
+  //    - 必需 headers、格式驗證（如 Bearer token）
+
+  // ✅ 多源聯合驗證 (3 tests)
+  //    - 同時驗證 body + query + params + headers
+
+  // ✅ 錯誤處理和格式化 (4 tests)
+  //    - Zod 錯誤轉換、自訂錯誤處理器、錯誤路徑格式化
+
+  // ✅ Common Schemas 預設 (7 tests)
+  //    - pagination, id, dateRange, search, authHeaders
+
+  // ✅ 便捷函數 (3 tests)
+  //    - createRequestValidator, validateRequest 中間件
+
+  // ✅ Success Callback (2 tests)
+  //    - onSuccess 回調機制
+
+  // ✅ Edge Cases (7 tests)
+  //    - 空配置、複雜嵌套對象、數組、類型轉換、默認值
+
+  // ✅ 真實場景測試 (3 tests)
+  //    - 用戶註冊、搜索請求、API 更新請求
+})
+```
+
+#### **2. Mock Utility 增強**
+**修改檔案**: `__tests__/utils/mock-next-request.ts`
+
+**新增功能**: 支援 `request.json()` 方法
+```typescript
+// 添加 JSON body 解析支援
+if (options?.body && typeof options.body === 'string') {
+  Object.defineProperty(request, 'json', {
+    value: async () => {
+      try {
+        return JSON.parse(options.body as string)
+      } catch (error) {
+        throw new SyntaxError('Unexpected token in JSON')
+      }
+    },
+    writable: false,
+    configurable: true
+  })
+}
+```
+
+**為什麼重要**:
+- Jest Node 環境不會自動初始化 NextRequest 的 `json()` 方法
+- Request Validation 需要解析 JSON body
+- 確保測試環境與生產環境行為一致
+
+#### **3. 語法錯誤修復**
+**問題**: `lib/middleware/request-validator.ts:33`
+```typescript
+// ❌ 錯誤：使用 * 通配符在註解中導致 SWC 編譯錯誤
+* • app/api/*/route.ts - API 路由中的驗證應用
+
+// ✅ 修復：使用 {route} 替代
+* • app/api/{route}/route.ts - API 路由中的驗證應用
+```
+
+### 🔍 **技術決策與實現細節**
+
+#### **測試設計原則**
+1. **全面覆蓋**: 測試所有 validation 來源（body, query, params, headers）
+2. **真實場景**: 模擬實際 API 使用情境（用戶註冊、搜索、更新）
+3. **錯誤處理**: 確保所有錯誤路徑都被正確處理和格式化
+4. **Common Schemas**: 驗證預設 schema 的正確性和實用性
+5. **Edge Cases**: 測試邊界條件和異常情況
+
+#### **Jest 相容性處理**
+```typescript
+// ❌ 原始寫法 - NextResponse instanceof 在 Jest 中不穩定
+expect(response).toBeInstanceOf(NextResponse)
+
+// ✅ 修復寫法 - 改用屬性檢查
+expect(response).toBeDefined()
+expect(typeof response).toBe('object')
+expect('status' in response).toBe(true)
+expect(response.status).toBe(400)
+```
+
+**原因**: Jest Node 環境中 Next.js 的 mock 實現與真實 NextResponse 類型不完全一致
+
+### 📊 **當前 API Gateway 架構**
+
+```
+API Gateway 中間件層
+├── Stage 1 (已完成 ✅)
+│   ├── CORS 中間件 (30/30 tests)
+│   ├── Security Headers (46/46 tests)
+│   ├── Request ID (8/8 tests)
+│   └── Route Matcher (57/57 tests)
+│
+└── Stage 2 (進行中 🔄)
+    ├── Rate Limiter ✅ (23/23 tests)
+    ├── API Versioning ✅ (38/38 tests)
+    ├── Request Validation ✅ (43/43 tests)  ← 本次完成
+    └── Response Transform ⏳ (待開始)
+
+總測試數量: 245/245 tests passing (100%)
+```
+
+### 📈 **測試統計**
+
+| 中間件 | 測試數量 | 狀態 | 測試類型 |
+|--------|---------|------|----------|
+| CORS | 30 | ✅ | 預檢、來源驗證、憑證處理 |
+| Security Headers | 46 | ✅ | CSP、HSTS、X-Frame-Options |
+| Request ID | 8 | ✅ | ID 生成、傳播 |
+| Route Matcher | 57 | ✅ | 路徑匹配、通配符 |
+| Rate Limiter | 23 | ✅ | 速率限制、窗口重置 |
+| API Versioning | 38 | ✅ | 版本識別、棄用警告 |
+| **Request Validation** | **43** | **✅** | **多源驗證、錯誤處理** |
+| **Total** | **245** | **✅ 100%** | **完整覆蓋** |
+
+### 🎯 **下一步計劃**
+
+#### **1. Response Transformation 中間件** (待開始)
+**預計功能**:
+- Content negotiation (JSON/XML/CSV)
+- Data format transformation
+- Pagination envelope
+- HATEOAS links generation
+- Response compression
+
+**預計測試數量**: 30-40 tests
+
+#### **2. Integration Tests** (待規劃)
+**測試範圍**:
+- 完整 middleware chain 測試
+- 多中間件協同工作
+- 錯誤傳播和處理
+- 性能測試
+
+### 💡 **經驗總結**
+
+#### **Jest + Next.js Edge Runtime 測試**
+1. **Mock NextRequest 完整性**: 需要手動 mock `json()`, `nextUrl`, `headers` 等屬性
+2. **instanceof 檢查不可靠**: 在 Jest 環境中使用屬性檢查替代
+3. **SWC 編譯器限制**: 註解中避免使用特殊字符如 `*` 通配符
+
+#### **測試設計最佳實踐**
+1. **真實場景優先**: 從實際使用情境出發設計測試
+2. **Edge Cases 不可忽略**: 邊界條件往往暴露隱藏問題
+3. **錯誤路徑完整覆蓋**: 錯誤處理與正常流程同樣重要
+4. **Common Schemas 實用性驗證**: 確保預設 schema 真正解決常見需求
+
+### 🔧 **相關檔案變更**
+
+```
+新建檔案:
+  ✅ __tests__/lib/middleware/request-validator.test.ts (975 lines, 43 tests)
+
+修改檔案:
+  ✅ __tests__/utils/mock-next-request.ts (+13 lines, 添加 json() mock)
+  ✅ lib/middleware/request-validator.ts (語法修復)
+
+測試結果:
+  ✅ Request Validator: 43/43 passing
+  ✅ All Middleware Tests: 245/245 passing
+```
+
+### 📝 **技術筆記**
+
+**Zod Schema 驗證最佳實踐**:
+```typescript
+// ✅ 推薦：使用 z.coerce 進行類型轉換
+page: z.coerce.number().int().positive()
+
+// ✅ 推薦：提供有意義的默認值
+limit: z.coerce.number().int().positive().max(100).default(10)
+
+// ✅ 推薦：使用 refine 進行業務規則驗證
+acceptTerms: z.boolean().refine(val => val === true, {
+  message: 'Must accept terms and conditions'
+})
+
+// ✅ 推薦：組合多個 schema
+const registrationSchema = z.object({
+  ...authSchema.shape,
+  ...profileSchema.shape
+})
+```
+
+**Common Schemas 使用示例**:
+```typescript
+// 分頁查詢
+const validator = createRequestValidator({
+  query: CommonSchemas.pagination
+})
+// 自動處理: page, limit, sortBy, sortOrder
+
+// 認證 headers
+const validator = createRequestValidator({
+  headers: CommonSchemas.authHeaders
+})
+// 自動驗證: Bearer token 格式
+
+// UUID 參數
+const validator = createRequestValidator({
+  params: CommonSchemas.id
+})
+// 自動驗證: UUID 格式
+```
 
 ---
 

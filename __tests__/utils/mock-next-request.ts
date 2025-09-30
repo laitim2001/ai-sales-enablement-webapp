@@ -42,6 +42,21 @@ export function createMockNextRequest(
 
   const request = new NextRequest(url, requestOptions)
 
+  // Mock the json() method for body parsing in Jest node environment
+  if (options?.body && typeof options.body === 'string') {
+    Object.defineProperty(request, 'json', {
+      value: async () => {
+        try {
+          return JSON.parse(options.body as string)
+        } catch (error) {
+          throw new SyntaxError('Unexpected token in JSON')
+        }
+      },
+      writable: false,
+      configurable: true
+    })
+  }
+
   // Mock the nextUrl property for URL parsing in Jest node environment
   const parsedUrl = new URL(url)
   Object.defineProperty(request, 'nextUrl', {
