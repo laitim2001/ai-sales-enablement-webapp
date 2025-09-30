@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年9月30日 - MVP Phase 2 Sprint 1 Week 1完成（JWT增強+API Gateway決策）
+> **📅 最後更新**: 2025年9月30日 - MVP Phase 2 Sprint 1: Azure AD SSO整合完成
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -106,11 +106,12 @@
 
 ### 🔐 lib/auth/ - JWT驗證增強系統 (MVP Phase 2)
 
-**用途**: 企業級JWT雙令牌驗證、Token撤銷和多設備管理
+**用途**: 企業級JWT雙令牌驗證、Token撤銷、多設備管理和Azure AD SSO整合
 
 | 功能模組               | 文件路徑                           | 用途說明                                     | 重要程度 |
 | ---------------------- | ---------------------------------- | -------------------------------------------- | -------- |
 | **Token服務**          | `lib/auth/token-service.ts`       | JWT雙令牌機制(15分+30天)、Token撤銷、多設備管理、自動清理 | 🔴 極高  |
+| **Azure AD服務**       | `lib/auth/azure-ad-service.ts`    | MSAL Node整合、OAuth 2.0、用戶同步、角色映射、單點登出 | 🔴 極高  |
 
 ### 📊 lib/monitoring/ - 性能監控系統
 
@@ -147,13 +148,15 @@
 
 ### 🔐 app/api/auth/ - 認證API增強 (MVP Phase 2)
 
-**用途**: JWT雙令牌認證端點
+**用途**: JWT雙令牌認證端點 + Azure AD SSO整合
 
 | 功能模組               | 文件路徑                                      | 用途說明                                     | 重要程度 |
 | ---------------------- | --------------------------------------------- | -------------------------------------------- | -------- |
 | **登入API**            | `app/api/auth/login/route.ts`                | 雙令牌登入（已升級）                        | 🔴 極高  |
 | **登出API**            | `app/api/auth/logout/route.ts`               | Token撤銷登出（已升級）                     | 🔴 極高  |
 | **Token刷新API**       | `app/api/auth/refresh/route.ts`              | Access token刷新端點（新增）                | 🔴 極高  |
+| **Azure AD登入**       | `app/api/auth/azure-ad/login/route.ts`       | Azure AD SSO登入啟動（新增）                | 🔴 極高  |
+| **Azure AD回調**       | `app/api/auth/azure-ad/callback/route.ts`    | Azure AD認證回調處理（新增）                | 🔴 極高  |
 
 ### 📖 docs/user-stories/ - 用戶故事詳細規格
 
