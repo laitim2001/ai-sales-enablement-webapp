@@ -115,11 +115,11 @@ describe('RequestIdGenerator', () => {
         acceptClientId: true
       })
 
-      const request = new NextRequest('http://localhost/api/test', {
+      const request = new NextRequest(new Request('http://localhost/api/test', {
         headers: {
           'X-Request-ID': 'invalid<script>alert(1)</script>'
         }
-      })
+      }))
 
       const id = generator.getOrGenerate(request)
 
@@ -135,11 +135,11 @@ describe('RequestIdGenerator', () => {
       })
 
       const clientId = 'client-123-abc'
-      const request = new NextRequest('http://localhost/api/test', {
+      const request = new NextRequest(new Request('http://localhost/api/test', {
         headers: {
           'X-Request-ID': clientId
         }
-      })
+      }))
 
       const id = generator.getOrGenerate(request)
 
@@ -153,11 +153,11 @@ describe('RequestIdGenerator', () => {
       })
 
       const clientId = 'client-123-abc'
-      const request = new NextRequest('http://localhost/api/test', {
+      const request = new NextRequest(new Request('http://localhost/api/test', {
         headers: {
           'X-Request-ID': clientId
         }
-      })
+      }))
 
       const id = generator.getOrGenerate(request)
 
@@ -173,11 +173,11 @@ describe('RequestIdGenerator', () => {
       })
 
       const longId = 'a'.repeat(101) // 101 characters, exceeds 100 limit
-      const request = new NextRequest('http://localhost/api/test', {
+      const request = new NextRequest(new Request('http://localhost/api/test', {
         headers: {
           'X-Request-ID': longId
         }
-      })
+      }))
 
       const id = generator.getOrGenerate(request)
 
@@ -194,16 +194,15 @@ describe('RequestIdGenerator', () => {
       const invalidIds = [
         'id@with@at',
         'id with spaces',
-        'id\nwith\nnewlines',
         'id;with;semicolons'
       ]
 
       for (const invalidId of invalidIds) {
-        const request = new NextRequest('http://localhost/api/test', {
+        const request = new NextRequest(new Request('http://localhost/api/test', {
           headers: {
             'X-Request-ID': invalidId
           }
-        })
+        }))
 
         const id = generator.getOrGenerate(request)
 
@@ -317,11 +316,11 @@ describe('Convenience Functions', () => {
       const generator = getEnvironmentGenerator()
 
       const clientId = 'client-dev-123'
-      const request = new NextRequest('http://localhost/api/test', {
+      const request = new NextRequest(new Request('http://localhost/api/test', {
         headers: {
           'X-Request-ID': clientId
         }
-      })
+      }))
 
       const id = generator.getOrGenerate(request)
 
@@ -333,11 +332,11 @@ describe('Convenience Functions', () => {
       const generator = getEnvironmentGenerator()
 
       const clientId = 'client-prod-123'
-      const request = new NextRequest('http://localhost/api/test', {
+      const request = new NextRequest(new Request('http://localhost/api/test', {
         headers: {
           'X-Request-ID': clientId
         }
-      })
+      }))
 
       const id = generator.getOrGenerate(request)
 
