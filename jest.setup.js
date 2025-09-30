@@ -123,6 +123,18 @@ jest.mock('next/server', () => {
       async text() {
         return this.body
       }
+
+      clone() {
+        const cloned = new this.constructor(this.body, {
+          status: this.status,
+          statusText: this.statusText,
+          headers: this.headers
+        })
+        if (this._jsonBody !== undefined) {
+          cloned._jsonBody = this._jsonBody
+        }
+        return cloned
+      }
     },
   }
 })
