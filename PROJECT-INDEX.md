@@ -58,6 +58,8 @@
 | **MVP Phase 2 開發計劃** | `docs/mvp2-development-plan.md`  | MVP Phase 2完整開發計劃（14週，A+C混合方案） | 🔴 極高  |
 | **MVP Phase 2 實施清單** | `docs/mvp2-implementation-checklist.md` | MVP Phase 2實施進度追蹤（14週，54項檢查清單） | 🔴 極高  |
 | **MVP Phase 2 用戶故事映射** | `docs/mvp2-user-stories-mapping.md` | MVP Phase 2的9個功能詳細規劃和優先級 | 🔴 極高  |
+| **MVP Phase 2 Sprint調整決策** | `docs/mvp2-sprint-adjustment-decision.md` | Sprint重新分配決策記錄（Story 3.3移至Sprint 6） | 🔴 極高  |
+| **語音功能戰略定位決策** | `docs/voice-feature-strategic-decision.md` | 語音功能延後決策分析（選項A/B/C評估） | 🔴 極高  |
 | **未來創新功能記錄** | `docs/future-innovations.md`     | 選項B創新功能（實時語音助理等）完整藍圖 | 🟡 高    |
 | **規劃總結**       | `docs/planning-summary.md`             | 項目規劃總結文檔     | 🟡 高    |
 | **產品需求文檔**   | `docs/prd.md`                          | 完整 PRD 文檔        | 🔴 極高  |
