@@ -536,7 +536,6 @@
 | **API Versioning**      | `__tests__/lib/middleware/api-versioning.test.ts` | API版本控制測試           | 38     | 🔴 極高  |
 | **Request Validator**   | `__tests__/lib/middleware/request-validator.test.ts` | 請求驗證測試（9種）       | 43     | 🔴 極高  |
 | **Response Transformer**| `__tests__/lib/middleware/response-transformer.test.ts` | 響應轉換測試            | 51     | 🔴 極高  |
-| **綜合測試**            | `__tests__/lib/middleware/middleware.test.ts`   | 中間件鏈整合測試           | 45     | 🔴 極高  |
 
 **Stage 3 測試 (84 tests)**:
 
