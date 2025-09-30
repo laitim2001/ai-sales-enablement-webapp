@@ -10,6 +10,7 @@ import {
   CorsPresets,
   CorsOptions
 } from '@/lib/middleware/cors'
+import { createMockNextRequest, createMockOptionsRequest } from '@/__tests__/utils/mock-next-request'
 
 describe('CorsMiddleware', () => {
   describe('Origin Validation', () => {
@@ -18,9 +19,9 @@ describe('CorsMiddleware', () => {
         origins: ['https://example.com']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
+      })
 
       const response = cors.handle(request)
 
@@ -32,9 +33,9 @@ describe('CorsMiddleware', () => {
         origins: ['https://example.com']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://malicious.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://malicious.com'
+      })
 
       const response = cors.handle(request)
 
@@ -43,12 +44,13 @@ describe('CorsMiddleware', () => {
 
     it('should allow all origins with wildcard', () => {
       const cors = new CorsMiddleware({
-        origins: '*'
+        origins: '*',
+        credentials: false  // Must disable credentials to use wildcard
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://anysite.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://anysite.com'
+      })
 
       const response = cors.handle(request)
 
@@ -67,9 +69,9 @@ describe('CorsMiddleware', () => {
       ]
 
       for (const origin of validOrigins) {
-        const headers = new Headers()
-        headers.set('origin', origin)
-        const request = new NextRequest('http://localhost/api/test', { headers })
+        const request = createMockNextRequest('http://localhost/api/test', {
+          'origin': origin
+        })
 
         const response = cors.handle(request)
 
@@ -82,18 +84,18 @@ describe('CorsMiddleware', () => {
         origins: (origin) => origin.endsWith('.trusted.com')
       })
 
-      const headers1 = new Headers()
-      headers1.set('origin', 'https://app.trusted.com')
-      const request1 = new NextRequest('http://localhost/api/test', { headers: headers1 })
+      const request1 = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://app.trusted.com'
+      })
 
       const response1 = cors.handle(request1)
       expect(response1.headers.get('Access-Control-Allow-Origin')).toBe(
         'https://app.trusted.com'
       )
 
-      const headers2 = new Headers()
-      headers2.set('origin', 'https://app.untrusted.com')
-      const request2 = new NextRequest('http://localhost/api/test', { headers: headers2 })
+      const request2 = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://app.untrusted.com'
+      })
 
       const response2 = cors.handle(request2)
       expect(response2.headers.get('Access-Control-Allow-Origin')).toBeNull()
@@ -104,7 +106,8 @@ describe('CorsMiddleware', () => {
         origins: ['https://example.com']
       })
 
-      const request = new NextRequest('http://localhost/api/test')
+      // Use mock helper with no headers (provides empty headers mock)
+      const request = createMockNextRequest('http://localhost/api/test')
 
       const response = cors.handle(request)
 
@@ -121,11 +124,8 @@ describe('CorsMiddleware', () => {
         allowedHeaders: ['Content-Type', 'Authorization']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', {
-        method: 'OPTIONS',
-        headers
+      const request = createMockOptionsRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
       })
 
       const response = cors.handle(request)
@@ -144,12 +144,9 @@ describe('CorsMiddleware', () => {
         methods: ['GET', 'POST']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      headers.set('access-control-request-method', 'DELETE')
-      const request = new NextRequest('http://localhost/api/test', {
-        method: 'OPTIONS',
-        headers
+      const request = createMockOptionsRequest('http://localhost/api/test', {
+        'origin': 'https://example.com',
+        'access-control-request-method': 'DELETE'
       })
 
       const response = cors.handle(request)
@@ -163,11 +160,8 @@ describe('CorsMiddleware', () => {
         maxAge: 3600
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', {
-        method: 'OPTIONS',
-        headers
+      const request = createMockOptionsRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
       })
 
       const response = cors.handle(request)
@@ -183,11 +177,8 @@ describe('CorsMiddleware', () => {
         methods: ['GET', 'POST']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', {
-        method: 'GET',
-        headers
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
       })
 
       const response = cors.handle(request)
@@ -201,9 +192,9 @@ describe('CorsMiddleware', () => {
         exposedHeaders: ['X-Custom-Header', 'X-Request-ID']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
+      })
 
       const response = cors.handle(request)
 
@@ -217,9 +208,9 @@ describe('CorsMiddleware', () => {
         origins: ['https://example.com']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
+      })
 
       const existingResponse = NextResponse.json({ data: 'test' })
       const response = cors.handle(request, existingResponse)
@@ -236,9 +227,9 @@ describe('CorsMiddleware', () => {
         credentials: true
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
+      })
 
       const response = cors.handle(request)
 
@@ -252,9 +243,9 @@ describe('CorsMiddleware', () => {
         credentials: false
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
+      })
 
       const response = cors.handle(request)
 
@@ -268,9 +259,9 @@ describe('CorsMiddleware', () => {
         credentials: true
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
+      })
 
       const response = cors.handle(request)
 
@@ -291,9 +282,9 @@ describe('CorsMiddleware', () => {
       process.env.NODE_ENV = 'development'
       const cors = new CorsMiddleware({})
 
-      const headers = new Headers()
-      headers.set('origin', 'http://localhost:3000')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'http://localhost:3000'
+      })
 
       const response = cors.handle(request)
 
@@ -306,9 +297,9 @@ describe('CorsMiddleware', () => {
 
       const cors = new CorsMiddleware({})
 
-      const headers = new Headers()
-      headers.set('origin', 'https://prod.example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://prod.example.com'
+      })
 
       const response = cors.handle(request)
 
@@ -330,9 +321,9 @@ describe('CorsMiddleware', () => {
         origins: ['https://new.com']
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://new.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://new.com'
+      })
 
       const response = cors.handle(request)
 
@@ -358,9 +349,9 @@ describe('CorsMiddleware', () => {
 
   describe('applyCors', () => {
     it('should apply CORS to response', () => {
-      const headers = new Headers()
-      headers.set('origin', 'http://localhost:3000')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'http://localhost:3000'
+      })
 
       const response = NextResponse.json({ data: 'test' })
       const corsResponse = applyCors(request, response)
@@ -369,9 +360,9 @@ describe('CorsMiddleware', () => {
     })
 
     it('should use custom options', () => {
-      const headers = new Headers()
-      headers.set('origin', 'https://custom.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://custom.com'
+      })
 
       const response = NextResponse.json({ data: 'test' })
       const corsResponse = applyCors(request, response, {
@@ -422,9 +413,9 @@ describe('CorsMiddleware', () => {
       const origins = ['https://site1.com', 'https://site2.com', 'https://site3.com']
 
       for (const origin of origins) {
-        const headers = new Headers()
-        headers.set('origin', origin)
-        const request = new NextRequest('http://localhost/api/test', { headers })
+        const request = createMockNextRequest('http://localhost/api/test', {
+          'origin': origin
+        })
 
         const response = cors.handle(request)
 
@@ -438,11 +429,8 @@ describe('CorsMiddleware', () => {
         allowedHeaders: []
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', {
-        method: 'OPTIONS',
-        headers
+      const request = createMockOptionsRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
       })
 
       const response = cors.handle(request)
@@ -456,9 +444,9 @@ describe('CorsMiddleware', () => {
         exposedHeaders: []
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', { headers })
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
+      })
 
       const response = cors.handle(request)
 
@@ -471,11 +459,8 @@ describe('CorsMiddleware', () => {
         optionsSuccessStatus: 200
       })
 
-      const headers = new Headers()
-      headers.set('origin', 'https://example.com')
-      const request = new NextRequest('http://localhost/api/test', {
-        method: 'OPTIONS',
-        headers
+      const request = createMockOptionsRequest('http://localhost/api/test', {
+        'origin': 'https://example.com'
       })
 
       const response = cors.handle(request)

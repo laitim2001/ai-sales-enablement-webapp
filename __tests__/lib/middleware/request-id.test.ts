@@ -11,29 +11,7 @@ import {
   getEnvironmentGenerator,
   RequestIdConfig
 } from '@/lib/middleware/request-id'
-
-// Helper function to create NextRequest with headers that works in Jest
-// Jest node environment doesn't properly initialize NextRequest.headers
-function createMockNextRequest(url: string, headers?: Record<string, string>): NextRequest {
-  const request = new NextRequest(url)
-
-  // Mock the headers property since it's undefined in Jest node environment
-  if (headers) {
-    Object.defineProperty(request, 'headers', {
-      value: {
-        get: (name: string) => headers[name] || null,
-        has: (name: string) => name in headers,
-        forEach: (callback: (value: string, key: string) => void) => {
-          Object.entries(headers).forEach(([key, value]) => callback(value, key))
-        }
-      },
-      writable: false,
-      configurable: true
-    })
-  }
-
-  return request
-}
+import { createMockNextRequest } from '@/__tests__/utils/mock-next-request'
 
 describe('RequestIdGenerator', () => {
   describe('UUID Strategy', () => {

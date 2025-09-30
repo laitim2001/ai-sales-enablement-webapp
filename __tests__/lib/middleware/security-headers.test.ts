@@ -21,7 +21,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const csp = securedResponse.headers.get('Content-Security-Policy')
@@ -37,7 +37,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const csp = securedResponse.headers.get('Content-Security-Policy')
@@ -52,7 +52,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const csp = securedResponse.headers.get('Content-Security-Policy')
@@ -67,7 +67,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const csp = securedResponse.headers.get('Content-Security-Policy')
@@ -80,7 +80,7 @@ describe('SecurityHeadersMiddleware', () => {
         csp: false
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('Content-Security-Policy')).toBeNull()
@@ -100,7 +100,7 @@ describe('SecurityHeadersMiddleware', () => {
 
       const security = new SecurityHeadersMiddleware({ csp })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const cspHeader = securedResponse.headers.get('Content-Security-Policy')
@@ -116,7 +116,7 @@ describe('SecurityHeadersMiddleware', () => {
         hsts: true
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const hsts = securedResponse.headers.get('Strict-Transport-Security')
@@ -129,7 +129,7 @@ describe('SecurityHeadersMiddleware', () => {
         hsts: { maxAge: 63072000 }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const hsts = securedResponse.headers.get('Strict-Transport-Security')
@@ -141,7 +141,7 @@ describe('SecurityHeadersMiddleware', () => {
         hsts: { maxAge: 31536000, includeSubDomains: true, preload: true }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const hsts = securedResponse.headers.get('Strict-Transport-Security')
@@ -153,7 +153,7 @@ describe('SecurityHeadersMiddleware', () => {
         hsts: false
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('Strict-Transport-Security')).toBeNull()
@@ -164,7 +164,7 @@ describe('SecurityHeadersMiddleware', () => {
         hsts: { maxAge: 31536000, includeSubDomains: false }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const hsts = securedResponse.headers.get('Strict-Transport-Security')
@@ -179,7 +179,7 @@ describe('SecurityHeadersMiddleware', () => {
         frameOptions: 'DENY'
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-Frame-Options')).toBe('DENY')
@@ -190,7 +190,7 @@ describe('SecurityHeadersMiddleware', () => {
         frameOptions: 'SAMEORIGIN'
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-Frame-Options')).toBe('SAMEORIGIN')
@@ -201,7 +201,7 @@ describe('SecurityHeadersMiddleware', () => {
         frameOptions: false
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-Frame-Options')).toBeNull()
@@ -214,7 +214,7 @@ describe('SecurityHeadersMiddleware', () => {
         noSniff: true
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-Content-Type-Options')).toBe('nosniff')
@@ -225,7 +225,7 @@ describe('SecurityHeadersMiddleware', () => {
         noSniff: false
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-Content-Type-Options')).toBeNull()
@@ -238,7 +238,7 @@ describe('SecurityHeadersMiddleware', () => {
         xssProtection: true
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-XSS-Protection')).toBe('1; mode=block')
@@ -249,7 +249,7 @@ describe('SecurityHeadersMiddleware', () => {
         xssProtection: false
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-XSS-Protection')).toBeNull()
@@ -274,7 +274,7 @@ describe('SecurityHeadersMiddleware', () => {
           referrerPolicy: policy
         })
 
-        const response = NextResponse.next()
+        const response = NextResponse.json(null, { status: 200 })
         const securedResponse = security.apply(response)
 
         expect(securedResponse.headers.get('Referrer-Policy')).toBe(policy)
@@ -292,7 +292,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const policy = securedResponse.headers.get('Permissions-Policy')
@@ -308,7 +308,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const policy = securedResponse.headers.get('Permissions-Policy')
@@ -322,7 +322,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const policy = securedResponse.headers.get('Permissions-Policy')
@@ -339,7 +339,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-Custom-Header')).toBe('custom-value')
@@ -358,7 +358,7 @@ describe('SecurityHeadersMiddleware', () => {
       process.env.NODE_ENV = 'production'
       const security = new SecurityHeadersMiddleware({})
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const csp = securedResponse.headers.get('Content-Security-Policy')
@@ -369,7 +369,7 @@ describe('SecurityHeadersMiddleware', () => {
       process.env.NODE_ENV = 'development'
       const security = new SecurityHeadersMiddleware({})
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       const csp = securedResponse.headers.get('Content-Security-Policy')
@@ -388,7 +388,7 @@ describe('SecurityHeadersMiddleware', () => {
         frameOptions: 'DENY'
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('X-Frame-Options')).toBe('DENY')
@@ -442,7 +442,7 @@ describe('SecurityHeadersMiddleware', () => {
       it('should apply development preset', () => {
         const security = new SecurityHeadersMiddleware(SecurityPresets.development)
 
-        const response = NextResponse.next()
+        const response = NextResponse.json(null, { status: 200 })
         const securedResponse = security.apply(response)
 
         expect(securedResponse.headers.get('Strict-Transport-Security')).toBeNull()
@@ -461,7 +461,7 @@ describe('SecurityHeadersMiddleware', () => {
       it('should apply production preset', () => {
         const security = new SecurityHeadersMiddleware(SecurityPresets.production)
 
-        const response = NextResponse.next()
+        const response = NextResponse.json(null, { status: 200 })
         const securedResponse = security.apply(response)
 
         expect(securedResponse.headers.get('Strict-Transport-Security')).toBeDefined()
@@ -480,7 +480,7 @@ describe('SecurityHeadersMiddleware', () => {
       it('should apply maximum security preset', () => {
         const security = new SecurityHeadersMiddleware(SecurityPresets.maximum)
 
-        const response = NextResponse.next()
+        const response = NextResponse.json(null, { status: 200 })
         const securedResponse = security.apply(response)
 
         const hsts = securedResponse.headers.get('Strict-Transport-Security')
@@ -502,7 +502,7 @@ describe('SecurityHeadersMiddleware', () => {
       it('should apply API preset', () => {
         const security = new SecurityHeadersMiddleware(SecurityPresets.api)
 
-        const response = NextResponse.next()
+        const response = NextResponse.json(null, { status: 200 })
         const securedResponse = security.apply(response)
 
         expect(securedResponse.headers.get('Content-Security-Policy')).toBeNull()
@@ -531,7 +531,7 @@ describe('SecurityHeadersMiddleware', () => {
         }
       })
 
-      const response = NextResponse.next()
+      const response = NextResponse.json(null, { status: 200 })
       const securedResponse = security.apply(response)
 
       expect(securedResponse.headers.get('Content-Security-Policy')).toBeDefined()
