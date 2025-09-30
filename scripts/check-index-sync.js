@@ -235,7 +235,12 @@ class IndexSyncChecker {
       /.*test.*\.config\.(js|ts)$/,
       /playwright\.config\.(js|ts)$/,
       /jest\.config\.(js|ts)$/,
-      /vitest\.config\.(js|ts)$/
+      /vitest\.config\.(js|ts)$/,
+      // 核心代碼模組 - 需要更新 PROJECT-INDEX.md
+      /^lib\/.*\.(ts|js)$/,           // lib/ 目錄下所有 TypeScript/JavaScript 文件
+      /^components\/.*\.(tsx|ts)$/,    // components/ 目錄下所有組件
+      /^app\/.*\.(ts|tsx)$/,           // app/ 目錄下所有 Next.js 14 路由和頁面
+      /^__tests__\/.*\.test\.(ts|js)$/  // 所有測試文件
     ];
 
     if (highImportancePatterns.some(pattern => pattern.test(filePath))) {

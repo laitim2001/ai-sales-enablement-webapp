@@ -54,6 +54,7 @@
 | **系統架構**       | `docs/architecture.md`                 | 系統架構設計文檔     | 🔴 極高  |
 | **前端規格**       | `docs/front-end-spec.md`               | 前端開發規格和指南   | 🟡 高    |
 | **索引提醒設置**   | `docs/INDEX-REMINDER-SETUP.md`         | 索引同步提醒系統設置 | 🟢 中    |
+| **索引維護改進記錄** | `docs/index-maintenance-improvement-log.md` | 索引維護機制改進記錄（2025-10-01核心代碼檢測擴展） | 🟡 高    |
 | **MVP Phase 1 開發計劃** | `docs/mvp-development-plan.md`   | MVP Phase 1完整開發計劃（✅已100%完成） | 🔴 極高  |
 | **MVP Phase 1 實施清單** | `docs/mvp-implementation-checklist.md` | MVP Phase 1實施進度追蹤（✅已100%完成） | 🟡 高    |
 | **MVP Phase 2 開發計劃** | `docs/mvp2-development-plan.md`  | MVP Phase 2完整開發計劃（14週，A+C混合方案） | 🔴 極高  |
@@ -62,6 +63,7 @@
 | **MVP Phase 2 Sprint調整決策** | `docs/mvp2-sprint-adjustment-decision.md` | Sprint重新分配決策記錄（Story 3.3移至Sprint 6） | 🔴 極高  |
 | **語音功能戰略定位決策** | `docs/voice-feature-strategic-decision.md` | 語音功能延後決策分析（選項A/B/C評估） | 🔴 極高  |
 | **API Gateway技術決策** | `docs/api-gateway-decision.md` | API Gateway技術選型評估（AWS/Kong/Next.js）決策：選項C | 🔴 極高  |
+| **API Gateway架構設計** | `docs/api-gateway-architecture.md` | API Gateway完整架構設計（Next.js Middleware + 自定義方案） | 🔴 極高  |
 | **未來創新功能記錄** | `docs/future-innovations.md`     | 選項B創新功能（實時語音助理等）完整藍圖 | 🟡 高    |
 | **規劃總結**       | `docs/planning-summary.md`             | 項目規劃總結文檔     | 🟡 高    |
 | **產品需求文檔**   | `docs/prd.md`                          | 完整 PRD 文檔        | 🔴 極高  |
@@ -204,7 +206,8 @@
 - `docs/user-stories/epic-4/story-4.2-cicd-pipeline.md` - CI/CD 流水線
 - `docs/user-stories/epic-4/story-4.3-monitoring-alerting.md` - 監控和告警系統
 - `docs/user-stories/epic-4/story-4.4-security-hardening.md` - 安全強化
-- `docs/user-stories/epic-4/story-4.5-performance-optimization.md` - 性能優化
+- `docs/user-stories/epic-4/story-4.5-performance-high-availability.md` - 生產級性能優化與高可用性架構（MVP Phase 2）
+- `docs/user-stories/epic-4/story-4.5-performance-optimization.md` - 性能優化與擴展（Post-MVP）
 - `docs/user-stories/epic-4/story-4.6-user-training.md` - 用戶培訓
 
 ### 🗄️ prisma/ - 資料庫設計
