@@ -50,7 +50,46 @@ jest.mock('next/server', () => {
   }
 
   return {
-    NextRequest: jest.fn(),
+    NextRequest: class NextRequest {
+      constructor(url, init = {}) {
+        this.url = url
+        this.method = init.method || 'GET'
+        this.headers = new MockHeaders(init.headers)
+        this._body = init.body
+        this._jsonBody = null
+
+        // Parse JSON body if provided
+        if (this._body && typeof this._body === 'string') {
+          try {
+            this._jsonBody = JSON.parse(this._body)
+          } catch (e) {
+            // Not JSON, keep as string
+          }
+        }
+      }
+
+      async json() {
+        if (this._jsonBody !== null) {
+          return this._jsonBody
+        }
+        if (this._body && typeof this._body === 'string') {
+          return JSON.parse(this._body)
+        }
+        throw new Error('No body to parse')
+      }
+
+      async text() {
+        return this._body || ''
+      }
+
+      clone() {
+        return new NextRequest(this.url, {
+          method: this.method,
+          headers: this.headers,
+          body: this._body
+        })
+      }
+    },
     NextResponse: class NextResponse {
       constructor(body, init = {}) {
         this.body = body
