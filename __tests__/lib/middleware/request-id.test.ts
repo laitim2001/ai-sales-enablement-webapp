@@ -12,6 +12,29 @@ import {
   RequestIdConfig
 } from '@/lib/middleware/request-id'
 
+// Helper function to create NextRequest with headers that works in Jest
+// Jest node environment doesn't properly initialize NextRequest.headers
+function createMockNextRequest(url: string, headers?: Record<string, string>): NextRequest {
+  const request = new NextRequest(url)
+
+  // Mock the headers property since it's undefined in Jest node environment
+  if (headers) {
+    Object.defineProperty(request, 'headers', {
+      value: {
+        get: (name: string) => headers[name] || null,
+        has: (name: string) => name in headers,
+        forEach: (callback: (value: string, key: string) => void) => {
+          Object.entries(headers).forEach(([key, value]) => callback(value, key))
+        }
+      },
+      writable: false,
+      configurable: true
+    })
+  }
+
+  return request
+}
+
 describe('RequestIdGenerator', () => {
   describe('UUID Strategy', () => {
     it('should generate valid UUID format', () => {
@@ -52,10 +75,11 @@ describe('RequestIdGenerator', () => {
       expect(id).toMatch(timestampRegex)
     })
 
-    it('should generate sortable IDs', () => {
+    it('should generate sortable IDs', async () => {
       const generator = new RequestIdGenerator({ strategy: 'timestamp' })
       const id1 = generator.generate()
       // Small delay to ensure different timestamp
+      await new Promise(resolve => setTimeout(resolve, 10))
       const id2 = generator.generate()
 
       // Timestamp IDs should be lexicographically sortable
@@ -115,11 +139,9 @@ describe('RequestIdGenerator', () => {
         acceptClientId: true
       })
 
-      const request = new NextRequest(new Request('http://localhost/api/test', {
-        headers: {
-          'X-Request-ID': 'invalid<script>alert(1)</script>'
-        }
-      }))
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'X-Request-ID': 'invalid<script>alert(1)</script>'
+      })
 
       const id = generator.getOrGenerate(request)
 
@@ -135,11 +157,9 @@ describe('RequestIdGenerator', () => {
       })
 
       const clientId = 'client-123-abc'
-      const request = new NextRequest(new Request('http://localhost/api/test', {
-        headers: {
-          'X-Request-ID': clientId
-        }
-      }))
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'X-Request-ID': clientId
+      })
 
       const id = generator.getOrGenerate(request)
 
@@ -153,11 +173,9 @@ describe('RequestIdGenerator', () => {
       })
 
       const clientId = 'client-123-abc'
-      const request = new NextRequest(new Request('http://localhost/api/test', {
-        headers: {
-          'X-Request-ID': clientId
-        }
-      }))
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'X-Request-ID': clientId
+      })
 
       const id = generator.getOrGenerate(request)
 
@@ -173,11 +191,9 @@ describe('RequestIdGenerator', () => {
       })
 
       const longId = 'a'.repeat(101) // 101 characters, exceeds 100 limit
-      const request = new NextRequest(new Request('http://localhost/api/test', {
-        headers: {
-          'X-Request-ID': longId
-        }
-      }))
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'X-Request-ID': longId
+      })
 
       const id = generator.getOrGenerate(request)
 
@@ -198,11 +214,9 @@ describe('RequestIdGenerator', () => {
       ]
 
       for (const invalidId of invalidIds) {
-        const request = new NextRequest(new Request('http://localhost/api/test', {
-          headers: {
-            'X-Request-ID': invalidId
-          }
-        }))
+        const request = createMockNextRequest('http://localhost/api/test', {
+          'X-Request-ID': invalidId
+        })
 
         const id = generator.getOrGenerate(request)
 
@@ -316,11 +330,9 @@ describe('Convenience Functions', () => {
       const generator = getEnvironmentGenerator()
 
       const clientId = 'client-dev-123'
-      const request = new NextRequest(new Request('http://localhost/api/test', {
-        headers: {
-          'X-Request-ID': clientId
-        }
-      }))
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'X-Request-ID': clientId
+      })
 
       const id = generator.getOrGenerate(request)
 
@@ -332,11 +344,9 @@ describe('Convenience Functions', () => {
       const generator = getEnvironmentGenerator()
 
       const clientId = 'client-prod-123'
-      const request = new NextRequest(new Request('http://localhost/api/test', {
-        headers: {
-          'X-Request-ID': clientId
-        }
-      }))
+      const request = createMockNextRequest('http://localhost/api/test', {
+        'X-Request-ID': clientId
+      })
 
       const id = generator.getOrGenerate(request)
 

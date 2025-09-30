@@ -37,7 +37,8 @@
       "Bash(npx tsx:*)",
       "Bash(Get-Process node)",
       "Bash(Stop-Process -Force)",
-      "Bash(Stop-Process -Force -Id 8624)"
+      "Bash(Stop-Process -Force -Id 8624)",
+      "Bash(npx jest:*)"
     ],
     "deny": [],
     "ask": []

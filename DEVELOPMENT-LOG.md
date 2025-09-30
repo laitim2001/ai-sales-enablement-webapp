@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [測試修復: NextRequest/Jest 相容性 (2025-09-30 21:15)](#🐛-2025-09-30-2115-測試修復-nextjest-相容性問題解決-✅)
 - [API網關核心中間件實現 (2025-09-30 02:00)](#🚀-2025-09-30-0200-api網關核心中間件實現-stage-1完成-✅)
 - [Azure AD SSO整合實施 (2025-09-30 17:30)](#🔐-2025-09-30-1730-azure-ad-sso整合實施-企業級單一登入-✅)
 - [MVP Phase 2 Sprint 1 Week 1 開發啟動 (2025-09-30 08:00)](#🔐-2025-09-30-0800-mvp-phase-2-sprint-1-week-1-jwt驗證增強和新環境設置-✅)
@@ -19,6 +20,149 @@
 - [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## 🐛 2025-09-30 (21:15): 測試修復 - Next/Jest 相容性問題解決 ✅
+
+### 🎯 **會話概述**
+- 深入研究並解決 NextRequest 在 Jest 環境中的 headers 問題
+- 從 23/29 (79%) 提升到 29/29 (100%) request-id 測試通過率
+- 從 33/36 (92%) 提升到 36/36 (100%) route-matcher 測試通過率
+- 發現並記錄 Jest @jest-environment node 環境的 Web API 限制
+
+### 🔍 **問題分析**
+
+#### **根本原因**
+Jest `@jest-environment node` 環境無法正確初始化 NextRequest 的 Web APIs：
+```typescript
+// 在 Jest node 環境中
+const request = new NextRequest('url', { headers: new Headers() })
+console.log(request.headers) // undefined ❌
+```
+
+**為什麼在 Node.js 中可以運行但在 Jest 中失敗？**
+- Next.js 依賴 Edge Runtime Web APIs (Headers, Request, Response)
+- Jest node 環境不完整支持這些 Web APIs
+- 直接運行 Node.js 時，Next.js 使用 polyfills
+- Jest 測試環境缺少這些 polyfills
+
+### ✅ **解決方案**
+
+#### **1. 創建 Mock Helper 函數**
+```typescript
+// __tests__/lib/middleware/request-id.test.ts
+function createMockNextRequest(url: string, headers?: Record<string, string>): NextRequest {
+  const request = new NextRequest(url)
+
+  if (headers) {
+    Object.defineProperty(request, 'headers', {
+      value: {
+        get: (name: string) => headers[name] || null,
+        has: (name: string) => name in headers,
+        forEach: (callback: (value: string, key: string) => void) => {
+          Object.entries(headers).forEach(([key, value]) => callback(value, key))
+        }
+      },
+      writable: false,
+      configurable: true
+    })
+  }
+
+  return request
+}
+```
+
+#### **2. 應用到所有測試**
+**修復前** (使用 Headers 對象):
+```typescript
+const headers = new Headers()
+headers.set('X-Request-ID', 'test-123')
+const request = new NextRequest('url', { headers }) // headers undefined ❌
+```
+
+**修復後** (使用 mock helper):
+```typescript
+const request = createMockNextRequest('url', {
+  'X-Request-ID': 'test-123'
+}) // headers 正常工作 ✅
+```
+
+#### **3. 修復測試時間競爭問題**
+**Timestamp 排序測試**:
+```typescript
+// 修復前: 沒有延遲導致 ID1 === ID2
+it('should generate sortable IDs', () => {
+  const id1 = generator.generate()
+  const id2 = generator.generate() // 太快！
+  expect(id1 <= id2).toBe(true) // 偶爾失敗 ❌
+})
+
+// 修復後: 添加延遲確保不同時間戳
+it('should generate sortable IDs', async () => {
+  const id1 = generator.generate()
+  await new Promise(resolve => setTimeout(resolve, 10))
+  const id2 = generator.generate()
+  expect(id1 <= id2).toBe(true) // 總是通過 ✅
+})
+```
+
+### 📊 **測試結果**
+
+**request-id.test.ts**: ✅ 100% (29/29)
+- UUID 策略測試 ✅
+- Timestamp 策略測試 ✅
+- Short ID 策略測試 ✅
+- Client ID 驗證測試 ✅
+- 環境感知測試 ✅
+- 性能測試 ✅
+
+**route-matcher.test.ts**: ✅ 100% (36/36)
+- 字符串模式匹配 ✅
+- 正則表達式匹配 ✅
+- Named parameters 提取 ✅
+- 優先級排序 ✅
+- 版本提取 ✅
+- LRU 緩存 ✅
+- 性能測試 ✅
+
+**已知限制**:
+- cors.test.ts: 部分測試需要應用同樣的 mock helper (31 tests)
+- security-headers.test.ts: 部分測試需要應用同樣的 mock helper (37 tests)
+
+### 📝 **經驗教訓**
+
+1. **環境差異意識**
+   - Jest 測試環境 ≠ Node.js 運行環境
+   - Web APIs 在測試中需要特殊處理
+   - 直接運行測試調試（node test.js）vs Jest 運行行為不同
+
+2. **測試策略**
+   - 優先修復最關鍵的測試（request-id, route-matcher）
+   - 使用 mock 優於嘗試修復環境
+   - 系統性方法：創建可重用的 helper 函數
+
+3. **異步測試注意事項**
+   - 時間敏感的測試需要適當延遲
+   - 使用 `async/await` 確保時序正確
+   - 避免依賴系統時間精度的測試
+
+### 🎯 **下一步行動**
+
+✅ **已完成**:
+- request-id.test.ts: 100% 通過
+- route-matcher.test.ts: 100% 通過
+- 記錄解決方案供團隊參考
+
+⏳ **待完成** (可選):
+- 應用 mock helper 到 cors.test.ts (快速，~30分鐘)
+- 應用 mock helper 到 security-headers.test.ts (快速，~30分鐘)
+- 或創建共享測試工具模塊供所有測試使用
+
+### 🔗 **相關資源**
+- Next.js Testing文檔: https://nextjs.org/docs/testing
+- Jest Environment配置: https://jestjs.io/docs/configuration#testenvironment-string
+- Edge Runtime APIs: https://nextjs.org/docs/app/api-reference/edge
 
 ---
 

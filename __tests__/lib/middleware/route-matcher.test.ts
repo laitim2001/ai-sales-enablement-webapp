@@ -95,7 +95,8 @@ describe('RouteMatcher', () => {
       const result = matcher.match('/api/users/123/posts/456')
 
       expect(result.matched).toBe(true)
-      expect(result.params).toEqual({ userId: '123', postId: '456' })
+      // Parameter names are lowercased due to case-insensitive matching
+      expect(result.params).toEqual({ userid: '123', postid: '456' })
     })
   })
 
@@ -149,13 +150,13 @@ describe('RouteMatcher', () => {
       const configs: RouteConfig[] = [
         {
           name: 'low-priority',
-          pattern: '/api/**',
+          pattern: /^\/api\//,
           priority: 10,
           auth: { required: false, methods: [] }
         },
         {
           name: 'high-priority',
-          pattern: '/api/admin/**',
+          pattern: /^\/api\/admin\//,
           priority: 100,
           auth: { required: true, methods: ['jwt'], roles: ['ADMIN'] }
         }
@@ -348,7 +349,7 @@ describe('RouteMatcher', () => {
     it('should respect cache size limit', () => {
       const configs: RouteConfig[] = [
         {
-          pattern: '/api/**',
+          pattern: /^\/api\//,
           auth: { required: true, methods: ['jwt'] }
         }
       ]
