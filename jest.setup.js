@@ -30,8 +30,15 @@ jest.mock('next/server', () => {
       this.map = new Map()
       if (init) {
         if (init instanceof MockHeaders) {
+          // Copy from MockHeaders
           this.map = new Map(init.map)
+        } else if (init && typeof init.forEach === 'function') {
+          // Handle Headers-like objects (including real Headers API)
+          init.forEach((value, key) => {
+            this.map.set(key.toLowerCase(), value)
+          })
         } else if (typeof init === 'object') {
+          // Handle plain objects
           Object.entries(init).forEach(([key, value]) => {
             this.map.set(key.toLowerCase(), value)
           })
@@ -46,6 +53,18 @@ jest.mock('next/server', () => {
     }
     has(name) {
       return this.map.has(name?.toLowerCase())
+    }
+    entries() {
+      return this.map.entries()
+    }
+    keys() {
+      return this.map.keys()
+    }
+    values() {
+      return this.map.values()
+    }
+    forEach(callback) {
+      this.map.forEach((value, key) => callback(value, key, this))
     }
   }
 
@@ -99,12 +118,36 @@ jest.mock('next/server', () => {
       }
 
       static json(body, init = {}) {
+        // Handle Headers object properly
+        const headers = new MockHeaders()
+        headers.set('Content-Type', 'application/json')
+
+        // Merge init.headers if provided
+        if (init.headers) {
+          if (init.headers instanceof MockHeaders) {
+            // Copy from MockHeaders
+            init.headers.forEach((value, key) => {
+              headers.set(key, value)
+            })
+          } else if (typeof init.headers === 'object') {
+            // Copy from plain object or Headers
+            if (typeof init.headers.forEach === 'function') {
+              // It's a Headers-like object
+              init.headers.forEach((value, key) => {
+                headers.set(key, value)
+              })
+            } else {
+              // It's a plain object
+              Object.entries(init.headers).forEach(([key, value]) => {
+                headers.set(key, value)
+              })
+            }
+          }
+        }
+
         const response = new NextResponse(JSON.stringify(body), {
           ...init,
-          headers: {
-            'Content-Type': 'application/json',
-            ...init.headers,
-          },
+          headers
         })
         response._jsonBody = body
         return response
