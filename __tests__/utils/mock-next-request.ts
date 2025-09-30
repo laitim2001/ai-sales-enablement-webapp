@@ -42,6 +42,27 @@ export function createMockNextRequest(
 
   const request = new NextRequest(url, requestOptions)
 
+  // Mock the nextUrl property for URL parsing in Jest node environment
+  const parsedUrl = new URL(url)
+  Object.defineProperty(request, 'nextUrl', {
+    value: {
+      href: parsedUrl.href,
+      origin: parsedUrl.origin,
+      protocol: parsedUrl.protocol,
+      username: parsedUrl.username,
+      password: parsedUrl.password,
+      host: parsedUrl.host,
+      hostname: parsedUrl.hostname,
+      port: parsedUrl.port,
+      pathname: parsedUrl.pathname,
+      search: parsedUrl.search,
+      searchParams: parsedUrl.searchParams,
+      hash: parsedUrl.hash
+    },
+    writable: false,
+    configurable: true
+  })
+
   // Mock the method property to ensure it's properly accessible in Jest node environment
   if (options?.method) {
     Object.defineProperty(request, 'method', {
