@@ -56,10 +56,10 @@
 | 4.2 | CI/CD 管道建立 | 🔴 MVP Phase 1 | **開發效率** - 基礎GitHub Actions足夠 |
 | 4.3 | 監控告警系統 | 🟡 MVP Phase 2 | **運營必要** - 基礎日誌監控 |
 | 4.4 | 安全加固與合規 | 🟡 MVP Phase 2 | **企業需求** - 漸進式安全加固 |
-| 4.5 | 性能優化與擴展 | 🟢 Post-MVP | **優化功能** - 基於實際使用數據優化 |
+| 4.5 | 生產級性能優化與高可用性 | 🟡 MVP Phase 2 | **企業就緒** - 選項C增強功能，達到99.9%可用性 ⭐ 新增 |
 | 4.6 | 用戶培訓與採用 | 🟢 Post-MVP | **推廣功能** - MVP驗證後再大規模培訓 |
 
-**Epic 4 總結**: 2個高優先級 + 2個中優先級 + 2個延後 = 部署運維 ✅
+**Epic 4 總結**: 2個高優先級 + 3個中優先級 + 1個延後 = 部署運維 ✅ (Story 4.5新增於2025-09-30)
 
 ## 🎯 MVP 實施時間線
 
@@ -75,22 +75,25 @@
 - Epic 3: Story 3.1, 3.2 (提案範本 + AI生成)
 
 ### 🟡 MVP Phase 2 (月4-6) - 增強功能
-**總計 8 個中優先級stories**
+**總計 9 個中優先級stories** (更新於2025-09-30，新增Story 4.5)
 
-#### 月4-5: 完善體驗
-- Epic 1: Story 1.5, 1.6 (知識庫管理 + API網關)
+#### 階段1: 企業就緒（月4-5）
+- Epic 1: Story 1.6 (API網關與安全層)
+- Epic 4: Story 4.3, 4.4, 4.5 (監控 + 安全加固 + 性能優化) ⭐ 4.5新增
+
+#### 階段2: 用戶體驗（月5-6）
+- Epic 1: Story 1.5 (知識庫管理介面)
 - Epic 2: Story 2.3, 2.5 (會議準備 + 智能提醒)
-- Epic 3: Story 3.3, 3.4 (個人化 + 工作流程)
+- Epic 3: Story 3.3, 3.4 (個人化推薦 + 工作流程)
 
-#### 月6: 穩定發布
-- Epic 4: Story 4.3, 4.4 (監控 + 安全加固)
+**注**: Sprint重新分配決策詳見 `docs/mvp2-sprint-adjustment-decision.md`
 
 ### 🟢 Post-MVP (6個月後) - 進階功能
-**總計 5 個延後stories**
+**總計 3 個延後stories** (Story 4.5已提升至MVP Phase 2)
 
 - Epic 2: Story 2.6 (離線模式)
 - Epic 3: Story 3.5, 3.6 (分析優化 + 多渠道)
-- Epic 4: Story 4.5, 4.6 (性能優化 + 用戶培訓)
+- Epic 4: Story 4.6 (用戶培訓)
 
 ## ⚖️ 優先級調整原則
 
@@ -129,4 +132,40 @@
 
 ---
 
-*此優先級分配基於2024年1月的項目驗證結果，將根據實際開發過程中的發現進行動態調整。*
+## 📝 重要更新記錄
+
+### 2025-09-30: MVP Phase 2規劃完成和調整
+**更新內容**:
+1. ✅ **新增Story 4.5**: "生產級性能優化與高可用性"
+   - 來源: 選項C（穩健優化路線）增強功能
+   - 優先級: 🟡 MVP Phase 2
+   - Sprint: Sprint 4（第7-8週）
+   - 詳情: `docs/user-stories/epic-4/story-4.5-performance-high-availability.md`
+
+2. ✅ **Sprint重新分配**: Story 3.3從Sprint 7移至Sprint 6
+   - 原因: Sprint 7工時超載（15-20天 vs 10天可用）
+   - 新分配: Sprint 6包含Story 1.5 + 3.3，Sprint 7包含Story 2.3 + 2.5
+   - 詳情: `docs/mvp2-sprint-adjustment-decision.md`
+
+3. ✅ **語音功能戰略定位**: 延後至Post-MVP（選項B - 驗證後決策）
+   - 原因: 技術複雜度高，投資大（$220K-240K），風險中-高
+   - 決策時間表: MVP Phase 2完成後3-4個月決策點
+   - 詳情: `docs/voice-feature-strategic-decision.md`
+
+**影響評估**:
+- MVP Phase 2 stories: 8個 → 9個（新增Story 4.5）
+- Post-MVP stories: 5個 → 3個（Story 4.5提升）
+- 總體時程: 保持14週不變
+- Sprint平衡度: 顯著改善（Sprint 7超載問題解決）
+
+**相關文檔**:
+- `docs/mvp2-development-plan.md` - 主開發計劃
+- `docs/mvp2-user-stories-mapping.md` - 用戶故事映射
+- `docs/mvp2-implementation-checklist.md` - 實施檢查清單
+- `docs/mvp2-sprint-adjustment-decision.md` - Sprint調整決策
+- `docs/voice-feature-strategic-decision.md` - 語音功能戰略定位
+- `docs/future-innovations.md` - 創新功能（含語音）完整藍圖
+
+---
+
+*此優先級分配基於2024年1月的項目驗證結果和2025年9月30日的MVP Phase 2規劃，將根據實際開發過程中的發現進行動態調整。*
