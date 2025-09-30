@@ -23,16 +23,70 @@ global.console = {
 }
 
 // Mock Next.js modules
-jest.mock('next/server', () => ({
-  NextRequest: jest.fn(),
-  NextResponse: {
-    json: jest.fn((body, init) => ({
-      json: jest.fn(() => Promise.resolve(body)),
-      status: init?.status || 200,
-      headers: init?.headers || new Headers(),
-    })),
-  },
-}))
+jest.mock('next/server', () => {
+  // 創建一個 Headers mock
+  class MockHeaders {
+    constructor(init) {
+      this.map = new Map()
+      if (init) {
+        if (init instanceof MockHeaders) {
+          this.map = new Map(init.map)
+        } else if (typeof init === 'object') {
+          Object.entries(init).forEach(([key, value]) => {
+            this.map.set(key.toLowerCase(), value)
+          })
+        }
+      }
+    }
+    get(name) {
+      return this.map.get(name?.toLowerCase()) || null
+    }
+    set(name, value) {
+      this.map.set(name.toLowerCase(), value)
+    }
+    has(name) {
+      return this.map.has(name?.toLowerCase())
+    }
+  }
+
+  return {
+    NextRequest: jest.fn(),
+    NextResponse: class NextResponse {
+      constructor(body, init = {}) {
+        this.body = body
+        this.status = init.status || 200
+        this.statusText = init.statusText || ''
+        this.headers = new MockHeaders(init.headers)
+      }
+
+      static json(body, init = {}) {
+        const response = new NextResponse(JSON.stringify(body), {
+          ...init,
+          headers: {
+            'Content-Type': 'application/json',
+            ...init.headers,
+          },
+        })
+        response._jsonBody = body
+        return response
+      }
+
+      async json() {
+        if (this._jsonBody !== undefined) {
+          return this._jsonBody
+        }
+        if (this.body === 'undefined' || this.body === undefined) {
+          return undefined
+        }
+        return JSON.parse(this.body)
+      }
+
+      async text() {
+        return this.body
+      }
+    },
+  }
+})
 
 // Mock Prisma Client
 jest.mock('@prisma/client', () => ({
