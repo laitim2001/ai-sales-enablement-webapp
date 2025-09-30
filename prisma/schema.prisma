@@ -40,6 +40,10 @@ model User {
   updatedAIConfigs       AIGenerationConfig[] @relation("AIConfigUpdater")
   userAIConfigs          AIGenerationConfig[] @relation("UserAIConfig")
 
+  // MVP Phase 2 Sprint 1: API網關與安全層關聯
+  refreshTokens          RefreshToken[] @relation("UserRefreshTokens")
+  apiKeys                ApiKey[] @relation("UserApiKeys")
+
   @@map("users")
   @@index([email, is_active], name: "IX_User_Email_Active")
   @@index([role, department], name: "IX_User_Role_Department")
@@ -790,4 +794,72 @@ enum AIConfigType {
   USER                // 用戶配置
   TEMPLATE            // 範本配置
   ORGANIZATION        // 組織配置
+}
+
+// ================================================================
+// MVP Phase 2 Sprint 1: API網關與安全層
+// ================================================================
+
+// Refresh Token 模型 - JWT驗證增強
+model RefreshToken {
+  id            String    @id @default(uuid())
+  user_id       Int
+  token_hash    String    @unique  // 使用SHA256哈希儲存，不儲存明文
+  device_id     String?              // 設備識別（用於多設備管理）
+  ip_address    String?              // 發放IP地址
+  user_agent    String?              // 瀏覽器/設備信息
+  expires_at    DateTime             // 過期時間（通常30-90天）
+  revoked_at    DateTime?            // 撤銷時間
+  is_active     Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  last_used_at  DateTime  @default(now())
+
+  // 關聯關係
+  user          User      @relation("UserRefreshTokens", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+  @@index([user_id, is_active], name: "IX_RefreshToken_User_Active")
+  @@index([token_hash], name: "IX_RefreshToken_Hash")
+  @@index([expires_at, is_active], name: "IX_RefreshToken_Expiry_Active")
+}
+
+// Token 黑名單模型 - JWT撤銷機制
+model TokenBlacklist {
+  id            String    @id @default(uuid())
+  token_jti     String    @unique  // JWT ID (jti claim)
+  user_id       Int?                 // 用戶ID（可選，用於追蹤）
+  reason        String?              // 撤銷原因
+  expires_at    DateTime             // Token原本的過期時間
+  blacklisted_at DateTime  @default(now())
+
+  @@map("token_blacklist")
+  @@index([token_jti], name: "IX_TokenBlacklist_JTI")
+  @@index([expires_at], name: "IX_TokenBlacklist_Expiry")
+  @@index([user_id], name: "IX_TokenBlacklist_User")
+}
+
+// API Key 管理模型 - 企業級API訪問控制
+model ApiKey {
+  id            String    @id @default(uuid())
+  user_id       Int?                 // 關聯用戶（可選，支援系統級API Key）
+  key_name      String               // API Key名稱/描述
+  key_prefix    String               // Key前綴（顯示用，如 "sk_live_"）
+  key_hash      String    @unique    // SHA256哈希後的完整key
+  permissions   String[]  @default([]) // 權限列表 JSON數組
+  rate_limit    Int       @default(1000) // 速率限制（每小時請求數）
+  is_active     Boolean   @default(true)
+  expires_at    DateTime?            // 過期時間（可選）
+  last_used_at  DateTime?            // 最後使用時間
+  last_used_ip  String?              // 最後使用IP
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  // 關聯關係
+  user          User?     @relation("UserApiKeys", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("api_keys")
+  @@index([user_id, is_active], name: "IX_ApiKey_User_Active")
+  @@index([key_hash], name: "IX_ApiKey_Hash")
+  @@index([key_prefix], name: "IX_ApiKey_Prefix")
+  @@index([expires_at, is_active], name: "IX_ApiKey_Expiry_Active")
 }

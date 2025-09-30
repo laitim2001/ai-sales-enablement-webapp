@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [MVP Phase 2 Sprint 1 Week 1 開發啟動 (2025-09-30 08:00)](#🔐-2025-09-30-0800-mvp-phase-2-sprint-1-week-1-jwt驗證增強和新環境設置-✅)
 - [MVP Phase 2 開發計劃制定 (2025-09-30 21:00)](#🚀-2025-09-30-2100-mvp-phase-2-開發計劃制定和路線圖規劃-✅)
 - [項目維護和文檔同步 (2025-09-30 17:50)](#📚-2025-09-30-1750-項目維護和文檔同步-mvp-phase-1完成總結-✅)
 - [健康檢查系統優化 (2025-09-30 00:07)](#🏥-2025-09-30-0007-健康檢查系統優化和監控服務修復-✅)
@@ -16,6 +17,201 @@
 - [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## 🔐 2025-09-30 (08:00): MVP Phase 2 Sprint 1 Week 1 - JWT驗證增強和新環境設置 ✅
+
+### 🎯 **會話概述**
+- 啟動MVP Phase 2 Sprint 1 Week 1開發
+- 實施JWT驗證增強系統（Refresh Token + Token黑名單）
+- 在全新開發環境中完成項目設置
+- 解決Prisma遷移和Docker服務啟動問題
+
+### ✅ **主要成果**
+
+#### **1. API Gateway技術選型決策** 📋
+**決策**: 選擇 Next.js Middleware + 自定義方案（選項C）
+- 文檔: `docs/api-gateway-decision.md` (完整技術評估報告)
+- 理由: 與現有架構完美整合、成本最低、開發效率最高
+- 對比分析: AWS API Gateway、Kong Gateway、Next.js Middleware
+
+#### **2. JWT驗證增強系統實施** 🔐
+**數據庫Schema更新**:
+- ✅ 新增 `RefreshToken` 模型 - 支援多設備管理
+  - 字段: token_hash (SHA256), device_id, ip_address, user_agent
+  - 有效期: 30天
+  - 索引: user_id, token_hash, expires_at
+- ✅ 新增 `TokenBlacklist` 模型 - JWT撤銷機制
+  - 字段: token_jti (JWT ID), user_id, reason, expires_at
+  - 用途: 立即撤銷access token
+- ✅ 新增 `ApiKey` 模型 - 企業級API訪問控制
+  - 字段: key_hash, permissions, rate_limit, expires_at
+  - 功能: API Key管理和速率限制
+
+**核心服務實現**:
+- ✅ Token服務: `lib/auth/token-service.ts` (~700行)
+  - Access Token生成和驗證（15分鐘有效）
+  - Refresh Token生成和驗證（30天有效）
+  - Token黑名單管理
+  - Token輪換機制
+  - 多設備管理
+  - 自動清理過期token
+
+**API端點升級**:
+- ✅ 登入API (`/api/auth/login`) - 增強版
+  - 生成 Access Token + Refresh Token 對
+  - 記錄設備指紋（device_id, IP, User-Agent）
+  - 設置雙Cookie（auth-token, refresh-token）
+
+- ✅ Refresh API (`/api/auth/refresh`) - 新建
+  - 刷新 Access Token
+  - 可選的 Refresh Token 輪換
+  - 設備上下文驗證
+
+- ✅ 登出API (`/api/auth/logout`) - 增強版
+  - Access Token 加入黑名單
+  - Refresh Token 撤銷（單設備或所有設備）
+  - 清除所有 Cookies
+
+#### **3. 新開發環境設置** 🚀
+**環境初始化**:
+- ✅ 系統要求檢查通過
+  - Node.js v22.20.0 ✅
+  - npm 10.9.3 ✅
+  - Docker 28.4.0 ✅
+
+- ✅ 環境配置文件創建
+  - 複製 `.env.example` → `.env.local`
+  - 配置 DATABASE_URL (端口5433)
+  - 添加 JWT增強配置 (access/refresh token有效期)
+
+**Docker服務啟動**:
+- ✅ PostgreSQL 容器 (pgvector/pgvector:pg16)
+  - 容器名: ai-sales-postgres-dev
+  - 狀態: Running (healthy) ✅
+  - 端口: 5433
+  - 密碼: dev_password_123
+
+- ✅ Redis 容器 (redis:7-alpine)
+  - 容器名: ai-sales-redis-dev
+  - 狀態: Running (healthy) ✅
+  - 端口: 6379
+
+**數據庫遷移**:
+- ✅ Prisma schema 同步成功
+  - 執行時間: 14.23秒
+  - 新增表: refresh_tokens, token_blacklist, api_keys
+  - Prisma Client 生成: v5.22.0
+
+### 🔧 **技術決策記錄**
+
+#### **選擇 Next.js Middleware 方案的理由**
+1. **架構一致性**: 與現有Next.js 14 App Router完美整合
+2. **成本優勢**: 無額外基礎設施成本 ($0/月 vs $30-60/月)
+3. **開發效率**: TypeScript全棧，共享代碼和類型
+4. **性能優異**: 零額外延遲，支援邊緣運算
+5. **完全控制**: 自由定制，無供應商鎖定
+
+#### **JWT雙令牌機制設計**
+```
+Access Token (短期):
+- 有效期: 15分鐘
+- 用途: API請求認證
+- 存儲: HttpOnly Cookie (auth-token)
+- 撤銷: 通過黑名單立即失效
+
+Refresh Token (長期):
+- 有效期: 30天
+- 用途: 刷新Access Token
+- 存儲: 數據庫哈希 + HttpOnly Cookie (refresh-token)
+- 撤銷: 數據庫標記revoked
+- 輪換: 每次刷新可選輪換新token
+```
+
+### 📊 **安全增強特性**
+
+1. **短期Access Token** - 15分鐘有效，減少風險窗口
+2. **長期Refresh Token** - 30天有效，改善用戶體驗
+3. **Token黑名單** - 立即撤銷能力
+4. **Token輪換** - 每次刷新可輪換refresh token
+5. **設備追蹤** - 記錄device_id, IP, User-Agent
+6. **多設備管理** - 用戶可查看和撤銷特定設備
+7. **HttpOnly Cookies** - 防止XSS攻擊
+8. **SHA256哈希** - Refresh token哈希儲存，不存明文
+9. **自動清理** - 過期token自動清理機制
+
+### ⚠️ **遇到的挑戰與解決方案**
+
+#### **挑戰1: 全新環境缺少配置文件**
+- **問題**: .env.local文件不存在，DATABASE_URL未配置
+- **解決**:
+  - 複製.env.example為.env.local
+  - 根據docker-compose.dev.yml配置DATABASE_URL
+  - 添加JWT_ACCESS_TOKEN_EXPIRES_IN和JWT_REFRESH_TOKEN_EXPIRES_IN
+
+#### **挑戰2: npm命令持續超時**
+- **問題**: npm install和npx prisma migrate超時
+- **根因**: 網絡下載速度慢或Docker映像下載
+- **解決**:
+  - Docker服務在後台運行，最終成功
+  - 使用環境變數直接運行prisma命令
+  - 繞過npm腳本，直接使用npx
+
+#### **挑戰3: Prisma找不到DATABASE_URL**
+- **問題**: .env.local未被bash shell自動載入
+- **解決**: 在命令行直接提供DATABASE_URL環境變數
+  ```bash
+  DATABASE_URL="postgresql://..." npx prisma db push
+  ```
+
+### 📈 **開發進度**
+
+**MVP Phase 2 Sprint 1 Week 1 狀態**:
+- ✅ API Gateway技術選型決策
+- ✅ JWT驗證增強完整實施
+- ✅ 數據庫Schema更新（3個新表）
+- ✅ Token服務實現（700行核心邏輯）
+- ✅ API端點升級（login/refresh/logout）
+- ✅ 開發環境設置完成
+- ⏳ Azure AD/Entra ID SSO整合（下一步）
+- ⏳ API Key管理系統（待開發）
+- ⏳ 結構化日誌系統（待開發）
+
+**完成度**: Sprint 1 Week 1 約 40% 完成
+
+### 📝 **文檔輸出**
+
+| 文檔類型 | 文件路徑 | 行數 | 用途 |
+|---------|---------|------|------|
+| **技術決策** | `docs/api-gateway-decision.md` | ~1,000 | API Gateway選型完整分析 |
+| **Token服務** | `lib/auth/token-service.ts` | ~700 | JWT增強核心實現 |
+| **登入API** | `app/api/auth/login/route.ts` | ~150 | 雙令牌登入端點 |
+| **Refresh API** | `app/api/auth/refresh/route.ts` | ~150 | Token刷新端點 |
+| **登出API** | `app/api/auth/logout/route.ts` | ~150 | Token撤銷端點 |
+| **Schema更新** | `prisma/schema.prisma` | +70 | 3個新模型定義 |
+
+### 🔄 **下一步行動**
+
+**立即行動**:
+1. ✅ 更新DEVELOPMENT-LOG.md
+2. ⏳ 檢查mvp-progress-report.json
+3. ⏳ 更新mvp2-implementation-checklist.md
+4. ⏳ 提交Git並推送到GitHub
+5. ⏳ 繼續Azure AD/Entra ID SSO整合
+
+**Sprint 1 Week 1 剩餘任務**:
+- Azure AD SSO整合（2-3天）
+- API Key管理系統（1-2天）
+- 結構化日誌系統（1天）
+
+### 💡 **經驗教訓**
+
+1. **新環境設置**: 遵循NEW-DEVELOPER-SETUP-GUIDE.md流程非常重要
+2. **Docker優先**: 先確保Docker服務運行，再進行數據庫操作
+3. **環境變數**: 新環境必須手動配置.env.local
+4. **網絡超時**: npm和Docker下載可能很慢，使用後台運行和直接命令
+5. **Prisma遷移**: db push比migrate更適合開發環境快速迭代
 
 ---
 
