@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [Azure AD SSO整合實施 (2025-09-30 17:30)](#🔐-2025-09-30-1730-azure-ad-sso整合實施-企業級單一登入-✅)
 - [MVP Phase 2 Sprint 1 Week 1 開發啟動 (2025-09-30 08:00)](#🔐-2025-09-30-0800-mvp-phase-2-sprint-1-week-1-jwt驗證增強和新環境設置-✅)
 - [MVP Phase 2 開發計劃制定 (2025-09-30 21:00)](#🚀-2025-09-30-2100-mvp-phase-2-開發計劃制定和路線圖規劃-✅)
 - [項目維護和文檔同步 (2025-09-30 17:50)](#📚-2025-09-30-1750-項目維護和文檔同步-mvp-phase-1完成總結-✅)
@@ -17,6 +18,278 @@
 - [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## 🔐 2025-09-30 (17:30): Azure AD SSO整合實施 - 企業級單一登入 ✅
+
+### 🎯 **會話概述**
+- 實施Azure AD / Entra ID單一登入(SSO)整合
+- 使用@azure/msal-node實現OAuth 2.0認證流程
+- 與現有JWT雙令牌系統無縫整合
+- 支援自動用戶同步和角色映射
+
+### ✅ **主要成果**
+
+#### **1. Azure AD服務核心實現** 🔐
+**文件**: `lib/auth/azure-ad-service.ts` (~350行)
+
+**核心功能**:
+- ✅ MSAL Node整合 - Microsoft官方認證庫
+- ✅ OAuth 2.0授權碼流程
+- ✅ PKCE支援（由MSAL自動處理）
+- ✅ State參數CSRF防護
+- ✅ Token交換和驗證
+- ✅ 用戶信息獲取（Microsoft Graph）
+- ✅ 自動用戶同步到本地資料庫
+- ✅ 角色映射（Azure AD → 應用角色）
+- ✅ JWT tokens生成（與現有系統整合）
+- ✅ 單點登出(SLO)支援
+
+**技術特色**:
+```typescript
+// MSAL配置
+const msalConfig: Configuration = {
+  auth: {
+    clientId: process.env.AZURE_AD_CLIENT_ID,
+    authority: `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}`,
+    clientSecret: process.env.AZURE_AD_CLIENT_SECRET
+  }
+}
+
+// 用戶同步邏輯
+async function syncAzureADUser(azureUser: AzureADUserInfo): Promise<User> {
+  // 通過azure_ad_oid或email查找用戶
+  // 首次登入：創建新用戶
+  // 後續登入：更新用戶信息
+  // Azure AD已驗證email，設置email_verified=true
+}
+
+// 角色映射
+const roleMapping: Record<string, string> = {
+  'Admin': 'admin',
+  'SalesManager': 'manager',
+  'Sales': 'sales'
+}
+```
+
+**認證流程**:
+1. 前端訪問 `/api/auth/azure-ad/login`
+2. 生成state參數並重定向到Azure AD
+3. 用戶在Azure AD完成認證
+4. Azure AD重定向到 `/api/auth/azure-ad/callback?code=xxx&state=yyy`
+5. 後端用授權碼交換access token
+6. 獲取用戶信息並同步到本地
+7. 生成JWT tokens（15分鐘 + 30天）
+8. 設置cookies並重定向到 `/dashboard`
+
+#### **2. API端點實現** 🌐
+
+**登入端點**: `app/api/auth/azure-ad/login/route.ts`
+- GET方法: 重定向到Azure AD登入頁面
+- State參數生成和cookie存儲
+- CSRF防護機制
+
+**回調端點**: `app/api/auth/azure-ad/callback/route.ts`
+- GET方法: 處理Azure AD認證回調
+- State參數驗證
+- 授權碼驗證
+- Token交換
+- 用戶同步
+- JWT tokens設置
+- 錯誤處理和重定向
+
+**安全特性**:
+```typescript
+// State驗證
+const storedState = request.cookies.get('azure-ad-state')?.value
+if (!storedState || storedState !== state) {
+  return redirect('/login?error=invalid_state')
+}
+
+// Cookies設置
+response.cookies.set('auth-token', tokens.accessToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 15 * 60 // 15分鐘
+})
+
+response.cookies.set('refresh-token', tokens.refreshToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 30 * 24 * 60 * 60, // 30天
+  path: '/api/auth/refresh'
+})
+```
+
+#### **3. 資料庫Schema擴展** 🗄️
+
+**User模型更新**:
+```prisma
+model User {
+  // 原有字段
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password_hash String?  // 改為可選，SSO用戶不需要密碼
+
+  // 新增字段 - Azure AD SSO支援
+  azure_ad_oid  String?  @unique      // Azure AD Object ID
+  email_verified Boolean @default(false)  // Email驗證狀態
+  last_login_at DateTime?              // 最後登入時間
+
+  @@index([azure_ad_oid], name: "IX_User_AzureAD_OID")
+}
+```
+
+**變更說明**:
+- `password_hash`: 改為可選（SSO用戶無密碼）
+- `azure_ad_oid`: 存儲Azure AD的唯一標識符
+- `email_verified`: Azure AD驗證過的email自動標記為已驗證
+- `last_login_at`: 追蹤最後登入時間
+
+**資料庫同步**:
+```bash
+# 成功同步到PostgreSQL
+DATABASE_URL="..." npx prisma db push --accept-data-loss
+# Your database is now in sync with your Prisma schema. Done in 933ms
+```
+
+#### **4. 認證整合架構** 🏗️
+
+**雙認證系統支援**:
+1. **傳統認證**: Email + 密碼登入
+   - 端點: `/api/auth/login`
+   - 用戶類型: password_hash不為null
+
+2. **Azure AD SSO**: 企業單一登入
+   - 端點: `/api/auth/azure-ad/login`
+   - 用戶類型: azure_ad_oid不為null
+
+3. **統一JWT系統**: 兩種認證方式都生成相同格式的JWT tokens
+   - Access Token: 15分鐘
+   - Refresh Token: 30天
+   - Token撤銷支援
+   - 多設備管理
+
+**用戶數據流**:
+```
+Azure AD用戶
+  ↓
+MSAL認證
+  ↓
+用戶信息獲取
+  ↓
+本地用戶同步 (upsert)
+  ↓
+JWT生成 (loginUser)
+  ↓
+Cookies設置
+  ↓
+應用訪問
+```
+
+### 🔒 **安全特性**
+
+1. **CSRF防護**: State參數驗證
+2. **PKCE支援**: 增強授權碼流程安全性
+3. **Token安全存儲**:
+   - Refresh Token使用SHA256哈希
+   - HttpOnly cookies
+   - Secure flag（生產環境）
+4. **設備追蹤**: IP地址、User-Agent記錄
+5. **自動過期**: Token自動清理機制
+6. **單點登出**: 支援Azure AD全局登出
+
+### 📊 **開發進度更新**
+
+**Sprint 1 Week 1進度**:
+- JWT驗證增強: ✅ 已完成
+- API Gateway決策: ✅ 已完成
+- Azure AD SSO整合: ✅ 已完成
+- 進度: 11/54 (20%)
+
+**已完成功能**:
+1. ✅ JWT雙令牌機制
+2. ✅ Token黑名單和撤銷
+3. ✅ API Key管理（Schema）
+4. ✅ API Gateway技術選型
+5. ✅ Azure AD SSO核心服務
+6. ✅ Azure AD API端點
+7. ✅ 用戶同步和角色映射
+8. ✅ 統一認證架構
+
+### 📁 **文件清單**
+
+**新增文件**:
+- `lib/auth/azure-ad-service.ts` (~350行) - Azure AD核心服務
+- `app/api/auth/azure-ad/login/route.ts` (~90行) - SSO登入端點
+- `app/api/auth/azure-ad/callback/route.ts` (~160行) - SSO回調端點
+
+**修改文件**:
+- `prisma/schema.prisma` - User模型擴展（Azure AD支援）
+
+### 🧪 **測試指南**
+
+**前提條件**:
+1. Azure AD租戶和應用程式註冊
+2. 配置環境變數:
+   ```env
+   AZURE_AD_CLIENT_ID=your-client-id
+   AZURE_AD_CLIENT_SECRET=your-client-secret
+   AZURE_AD_TENANT_ID=your-tenant-id
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
+   ```
+3. 在Azure AD應用中配置重定向URI:
+   `http://localhost:3000/api/auth/azure-ad/callback`
+
+**測試流程**:
+1. 訪問 `http://localhost:3000/api/auth/azure-ad/login`
+2. 重定向到Azure AD登入頁面
+3. 使用Azure AD帳號登入
+4. 重定向回應用 `/dashboard`
+5. 檢查cookies中的JWT tokens
+6. 驗證用戶同步到資料庫
+7. 測試refresh token機制
+8. 測試登出功能
+
+### 🚧 **待完成工作**
+
+**Sprint 1 Week 1 剩餘任務**:
+- [ ] API Gateway架構設計（路由規則、速率限制）
+- [ ] 開發環境API Gateway配置
+- [ ] JWT中間件單元測試
+- [ ] API Key生成和管理API實現
+- [ ] OAuth 2.0增強（Client Credentials）
+- [ ] 結構化日誌系統
+
+**下一步（Sprint 1 Week 2）**:
+- 速率限制實施
+- CORS和安全頭部配置
+- API文檔生成（OpenAPI/Swagger）
+- 安全測試執行
+
+### 💡 **技術決策**
+
+**為什麼選擇@azure/msal-node而不是next-auth？**
+1. ✅ 項目已有@azure/msal-node依賴
+2. ✅ 更輕量級，專注Azure AD整合
+3. ✅ 與現有JWT系統整合更簡單
+4. ✅ 完全控制認證流程
+5. ✅ Microsoft官方支援和更新
+
+**為什麼使用Azure AD Object ID作為唯一標識？**
+1. ✅ 永久不變的用戶標識符
+2. ✅ 跨租戶遷移保持一致性
+3. ✅ 支援email變更
+4. ✅ 與Microsoft服務整合標準
+
+### 📚 **參考資源**
+
+- [MSAL Node文檔](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-node)
+- [Azure AD OAuth 2.0](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow)
+- [Microsoft Graph API](https://docs.microsoft.com/graph/overview)
 
 ---
 

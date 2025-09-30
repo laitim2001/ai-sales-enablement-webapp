@@ -14,7 +14,7 @@ datasource db {
 model User {
   id            Int      @id @default(autoincrement())
   email         String   @unique
-  password_hash String
+  password_hash String?              // 可選：SSO用戶不需要密碼
   first_name    String
   last_name     String
   role          UserRole @default(SALES_REP)
@@ -23,6 +23,11 @@ model User {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
   last_login    DateTime?
+
+  // MVP Phase 2 Sprint 1: Azure AD SSO整合
+  azure_ad_oid  String?  @unique      // Azure AD Object ID
+  email_verified Boolean @default(false)  // Email驗證狀態
+  last_login_at DateTime?              // 最後登入時間
 
   // 關聯關係
   customers              Customer[]
@@ -47,6 +52,7 @@ model User {
   @@map("users")
   @@index([email, is_active], name: "IX_User_Email_Active")
   @@index([role, department], name: "IX_User_Role_Department")
+  @@index([azure_ad_oid], name: "IX_User_AzureAD_OID")
 }
 
 // 客戶模型
