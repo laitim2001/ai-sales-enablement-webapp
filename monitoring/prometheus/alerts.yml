@@ -1,0 +1,219 @@
+# Prometheus Alert Rules for AI Sales Enablement Platform
+# Four-level alert system: P1-Critical, P2-High, P3-Medium, P4-Low
+
+groups:
+  # ========================================
+  # P1 - CRITICAL Alerts (即時響應)
+  # ========================================
+  - name: critical_alerts
+    interval: 30s
+    rules:
+      # API 完全不可用
+      - alert: APICompletelyDown
+        expr: up{job="ai-sales-platform"} == 0
+        for: 1m
+        labels:
+          severity: P1
+          component: api
+        annotations:
+          summary: "API 服務完全不可用"
+          description: "{{ $labels.service }} 已經停止響應超過 1 分鐘"
+          action: "立即檢查應用程序狀態和日誌"
+
+      # 錯誤率超過 10%
+      - alert: HighErrorRate
+        expr: (sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))) > 0.1
+        for: 2m
+        labels:
+          severity: P1
+          component: api
+        annotations:
+          summary: "API 錯誤率過高 (>10%)"
+          description: "5xx 錯誤率: {{ $value | humanizePercentage }}"
+          action: "檢查錯誤日誌和服務健康狀態"
+
+      # 資料庫連接失敗
+      - alert: DatabaseConnectionFailure
+        expr: database_connection_errors_total > 10
+        for: 2m
+        labels:
+          severity: P1
+          component: database
+        annotations:
+          summary: "資料庫連接失敗"
+          description: "資料庫連接錯誤數: {{ $value }}"
+          action: "檢查資料庫連接配置和網絡連接"
+
+      # 記憶體使用率超過 95%
+      - alert: CriticalMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.95
+        for: 5m
+        labels:
+          severity: P1
+          component: infrastructure
+        annotations:
+          summary: "記憶體使用率極高 (>95%)"
+          description: "記憶體使用率: {{ $value | humanizePercentage }}"
+          action: "檢查記憶體洩漏和優化應用程序"
+
+  # ========================================
+  # P2 - HIGH Priority Alerts (1小時內處理)
+  # ========================================
+  - name: high_priority_alerts
+    interval: 1m
+    rules:
+      # API 響應時間過長
+      - alert: SlowAPIResponse
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, route)) > 2
+        for: 5m
+        labels:
+          severity: P2
+          component: api
+        annotations:
+          summary: "API P95 響應時間過長 (>2s)"
+          description: "路由 {{ $labels.route }} 的 P95 響應時間: {{ $value }}s"
+          action: "分析慢查詢和優化性能"
+
+      # 錯誤率超過 5%
+      - alert: ElevatedErrorRate
+        expr: (sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))) > 0.05
+        for: 5m
+        labels:
+          severity: P2
+          component: api
+        annotations:
+          summary: "API 錯誤率升高 (>5%)"
+          description: "5xx 錯誤率: {{ $value | humanizePercentage }}"
+          action: "檢查錯誤日誌找出根本原因"
+
+      # AI 服務調用失敗率高
+      - alert: HighAIServiceFailureRate
+        expr: (sum(rate(ai_service_calls_total{status="error"}[5m])) / sum(rate(ai_service_calls_total[5m]))) > 0.1
+        for: 5m
+        labels:
+          severity: P2
+          component: ai-service
+        annotations:
+          summary: "AI 服務調用失敗率過高 (>10%)"
+          description: "AI 服務失敗率: {{ $value | humanizePercentage }}"
+          action: "檢查 Azure OpenAI 服務狀態和配額"
+
+      # 資料庫查詢延遲
+      - alert: SlowDatabaseQueries
+        expr: histogram_quantile(0.95, sum(rate(database_query_duration_seconds_bucket[5m])) by (le)) > 1
+        for: 5m
+        labels:
+          severity: P2
+          component: database
+        annotations:
+          summary: "資料庫查詢 P95 延遲過高 (>1s)"
+          description: "P95 查詢時間: {{ $value }}s"
+          action: "分析慢查詢並優化索引"
+
+      # CPU 使用率持續過高
+      - alert: HighCPUUsage
+        expr: (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 0.85
+        for: 10m
+        labels:
+          severity: P2
+          component: infrastructure
+        annotations:
+          summary: "CPU 使用率持續過高 (>85%)"
+          description: "CPU 使用率: {{ $value | humanizePercentage }}"
+          action: "檢查資源消耗並考慮擴容"
+
+  # ========================================
+  # P3 - MEDIUM Priority Alerts (當天處理)
+  # ========================================
+  - name: medium_priority_alerts
+    interval: 2m
+    rules:
+      # 4xx 錯誤率升高
+      - alert: Elevated4xxErrorRate
+        expr: (sum(rate(http_requests_total{status=~"4.."}[10m])) / sum(rate(http_requests_total[10m]))) > 0.1
+        for: 10m
+        labels:
+          severity: P3
+          component: api
+        annotations:
+          summary: "客戶端錯誤率升高 (>10%)"
+          description: "4xx 錯誤率: {{ $value | humanizePercentage }}"
+          action: "檢查 API 使用模式和驗證邏輯"
+
+      # 記憶體使用率較高
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.80
+        for: 15m
+        labels:
+          severity: P3
+          component: infrastructure
+        annotations:
+          summary: "記憶體使用率較高 (>80%)"
+          description: "記憶體使用率: {{ $value | humanizePercentage }}"
+          action: "監控記憶體使用趨勢"
+
+      # 磁碟空間使用率高
+      - alert: HighDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"})) > 0.80
+        for: 15m
+        labels:
+          severity: P3
+          component: infrastructure
+        annotations:
+          summary: "磁碟空間使用率較高 (>80%)"
+          description: "磁碟使用率: {{ $value | humanizePercentage }}"
+          action: "清理臨時文件和日誌"
+
+      # AI Token 使用量接近限制
+      - alert: AITokenUsageHigh
+        expr: ai_tokens_used_total / ai_tokens_quota_total > 0.80
+        for: 30m
+        labels:
+          severity: P3
+          component: ai-service
+        annotations:
+          summary: "AI Token 使用量接近限制 (>80%)"
+          description: "Token 使用率: {{ $value | humanizePercentage }}"
+          action: "監控 Token 消耗並考慮配額調整"
+
+  # ========================================
+  # P4 - LOW Priority Alerts (本週處理)
+  # ========================================
+  - name: low_priority_alerts
+    interval: 5m
+    rules:
+      # API 流量異常低
+      - alert: LowAPITraffic
+        expr: sum(rate(http_requests_total[10m])) < 1
+        for: 30m
+        labels:
+          severity: P4
+          component: api
+        annotations:
+          summary: "API 流量異常低 (<1 req/s)"
+          description: "當前請求率: {{ $value }} req/s"
+          action: "確認是否為正常業務波動"
+
+      # 緩存命中率低
+      - alert: LowCacheHitRate
+        expr: (sum(rate(cache_hits_total[10m])) / sum(rate(cache_requests_total[10m]))) < 0.7
+        for: 30m
+        labels:
+          severity: P4
+          component: cache
+        annotations:
+          summary: "緩存命中率較低 (<70%)"
+          description: "緩存命中率: {{ $value | humanizePercentage }}"
+          action: "檢查緩存策略和 TTL 配置"
+
+      # 長時間無部署
+      - alert: NoRecentDeployment
+        expr: (time() - deployment_timestamp_seconds) > 604800
+        for: 1h
+        labels:
+          severity: P4
+          component: deployment
+        annotations:
+          summary: "超過 7 天未部署"
+          description: "上次部署時間: {{ $value | humanizeDuration }} 前"
+          action: "確認是否需要更新或修復"

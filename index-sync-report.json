@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-30T13:08:09.934Z",
+  "timestamp": "2025-09-30T18:01:34.245Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -11,7 +11,7 @@
     "highSeverity": 0,
     "mediumSeverity": 0,
     "lowSeverity": 0,
-    "suggestions": 3,
+    "suggestions": 1,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -22,26 +22,10 @@
   "suggestions": [
     {
       "type": "add_to_index",
-      "file": "docs\\api-gateway-architecture.md",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\api-gateway-architecture.md",
-      "modifiedTime": "2025-09-30T10:08:36.096Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "docs\\user-stories\\epic-4\\story-4.5-performance-high-availability.md",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\user-stories\\epic-4\\story-4.5-performance-high-availability.md",
-      "modifiedTime": "2025-09-30T09:59:16.495Z"
-    },
-    {
-      "type": "add_to_index",
       "file": "Cai-sales-enablement-webapptempREADME.md",
       "severity": "low",
       "message": "建議將重要文件加入索引: Cai-sales-enablement-webapptempREADME.md"
     }
   ],
-  "lastUpdated": "2025-09-30T13:08:09.934Z"
+  "lastUpdated": "2025-09-30T18:01:34.245Z"
 }

@@ -1,0 +1,165 @@
+# Alertmanager Configuration for AI Sales Enablement Platform
+# Multi-channel notification with priority-based routing
+
+global:
+  resolve_timeout: 5m
+  # SMTP 配置 (需要根據實際環境配置)
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'alerts@ai-sales-platform.com'
+  smtp_auth_username: 'your-email@gmail.com'
+  smtp_auth_password: 'your-app-password'
+
+# 通知路由規則
+route:
+  group_by: ['alertname', 'severity', 'component']
+  group_wait: 10s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'default-receiver'
+
+  routes:
+    # P1 - Critical: 立即通知所有渠道
+    - match:
+        severity: P1
+      receiver: 'critical-alerts'
+      continue: false
+      group_wait: 10s
+      repeat_interval: 30m
+
+    # P2 - High: Email + Slack
+    - match:
+        severity: P2
+      receiver: 'high-priority-alerts'
+      continue: false
+      group_wait: 30s
+      repeat_interval: 2h
+
+    # P3 - Medium: Email only
+    - match:
+        severity: P3
+      receiver: 'medium-priority-alerts'
+      continue: false
+      group_wait: 5m
+      repeat_interval: 6h
+
+    # P4 - Low: 每日摘要
+    - match:
+        severity: P4
+      receiver: 'low-priority-alerts'
+      continue: false
+      group_wait: 1h
+      repeat_interval: 24h
+
+# 抑制規則 (避免告警風暴)
+inhibit_rules:
+  # 如果 API 完全不可用，抑制其他 API 相關告警
+  - source_match:
+      alertname: APICompletelyDown
+    target_match:
+      component: api
+    equal: ['service']
+
+  # 如果記憶體極高，抑制記憶體較高告警
+  - source_match:
+      alertname: CriticalMemoryUsage
+    target_match:
+      alertname: HighMemoryUsage
+    equal: ['instance']
+
+# 接收器配置
+receivers:
+  # 默認接收器
+  - name: 'default-receiver'
+    email_configs:
+      - to: 'dev-team@ai-sales-platform.com'
+        headers:
+          subject: '[Monitor] {{ .GroupLabels.alertname }}'
+
+  # P1 - Critical: 所有渠道 + 電話（可選）
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'oncall@ai-sales-platform.com'
+        headers:
+          subject: '🚨 [P1-CRITICAL] {{ .GroupLabels.alertname }}'
+        html: |
+          {{ range .Alerts }}
+          <h2>🚨 CRITICAL ALERT</h2>
+          <p><strong>Alert:</strong> {{ .Labels.alertname }}</p>
+          <p><strong>Severity:</strong> {{ .Labels.severity }}</p>
+          <p><strong>Component:</strong> {{ .Labels.component }}</p>
+          <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
+          <p><strong>Action Required:</strong> {{ .Annotations.action }}</p>
+          <p><strong>Started At:</strong> {{ .StartsAt }}</p>
+          {{ end }}
+
+    # Slack 配置 (需要創建 Incoming Webhook)
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+        channel: '#alerts-critical'
+        title: '🚨 P1-CRITICAL: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Action:* {{ .Annotations.action }}
+          {{ end }}
+        color: 'danger'
+
+    # Microsoft Teams 配置 (需要創建 Incoming Webhook)
+    webhook_configs:
+      - url: 'https://outlook.office.com/webhook/YOUR/TEAMS/WEBHOOK'
+        send_resolved: true
+
+  # P2 - High: Email + Slack
+  - name: 'high-priority-alerts'
+    email_configs:
+      - to: 'dev-team@ai-sales-platform.com'
+        headers:
+          subject: '⚠️ [P2-HIGH] {{ .GroupLabels.alertname }}'
+        html: |
+          {{ range .Alerts }}
+          <h2>⚠️ HIGH PRIORITY ALERT</h2>
+          <p><strong>Alert:</strong> {{ .Labels.alertname }}</p>
+          <p><strong>Component:</strong> {{ .Labels.component }}</p>
+          <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
+          <p><strong>Action:</strong> {{ .Annotations.action }}</p>
+          {{ end }}
+
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
+        channel: '#alerts-high'
+        title: '⚠️ P2-HIGH: {{ .GroupLabels.alertname }}'
+        text: |
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Action:* {{ .Annotations.action }}
+          {{ end }}
+        color: 'warning'
+
+  # P3 - Medium: Email only
+  - name: 'medium-priority-alerts'
+    email_configs:
+      - to: 'dev-team@ai-sales-platform.com'
+        headers:
+          subject: 'ℹ️ [P3-MEDIUM] {{ .GroupLabels.alertname }}'
+        html: |
+          {{ range .Alerts }}
+          <h3>ℹ️ MEDIUM PRIORITY ALERT</h3>
+          <p><strong>Alert:</strong> {{ .Labels.alertname }}</p>
+          <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+          <p><strong>Action:</strong> {{ .Annotations.action }}</p>
+          {{ end }}
+
+  # P4 - Low: 每日摘要
+  - name: 'low-priority-alerts'
+    email_configs:
+      - to: 'dev-team@ai-sales-platform.com'
+        headers:
+          subject: '📊 [P4-LOW] Daily Alert Summary'
+        html: |
+          <h3>📊 Daily Low Priority Alerts Summary</h3>
+          {{ range .Alerts }}
+          <p><strong>{{ .Labels.alertname }}:</strong> {{ .Annotations.summary }}</p>
+          {{ end }}

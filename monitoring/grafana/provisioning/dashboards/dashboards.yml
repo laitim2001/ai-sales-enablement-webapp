@@ -1,0 +1,16 @@
+# Grafana Dashboard Provisioning Configuration
+# Auto-load dashboards from /var/lib/grafana/dashboards
+
+apiVersion: 1
+
+providers:
+  - name: 'AI Sales Platform Dashboards'
+    orgId: 1
+    folder: 'AI Sales Enablement'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true
