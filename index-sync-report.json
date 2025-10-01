@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-01T15:34:12.450Z",
+  "timestamp": "2025-10-01T17:53:57.106Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -7,27 +7,90 @@
     "workingDirectory": "C:\\ai-sales-enablement-webapp"
   },
   "summary": {
-    "totalIssues": 0,
+    "totalIssues": 10,
     "highSeverity": 0,
-    "mediumSeverity": 0,
+    "mediumSeverity": 10,
     "lowSeverity": 0,
-    "suggestions": 15,
+    "suggestions": 24,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
     ],
     "status": "needs_attention"
   },
-  "issues": [],
-  "suggestions": [
+  "issues": [
     {
-      "type": "add_to_index",
-      "file": "docs\\MVP2-TESTING-GUIDE.md",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\MVP2-TESTING-GUIDE.md",
-      "modifiedTime": "2025-10-01T15:19:57.241Z"
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: route.ts"
     },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "[id]/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "[id]/duplicate/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/duplicate/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "[id]/preview/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/preview/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "preview-temp/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: preview-temp/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "stats/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: stats/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "page.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: page.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "new/page.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: new/page.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "[id]/page.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/page.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "[id]/preview/page.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/preview/page.tsx"
+    }
+  ],
+  "suggestions": [
     {
       "type": "add_to_index",
       "file": "docs\\workflow-engine-design.md",
@@ -126,6 +189,86 @@
     },
     {
       "type": "add_to_index",
+      "file": "app\\api\\templates\\preview-temp\\route.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\api\\templates\\preview-temp\\route.ts",
+      "modifiedTime": "2025-10-01T17:45:00.574Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\api\\templates\\route.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\api\\templates\\route.ts",
+      "modifiedTime": "2025-10-01T17:33:18.449Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\api\\templates\\stats\\route.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\api\\templates\\stats\\route.ts",
+      "modifiedTime": "2025-10-01T17:33:48.561Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\api\\templates\\[id]\\duplicate\\route.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\api\\templates\\[id]\\duplicate\\route.ts",
+      "modifiedTime": "2025-10-01T17:33:40.220Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\api\\templates\\[id]\\preview\\route.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\api\\templates\\[id]\\preview\\route.ts",
+      "modifiedTime": "2025-10-01T17:35:14.784Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\api\\templates\\[id]\\route.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\api\\templates\\[id]\\route.ts",
+      "modifiedTime": "2025-10-01T17:33:32.289Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\dashboard\\templates\\new\\page.tsx",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\dashboard\\templates\\new\\page.tsx",
+      "modifiedTime": "2025-10-01T17:40:25.014Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\dashboard\\templates\\page.tsx",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\dashboard\\templates\\page.tsx",
+      "modifiedTime": "2025-10-01T17:39:22.771Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\dashboard\\templates\\[id]\\page.tsx",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\dashboard\\templates\\[id]\\page.tsx",
+      "modifiedTime": "2025-10-01T17:43:55.916Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "app\\dashboard\\templates\\[id]\\preview\\page.tsx",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: app\\dashboard\\templates\\[id]\\preview\\page.tsx",
+      "modifiedTime": "2025-10-01T17:44:44.098Z"
+    },
+    {
+      "type": "add_to_index",
       "file": "Cai-sales-enablement-webapptempREADME.md",
       "severity": "low",
       "message": "建議將重要文件加入索引: Cai-sales-enablement-webapptempREADME.md"
@@ -137,5 +280,5 @@
       "message": "建議將重要文件加入索引: START-SERVICES.md"
     }
   ],
-  "lastUpdated": "2025-10-01T15:34:12.450Z"
+  "lastUpdated": "2025-10-01T17:53:57.107Z"
 }
