@@ -256,7 +256,6 @@
 | **通知統計**           | `app/api/notifications/stats/route.ts`       | 未讀計數和分類統計                           | 🟡 高    |
 | **已讀標記**           | `app/api/notifications/read/route.ts`        | 標記通知已讀（單個/批量/全部）               | 🔴 極高  |
 | **通知偏好**           | `app/api/notifications/preferences/route.ts` | 獲取/更新通知偏好設置                        | 🟡 高    |
-| **測試端點**           | `app/api/notifications/test/route.ts`        | 通知系統測試（開發用）                       | 🟢 中    |
 
 ### 📖 docs/user-stories/ - 用戶故事詳細規格
 
