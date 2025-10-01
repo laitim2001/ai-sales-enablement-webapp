@@ -227,6 +227,83 @@ curl -X POST http://localhost:3000/api/auth/register \
   -d '{"email":"test@example.com","password":"TestPassword123!","firstName":"Test","lastName":"User"}'
 ```
 
+### **Step 5: 啟動監控系統（可選 - MVP Phase 2 Sprint 2）**
+
+> **💡 提示**：監控系統對生產環境強烈推薦，開發環境可選
+
+#### 5.1 啟動監控堆棧
+```bash
+# 啟動完整監控服務
+docker-compose -f docker-compose.monitoring.yml up -d
+
+# 等待服務啟動（約20秒）
+sleep 20
+
+# 驗證監控服務狀態
+docker-compose -f docker-compose.monitoring.yml ps
+```
+
+#### 5.2 驗證監控服務
+```bash
+# Grafana 健康檢查
+curl http://localhost:3001/api/health
+# 期望輸出: {"database":"ok",...}
+
+# Prometheus 健康檢查
+curl http://localhost:9090/-/healthy
+# 期望輸出: Prometheus is Healthy.
+
+# Jaeger 健康檢查
+curl -I http://localhost:16686/
+# 期望輸出: HTTP/1.1 200 OK
+
+# Alertmanager 健康檢查
+curl http://localhost:9093/-/healthy
+# 期望輸出: OK
+```
+
+#### 5.3 訪問監控儀表板
+```bash
+# Grafana（監控儀表板）
+open http://localhost:3001
+# 預設登入: admin / admin
+# 首次登入後會要求修改密碼
+
+# Prometheus（指標查詢）
+open http://localhost:9090
+
+# Jaeger（分散式追蹤）
+open http://localhost:16686
+
+# Alertmanager（告警管理）
+open http://localhost:9093
+```
+
+#### 5.4 配置 Grafana 儀表板
+```bash
+# 1. 登入 Grafana (admin/admin)
+# 2. 添加 Prometheus 數據源
+#    - Configuration → Data Sources → Add data source
+#    - 選擇 Prometheus
+#    - URL: http://prometheus:9090
+#    - 點擊 "Save & Test"
+
+# 3. 導入預設儀表板
+#    - Dashboards → Import
+#    - 上傳 monitoring/grafana/dashboards/*.json
+#    - 或使用儀表板 ID: 1860 (Node Exporter Full)
+```
+
+**📊 監控系統功能**：
+- ✅ 應用程式性能指標（響應時間、請求量、錯誤率）
+- ✅ 資料庫查詢統計和連接池狀態
+- ✅ Redis 緩存命中率和記憶體使用
+- ✅ API Gateway 速率限制和安全事件
+- ✅ 通知系統發送統計（Sprint 5）
+- ✅ 工作流程引擎狀態轉換追蹤（Sprint 5）
+- ✅ 分散式請求鏈路追蹤
+- ✅ 告警規則和通知配置
+
 ---
 
 ## 📊 **服務端口分配**
@@ -296,6 +373,91 @@ echo $AZURE_OPENAI_API_KEY
 
 # 測試基本連接
 cd poc && node azure-openai-cost-test.js
+```
+
+### 常見問題 4: Redis 連接問題（MVP Phase 2）
+```bash
+# 檢查 Redis 容器狀態
+docker ps | grep redis
+
+# 測試 Redis 連接
+docker exec ai-sales-redis-dev redis-cli ping
+# 期望輸出: PONG
+
+# 檢查 Redis 記憶體使用
+docker exec ai-sales-redis-dev redis-cli INFO memory
+
+# 清空 Redis 緩存（開發環境）
+docker exec ai-sales-redis-dev redis-cli FLUSHALL
+
+# 重啟 Redis 容器
+docker-compose -f docker-compose.dev.yml restart redis
+```
+
+### 常見問題 5: 監控系統啟動失敗（Sprint 2）
+```bash
+# 檢查監控容器狀態
+docker-compose -f docker-compose.monitoring.yml ps
+
+# 查看 Grafana 日誌
+docker-compose -f docker-compose.monitoring.yml logs grafana
+
+# 查看 Prometheus 日誌
+docker-compose -f docker-compose.monitoring.yml logs prometheus
+
+# 重啟監控堆棧
+docker-compose -f docker-compose.monitoring.yml down
+docker-compose -f docker-compose.monitoring.yml up -d
+
+# 檢查端口衝突
+netstat -an | grep -E ":(3001|9090|16686|9093)"
+```
+
+### 常見問題 6: 通知系統錯誤（Sprint 5）
+```bash
+# 檢查郵件服務配置
+npm run env:check | grep EMAIL
+
+# 測試 SendGrid 連接
+curl -X POST http://localhost:3000/api/notifications/email/test
+
+# 檢查通知系統日誌
+docker-compose -f docker-compose.dev.yml logs app | grep notification
+
+# 驗證通知資料表
+npx prisma studio
+# 導航到 Notification 表檢查數據
+```
+
+### 常見問題 7: 工作流程引擎問題（Sprint 5）
+```bash
+# 檢查工作流程狀態機配置
+npm run test:workflow
+
+# 查看工作流程日誌
+docker-compose -f docker-compose.dev.yml logs app | grep workflow
+
+# 重置工作流程測試數據
+npm run db:seed -- --only-workflows
+
+# 驗證工作流程資料表
+npx prisma studio
+# 檢查 Workflow、WorkflowVersion、WorkflowComment 表
+```
+
+### 常見問題 8: TypeScript 編譯錯誤
+```bash
+# 清理並重新生成類型
+rm -rf node_modules/.cache
+rm -rf .next
+npx prisma generate
+npm run build
+
+# 檢查類型錯誤
+npx tsc --noEmit
+
+# 修復 ESLint 問題
+npm run lint -- --fix
 ```
 
 ---

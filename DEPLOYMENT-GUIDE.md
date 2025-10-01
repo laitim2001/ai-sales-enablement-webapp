@@ -862,34 +862,193 @@ sudo certbot renew
 docker-compose -f docker-compose.prod.yml exec nginx nginx -s reload
 ```
 
-### 性能優化
+### 性能優化（MVP Phase 2 Sprint 4 實現）
 
 #### 1. 資料庫優化
 
 ```sql
+-- 啟用 pg_stat_statements 擴展（如未啟用）
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+
 -- 檢查慢查詢
-SELECT query, calls, total_time, mean_time
+SELECT
+  query,
+  calls,
+  total_time,
+  mean_time,
+  max_time,
+  stddev_time
 FROM pg_stat_statements
 ORDER BY mean_time DESC
-LIMIT 10;
+LIMIT 20;
 
--- 分析表統計
-ANALYZE;
+-- 檢查資料庫大小
+SELECT
+  schemaname,
+  tablename,
+  pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size
+FROM pg_tables
+WHERE schemaname = 'public'
+ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 
--- 重建索引
+-- 分析表統計（更新查詢計劃器統計）
+ANALYZE VERBOSE;
+
+-- 檢查未使用的索引
+SELECT
+  schemaname,
+  tablename,
+  indexname,
+  idx_scan,
+  idx_tup_read,
+  idx_tup_fetch
+FROM pg_stat_user_indexes
+WHERE idx_scan = 0
+ORDER BY pg_relation_size(indexrelid) DESC;
+
+-- 重建索引（維護窗口執行）
 REINDEX DATABASE ai_sales_enablement_prod;
+
+-- 清理死元組（減少表膨脹）
+VACUUM ANALYZE;
 ```
 
-#### 2. 應用程式優化
+#### 2. Redis 緩存優化（Sprint 4）
 
 ```bash
-# 檢查應用程式記憶體使用
-docker stats ai-sales-enablement-app
+# 檢查 Redis 緩存命中率
+docker-compose -f docker-compose.prod.yml exec redis redis-cli INFO stats | grep keyspace
 
-# 調整 Node.js 記憶體限制
-docker-compose -f docker-compose.prod.yml up -d \
-  --scale app=0 \
-  -e NODE_OPTIONS="--max_old_space_size=2048"
+# 檢查緩存過期策略
+docker-compose -f docker-compose.prod.yml exec redis redis-cli CONFIG GET maxmemory-policy
+# 建議設置: allkeys-lru（最少使用淘汰）
+
+# 設置最大記憶體限制（生產環境）
+docker-compose -f docker-compose.prod.yml exec redis redis-cli CONFIG SET maxmemory 2gb
+docker-compose -f docker-compose.prod.yml exec redis redis-cli CONFIG SET maxmemory-policy allkeys-lru
+
+# 監控緩存性能
+docker-compose -f docker-compose.prod.yml exec redis redis-cli --stat
+
+# 查看熱點 key
+docker-compose -f docker-compose.prod.yml exec redis redis-cli --hotkeys
+```
+
+#### 3. API 性能優化（Sprint 4 實現）
+
+```bash
+# 檢查 API 緩存命中率
+curl http://your-domain/api/metrics | grep cache_hit_rate
+
+# 調整 API 緩存 TTL（在 .env.production）
+API_CACHE_TTL=300  # 5分鐘
+API_CACHE_ENABLED=true
+
+# 檢查熔斷器狀態
+curl http://your-domain/api/metrics | grep circuit_breaker
+
+# 監控 DataLoader 批次效率
+curl http://your-domain/api/metrics | grep dataloader_batch
+```
+
+#### 4. 應用程式資源優化
+
+```bash
+# 檢查所有容器資源使用
+docker stats --no-stream
+
+# 檢查應用程式記憶體使用
+docker stats ai-sales-enablement-app --no-stream
+
+# 調整 Node.js 記憶體限制（在 docker-compose.prod.yml）
+environment:
+  - NODE_OPTIONS=--max_old_space_size=2048
+
+# 啟用生產模式優化
+NODE_ENV=production
+NEXT_TELEMETRY_DISABLED=1
+
+# 檢查 Next.js 構建大小
+docker-compose -f docker-compose.prod.yml exec app du -sh .next/
+```
+
+#### 5. 網絡和連接優化
+
+```bash
+# 檢查資料庫連接池使用率
+docker-compose -f docker-compose.prod.yml exec postgres \
+  psql -U prod_user -d ai_sales_enablement_prod -c \
+  "SELECT count(*) as connections, state FROM pg_stat_activity GROUP BY state;"
+
+# 調整資料庫連接池（在 .env.production）
+DATABASE_POOL_MIN=5
+DATABASE_POOL_MAX=20
+DATABASE_POOL_IDLE_TIMEOUT=30000
+
+# 啟用 HTTP/2 和壓縮（Nginx 配置）
+# 在 nginx.conf 添加:
+# http2_push_preload on;
+# gzip on;
+# gzip_types text/plain text/css application/json application/javascript;
+```
+
+#### 6. 監控告警配置（Sprint 2）
+
+```yaml
+# prometheus/alerts.yml
+groups:
+  - name: performance_alerts
+    interval: 30s
+    rules:
+      # API 響應時間告警
+      - alert: HighAPILatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API P95 延遲超過 2 秒"
+          description: "API 響應時間過慢，當前值: {{ $value }}秒"
+
+      # 資料庫連接池告警
+      - alert: DatabasePoolExhausted
+        expr: db_connections_active / db_connections_max > 0.9
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "資料庫連接池接近耗盡"
+          description: "連接池使用率: {{ $value | humanizePercentage }}"
+
+      # Redis 記憶體告警
+      - alert: RedisHighMemory
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis 記憶體使用率過高"
+          description: "當前使用率: {{ $value | humanizePercentage }}"
+
+      # 通知系統失敗率告警（Sprint 5）
+      - alert: HighNotificationFailureRate
+        expr: rate(notification_sent_total{status="failed"}[5m]) / rate(notification_sent_total[5m]) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "通知發送失敗率過高"
+          description: "失敗率: {{ $value | humanizePercentage }}"
+
+      # 工作流程引擎錯誤告警（Sprint 5）
+      - alert: WorkflowTransitionFailures
+        expr: rate(workflow_transition_errors_total[5m]) > 0.5
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "工作流程狀態轉換頻繁失敗"
+          description: "錯誤率: {{ $value }}/秒"
 ```
 
 ## 🆙 更新和升級
