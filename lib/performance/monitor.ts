@@ -185,13 +185,13 @@ export class PerformanceMonitor {
   private async flushMetrics() {
     if (this.metrics.length === 0) return
 
+    // 批量插入 - Batch insert
+    const metricsToFlush = [...this.metrics]
+    this.metrics = []
+
     try {
       // 創建性能指標表（如果不存在） - Ensure metrics table exists
       await this.ensureMetricsTable()
-
-      // 批量插入 - Batch insert
-      const metricsToFlush = [...this.metrics]
-      this.metrics = []
 
       await prisma.$executeRaw`
         INSERT INTO performance_metrics (
