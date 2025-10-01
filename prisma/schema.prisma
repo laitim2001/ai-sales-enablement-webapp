@@ -435,11 +435,15 @@ enum CallStatus {
 
 enum ProposalStatus {
   DRAFT
+  PENDING_APPROVAL
+  UNDER_REVIEW
+  REVISING
+  APPROVED
   SENT
   VIEWED
-  UNDER_REVIEW
-  APPROVED
+  ACCEPTED
   REJECTED
+  WITHDRAWN
   EXPIRED
 }
 
@@ -797,6 +801,7 @@ enum TemplateAccess {
   TEAM // 團隊 (同部門)
   ORGANIZATION // 組織 (全公司)
   PUBLIC // 公開 (所有用戶)
+  SHARED // 共享 (指定用戶)
 }
 
 // 生成狀態枚舉

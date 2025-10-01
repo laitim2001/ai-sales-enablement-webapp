@@ -266,8 +266,10 @@ export class WorkflowEngine {
     // 2. 如果需要審批，檢查用戶權限
     if (proposalId) {
       const needsApproval = await this.requiresApproval(currentState, targetState);
+
       if (needsApproval) {
         const hasPermission = await this.checkApprovalPermission(proposalId, userId);
+
         if (!hasPermission) {
           return false;
         }
@@ -336,10 +338,21 @@ export class WorkflowEngine {
   /**
    * 執行自動化狀態轉換（如過期處理）
    *
+   * @param systemUserId - 系統用戶ID（用於審計追蹤）
    * @returns 處理的提案數量
    */
-  async executeAutoTransitions(): Promise<number> {
+  async executeAutoTransitions(systemUserId?: number): Promise<number> {
     let count = 0;
+
+    // 獲取或創建系統用戶
+    let userId = systemUserId;
+    if (!userId) {
+      // 嘗試獲取系統用戶
+      const systemUser = await this.prisma.user.findFirst({
+        where: { email: 'system@workflow.com' },
+      });
+      userId = systemUser?.id || 1; // 默認使用ID 1（假設至少有一個用戶）
+    }
 
     // 1. 處理已發送但超過有效期的提案（自動過期）
     const sentProposals = await this.prisma.proposal.findMany({
@@ -355,7 +368,7 @@ export class WorkflowEngine {
       const result = await this.transitionState(
         proposal.id,
         'EXPIRED',
-        0, // 系統用戶
+        userId,
         {
           reason: 'Auto-expired after 30 days',
           autoTriggered: true,

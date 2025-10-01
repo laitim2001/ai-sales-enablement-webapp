@@ -25,10 +25,22 @@ describe('WorkflowEngine', () => {
   let testProposalId: number;
   let testUserId: number;
   let managerUserId: number;
+  let systemUserId: number;
 
   beforeAll(async () => {
     prisma = new PrismaClient();
     engine = createWorkflowEngine(prisma);
+
+    // 創建系統用戶（用於自動化操作）
+    const systemUser = await prisma.user.create({
+      data: {
+        email: 'system@workflow.com',
+        first_name: 'System',
+        last_name: 'User',
+        role: 'ADMIN',
+      },
+    });
+    systemUserId = systemUser.id;
 
     // 創建測試用戶
     const testUser = await prisma.user.create({
@@ -65,7 +77,7 @@ describe('WorkflowEngine', () => {
         customer_id: customer.id,
         user_id: testUserId,
         title: 'Test Proposal',
-        status: ProposalStatus.DRAFT,
+        status: 'DRAFT',
       },
     });
     testProposalId = proposal.id;
@@ -80,7 +92,7 @@ describe('WorkflowEngine', () => {
     await prisma.customer.deleteMany();
     await prisma.user.deleteMany({
       where: {
-        email: { in: ['test@workflow.com', 'manager@workflow.com'] },
+        email: { in: ['test@workflow.com', 'manager@workflow.com', 'system@workflow.com'] },
       },
     });
     await prisma.$disconnect();
@@ -120,6 +132,14 @@ describe('WorkflowEngine', () => {
   });
 
   describe('transitionState', () => {
+    beforeEach(async () => {
+      // 重置提案狀態為 DRAFT
+      await prisma.proposal.update({
+        where: { id: testProposalId },
+        data: { status: 'DRAFT' },
+      });
+    });
+
     it('應該成功從 DRAFT 轉換到 PENDING_APPROVAL', async () => {
       const result = await engine.transitionState(
         testProposalId,
@@ -161,6 +181,14 @@ describe('WorkflowEngine', () => {
     });
 
     it('管理員應該可以批准提案', async () => {
+      // 先提交到待審批狀態
+      await engine.transitionState(
+        testProposalId,
+        'PENDING_APPROVAL',
+        testUserId
+      );
+
+      // 管理員批准
       const result = await engine.transitionState(
         testProposalId,
         'APPROVED',
@@ -307,7 +335,7 @@ describe('WorkflowEngine', () => {
         },
       });
 
-      const count = await engine.executeAutoTransitions();
+      const count = await engine.executeAutoTransitions(systemUserId);
 
       expect(count).toBeGreaterThan(0);
 
@@ -332,7 +360,7 @@ describe('WorkflowEngine', () => {
         },
       });
 
-      await engine.executeAutoTransitions();
+      await engine.executeAutoTransitions(systemUserId);
 
       const updated = await prisma.proposal.findUnique({
         where: { id: recentProposal.id },

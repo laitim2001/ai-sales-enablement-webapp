@@ -23,15 +23,15 @@ process.env.AZURE_OPENAI_API_VERSION = process.env.AZURE_OPENAI_API_VERSION || '
 process.env.AZURE_OPENAI_DEPLOYMENT_ID_GPT4 = process.env.AZURE_OPENAI_DEPLOYMENT_ID_GPT4 || 'gpt-4'
 process.env.AZURE_OPENAI_DEPLOYMENT_ID_EMBEDDINGS = process.env.AZURE_OPENAI_DEPLOYMENT_ID_EMBEDDINGS || 'text-embedding-ada-002'
 
-// Mock console 來保持測試輸出清潔
-global.console = {
-  ...console,
-  log: jest.fn(),
-  debug: jest.fn(),
-  info: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
-}
+// Mock console 來保持測試輸出清潔（臨時禁用以便調試）
+// global.console = {
+//   ...console,
+//   log: jest.fn(),
+//   debug: jest.fn(),
+//   info: jest.fn(),
+//   warn: jest.fn(),
+//   error: jest.fn(),
+// }
 
 // 全局測試鉤子
 beforeAll(async () => {

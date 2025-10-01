@@ -48,7 +48,7 @@ async function setupTestDatabase() {
   // 1. 檢查 PostgreSQL 是否運行
   log('1️⃣ 檢查 PostgreSQL 連接...', 'blue');
   const pgRunning = await runCommand(
-    'psql -U postgres -c "SELECT version();" 2>&1',
+    'psql -U postgres -h localhost -p 5433 -c "SELECT version();" 2>&1',
     '檢查 PostgreSQL'
   );
 
@@ -63,11 +63,11 @@ async function setupTestDatabase() {
   // 2. 創建測試數據庫（如果不存在）
   log('\n2️⃣ 創建測試數據庫...', 'blue');
   await runCommand(
-    'psql -U postgres -c "DROP DATABASE IF EXISTS sales_enablement_test;"',
+    'psql -U postgres -h localhost -p 5433 -c "DROP DATABASE IF EXISTS sales_enablement_test;"',
     '刪除舊測試數據庫'
   );
   await runCommand(
-    'psql -U postgres -c "CREATE DATABASE sales_enablement_test;"',
+    'psql -U postgres -h localhost -p 5433 -c "CREATE DATABASE sales_enablement_test;"',
     '創建新測試數據庫'
   );
 
