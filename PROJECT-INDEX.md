@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月2日 - Sprint 5 Week 10 Day 2 完成（通知系統完整實現：5個API端點+5個UI組件+工作流程整合，~1,600行後端+~1,500行前端）
+> **📅 最後更新**: 2025年10月2日 - Sprint 5 Week 10 Day 2-3 完成（通知系統+範本管理系統：通知5個API+5個UI，範本5個API+範本引擎，~3,750行代碼）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -181,6 +181,38 @@
 - 數據庫: 2個模型（Notification + NotificationPreference）
 - API端點: 5個REST API
 - UI組件: 5個React組件
+
+---
+
+### 📝 lib/template/ - 提案範本管理系統 (Sprint 5 Week 10進行中)
+
+**用途**: 範本管理引擎 - 範本CRUD、變數替換、預覽、PDF導出
+
+**🎯 核心特點**:
+- **Handlebars引擎**: 強大的範本語法支援（變數/條件/循環）
+- **25個Helper函數**: 日期/貨幣/數學/邏輯/字串處理
+- **訪問控制**: PRIVATE/TEAM/ORGANIZATION/PUBLIC 4級權限
+- **變數系統**: 8種變數類型，完整驗證和測試數據生成
+- **版本管理**: 自動版本號，範本複製和統計
+
+| 範本模組               | 文件路徑                              | 用途說明                                     | 代碼行數 | 重要程度 |
+| ---------------------- | ------------------------------------- | -------------------------------------------- | -------- | -------- |
+| **範本管理器**         | `lib/template/template-manager.ts`    | Repository Pattern，CRUD/搜索/權限/統計      | 700      | 🔴 極高  |
+| **範本引擎**           | `lib/template/template-engine.ts`     | Handlebars編譯/渲染/驗證/預覽                | 450      | 🔴 極高  |
+
+**🎯 API端點** (app/api/templates/):
+- `route.ts`: 範本列表和創建 (GET/POST)
+- `[id]/route.ts`: 單個範本操作 (GET/PUT/DELETE)
+- `[id]/duplicate/route.ts`: 複製範本 (POST)
+- `[id]/preview/route.ts`: 預覽範本 (POST)
+- `stats/route.ts`: 統計信息 (GET)
+
+**✅ 完成狀態**: Sprint 5 Week 10 Day 3 部分完成 (2025-10-02)
+- 後端: ~1,150行代碼（範本管理+引擎+API）
+- 前端: 待開發
+- 數據庫: 2個模型（ProposalTemplate + ProposalGeneration）已存在
+- API端點: 5個REST API ✅
+- PDF導出: 待整合 Puppeteer
 
 ### 📊 lib/monitoring/ - 企業級監控告警系統 (Sprint 2完成)
 
