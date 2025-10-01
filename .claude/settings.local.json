@@ -39,7 +39,10 @@
       "Bash(Stop-Process -Force)",
       "Bash(Stop-Process -Force -Id 8624)",
       "Bash(npx jest:*)",
-      "Bash(npm audit:*)"
+      "Bash(npm audit:*)",
+      "Bash(Get-Process -Name \"node\")",
+      "Bash(pkill:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []

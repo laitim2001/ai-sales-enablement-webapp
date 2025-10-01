@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月1日 - Sprint 5 Week 9 Day 2 完成（工作流程引擎+版本控制+評論系統+審批管理，2,345行後端+3,010行前端，6個設計模式）
+> **📅 最後更新**: 2025年10月2日 - Sprint 5 Week 10 Day 2 完成（通知系統完整實現：5個API端點+5個UI組件+工作流程整合，~1,600行後端+~1,500行前端）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -72,6 +72,7 @@
 | **安全標準**       | `docs/security-standards.md`           | 安全開發標準和規範   | 🟡 高    |
 | **技術可行性報告** | `docs/technical-feasibility-report.md` | 技術可行性分析報告   | 🟡 高    |
 | **測試策略**       | `docs/testing-strategy.md`             | 完整測試策略文檔     | 🟡 高    |
+| **MVP Phase 2 測試指南** | `docs/MVP2-TESTING-GUIDE.md`      | MVP Phase 2 完整測試驗證指南 (Sprint 1-5) | 🔴 極高  |
 | **性能審計報告**   | `docs/performance-audit-2025.md`       | 2025年性能優化分析   | 🟡 高    |
 | **性能實施指南**   | `docs/performance-implementation-guide.md` | 性能優化實施指南 | 🟡 高    |
 | **Week 5開發計劃** | `docs/week5-development-plan.md`        | AI搜索引擎開發規劃   | 🟡 高    |
@@ -152,6 +153,35 @@
 - 數據庫: 5個模型 + 5個枚舉 + 30+索引
 - 測試: 400行測試框架（待環境配置）
 
+### 🔔 lib/notification/ - 企業級通知系統 (Sprint 5 Week 10完成)
+
+**用途**: 多渠道通知引擎 - 站內通知、郵件服務、實時更新、偏好管理
+
+**🎯 核心特點**:
+- **多渠道支援**: IN_APP（站內）、EMAIL（郵件）、PUSH（推送）、SMS（短信）
+- **優先級管理**: LOW/NORMAL/HIGH/URGENT 四級優先級
+- **智能過濾**: 基於用戶偏好的通知過濾和路由
+- **批量處理**: 高效批量發送和通知聚合
+- **工作流程整合**: 與工作流程引擎深度整合
+
+| 通知模組               | 文件路徑                              | 用途說明                                     | 代碼行數 | 重要程度 |
+| ---------------------- | ------------------------------------- | -------------------------------------------- | -------- | -------- |
+| **通知引擎**           | `lib/notification/engine.ts`          | 核心通知引擎，創建/查詢/統計/批量處理         | 580      | 🔴 極高  |
+| **站內通知服務**       | `lib/notification/in-app-service.ts`  | 站內通知管理，實時更新，分組摘要             | 450      | 🔴 極高  |
+| **郵件通知服務**       | `lib/notification/email-service.ts`   | SMTP/SendGrid郵件發送，範本渲染              | 520      | 🔴 極高  |
+| **統一導出**           | `lib/notification/index.ts`           | 所有通知模組的統一導出入口                   | 50       | 🟡 高    |
+
+**🎯 工作流程整合**:
+- `lib/workflow/engine.ts`: 狀態變更自動通知
+- `lib/workflow/comment-system.ts`: 評論和@提及通知
+- `lib/workflow/approval-manager.ts`: 審批請求和結果通知
+
+**✅ 完成狀態**: Sprint 5 Week 10 Day 2 完成 (2025-10-02)
+- 總計: ~1,600行後端代碼 + ~1,500行前端代碼
+- 數據庫: 2個模型（Notification + NotificationPreference）
+- API端點: 5個REST API
+- UI組件: 5個React組件
+
 ### 📊 lib/monitoring/ - 企業級監控告警系統 (Sprint 2完成)
 
 **用途**: 基於 OpenTelemetry 的統一可觀測性平台，支援零成本遷移
@@ -215,6 +245,18 @@
 | **Token刷新API**       | `app/api/auth/refresh/route.ts`              | Access token刷新端點（新增）                | 🔴 極高  |
 | **Azure AD登入**       | `app/api/auth/azure-ad/login/route.ts`       | Azure AD SSO登入啟動（新增）                | 🔴 極高  |
 | **Azure AD回調**       | `app/api/auth/azure-ad/callback/route.ts`    | Azure AD認證回調處理（新增）                | 🔴 極高  |
+
+### 🔔 app/api/notifications/ - 通知系統API (Sprint 5 Week 10)
+
+**用途**: 完整通知系統REST API端點
+
+| 功能模組               | 文件路徑                                      | 用途說明                                     | 重要程度 |
+| ---------------------- | --------------------------------------------- | -------------------------------------------- | -------- |
+| **通知列表**           | `app/api/notifications/route.ts`             | 獲取/刪除通知，支持過濾分頁                  | 🔴 極高  |
+| **通知統計**           | `app/api/notifications/stats/route.ts`       | 未讀計數和分類統計                           | 🟡 高    |
+| **已讀標記**           | `app/api/notifications/read/route.ts`        | 標記通知已讀（單個/批量/全部）               | 🔴 極高  |
+| **通知偏好**           | `app/api/notifications/preferences/route.ts` | 獲取/更新通知偏好設置                        | 🟡 高    |
+| **測試端點**           | `app/api/notifications/test/route.ts`        | 通知系統測試（開發用）                       | 🟢 中    |
 
 ### 📖 docs/user-stories/ - 用戶故事詳細規格
 
@@ -343,6 +385,23 @@
 | **範本詳情**   | `app/dashboard/proposals/templates/[id]/page.tsx` | 提案範本詳情查看頁面 | 🟢 中    |
 | **任務管理**   | `app/dashboard/tasks/page.tsx` | 任務列表和管理頁面   | 🟡 高    |
 | **系統設置**   | `app/dashboard/settings/page.tsx` | 用戶設置和配置頁面   | 🟡 高    |
+| **通知中心**   | `app/dashboard/notifications/page.tsx` | 通知列表和管理中心（Sprint 5 Week 10） | 🔴 極高  |
+| **通知偏好**   | `app/dashboard/notifications/preferences/page.tsx` | 通知偏好設置頁面（Sprint 5 Week 10） | 🟡 高    |
+
+#### 🧩 components/notifications/ - 通知UI組件 (Sprint 5 Week 10完成)
+
+**用途**: 可復用的通知相關React組件
+
+| 組件類型               | 文件路徑                                      | 用途說明                                     | 重要程度 |
+| ---------------------- | --------------------------------------------- | -------------------------------------------- | -------- |
+| **通知項目**           | `components/notifications/notification-item.tsx` | 單個通知卡片組件，支持已讀/刪除            | 🔴 極高  |
+| **通知列表**           | `components/notifications/notification-list.tsx` | 通知列表容器，分頁/過濾/批量操作           | 🔴 極高  |
+| **通知鈴鐺**           | `components/notifications/notification-bell.tsx` | 導航欄通知圖標，未讀徽章，下拉預覽         | 🔴 極高  |
+
+**✅ 完成狀態**: Sprint 5 Week 10 Day 2 完成 (2025-10-02)
+- 5個React組件（通知中心頁面 + 偏好設置頁面 + 3個可復用組件）
+- 完整功能：實時更新、分類過濾、批量操作、偏好管理
+- 集成Lucide React圖標 + Tailwind CSS樣式
 
 #### 🔌 API 路由結構
 

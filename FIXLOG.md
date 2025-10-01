@@ -8,6 +8,7 @@
 
 | 日期 | 問題類型 | 狀態 | 描述 |
 |------|----------|------|------|
+| 2025-10-01 | 🔑 認證/JWT | ✅ 已解決 | [FIX-017: JWT Token 生成錯誤 - jwtid 重複定義](#fix-017-jwt-token-生成錯誤-jwtid-重複定義) |
 | 2025-09-30 | 🧪 測試基礎設施 | 📋 待修復 | [FIX-016: 測試套件失敗問題分析和修復計劃](#fix-016-測試套件失敗問題分析和修復計劃-21-個測試套件) |
 | 2025-09-30 | 🔍 監控系統/健康檢查 | ✅ 已解決 | [FIX-015: 健康檢查系統優化 - 監控服務初始化和狀態修復](#fix-015-健康檢查系統優化-監控服務初始化和狀態修復) |
 | 2025-09-29 | 📦 依賴管理/環境 | ✅ 已解決 | [FIX-014: 新電腦環境依賴缺失問題和自動化工具創建](#fix-014-新電腦環境依賴缺失問題和自動化工具創建) |
@@ -26,10 +27,11 @@
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
 
 ## 🔍 快速搜索
+- **JWT/Token問題**: FIX-017, FIX-009, FIX-001, FIX-002, FIX-003
 - **測試基礎設施問題**: FIX-016
 - **監控系統問題**: FIX-015
 - **環境/依賴問題**: FIX-014, FIX-013
-- **認證問題**: FIX-009, FIX-001, FIX-002, FIX-003
+- **認證問題**: FIX-017, FIX-009, FIX-001, FIX-002, FIX-003
 - **前端問題**: FIX-011, FIX-008, FIX-006, FIX-004
 - **API問題**: FIX-012, FIX-010, FIX-007, FIX-004
 - **Next.js緩存問題**: FIX-011, FIX-010
@@ -45,6 +47,110 @@
 ---
 
 # 詳細修復記錄 (最新在上)
+
+## FIX-017: JWT Token 生成錯誤 - jwtid 重複定義
+
+### 📅 **修復日期**: 2025-10-01
+### 🎯 **問題級別**: 🔴 Critical
+### ✅ **狀態**: 已解決
+
+### 🚨 **問題現象**
+1. **症狀**: 用戶登入時出現 500 Internal Server Error
+2. **錯誤訊息**:
+   ```
+   Error: Bad "options.jwtid" option. The payload already has an "jti" property.
+   ```
+3. **影響範圍**: 所有登入請求失敗，用戶無法登入系統
+4. **用戶體驗**: 前端顯示「表單驗證錯誤」和「An unexpected error occurred」
+
+### 🔍 **根本原因分析**
+- **核心問題**: JWT token 生成時 `jti` (JWT ID) 被重複定義
+- **技術原理**: jsonwebtoken 套件不允許同時在 payload 中包含 `jti` 屬性並在 options 中指定 `jwtid`
+- **代碼位置**: `lib/auth/token-service.ts` 第 109-122 行
+- **衝突點**:
+  ```typescript
+  // payload 中定義了 jti
+  const payload: AccessTokenPayload = {
+    userId: user.id,
+    email: user.email,
+    role: user.role,
+    jti,              // ← 這裡定義了 jti
+    type: 'access'
+  }
+
+  // options 中又定義了 jwtid
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+    issuer: 'ai-sales-platform',
+    audience: 'ai-sales-users',
+    jwtid: jti       // ← 這裡又定義了 jwtid（重複）
+  } as jwt.SignOptions)
+  ```
+
+### 🛠️ **修復方案**
+
+#### **修改 `lib/auth/token-service.ts`**
+```typescript
+// 修復前 (錯誤)
+return jwt.sign(payload, JWT_SECRET, {
+  expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+  issuer: 'ai-sales-platform',
+  audience: 'ai-sales-users',
+  jwtid: jti       // ❌ 與 payload.jti 重複
+} as jwt.SignOptions)
+
+// 修復後 (正確)
+return jwt.sign(payload, JWT_SECRET, {
+  expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+  issuer: 'ai-sales-platform',
+  audience: 'ai-sales-users'
+  // ✅ jwtid 已經在 payload 中作為 jti，不需要在 options 中重複指定
+} as jwt.SignOptions)
+```
+
+### 🔧 **修復步驟**
+1. **識別問題**: 檢查後台日誌發現 JWT 簽名錯誤
+2. **定位代碼**: 在 `generateAccessToken` 函數中找到重複定義
+3. **修改代碼**: 移除 options 中的 `jwtid` 參數
+4. **清理緩存**: 刪除 `.next` 目錄清理編譯緩存
+5. **重啟服務**: 停止並重新啟動 Next.js 開發服務器
+6. **驗證修復**: 測試登入 API，確認返回正確的 401 錯誤（而非 500）
+
+### ✅ **驗證結果**
+- **修復前**: `POST /api/auth/login` 返回 500 錯誤，日誌顯示 JWT 簽名錯誤
+- **修復後**: `POST /api/auth/login` 返回 401 錯誤（正確的認證失敗響應）
+- **日誌確認**: 無 JWT 相關錯誤，只有預期的認證錯誤訊息
+
+### 📊 **修復文件清單**
+- ✅ `lib/auth/token-service.ts` (第 121 行) - 移除 `jwtid` 選項
+
+### 📚 **學習要點**
+1. **JWT 規範**: 不能同時在 payload 和 options 中定義相同的保留欄位
+2. **jsonwebtoken 套件**: `jti` (payload) 和 `jwtid` (option) 是同一個概念
+3. **緩存清理**: Next.js 修改後需要清理 `.next` 緩存才能生效
+4. **進程管理**: 在開發環境中要小心區分 Claude Code 進程和 Next.js 進程
+
+### 🚫 **避免重蹈覆轍**
+- ❌ **不要**: 在 JWT payload 中定義保留欄位後又在 options 中重複定義
+- ❌ **不要**: 混淆 `jti` (payload) 和 `jwtid` (option) 的關係
+- ✅ **應該**: 選擇一種方式定義 JWT ID（推薦在 payload 中定義）
+- ✅ **應該**: 修改 JWT 相關代碼後清理緩存並重啟服務
+- ✅ **應該**: 檢查後台日誌確認錯誤根本原因
+
+### 🔄 **如果問題再次出現**
+1. 檢查 JWT 相關代碼是否有重複定義保留欄位
+2. 確認 jsonwebtoken 套件版本和使用方式
+3. 清理 `.next` 緩存目錄
+4. 重啟開發服務器確保使用最新代碼
+5. 檢查後台錯誤日誌找出具體的 JWT 錯誤訊息
+
+### 🎯 **相關修復**
+- FIX-001: JWT_SECRET 客戶端訪問錯誤
+- FIX-002: JWT Payload userId 類型不一致
+- FIX-003: authenticateUser 函數 userId 類型錯誤
+- FIX-009: 認證 Token Key 不一致導致 API 401 錯誤
+
+---
 
 ## FIX-016: 測試套件失敗問題分析和修復計劃 (21 個測試套件)
 

@@ -530,11 +530,236 @@ export class WorkflowEngine {
     toState: ProposalStatus,
     userId: number
   ): Promise<void> {
-    // TODO: 實現後續自動化操作
-    // 1. 發送通知給相關用戶
-    // 2. 創建審批任務
-    // 3. 觸發webhook
-    // 4. 更新統計數據等
+    try {
+      // 1. 發送狀態變更通知給相關用戶
+      await this.sendWorkflowNotification(proposalId, fromState, toState, userId);
+
+      // 2. 根據目標狀態執行特定操作
+      switch (toState) {
+        case ProposalStatus.PENDING_APPROVAL:
+          // 通知審批者
+          await this.notifyApprovers(proposalId, userId);
+          break;
+
+        case ProposalStatus.APPROVED:
+          // 通知提案創建者審批通過
+          await this.notifyProposalOwner(proposalId, 'approved', userId);
+          break;
+
+        case ProposalStatus.REJECTED:
+          // 通知提案創建者審批拒絕
+          await this.notifyProposalOwner(proposalId, 'rejected', userId);
+          break;
+
+        case ProposalStatus.REVISING:
+          // 通知提案創建者需要修訂
+          await this.notifyProposalOwner(proposalId, 'revising', userId);
+          break;
+      }
+
+      // 3. 未來可擴展：觸發webhook、更新統計數據等
+    } catch (error) {
+      console.error('Post-transition actions failed:', error);
+      // 不拋出錯誤，避免影響主流程
+    }
+  }
+
+  /**
+   * 發送工作流程狀態變更通知
+   *
+   * @param proposalId - 提案ID
+   * @param fromState - 起始狀態
+   * @param toState - 目標狀態
+   * @param userId - 執行用戶ID
+   */
+  private async sendWorkflowNotification(
+    proposalId: number,
+    fromState: ProposalStatus,
+    toState: ProposalStatus,
+    userId: number
+  ): Promise<void> {
+    // 動態導入通知引擎（避免循環依賴）
+    const { NotificationEngine } = await import('@/lib/notification/engine');
+    const { NotificationType, NotificationCategory, NotificationPriority, NotificationChannel } = await import('@prisma/client');
+
+    const notificationEngine = new NotificationEngine(this.prisma);
+
+    // 獲取提案信息
+    const proposal = await this.prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: { created_by_user: true }
+    });
+
+    if (!proposal) return;
+
+    // 構建通知消息
+    const stateLabels: Record<ProposalStatus, string> = {
+      DRAFT: '草稿',
+      PENDING_APPROVAL: '待審批',
+      UNDER_REVIEW: '審核中',
+      REVISING: '修訂中',
+      APPROVED: '已批准',
+      REJECTED: '已拒絕',
+      SENT: '已發送',
+      VIEWED: '已查看',
+      ACCEPTED: '已接受',
+      WITHDRAWN: '已撤回',
+      EXPIRED: '已過期'
+    };
+
+    const title = `提案狀態變更：${proposal.title}`;
+    const message = `提案狀態從「${stateLabels[fromState]}」變更為「${stateLabels[toState]}」`;
+
+    // 發送通知給提案創建者
+    if (proposal.created_by !== userId) {
+      await notificationEngine.createNotification({
+        recipientId: proposal.created_by,
+        type: NotificationType.WORKFLOW_STATE_CHANGED,
+        category: NotificationCategory.WORKFLOW,
+        priority: [ProposalStatus.APPROVED, ProposalStatus.REJECTED].includes(toState)
+          ? NotificationPriority.HIGH
+          : NotificationPriority.NORMAL,
+        title,
+        message,
+        data: {
+          proposalId,
+          fromState,
+          toState,
+          triggeredBy: userId
+        },
+        channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
+        actionUrl: `/dashboard/proposals/${proposalId}`,
+        actionText: '查看提案'
+      });
+    }
+  }
+
+  /**
+   * 通知審批者
+   *
+   * @param proposalId - 提案ID
+   * @param userId - 提交用戶ID
+   */
+  private async notifyApprovers(proposalId: number, userId: number): Promise<void> {
+    const { NotificationEngine } = await import('@/lib/notification/engine');
+    const { NotificationType, NotificationCategory, NotificationPriority, NotificationChannel } = await import('@prisma/client');
+
+    const notificationEngine = new NotificationEngine(this.prisma);
+
+    // 獲取提案和審批流程信息
+    const proposal = await this.prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: {
+        workflow: {
+          include: {
+            approval_flow: {
+              include: {
+                approvals: {
+                  where: { status: 'PENDING' },
+                  include: { approver: true }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!proposal?.workflow?.approval_flow) return;
+
+    // 通知所有待審批者
+    for (const approval of proposal.workflow.approval_flow.approvals) {
+      if (approval.approver_id !== userId) {
+        await notificationEngine.createNotification({
+          recipientId: approval.approver_id,
+          type: NotificationType.APPROVAL_REQUESTED,
+          category: NotificationCategory.APPROVAL,
+          priority: NotificationPriority.HIGH,
+          title: `審批請求：${proposal.title}`,
+          message: `您有一個新的提案審批請求，請及時處理`,
+          data: {
+            proposalId,
+            approvalId: approval.id,
+            requestedBy: userId
+          },
+          channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
+          actionUrl: `/dashboard/approvals/${approval.id}`,
+          actionText: '立即審批'
+        });
+      }
+    }
+  }
+
+  /**
+   * 通知提案擁有者
+   *
+   * @param proposalId - 提案ID
+   * @param action - 動作類型（approved/rejected/revising）
+   * @param userId - 執行用戶ID
+   */
+  private async notifyProposalOwner(
+    proposalId: number,
+    action: 'approved' | 'rejected' | 'revising',
+    userId: number
+  ): Promise<void> {
+    const { NotificationEngine } = await import('@/lib/notification/engine');
+    const { NotificationType, NotificationCategory, NotificationPriority, NotificationChannel } = await import('@prisma/client');
+
+    const notificationEngine = new NotificationEngine(this.prisma);
+
+    // 獲取提案信息
+    const proposal = await this.prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: { created_by_user: true }
+    });
+
+    if (!proposal || proposal.created_by === userId) return;
+
+    // 根據動作類型構建通知
+    const notificationConfig: Record<typeof action, {
+      type: any,
+      priority: any,
+      title: string,
+      message: string
+    }> = {
+      approved: {
+        type: NotificationType.WORKFLOW_APPROVED,
+        priority: NotificationPriority.HIGH,
+        title: `提案已批准：${proposal.title}`,
+        message: '您的提案已通過審批，可以繼續下一步操作'
+      },
+      rejected: {
+        type: NotificationType.WORKFLOW_REJECTED,
+        priority: NotificationPriority.HIGH,
+        title: `提案被拒絕：${proposal.title}`,
+        message: '您的提案未通過審批，請查看審批意見並修改後重新提交'
+      },
+      revising: {
+        type: NotificationType.WORKFLOW_STATE_CHANGED,
+        priority: NotificationPriority.NORMAL,
+        title: `需要修訂：${proposal.title}`,
+        message: '您的提案需要修訂，請根據反饋意見進行調整'
+      }
+    };
+
+    const config = notificationConfig[action];
+
+    await notificationEngine.createNotification({
+      recipientId: proposal.created_by,
+      type: config.type,
+      category: NotificationCategory.APPROVAL,
+      priority: config.priority,
+      title: config.title,
+      message: config.message,
+      data: {
+        proposalId,
+        action,
+        actionBy: userId
+      },
+      channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
+      actionUrl: `/dashboard/proposals/${proposalId}`,
+      actionText: '查看詳情'
+    });
   }
 }
 

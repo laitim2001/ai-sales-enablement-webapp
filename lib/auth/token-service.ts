@@ -117,8 +117,8 @@ export function generateAccessToken(user: Pick<User, 'id' | 'email' | 'role'>): 
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
     issuer: 'ai-sales-platform',
-    audience: 'ai-sales-users',
-    jwtid: jti
+    audience: 'ai-sales-users'
+    // jwtid 已經在 payload 中作為 jti，不需要在 options 中重複指定
   } as jwt.SignOptions)
 }
 

@@ -542,12 +542,48 @@ export class ApprovalManager {
     workflowId: string,
     currentSequence: number
   ): Promise<void> {
-    // TODO: 實現通知邏輯
-    // 1. 查找下一個序列的審批者
-    // 2. 發送郵件通知
-    // 3. 推送即時通知
+    try {
+      // 動態導入避免循環依賴
+      const { NotificationEngine } = await import('@/lib/notification/engine');
+      const { NotificationType, NotificationCategory, NotificationPriority, NotificationChannel } = await import('@prisma/client');
 
-    console.log(`Notifying next approver for workflow ${workflowId}, sequence ${currentSequence + 1}`);
+      const notificationEngine = new NotificationEngine(this.prisma);
+
+      // 1. 查找下一個序列的審批者
+      const nextTasks = await this.prisma.approvalTask.findMany({
+        where: {
+          workflow_id: workflowId,
+          sequence: currentSequence + 1,
+          status: { in: ['PENDING', 'IN_PROGRESS'] },
+        },
+        include: {
+          workflow: {
+            include: {
+              proposal: true,
+            },
+          },
+        },
+      });
+
+      // 2. 為每個下一序列的審批者發送通知
+      for (const task of nextTasks) {
+        const approverId = task.delegated_to || task.approver_id;
+
+        await notificationEngine.createNotification({
+          recipientId: approverId,
+          type: NotificationType.APPROVAL_REQUESTED,
+          category: NotificationCategory.APPROVAL,
+          priority: NotificationPriority.HIGH,
+          title: `審批請求：${task.workflow.proposal.title}`,
+          message: `您有一個新的審批任務需要處理。${task.comments ? `備註：${task.comments}` : ''}`,
+          channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
+          actionUrl: `/dashboard/approvals/${task.id}`,
+          actionText: '立即審批',
+        });
+      }
+    } catch (error) {
+      console.error('Failed to notify next approver:', error);
+    }
   }
 
   /**
@@ -560,8 +596,51 @@ export class ApprovalManager {
     task: ApprovalTask,
     toUserId: number
   ): Promise<void> {
-    // TODO: 實現通知邏輯
-    console.log(`Delegation notification sent for task ${task.id} to user ${toUserId}`);
+    try {
+      // 動態導入避免循環依賴
+      const { NotificationEngine } = await import('@/lib/notification/engine');
+      const { NotificationType, NotificationCategory, NotificationPriority, NotificationChannel } = await import('@prisma/client');
+
+      const notificationEngine = new NotificationEngine(this.prisma);
+
+      // 獲取工作流程和提案信息
+      const taskWithDetails = await this.prisma.approvalTask.findUnique({
+        where: { id: task.id },
+        include: {
+          workflow: {
+            include: {
+              proposal: true,
+            },
+          },
+          approver: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+            },
+          },
+        },
+      });
+
+      if (!taskWithDetails) return;
+
+      const delegatorName = `${taskWithDetails.approver.first_name || ''} ${taskWithDetails.approver.last_name || ''}`.trim() || '某用戶';
+
+      // 發送委派通知給新審批者
+      await notificationEngine.createNotification({
+        recipientId: toUserId,
+        type: NotificationType.APPROVAL_DELEGATED,
+        category: NotificationCategory.APPROVAL,
+        priority: NotificationPriority.HIGH,
+        title: `審批委派：${taskWithDetails.workflow.proposal.title}`,
+        message: `${delegatorName} 將審批任務委派給您。${task.delegation_reason ? `原因：${task.delegation_reason}` : ''}`,
+        channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
+        actionUrl: `/dashboard/approvals/${task.id}`,
+        actionText: '查看審批',
+      });
+    } catch (error) {
+      console.error('Failed to send delegation notification:', error);
+    }
   }
 
   /**

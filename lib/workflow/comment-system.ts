@@ -160,7 +160,7 @@ export class CommentSystem {
     }
 
     // 2. 創建回覆（繼承父評論的提案ID和版本ID）
-    return this.createComment(
+    const reply = await this.createComment(
       parentComment.proposal_id,
       userId,
       content,
@@ -170,6 +170,11 @@ export class CommentSystem {
         versionId: options.versionId || parentComment.version_id || undefined,
       }
     );
+
+    // 3. 發送回覆通知給父評論的作者
+    await this.sendReplyNotification(reply.id, commentId);
+
+    return reply;
   }
 
   /**
@@ -516,13 +521,133 @@ export class CommentSystem {
     commentId: string,
     userIds: number[]
   ): Promise<void> {
-    // TODO: 實現通知邏輯
-    // 1. 創建通知記錄
-    // 2. 發送郵件通知
-    // 3. 推送即時通知
+    try {
+      // 動態導入通知引擎（避免循環依賴）
+      const { NotificationEngine } = await import('@/lib/notification/engine');
+      const { NotificationType, NotificationCategory, NotificationPriority, NotificationChannel } = await import('@prisma/client');
 
-    // 暫時只記錄日誌
-    console.log(`Mention notifications sent for comment ${commentId} to users:`, userIds);
+      const notificationEngine = new NotificationEngine(this.prisma);
+
+      // 獲取評論詳細信息
+      const comment = await this.prisma.proposalComment.findUnique({
+        where: { id: commentId },
+        include: {
+          proposal: true,
+          creator: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true
+            }
+          }
+        }
+      });
+
+      if (!comment) return;
+
+      const creatorName = `${comment.creator.first_name || ''} ${comment.creator.last_name || ''}`.trim() || '某用戶';
+
+      // 為每個被提及的用戶發送通知
+      for (const userId of userIds) {
+        // 不給自己發送通知
+        if (userId === comment.created_by) continue;
+
+        await notificationEngine.createNotification({
+          recipientId: userId,
+          type: NotificationType.COMMENT_MENTION,
+          category: NotificationCategory.COMMENT,
+          priority: NotificationPriority.NORMAL,
+          title: `${creatorName} 在評論中提到了您`,
+          message: `在提案「${comment.proposal.title}」的評論中：${comment.content.substring(0, 100)}${comment.content.length > 100 ? '...' : ''}`,
+          data: {
+            commentId: comment.id,
+            proposalId: comment.proposal_id,
+            createdBy: comment.created_by,
+            creatorName
+          },
+          channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
+          actionUrl: `/dashboard/proposals/${comment.proposal_id}?commentId=${comment.id}`,
+          actionText: '查看評論'
+        });
+      }
+    } catch (error) {
+      console.error('Failed to send mention notifications:', error);
+      // 不拋出錯誤，避免影響評論創建流程
+    }
+  }
+
+  /**
+   * 發送評論回覆通知
+   *
+   * @param commentId - 新評論ID
+   * @param parentCommentId - 父評論ID
+   */
+  private async sendReplyNotification(
+    commentId: string,
+    parentCommentId: string
+  ): Promise<void> {
+    try {
+      const { NotificationEngine } = await import('@/lib/notification/engine');
+      const { NotificationType, NotificationCategory, NotificationPriority, NotificationChannel } = await import('@prisma/client');
+
+      const notificationEngine = new NotificationEngine(this.prisma);
+
+      // 獲取評論和父評論信息
+      const comment = await this.prisma.proposalComment.findUnique({
+        where: { id: commentId },
+        include: {
+          proposal: true,
+          creator: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true
+            }
+          }
+        }
+      });
+
+      const parentComment = await this.prisma.proposalComment.findUnique({
+        where: { id: parentCommentId },
+        include: {
+          creator: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true
+            }
+          }
+        }
+      });
+
+      if (!comment || !parentComment) return;
+
+      // 不給自己發送通知
+      if (comment.created_by === parentComment.created_by) return;
+
+      const replyCreatorName = `${comment.creator.first_name || ''} ${comment.creator.last_name || ''}`.trim() || '某用戶';
+
+      // 通知父評論的作者
+      await notificationEngine.createNotification({
+        recipientId: parentComment.created_by,
+        type: NotificationType.COMMENT_REPLY,
+        category: NotificationCategory.COMMENT,
+        priority: NotificationPriority.NORMAL,
+        title: `${replyCreatorName} 回覆了您的評論`,
+        message: `在提案「${comment.proposal.title}」中：${comment.content.substring(0, 100)}${comment.content.length > 100 ? '...' : ''}`,
+        data: {
+          commentId: comment.id,
+          parentCommentId,
+          proposalId: comment.proposal_id,
+          createdBy: comment.created_by
+        },
+        channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
+        actionUrl: `/dashboard/proposals/${comment.proposal_id}?commentId=${comment.id}`,
+        actionText: '查看回覆'
+      });
+    } catch (error) {
+      console.error('Failed to send reply notification:', error);
+    }
   }
 }
 

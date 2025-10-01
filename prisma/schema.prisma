@@ -58,6 +58,10 @@ model User {
   approvalTasksDelegated  ApprovalTask[]         @relation("TaskDelegate")
   triggeredWorkflowStates WorkflowStateHistory[] @relation("WorkflowTrigger")
 
+  // MVP Phase 2 Sprint 5 Week 10: 通知系統關聯
+  notifications         Notification[]           @relation("UserNotifications")
+  notificationPreference NotificationPreference? @relation("UserNotificationPreferences")
+
   @@index([email, is_active], name: "IX_User_Email_Active")
   @@index([role, department], name: "IX_User_Role_Department")
   @@index([azure_ad_oid], name: "IX_User_AzureAD_OID")
@@ -1133,4 +1137,243 @@ enum ApprovalDecision {
   REJECTED // 拒絕
   REQUEST_REVISION // 要求修訂
   DELEGATED // 已委派
+}
+
+// =====================================================
+// 通知系統 (Notification System)
+// Sprint 5 Week 10 - 支援工作流程引擎的通知功能
+// =====================================================
+
+// 通知模型 - 統一通知管理
+model Notification {
+  id          Int              @id @default(autoincrement())
+  recipient_id Int             // 接收者ID
+  type        NotificationType // 通知類型
+  category    NotificationCategory @default(SYSTEM) // 通知分類
+  priority    NotificationPriority @default(NORMAL) // 優先級
+
+  // 通知內容
+  title       String           // 通知標題
+  message     String           @db.Text // 通知內容
+  data        Json?            // 額外數據（JSON格式）
+
+  // 通知狀態
+  status      NotificationStatus @default(PENDING) // 通知狀態
+  is_read     Boolean          @default(false) // 是否已讀
+  read_at     DateTime?        // 已讀時間
+
+  // 發送渠道
+  channels    NotificationChannel[] @default([IN_APP]) // 發送渠道（多選）
+
+  // 發送狀態追蹤
+  sent_at     DateTime?        // 發送時間
+  delivered_at DateTime?       // 送達時間
+  failed_at   DateTime?        // 失敗時間
+  error_message String?        // 錯誤信息
+  retry_count Int              @default(0) // 重試次數
+
+  // 相關實體（多態關聯）
+  entity_type String?          // 實體類型（proposal, workflow, comment等）
+  entity_id   Int?             // 實體ID
+
+  // 操作相關
+  action_url  String?          // 操作URL
+  action_text String?          // 操作按鈕文字
+
+  // 過期時間
+  expires_at  DateTime?        // 過期時間
+
+  // 時間戳
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+
+  // 關聯關係
+  recipient   User             @relation("UserNotifications", fields: [recipient_id], references: [id], onDelete: Cascade)
+
+  // 索引優化
+  @@index([recipient_id, is_read, created_at], name: "IX_Notification_Recipient_Read")
+  @@index([recipient_id, status], name: "IX_Notification_Recipient_Status")
+  @@index([type, created_at], name: "IX_Notification_Type_Created")
+  @@index([entity_type, entity_id], name: "IX_Notification_Entity")
+  @@index([status, created_at], name: "IX_Notification_Status_Created")
+  @@index([expires_at], name: "IX_Notification_Expires")
+
+  @@map("notifications")
+}
+
+// 通知偏好設定 - 用戶通知偏好管理
+model NotificationPreference {
+  id          Int      @id @default(autoincrement())
+  user_id     Int      @unique // 用戶ID
+
+  // 通知渠道偏好
+  in_app_enabled    Boolean @default(true) // 站內通知
+  email_enabled     Boolean @default(true) // 郵件通知
+  push_enabled      Boolean @default(false) // 推送通知（未來）
+
+  // 通知類型偏好（JSON格式，按類型開關）
+  type_preferences  Json?   // { "WORKFLOW_APPROVED": true, "COMMENT_MENTION": false, ... }
+
+  // 安靜模式
+  quiet_hours_enabled Boolean @default(false) // 啟用安靜時間
+  quiet_hours_start   String? // 安靜開始時間 (HH:MM)
+  quiet_hours_end     String? // 安靜結束時間 (HH:MM)
+
+  // 批次發送偏好
+  batch_enabled       Boolean @default(false) // 批次發送
+  batch_interval      Int     @default(60) // 批次間隔（分鐘）
+
+  // 時間戳
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // 關聯關係
+  user        User     @relation("UserNotificationPreferences", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
+}
+
+// 通知模板 - 預定義通知模板
+model NotificationTemplate {
+  id          Int              @id @default(autoincrement())
+  type        NotificationType // 通知類型
+  name        String           @unique // 模板名稱
+
+  // 模板內容
+  title_template   String      // 標題模板
+  message_template String      @db.Text // 內容模板
+
+  // 模板變數說明
+  variables   Json?            // 變數列表及說明
+
+  // 預設配置
+  default_priority NotificationPriority @default(NORMAL)
+  default_channels NotificationChannel[] @default([IN_APP])
+
+  // 狀態
+  is_active   Boolean          @default(true)
+
+  // 時間戳
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+
+  // 索引
+  @@index([type, is_active], name: "IX_Template_Type_Active")
+
+  @@map("notification_templates")
+}
+
+// 通知批次 - 批次通知管理
+model NotificationBatch {
+  id          Int      @id @default(autoincrement())
+  name        String   // 批次名稱
+
+  // 批次統計
+  total_count     Int  @default(0) // 總通知數
+  sent_count      Int  @default(0) // 已發送數
+  failed_count    Int  @default(0) // 失敗數
+
+  // 批次狀態
+  status      BatchStatus @default(PENDING)
+
+  // 發送時間
+  scheduled_at DateTime? // 計劃發送時間
+  started_at   DateTime? // 開始時間
+  completed_at DateTime? // 完成時間
+
+  // 時間戳
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // 索引
+  @@index([status, scheduled_at], name: "IX_Batch_Status_Scheduled")
+
+  @@map("notification_batches")
+}
+
+// =====================================================
+// 通知系統枚舉定義
+// =====================================================
+
+// 通知類型
+enum NotificationType {
+  // 工作流程相關
+  WORKFLOW_STATE_CHANGED      // 工作流程狀態變更
+  WORKFLOW_ASSIGNED           // 工作流程分配
+  WORKFLOW_APPROVED           // 工作流程批准
+  WORKFLOW_REJECTED           // 工作流程拒絕
+  WORKFLOW_REVISION_REQUESTED // 需要修訂
+
+  // 審批相關
+  APPROVAL_REQUESTED          // 審批請求
+  APPROVAL_REMINDER           // 審批提醒
+  APPROVAL_DELEGATED          // 審批委派
+  APPROVAL_OVERDUE            // 審批逾期
+
+  // 評論相關
+  COMMENT_ADDED               // 新評論
+  COMMENT_MENTION             // @提及
+  COMMENT_REPLY               // 評論回覆
+  COMMENT_RESOLVED            // 評論已解決
+
+  // 版本控制相關
+  VERSION_CREATED             // 新版本創建
+  VERSION_RESTORED            // 版本恢復
+
+  // 提案相關
+  PROPOSAL_SHARED             // 提案分享
+  PROPOSAL_VIEWED             // 提案查看
+  PROPOSAL_EXPIRED            // 提案過期
+
+  // 系統相關
+  SYSTEM_MAINTENANCE          // 系統維護
+  SYSTEM_ANNOUNCEMENT         // 系統公告
+  SYSTEM_UPDATE               // 系統更新
+
+  // 其他
+  CUSTOM                      // 自定義通知
+}
+
+// 通知分類
+enum NotificationCategory {
+  WORKFLOW  // 工作流程
+  APPROVAL  // 審批
+  COMMENT   // 評論
+  SYSTEM    // 系統
+  CUSTOM    // 自定義
+}
+
+// 通知優先級
+enum NotificationPriority {
+  LOW       // 低優先級
+  NORMAL    // 普通優先級
+  HIGH      // 高優先級
+  URGENT    // 緊急
+}
+
+// 通知狀態
+enum NotificationStatus {
+  PENDING   // 待發送
+  SENDING   // 發送中
+  SENT      // 已發送
+  DELIVERED // 已送達
+  FAILED    // 發送失敗
+  EXPIRED   // 已過期
+}
+
+// 通知渠道
+enum NotificationChannel {
+  IN_APP    // 站內通知
+  EMAIL     // 郵件
+  PUSH      // 推送通知（未來）
+  SMS       // 短信（未來）
+}
+
+// 批次狀態
+enum BatchStatus {
+  PENDING   // 待處理
+  PROCESSING // 處理中
+  COMPLETED // 已完成
+  FAILED    // 失敗
+  CANCELLED // 已取消
 }

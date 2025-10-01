@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-30T18:01:34.245Z",
+  "timestamp": "2025-10-01T15:34:12.450Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -11,7 +11,7 @@
     "highSeverity": 0,
     "mediumSeverity": 0,
     "lowSeverity": 0,
-    "suggestions": 1,
+    "suggestions": 15,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -22,10 +22,120 @@
   "suggestions": [
     {
       "type": "add_to_index",
+      "file": "docs\\MVP2-TESTING-GUIDE.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\MVP2-TESTING-GUIDE.md",
+      "modifiedTime": "2025-10-01T15:19:57.241Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "docs\\workflow-engine-design.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\workflow-engine-design.md",
+      "modifiedTime": "2025-10-01T10:27:54.036Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\performance\\monitor.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\performance\\monitor.test.ts",
+      "modifiedTime": "2025-10-01T09:35:16.051Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\performance\\query-optimizer.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\performance\\query-optimizer.test.ts",
+      "modifiedTime": "2025-10-01T09:22:39.965Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\performance\\response-cache.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\performance\\response-cache.test.ts",
+      "modifiedTime": "2025-10-01T09:04:34.390Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\resilience\\circuit-breaker.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\resilience\\circuit-breaker.test.ts",
+      "modifiedTime": "2025-10-01T09:42:40.159Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\resilience\\health-check.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\resilience\\health-check.test.ts",
+      "modifiedTime": "2025-10-01T09:51:01.648Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\resilience\\retry.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\resilience\\retry.test.ts",
+      "modifiedTime": "2025-10-01T09:57:39.680Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\security\\audit-log.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\security\\audit-log.test.ts",
+      "modifiedTime": "2025-10-01T08:50:02.733Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\security\\backup.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\security\\backup.test.ts",
+      "modifiedTime": "2025-10-01T08:52:08.781Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\security\\encryption.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\security\\encryption.test.ts",
+      "modifiedTime": "2025-10-01T08:28:47.051Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\security\\permission-middleware.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\security\\permission-middleware.test.ts",
+      "modifiedTime": "2025-10-01T08:44:58.875Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "lib\\security\\rbac.test.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\security\\rbac.test.ts",
+      "modifiedTime": "2025-10-01T08:31:15.658Z"
+    },
+    {
+      "type": "add_to_index",
       "file": "Cai-sales-enablement-webapptempREADME.md",
       "severity": "low",
       "message": "建議將重要文件加入索引: Cai-sales-enablement-webapptempREADME.md"
+    },
+    {
+      "type": "add_to_index",
+      "file": "START-SERVICES.md",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: START-SERVICES.md"
     }
   ],
-  "lastUpdated": "2025-09-30T18:01:34.245Z"
+  "lastUpdated": "2025-10-01T15:34:12.450Z"
 }
