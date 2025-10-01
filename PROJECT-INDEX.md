@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月2日 - Sprint 5 Week 10 Day 2-3 完成（通知系統+範本管理系統：通知5個API+5個UI，範本5個API+範本引擎，~3,750行代碼）
+> **📅 最後更新**: 2025年10月2日 - Sprint 5 Week 10 Day 3 完成（通知系統+範本管理系統：通知5個API+5個UI，範本6個API+範本引擎+4個前端頁面，~6,050行代碼）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -184,7 +184,7 @@
 
 ---
 
-### 📝 lib/template/ - 提案範本管理系統 (Sprint 5 Week 10進行中)
+### 📝 lib/template/ - 提案範本管理系統 (Sprint 5 Week 10完成)
 
 **用途**: 範本管理引擎 - 範本CRUD、變數替換、預覽、PDF導出
 
@@ -192,7 +192,7 @@
 - **Handlebars引擎**: 強大的範本語法支援（變數/條件/循環）
 - **25個Helper函數**: 日期/貨幣/數學/邏輯/字串處理
 - **訪問控制**: PRIVATE/TEAM/ORGANIZATION/PUBLIC 4級權限
-- **變數系統**: 8種變數類型，完整驗證和測試數據生成
+- **變數系統**: 6種變數類型，完整驗證和測試數據生成
 - **版本管理**: 自動版本號，範本複製和統計
 
 | 範本模組               | 文件路徑                              | 用途說明                                     | 代碼行數 | 重要程度 |
@@ -205,14 +205,21 @@
 - `[id]/route.ts`: 單個範本操作 (GET/PUT/DELETE)
 - `[id]/duplicate/route.ts`: 複製範本 (POST)
 - `[id]/preview/route.ts`: 預覽範本 (POST)
+- `preview-temp/route.ts`: 臨時範本預覽 (POST) - 用於創建頁面
 - `stats/route.ts`: 統計信息 (GET)
 
-**✅ 完成狀態**: Sprint 5 Week 10 Day 3 部分完成 (2025-10-02)
-- 後端: ~1,150行代碼（範本管理+引擎+API）
-- 前端: 待開發
-- 數據庫: 2個模型（ProposalTemplate + ProposalGeneration）已存在
-- API端點: 5個REST API ✅
-- PDF導出: 待整合 Puppeteer
+**🎨 前端頁面** (app/dashboard/templates/):
+- `page.tsx`: 範本列表頁（~450行）- 搜索/過濾/統計/分頁
+- `new/page.tsx`: 範本創建頁（~650行）- Tab界面/變數配置/預覽
+- `[id]/page.tsx`: 範本編輯頁（~700行）- 完整編輯功能
+- `[id]/preview/page.tsx`: 範本預覽頁（~500行）- 獨立預覽/變數輸入
+
+**✅ 完成狀態**: Sprint 5 Week 10 Day 3 完成 (2025-10-02)
+- 後端: ~1,220行代碼（範本管理+引擎+6個API）✅
+- 前端: ~2,300行代碼（4個頁面完整UI）✅
+- 數據庫: 2個模型（ProposalTemplate + ProposalGeneration）已存在 ✅
+- API端點: 6個REST API ✅
+- PDF導出: 待整合 Puppeteer ⏳
 
 ### 📊 lib/monitoring/ - 企業級監控告警系統 (Sprint 2完成)
 
