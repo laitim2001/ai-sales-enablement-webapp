@@ -1,8 +1,10 @@
 # 🚀 AI 銷售賦能平台 - 服務啟動指南
 
+> **版本**: v2.0.0 (更新至 MVP Phase 2 Sprint 5)
 > **目的**: 提供開發團隊和新成員快速啟動所有服務的標準流程
 > **適用**: 本地開發環境
-> **更新**: 每次服務配置變更後更新
+> **最後更新**: 2025-10-02
+> **變更記錄**: 新增Redis、監控系統、通知系統、工作流程引擎配置
 
 ---
 
@@ -10,17 +12,33 @@
 
 ### 🎯 **一鍵啟動命令**
 ```bash
-# 複製並填入環境變數
+# 1. 複製並配置環境變數
 cp .env.example .env.local
+# 編輯 .env.local 填入必要配置（詳見下方）
 
-# 啟動所有服務
-docker-compose -f docker-compose.dev.yml up -d
+# 2. 啟動基礎服務 (PostgreSQL + Redis)
+docker-compose -f docker-compose.dev.yml up -d postgres redis
 
-# 等待服務就緒 (約30秒)
-npm run services:health-check
+# 3. 等待服務就緒 (約30秒)
+sleep 30
 
-# 啟動 Next.js 應用
+# 4. 初始化資料庫
+npx prisma generate
+npx prisma db push
+
+# 5. 環境配置檢查
+npm run env:check
+
+# 6. 啟動 Next.js 應用
 npm run dev
+```
+
+### 🔧 **快速診斷和修復**
+如遇問題，使用自動化工具：
+```bash
+npm run fix:diagnose    # 診斷系統問題
+npm run fix:all         # 執行所有自動修復
+npm run env:setup       # 互動式環境設置
 ```
 
 ---
@@ -57,34 +75,104 @@ cd poc && npm install && cd ..
 cp .env.example .env.local
 
 # 編輯 .env.local 填入實際值:
-# - AZURE_OPENAI_API_KEY (必需)
-# - AZURE_OPENAI_ENDPOINT (必需)
-# - JWT_SECRET (必需，至少32字符)
+
+# ============================================
+# 🔴 必需配置（核心功能）
+# ============================================
+
+# 1. 資料庫連接 (使用Docker預設值)
+DATABASE_URL="postgresql://postgres:dev_password_123@localhost:5433/ai_sales_db"
+
+# 2. JWT 認證 (至少32字符)
+JWT_SECRET="your-super-secret-jwt-key-min-32-characters-long"
+JWT_EXPIRES_IN="7d"
+
+# 3. Azure OpenAI (必需)
+AZURE_OPENAI_API_KEY="your-azure-openai-api-key"
+AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
+AZURE_OPENAI_API_VERSION="2024-02-01"
+AZURE_OPENAI_DEPLOYMENT_ID_GPT4="gpt-4"
+AZURE_OPENAI_DEPLOYMENT_ID_EMBEDDINGS="text-embedding-ada-002"
+
+# 4. Dynamics 365 CRM (必需)
+DYNAMICS_365_TENANT_ID="your-azure-tenant-id"
+DYNAMICS_365_CLIENT_ID="your-app-client-id"
+DYNAMICS_365_CLIENT_SECRET="your-app-client-secret"
+DYNAMICS_365_RESOURCE="https://your-org.crm5.dynamics.com/"
+
+# ============================================
+# 🟡 推薦配置（企業功能 - MVP Phase 2）
+# ============================================
+
+# 5. Azure AD SSO (Sprint 1實現 - 單一登入)
+AZURE_AD_CLIENT_ID="your-azure-ad-client-id"
+AZURE_AD_CLIENT_SECRET="your-azure-ad-client-secret"
+AZURE_AD_TENANT_ID="your-azure-ad-tenant-id"
+
+# 6. 郵件服務 (Sprint 5實現 - 通知系統)
+EMAIL_SERVICE_API_KEY="your-sendgrid-api-key"
+EMAIL_FROM_ADDRESS="noreply@your-domain.com"
+EMAIL_FROM_NAME="AI Sales Platform"
+SMTP_HOST="smtp.sendgrid.net"
+SMTP_PORT="587"
+SMTP_USER="apikey"
+SMTP_PASS="your-sendgrid-api-key"
+
+# ============================================
+# 🟢 可選配置（開發輔助）
+# ============================================
+
+# 7. 監控系統 (Sprint 2實現 - 可選)
+ENABLE_TELEMETRY="true"
+OTEL_SERVICE_NAME="ai-sales-enablement-dev"
+
+# 8. 功能開關
+FEATURE_FLAG_AI_PROPOSALS="1"
+FEATURE_FLAG_CRM_SYNC="1"
+FEATURE_FLAG_ADVANCED_SEARCH="1"
 ```
+
+**💡 提示**:
+- 運行 `npm run env:check` 檢查配置完整性
+- 運行 `npm run env:setup` 進行自動配置引導
+- 運行 `npm run env:auto-fix` 自動修復常見配置問題
 
 ### **Step 2: 啟動基礎服務** (必須按順序)
 
-#### 2.1 啟動資料庫服務
+#### 2.1 同時啟動資料庫和快取服務
 ```bash
-# 啟動 PostgreSQL + pgvector
-docker-compose -f docker-compose.dev.yml up -d postgres
+# 啟動 PostgreSQL + pgvector + Redis
+docker-compose -f docker-compose.dev.yml up -d postgres redis
 
 # 等待服務啟動 (約30秒)
-docker-compose -f docker-compose.dev.yml logs postgres
+echo "等待服務啟動..."
+sleep 30
 
-# 驗證 pgvector 擴展
-docker exec $(docker-compose -f docker-compose.dev.yml ps -q postgres) \
-  psql -U postgres -d ai_sales_db -c "SELECT extname FROM pg_extension WHERE extname = 'vector';"
+# 查看服務日誌
+docker-compose -f docker-compose.dev.yml logs postgres redis
 ```
 
-#### 2.2 啟動快取服務
+#### 2.2 驗證服務狀態
 ```bash
-# 啟動 Redis
-docker-compose -f docker-compose.dev.yml up -d redis
+# 驗證 PostgreSQL + pgvector 擴展
+docker exec ai-sales-postgres-dev \
+  psql -U postgres -d ai_sales_db -c "SELECT extname, extversion FROM pg_extension WHERE extname = 'vector';"
+# 期望輸出: vector | 0.5.1 (或更高版本)
 
 # 驗證 Redis 連接
-docker exec $(docker-compose -f docker-compose.dev.yml ps -q redis) redis-cli ping
+docker exec ai-sales-redis-dev redis-cli ping
+# 期望輸出: PONG
+
+# 驗證 Redis 版本
+docker exec ai-sales-redis-dev redis-cli INFO server | grep redis_version
+# 期望輸出: redis_version:7.x.x
 ```
+
+**📝 Redis 用途說明** (MVP Phase 2):
+- 🔐 用戶會話管理
+- ⚡ API響應緩存 (Sprint 4 - 性能優化)
+- 🚦 速率限制記錄 (Sprint 1 - API Gateway)
+- 🔔 通知系統臨時存儲 (Sprint 5)
 
 #### 2.3 初始化資料庫
 ```bash
@@ -143,12 +231,34 @@ curl -X POST http://localhost:3000/api/auth/register \
 
 ## 📊 **服務端口分配**
 
-| 服務 | 端口 | 用途 | 健康檢查 |
-|------|------|------|----------|
-| **Next.js App** | 3000 | 主應用 | `http://localhost:3000/api/health` |
-| **PostgreSQL** | 5433 | 主資料庫 | `docker exec <container> pg_isready` |
-| **Redis** | 6379 | 快取服務 | `docker exec <container> redis-cli ping` |
-| **pgAdmin** | 8080 | 資料庫管理 | `http://localhost:8080` |
+### 核心服務 (必需)
+| 服務 | 端口 | 用途 | 健康檢查 | 狀態 |
+|------|------|------|----------|------|
+| **Next.js App** | 3000 | 主應用程式 | `http://localhost:3000/api/health` | ✅ MVP1+2 |
+| **PostgreSQL** | 5433 | 主資料庫 + pgvector | `docker exec ai-sales-postgres-dev pg_isready` | ✅ MVP1+2 |
+| **Redis** | 6379 | 快取/會話服務 | `docker exec ai-sales-redis-dev redis-cli ping` | ✅ MVP2 Sprint 1 |
+
+### 監控服務 (可選 - Sprint 2實現)
+| 服務 | 端口 | 用途 | 健康檢查 | 狀態 |
+|------|------|------|----------|------|
+| **Grafana** | 3001 | 監控儀表板 | `http://localhost:3001/api/health` | ✅ MVP2 Sprint 2 |
+| **Prometheus** | 9090 | 指標收集 | `http://localhost:9090/-/healthy` | ✅ MVP2 Sprint 2 |
+| **Jaeger** | 16686 | 分散式追蹤 | `http://localhost:16686/` | ✅ MVP2 Sprint 2 |
+| **Alertmanager** | 9093 | 告警管理 | `http://localhost:9093/-/healthy` | ✅ MVP2 Sprint 2 |
+
+### 開發工具 (可選)
+| 服務 | 端口 | 用途 | 健康檢查 | 狀態 |
+|------|------|------|----------|------|
+| **Prisma Studio** | 5555 | 資料庫 GUI | `http://localhost:5555` | ✅ 開發工具 |
+| **pgAdmin** | 8080 | 資料庫管理 | `http://localhost:8080` | 🟡 可選配置 |
+
+**💡 快速訪問連結**:
+- 主應用: http://localhost:3000
+- API健康: http://localhost:3000/api/health
+- Grafana監控: http://localhost:3001 (admin/admin)
+- Prometheus: http://localhost:9090
+- Jaeger追蹤: http://localhost:16686
+- Prisma Studio: http://localhost:5555
 
 ---
 
@@ -233,23 +343,209 @@ npm run dev
 
 ---
 
-## 🔄 **服務依賴關係圖**
+## 🚀 **常用開發命令參考**
+
+### 環境管理與診斷
+```bash
+# 環境配置檢查和修復 (MVP Phase 2 新增)
+npm run env:check                # 檢查環境配置完整性
+npm run env:setup                # 互動式環境設置引導
+npm run env:auto-fix             # 自動修復常見配置問題
+
+# 快速問題診斷和修復 (MVP Phase 2 新增)
+npm run fix:diagnose             # 診斷系統問題
+npm run fix:all                  # 執行所有自動修復
+npm run fix:deps                 # 修復npm依賴問題
+npm run fix:restart              # 重啟所有服務
+```
+
+### 資料庫操作
+```bash
+# Prisma 資料庫管理
+npm run db:generate              # 生成Prisma Client
+npm run db:push                  # 推送schema到資料庫（開發用）
+npm run db:migrate               # 創建和應用遷移（生產用）
+npm run db:studio                # 啟動Prisma Studio GUI
+npm run db:seed                  # 載入種子數據
+
+# 直接資料庫操作
+docker exec ai-sales-postgres-dev psql -U postgres -d ai_sales_db
+```
+
+### 應用程式開發
+```bash
+# Next.js 開發
+npm run dev                      # 啟動開發服務器
+npm run build                    # 構建生產版本
+npm run start                    # 啟動生產服務器
+npm run lint                     # ESLint檢查
+npm run type-check               # TypeScript類型檢查
+```
+
+### 測試執行
+```bash
+# 單元測試
+npm run test                     # 執行所有單元測試
+npm run test:watch               # 監視模式執行測試
+npm run test:coverage            # 生成測試覆蓋率報告
+
+# 工作流程測試 (Sprint 5實現)
+npm run test:workflow            # 工作流程引擎測試
+npm run test:workflow:watch      # 監視模式
+npm run test:workflow:coverage   # 覆蓋率報告
+
+# 端到端測試
+npm run test:e2e                 # 執行E2E測試
+npm run test:e2e:ui              # Playwright UI模式
+npm run test:e2e:knowledge       # 知識庫功能E2E測試
+
+# 整合測試
+npm run test:integration         # 所有整合測試
+npm run test:integration:crm     # CRM整合測試
+npm run test:integration:system  # 系統整合測試
+```
+
+### Docker 容器管理
+```bash
+# 開發環境
+npm run docker:dev               # 啟動開發環境（= docker-compose up）
+docker-compose -f docker-compose.dev.yml up -d        # 背景啟動
+docker-compose -f docker-compose.dev.yml down         # 停止並移除
+docker-compose -f docker-compose.dev.yml restart      # 重啟服務
+docker-compose -f docker-compose.dev.yml logs -f      # 查看即時日誌
+
+# 生產環境
+npm run docker:prod              # 啟動生產環境
+npm run docker:build             # 構建Docker鏡像
+
+# 監控堆棧 (Sprint 2實現 - 可選)
+docker-compose -f docker-compose.monitoring.yml up -d     # 啟動監控服務
+docker-compose -f docker-compose.monitoring.yml down      # 停止監控服務
+```
+
+### 服務健康檢查
+```bash
+# 應用程式健康
+curl http://localhost:3000/api/health
+
+# 資料庫健康
+docker exec ai-sales-postgres-dev pg_isready -U postgres
+
+# Redis健康
+docker exec ai-sales-redis-dev redis-cli ping
+
+# 所有容器狀態
+docker-compose -f docker-compose.dev.yml ps
+
+# 查看特定服務日誌
+docker-compose -f docker-compose.dev.yml logs postgres
+docker-compose -f docker-compose.dev.yml logs redis
+docker-compose -f docker-compose.dev.yml logs -f app  # 即時日誌
+```
+
+### POC 測試 (外部服務驗證)
+```bash
+# 進入POC目錄執行測試
+cd poc
+
+# 執行所有POC測試
+node run-all-tests.js
+
+# 單獨測試各服務
+node azure-openai-basic-test.js       # Azure OpenAI連接
+node dynamics-365-test.js             # Dynamics 365整合
+node pgvector-performance-test.js     # pgvector性能
+
+# 返回項目根目錄
+cd ..
+```
+
+---
+
+## 🔄 **服務依賴關係圖** (MVP Phase 2 完整架構)
 
 ```
-Azure OpenAI API ─┐
-                  │
-Dynamics 365 API ─┼─── Next.js App (port 3000)
-                  │         │
-                  │         ├─── Prisma Client
-                  │         │         │
-Redis (port 6379) ┘         │         ▼
-                            │    PostgreSQL + pgvector
-                            │    (port 5433)
-                            │
-                            ▼
-                      pgAdmin (port 8080)
-                      [可選資料庫管理]
+┌─────────────────────────────────────────────────────────────────┐
+│                     外部服務 (雲端)                              │
+│                                                                  │
+│  Azure OpenAI API ────┐                                         │
+│  (GPT-4 + Embeddings) │                                         │
+│                       │                                         │
+│  Dynamics 365 CRM ────┤                                         │
+│  (客戶資料)            │                                         │
+│                       │                                         │
+│  Azure AD (SSO) ──────┤                                         │
+│  (單一登入)            │                                         │
+│                       │                                         │
+│  SendGrid (Email) ────┤                                         │
+│  (郵件通知)            │                                         │
+└───────────────────────┼─────────────────────────────────────────┘
+                        │
+                        ▼
+         ┌──────────────────────────────────┐
+         │   Next.js App (port 3000)        │
+         │   ✅ MVP Phase 1 + 2 完成         │
+         │                                  │
+         │  ┌─────────────────────────┐    │
+         │  │ API Gateway (Sprint 1)  │    │
+         │  │ - 10個核心中間件         │    │
+         │  │ - 速率限制/CORS/安全     │    │
+         │  └─────────────────────────┘    │
+         │  ┌─────────────────────────┐    │
+         │  │ 通知系統 (Sprint 5)     │    │
+         │  │ - 站內/郵件通知          │    │
+         │  │ - 工作流程整合          │    │
+         │  └─────────────────────────┘    │
+         │  ┌─────────────────────────┐    │
+         │  │ 工作流程引擎 (Sprint 5) │    │
+         │  │ - 12狀態機              │    │
+         │  │ - 版本控制/評論/審批     │    │
+         │  └─────────────────────────┘    │
+         │  ┌─────────────────────────┐    │
+         │  │ 性能優化 (Sprint 4)     │    │
+         │  │ - API緩存/DataLoader    │    │
+         │  │ - 熔斷器/重試策略        │    │
+         │  └─────────────────────────┘    │
+         └──────────┬───────────┬───────────┘
+                    │           │
+            ┌───────▼───┐   ┌──▼──────────┐
+            │  Redis    │   │  Prisma     │
+            │ (port     │   │  Client     │
+            │  6379)    │   │             │
+            │           │   └──────┬──────┘
+            │ ✅ MVP2   │          │
+            │ - 會話    │          │
+            │ - 緩存    │          ▼
+            │ - 速率    │   ┌─────────────────┐
+            │   限制    │   │  PostgreSQL     │
+            └───────────┘   │  + pgvector     │
+                            │  (port 5433)    │
+                            │                 │
+                            │  ✅ MVP1+2      │
+                            │  - 用戶/知識庫  │
+                            │  - 工作流程     │
+                            │  - 通知         │
+                            └─────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│              監控系統 (可選 - Sprint 2)                          │
+│                                                                  │
+│  Grafana (3001) ───┬─── Prometheus (9090) ─── 指標收集          │
+│  儀表板/告警       │                                             │
+│                    └─── Jaeger (16686) ────── 分散式追蹤        │
+│                                                                  │
+│  Alertmanager (9093) ────────────────────── 告警管理            │
+└─────────────────────────────────────────────────────────────────┘
+
+開發工具 (可選):
+  - Prisma Studio (5555) - 資料庫 GUI
+  - pgAdmin (8080) - PostgreSQL 管理
 ```
+
+**📝 說明**:
+- ✅ 表示已實現並穩定運行
+- 🔄 表示開發中
+- 監控系統為可選配置，適合完整開發體驗
 
 ---
 
