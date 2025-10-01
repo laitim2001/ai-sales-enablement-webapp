@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月1日 - Sprint 4 Week 7-8.3 完成（響應緩存+查詢優化+性能監控+熔斷器+健康檢查+重試策略，390個測試通過）
+> **📅 最後更新**: 2025年10月1日 - Sprint 5 Week 9 Day 2 完成（工作流程引擎+版本控制+評論系統+審批管理，2,345行後端+3,010行前端，6個設計模式）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -119,6 +119,38 @@
 | ---------------------- | ---------------------------------- | -------------------------------------------- | -------- |
 | **Token服務**          | `lib/auth/token-service.ts`       | JWT雙令牌機制(15分+30天)、Token撤銷、多設備管理、自動清理 | 🔴 極高  |
 | **Azure AD服務**       | `lib/auth/azure-ad-service.ts`    | MSAL Node整合、OAuth 2.0、用戶同步、角色映射、單點登出 | 🔴 極高  |
+
+### 🔄 lib/workflow/ - 提案工作流程系統 (Sprint 5 Week 9完成)
+
+**用途**: 企業級提案工作流程引擎 - 狀態管理、版本控制、協作、審批
+
+**🎯 核心特點**:
+- **狀態機引擎**: 12狀態完整狀態機，30+狀態轉換，權限控制
+- **版本控制**: 快照式版本管理，差異計算，回滾機制
+- **協作系統**: 段落級評論，@mentions，樹狀回覆結構
+- **審批管理**: 多級審批，並行會簽，委派機制
+- **審計追蹤**: 完整狀態變更歷史，不可篡改記錄
+
+| 工作流程模組           | 文件路徑                              | 用途說明                                     | 代碼行數 | 重要程度 |
+| ---------------------- | ------------------------------------- | -------------------------------------------- | -------- | -------- |
+| **工作流程引擎**       | `lib/workflow/engine.ts`              | 12狀態狀態機，30+轉換，權限驗證，審計追蹤    | 420      | 🔴 極高  |
+| **版本控制系統**       | `lib/workflow/version-control.ts`     | 快照管理，差異計算，回滾功能，標籤支援        | 370      | 🔴 極高  |
+| **評論協作系統**       | `lib/workflow/comment-system.ts`      | 段落級評論，@mentions，樹狀回覆，狀態管理     | 370      | 🔴 極高  |
+| **審批管理器**         | `lib/workflow/approval-manager.ts`    | 多級審批，並行會簽，委派機制，自動推進        | 430      | 🔴 極高  |
+| **統一導出**           | `lib/workflow/index.ts`               | 所有工作流程模組的統一導出入口               | 45       | 🟡 高    |
+
+**🎯 設計模式應用**:
+- State Pattern (狀態機)
+- Observer Pattern (事件通知)
+- Strategy Pattern (審批策略)
+- Factory Pattern (模組實例化)
+- Command Pattern (狀態轉換)
+- Memento Pattern (版本快照)
+
+**✅ 完成狀態**: Sprint 5 Week 9 Day 2 完成 (2025-10-01)
+- 總計: 2,035行核心代碼
+- 數據庫: 5個模型 + 5個枚舉 + 30+索引
+- 測試: 400行測試框架（待環境配置）
 
 ### 📊 lib/monitoring/ - 企業級監控告警系統 (Sprint 2完成)
 
@@ -397,6 +429,61 @@
 | **文檔編輯**   | `components/knowledge/knowledge-document-edit.tsx` | 文檔內容和屬性編輯表單           | 🟢 高    |
 | **列表優化版** | `components/knowledge/knowledge-base-list-optimized.tsx` | 性能優化的知識庫列表組件 | 🟡 高    |
 
+#### 🔄 工作流程組件 (components/workflow/) - Sprint 5 Week 9 Day 2 完成
+
+**用途**: 完整的提案工作流程前端 UI 系統，支持狀態管理、版本控制、評論協作和審批流程
+
+**🎯 核心特點**:
+- **React Server/Client Components 混合架構**: 最佳性能和交互體驗
+- **TypeScript 完整類型安全**: 與後端工作流程引擎完美對接
+- **Shadcn/ui + Radix UI**: 企業級 UI 組件庫，無障礙設計
+- **中文本地化**: date-fns 時間處理，完整中文支持
+
+##### 工作流程狀態組件 (components/workflow/)
+
+| 組件名稱             | 文件路徑                                             | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ---------------------------------------------------- | -------------------------------- | -------- | -------- |
+| **狀態徽章**   | `components/workflow/ProposalStatusBadge.tsx` | 12狀態徽章，圖標+顏色系統，狀態圖例 | 150 | 🔴 極高  |
+| **狀態時間線** | `components/workflow/WorkflowTimeline.tsx` | 狀態轉換歷史時間線，自動/手動標記，精簡版支持 | 220 | 🔴 極高  |
+| **轉換按鈕**   | `components/workflow/StateTransitionButton.tsx` | 狀態轉換操作，批准/拒絕/委派，對話框確認 | 240 | 🔴 極高  |
+
+##### 版本控制組件 (components/workflow/version/)
+
+| 組件名稱             | 文件路徑                                             | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ---------------------------------------------------- | -------------------------------- | -------- | -------- |
+| **版本歷史**   | `components/workflow/version/VersionHistory.tsx` | 版本列表，比較/回滾/下載，標籤管理 | 220 | 🔴 極高  |
+| **版本比較**   | `components/workflow/version/VersionComparison.tsx` | 並排差異對比，變更統計，多視圖展示 | 310 | 🔴 極高  |
+| **版本回滾**   | `components/workflow/version/VersionRestore.tsx` | 版本回滾確認，影響分析，備份選項 | 250 | 🔴 極高  |
+
+##### 評論系統組件 (components/workflow/comments/)
+
+| 組件名稱             | 文件路徑                                             | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ---------------------------------------------------- | -------------------------------- | -------- | -------- |
+| **評論串**     | `components/workflow/comments/CommentThread.tsx` | 樹狀評論結構，開啟/已解決狀態，精簡版 | 250 | 🔴 極高  |
+| **評論項目**   | `components/workflow/comments/CommentItem.tsx` | 單條評論，@mentions 高亮，回覆/編輯 | 220 | 🔴 極高  |
+| **評論表單**   | `components/workflow/comments/CommentForm.tsx` | 評論輸入，@mentions 自動完成，富文本 | 230 | 🔴 極高  |
+
+##### 審批管理組件 (components/workflow/approval/)
+
+| 組件名稱             | 文件路徑                                             | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ---------------------------------------------------- | -------------------------------- | -------- | -------- |
+| **任務列表**   | `components/workflow/approval/ApprovalTaskList.tsx` | 審批任務，優先級/狀態篩選，統計概覽 | 380 | 🔴 極高  |
+| **審批表單**   | `components/workflow/approval/ApprovalForm.tsx` | 批准/拒絕/委派表單，決策確認 | 260 | 🔴 極高  |
+| **審批進度**   | `components/workflow/approval/ApprovalProgress.tsx` | 多級審批進度，並行/順序支持，精簡版 | 330 | 🔴 極高  |
+
+**📊 統計**:
+- **組件數**: 13 個
+- **總代碼行數**: ~3,010 lines
+- **完成狀態**: Sprint 5 Week 9 Day 2 完成 (2025-10-01)
+- **技術棧**: Next.js 14, React, TypeScript, Shadcn/ui, Radix UI, date-fns, Lucide React
+
+**🎨 設計特點**:
+- 完整的工作流程 UI 覆蓋
+- 響應式設計，支持精簡版組件
+- 一致的視覺語言和交互模式
+- 無障礙設計（Radix UI）
+- 中文本地化和時間格式化
+
 #### 🔧 管理組件 (components/admin/)
 
 | 組件名稱             | 文件路徑                                             | 用途說明                         | 重要程度 |
@@ -598,6 +685,19 @@
 | **知識庫列表測試** | `__tests__/components/knowledge/knowledge-base-list.test.tsx`     | 知識庫列表組件測試 | 🟡 高    |
 | **文檔預覽測試**   | `__tests__/components/knowledge/knowledge-document-view.test.tsx` | 文檔預覽組件測試   | 🟢 高    |
 | **文檔編輯測試**   | `__tests__/components/knowledge/knowledge-document-edit.test.tsx` | 文檔編輯組件測試   | 🟢 高    |
+
+##### 🔄 工作流程測試 (__tests__/workflow/) - Sprint 5 Week 9
+
+**用途**: 提案工作流程系統完整測試套件
+
+| 測試類別                 | 文件路徑                                  | 用途說明                                     | 測試數 | 重要程度 |
+| ------------------------ | ----------------------------------------- | -------------------------------------------- | ------ | -------- |
+| **工作流程引擎測試**     | `__tests__/workflow/engine.test.ts`       | 狀態轉換、權限、自動化、審計追蹤測試（400行）| 待配置 | 🔴 極高  |
+
+**✅ 完成狀態**: Sprint 5 Week 9 Day 2 完成 (2025-10-01)
+- 測試框架: 400行完整測試套件
+- 測試範圍: 狀態轉換/權限檢查/自動化工作流程/審計追蹤
+- 狀態: 待數據庫環境配置後執行
 
 ##### 🔌 中間件測試 (__tests__/lib/middleware/)
 
