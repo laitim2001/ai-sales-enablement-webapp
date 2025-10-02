@@ -58,6 +58,7 @@ import { Metadata } from 'next'                              // Next.js元資料
 import { Suspense } from 'react'                            // React Suspense組件
 import { KnowledgeBaseList } from '@/components/knowledge/knowledge-base-list'     // 知識庫列表組件
 import { KnowledgeBaseFilters } from '@/components/knowledge/knowledge-base-filters'  // 篩選器組件
+import { BreadcrumbNavigation } from '@/components/knowledge/breadcrumb-navigation'  // 麵包屑導航組件
 import { Button } from '@/components/ui/button'             // UI按鈕組件
 import Link from 'next/link'                                // Next.js路由連結
 import { PlusIcon, MagnifyingGlassIcon, FolderIcon } from '@heroicons/react/24/outline'  // Heroicons圖示
@@ -82,6 +83,7 @@ interface PageProps {
     tags?: string        // 標籤篩選（逗號分隔）
     sort?: string        // 排序欄位
     order?: string       // 排序方向（asc/desc）
+    folder?: string      // 資料夾ID篩選 (Sprint 6 Week 12)
   }
 }
 
@@ -108,8 +110,16 @@ export default function KnowledgePage({ searchParams }: PageProps) {
     order: (searchParams.order as 'asc' | 'desc') || 'desc',        // 排序方向，預設降序（最新在前）
   }
 
+  // 解析資料夾ID
+  const folderId = searchParams.folder ? parseInt(searchParams.folder) : null
+
   return (
     <div className="space-y-6">
+      {/* 麵包屑導航 - Sprint 6 Week 12 Day 1 */}
+      {folderId && (
+        <BreadcrumbNavigation folderId={folderId} showHome={true} />
+      )}
+
       {/* 頁面標題和主要操作區域 */}
       <div className="flex items-center justify-between">
         {/* 左側：頁面標題和描述 */}

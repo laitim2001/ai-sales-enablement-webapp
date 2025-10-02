@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月2日 23:35 - Sprint 6 Week 11 Day 2 完整交付（資料夾管理界面 + Tiptap富文本編輯器 + 資料夾過濾搜索，累計~3,038行新代碼）
+> **📅 最後更新**: 2025年10月3日 08:45 - Sprint 6 Week 12 Day 1 完整交付（麵包屑導航 + 快速跳轉搜索 + 批量上傳框架，累計~800行新代碼）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -293,7 +293,29 @@
   * 清空選擇功能
   * Props整合修復 (value/onFolderChange)
 
+**🧭 知識庫導航組件** (components/knowledge/, Week 12 Day 1新增):
+- `breadcrumb-navigation.tsx`: 麵包屑導航組件 (~180行)
+  * 顯示資料夾完整路徑
+  * 支持點擊跳轉父級資料夾
+  * 自動省略長路徑 (>5層)
+  * 加載骨架屏效果
+- `quick-jump-search.tsx`: 快速跳轉搜索組件 (~300行)
+  * 全局搜索資料夾和文檔
+  * 鍵盤快捷鍵支持 (Cmd/Ctrl + K)
+  * 防抖搜索 (300ms)
+  * 最近訪問記錄 (localStorage)
+  * 鍵盤導航 (↑↓ Enter Esc)
+- `bulk-upload.tsx`: 批量上傳界面框架 (~320行)
+  * 拖放文件上傳 (react-dropzone)
+  * 支持多種格式 (PDF, Word, Excel, CSV, 圖片)
+  * 文件預覽列表
+  * 50MB 文件大小限制
+  * TODO Day 3-4: 實現文件解析和批量處理
+
 **📄 知識庫管理頁面** (app/dashboard/knowledge/):
+- `page.tsx`: 知識庫主頁面 (整合麵包屑導航，Week 12 Day 1)
+  * 添加 BreadcrumbNavigation 組件
+  * 支持資料夾 URL 參數
 - `folders/page.tsx`: 資料夾管理主頁面 (~200行，Day 2新增)
   * 新建頂層資料夾對話框
   * KnowledgeFolderTree整合展示

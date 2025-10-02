@@ -47,20 +47,25 @@
 6. ✅ 與用戶確認改動是否接受
 7. ✅ 確認後同步到GitHub
 
-**📅 最近更新 (2025-10-02 23:35)**:
-- 🎉 Sprint 6 Week 11 Day 2 完整交付！資料夾管理與搜索過濾功能
-- Sprint 6 Week 11 Day 2 成果：
+**📅 最近更新 (2025-10-03 08:45)**:
+- 🎉 Sprint 6 Week 12 Day 1 完整交付！導航增強和批量上傳框架
+- Sprint 6 Week 12 Day 1 成果：
+  - 麵包屑導航組件 (breadcrumb-navigation.tsx, ~180行)
+  - 快速跳轉搜索組件 (quick-jump-search.tsx, ~300行)
+  - 批量上傳界面框架 (bulk-upload.tsx, ~320行)
+  - 整合麵包屑到知識庫頁面
+  - 安裝 react-dropzone 依賴
+- Sprint 6 Week 11 Day 2 完整交付！資料夾管理與搜索過濾功能
   - 富文本編輯器整合 (Tiptap, ~800行, SSR支持)
   - 資料夾過濾搜索 (FolderSelector組件, ~300行)
   - 資料夾管理頁面 (完整CRUD界面, ~200行)
   - 測試資料夾種子數據 (6個資料夾, 樹狀結構)
-  - Bug修復: FolderSelector props整合問題
-- Sprint 6 Week 11 累計: ~3,038行新代碼 (Day 1: 1,738行 + Day 2: 1,300行)
+- Sprint 6 累計: ~3,838行新代碼 (Week 11: 3,038行 + Week 12 Day 1: 800行)
 - 🎉 Sprint 5 完整完成 (100%)！
   - 核心代碼 6,855行 + 測試代碼 2,350行 = 9,205行
   - 測試覆蓋率: 核心功能 90%+, 版本控制 95%+
-- MVP Phase 2 總進度: 74% (40/54任務)
-- 已完成: Sprint 1 + 2 + 4 + 5 ✅ | Sprint 6 進行中 (40%) 🔄
+- MVP Phase 2 總進度: 76% (41/54任務)
+- 已完成: Sprint 1 + 2 + 4 + 5 ✅ | Sprint 6 進行中 (47%) 🔄
 
 ---
 
