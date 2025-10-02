@@ -42,7 +42,9 @@
       "Bash(npm audit:*)",
       "Bash(Get-Process -Name \"node\")",
       "Bash(pkill:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(dir node_modules)",
+      "Bash(npx:*)"
     ],
     "deny": [],
     "ask": []
