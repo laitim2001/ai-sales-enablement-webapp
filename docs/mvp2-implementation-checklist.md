@@ -1,16 +1,16 @@
 # MVP Phase 2 實施檢查清單
 
-> **最後更新**: 2025-10-03 08:45 (Sprint 6 Week 12 Day 1 - **導航增強與批量上傳框架完成 🎉**)
+> **最後更新**: 2025-10-03 17:30 (Sprint 6 Week 12 Day 3-4 - **文件解析器與批量上傳API完成 🎉**)
 > **目標**: 確保 14 週 MVP Phase 2 開發按計劃執行，所有關鍵里程碑按時達成
 > **團隊**: 5-7 人開發團隊
 > **架構**: Next.js 14 全棧開發 (基於MVP Phase 1)
 > **策略**: A+C 混合方案 - 企業就緒優先 + 用戶體驗提升
-> **新增**: Sprint 6 Week 12 Day 1 完整交付 (麵包屑導航 + 快速跳轉搜索 + 批量上傳框架，累計~800行新代碼)
+> **新增**: Sprint 6 Week 12 Day 3-4 完整交付 (5個文件解析器 + 批量上傳API，累計~1,830行新代碼，支持PDF/Word/Excel/圖片)
 
 ---
 
-📊 **總體進度**: 41/54 (76%) **✅ Sprint 1 + Sprint 2 + Sprint 4 + Sprint 5 完成, Sprint 6 進行中**
-███████████████░░░░░ 76%
+📊 **總體進度**: 42/54 (78%) **✅ Sprint 1 + Sprint 2 + Sprint 4 + Sprint 5 完成, Sprint 6 進行中 (53%)**
+████████████████░░░░ 78%
 
 ---
 
@@ -1253,9 +1253,16 @@
 - **累計**: ~3,038行新代碼
 - **進度**: Sprint 6 從20% → 40% (7/17任務完成)
 
+**Week 12 Day 1-4 成果統計**:
+- Day 1 代碼量: ~800行 (麵包屑導航 + 快速跳轉 + 批量上傳框架)
+- Day 3-4 代碼量: ~1,830行 (5個文件解析器 + 批量上傳API)
+- **Week 12 累計**: ~2,630行新代碼
+- **Sprint 6 累計**: ~5,668行新代碼 (Week 11: 3,038行 + Week 12: 2,630行)
+- **進度**: Sprint 6 從40% → 53% (9/17任務完成)
+
 ---
 
-### Week 12: 版本控制與分析 🔄 **進行中 (Day 1完成 - 導航增強)**
+### Week 12: 版本控制與分析 🔄 **進行中 (Day 1-4完成 - 批量上傳完整實現)**
 
 #### 導航增強與批量上傳 ✅ **已完成 (Day 1 - 2025-10-03 08:45)**
 - [x] **麵包屑導航組件** ✅ **完成** (~180行)
@@ -1276,11 +1283,81 @@
   - [x] 支持多種文件格式 (PDF, Word, Excel, CSV, 圖片)
   - [x] 拖放上傳體驗
   - [x] 文件預覽和狀態追蹤
-  - [ ] TODO Day 3-4: 文件解析和批量處理邏輯
 
 - [x] **頁面整合** ✅ **完成**
   - [x] 麵包屑整合到知識庫主頁面
   - [x] 資料夾 URL 參數支持
+
+#### 文件解析器系統 ✅ **已完成 (Day 3-4 - 2025-10-03 17:30)**
+- [x] **PDF 解析器** ✅ **完成** (lib/parsers/pdf-parser.ts, ~260行)
+  - [x] 使用 pdf-parse 庫進行文本提取
+  - [x] 多頁 PDF 處理支持
+  - [x] 元數據提取 (標題、作者、創建時間)
+  - [x] PDF 日期格式解析 (D:YYYYMMDDHHmmSS)
+  - [x] 文件大小限制 (50MB)
+  - [x] Magic number 文件類型檢測 (%PDF-)
+
+- [x] **Word 解析器** ✅ **完成** (lib/parsers/word-parser.ts, ~270行)
+  - [x] 使用 mammoth 庫進行文檔解析
+  - [x] 支持 .docx 和 .doc 格式
+  - [x] 並行文本和 HTML 提取
+  - [x] 可選 HTML 輸出功能
+  - [x] 文件大小限制 (50MB)
+  - [x] Magic number 檢測 (PK=ZIP, OLE格式)
+
+- [x] **Excel/CSV 解析器** ✅ **完成** (lib/parsers/excel-parser.ts, ~280行)
+  - [x] 使用 xlsx 庫進行表格處理
+  - [x] 支持 .xlsx, .xls, .csv 格式
+  - [x] 多工作表處理
+  - [x] 智能空行過濾
+  - [x] Tab分隔文本輸出
+  - [x] 元數據統計 (工作表數、行列數)
+
+- [x] **圖片 OCR 解析器** ✅ **完成** (lib/parsers/image-ocr-parser.ts, ~290行)
+  - [x] 使用 tesseract.js 進行 OCR 識別
+  - [x] 支持 PNG, JPG, JPEG 格式
+  - [x] 多語言支持 (繁中、簡中、英文)
+  - [x] Worker 重用機制優化性能
+  - [x] 置信度評分和警告
+  - [x] 文件大小限制 (10MB)
+
+- [x] **統一導出接口** ✅ **完成** (lib/parsers/index.ts, ~180行)
+  - [x] FileType 枚舉定義
+  - [x] 自動文件類型檢測 (detectFileType)
+  - [x] 統一解析接口 (parseFile)
+  - [x] 批量解析支持 (parseFiles)
+  - [x] 通用 ParseResult 接口
+
+#### 批量上傳 API ✅ **已完成 (Day 3-4 - 2025-10-03 17:30)**
+- [x] **核心 API 端點** ✅ **完成** (app/api/knowledge-base/bulk-upload/route.ts, ~550行)
+  - [x] POST /api/knowledge-base/bulk-upload - 批量上傳
+  - [x] GET /api/knowledge-base/bulk-upload - 獲取上傳記錄
+  - [x] FormData 多文件處理
+  - [x] 最多 20 個文件並行處理
+  - [x] JWT 身份驗證
+  - [x] 獨立事務處理 (每文件一個事務)
+
+- [x] **文件處理邏輯** ✅ **完成**
+  - [x] 支持文件類型：PDF, DOCX, DOC, XLSX, XLS, CSV, PNG, JPG, JPEG
+  - [x] SHA-256 哈希重複檢測
+  - [x] 自動文件類型檢測和解析
+  - [x] 並行處理 (Promise.all)
+  - [x] 錯誤隔離 (單文件失敗不影響其他)
+  - [x] 完整統計信息 (成功/失敗/總時間)
+
+- [x] **安全機制** ✅ **完成**
+  - [x] MIME 類型驗證
+  - [x] 文件大小限制 (PDF/Word/Excel: 50MB, 圖片: 10MB)
+  - [x] Magic number 驗證
+  - [x] SHA-256 哈希去重
+  - [x] 標籤驗證和清理
+
+**Day 3-4 成果統計** (2025-10-03):
+- **文件解析器**: ~1,280行 (5個解析器 + 統一接口)
+- **批量上傳API**: ~550行 (POST + GET 端點)
+- **依賴安裝**: pdf-parse, mammoth, xlsx, tesseract.js
+- **累計代碼**: ~1,830行新代碼
+- **Git提交**: 2次提交，2次推送到GitHub
 
 #### 版本控制系統
 - [ ] **版本管理功能**

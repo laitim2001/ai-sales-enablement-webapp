@@ -47,25 +47,30 @@
 6. ✅ 與用戶確認改動是否接受
 7. ✅ 確認後同步到GitHub
 
-**📅 最近更新 (2025-10-03 08:45)**:
-- 🎉 Sprint 6 Week 12 Day 1 完整交付！導航增強和批量上傳框架
-- Sprint 6 Week 12 Day 1 成果：
+**📅 最近更新 (2025-10-03)**:
+- 🎉 Sprint 6 Week 12 Day 3-4 完整交付！文件解析器 + 批量上傳 API
+- Sprint 6 Week 12 Day 3-4 成果：
+  - **Part 1: 文件解析器基礎設施** (~1,280行)
+    - PDF解析器 (pdf-parse, 260行) - 多頁PDF和元數據提取
+    - Word解析器 (mammoth, 270行) - .docx/.doc支持
+    - Excel/CSV解析器 (xlsx, 280行) - 多工作表和結構化數據
+    - 圖片OCR解析器 (tesseract.js, 290行) - 多語言OCR識別
+    - 統一解析入口 (180行) - 自動檔案類型檢測
+  - **Part 2: 批量上傳 API** (~550行)
+    - POST /api/knowledge-base/bulk-upload - 批量上傳功能（最多20個文件）
+    - 完整的錯誤處理和統計信息
+    - 並行處理架構，自動解析和向量化
+  - 新增依賴: pdf-parse, mammoth, xlsx, tesseract.js
+- Sprint 6 Week 12 Day 1 完整交付！導航增強和批量上傳框架
   - 麵包屑導航組件 (breadcrumb-navigation.tsx, ~180行)
   - 快速跳轉搜索組件 (quick-jump-search.tsx, ~300行)
   - 批量上傳界面框架 (bulk-upload.tsx, ~320行)
-  - 整合麵包屑到知識庫頁面
-  - 安裝 react-dropzone 依賴
-- Sprint 6 Week 11 Day 2 完整交付！資料夾管理與搜索過濾功能
-  - 富文本編輯器整合 (Tiptap, ~800行, SSR支持)
-  - 資料夾過濾搜索 (FolderSelector組件, ~300行)
-  - 資料夾管理頁面 (完整CRUD界面, ~200行)
-  - 測試資料夾種子數據 (6個資料夾, 樹狀結構)
-- Sprint 6 累計: ~3,838行新代碼 (Week 11: 3,038行 + Week 12 Day 1: 800行)
+- Sprint 6 累計: ~5,668行新代碼 (Week 11: 3,038行 + Week 12: 2,630行)
 - 🎉 Sprint 5 完整完成 (100%)！
   - 核心代碼 6,855行 + 測試代碼 2,350行 = 9,205行
   - 測試覆蓋率: 核心功能 90%+, 版本控制 95%+
-- MVP Phase 2 總進度: 76% (41/54任務)
-- 已完成: Sprint 1 + 2 + 4 + 5 ✅ | Sprint 6 進行中 (47%) 🔄
+- MVP Phase 2 總進度: 78% (42/54任務)
+- 已完成: Sprint 1 + 2 + 4 + 5 ✅ | Sprint 6 進行中 (53%) 🔄
 
 ---
 

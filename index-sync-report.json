@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-02T16:30:05.523Z",
+  "timestamp": "2025-10-02T16:54:14.065Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -11,7 +11,7 @@
     "highSeverity": 0,
     "mediumSeverity": 25,
     "lowSeverity": 0,
-    "suggestions": 35,
+    "suggestions": 34,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -196,14 +196,6 @@
     }
   ],
   "suggestions": [
-    {
-      "type": "add_to_index",
-      "file": "lib\\parsers\\index.ts",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: lib\\parsers\\index.ts",
-      "modifiedTime": "2025-10-02T16:26:15.992Z"
-    },
     {
       "type": "add_to_index",
       "file": "lib\\performance\\monitor.test.ts",
@@ -475,5 +467,5 @@
       "message": "建議將重要文件加入索引: Cai-sales-enablement-webapptempREADME.md"
     }
   ],
-  "lastUpdated": "2025-10-02T16:30:05.523Z"
+  "lastUpdated": "2025-10-02T16:54:14.065Z"
 }
