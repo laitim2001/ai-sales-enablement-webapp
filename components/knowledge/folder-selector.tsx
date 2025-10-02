@@ -190,14 +190,19 @@ export function FolderSelector({
     setError(null)
 
     try {
+      const token = localStorage.getItem('auth-token')
+
       const response = await fetch('/api/knowledge-folders', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
         },
       })
 
       if (!response.ok) {
-        throw new Error('載入資料夾失敗')
+        const errorData = await response.json().catch(() => null)
+        const errorMessage = errorData?.error || `載入資料夾失敗 (${response.status})`
+        throw new Error(errorMessage)
       }
 
       const result = await response.json()

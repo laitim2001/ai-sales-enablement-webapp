@@ -152,9 +152,20 @@ async function getFolderTree(
 export async function GET(request: NextRequest) {
   try {
     // 1. 驗證用戶身份
-    const authResult = await verifyToken(request)
-    if (!authResult.isValid || !authResult.user) {
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
       throw new AppError('未授權訪問', 401)
+    }
+
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw new AppError('無效的token', 401)
     }
 
     // 2. 解析查詢參數
@@ -244,12 +255,23 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // 1. 驗證用戶身份
-    const authResult = await verifyToken(request)
-    if (!authResult.isValid || !authResult.user) {
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
       throw new AppError('未授權訪問', 401)
     }
 
-    const userId = authResult.user.userId
+    const payload = verifyToken(token)
+
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw new AppError('無效的token', 401)
+    }
+
+    const userId = payload.userId
 
     // 2. 解析請求體
     const body = await request.json()
