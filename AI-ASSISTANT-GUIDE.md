@@ -48,11 +48,12 @@
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-02)**:
-- Sprint 5 Week 10 Day 3 (範本系統前端) 完整實現: 4個前端頁面 + 完整CRUD界面
-- Sprint 5 進度: ~75% 完成 (工作流程引擎 + 通知系統 + 範本前端完成)
-- MVP Phase 2 總進度: 63% (Sprint 1 + 2 + 4 + Sprint 5 75%完成)
-- 範本系統: 後端完成(1,220行) + 前端完成(2,370行) = 3,590行代碼
-- docs/mvp2-implementation-checklist.md 已更新至 63% 完成度
+- Sprint 5 Week 10 Day 4 (PDF導出功能) 完整實現: Puppeteer整合 + 專業PDF範本 + 雙API端點
+- Sprint 5 進度: ~85% 完成 (工作流程引擎 + 通知系統 + 範本前端 + PDF導出完成)
+- MVP Phase 2 總進度: 67% (Sprint 1 + 2 + 4 完成 + Sprint 5 85%完成)
+- PDF系統: 核心引擎(270行) + 範本系統(350行) + API(270行) + 前端整合(70行) = 960行代碼
+- 範本系統總計: 後端1,220行 + 前端2,370行 + PDF系統960行 = 4,550行代碼
+- docs/mvp2-implementation-checklist.md 需更新至 67% 完成度
 
 ---
 
@@ -163,8 +164,8 @@ AI助手將自動執行所有必要的檢查和準備工作！
 
 **項目名稱**: AI 銷售賦能平台
 **目標市場**: 馬來西亞/新加坡
-**技術棧**: Next.js 14 + PostgreSQL + Azure OpenAI + OpenTelemetry
-**狀態**: ✅ MVP Phase 1 完成，🔄 MVP Phase 2 進行中 (63%)，Sprint 1+2+4 完成，Sprint 5 ~75%完成
+**技術棧**: Next.js 14 + PostgreSQL + Azure OpenAI + Puppeteer + OpenTelemetry
+**狀態**: ✅ MVP Phase 1 完成，🔄 MVP Phase 2 進行中 (67%)，Sprint 1+2+4 完成，Sprint 5 ~85%完成
 
 ---
 
@@ -216,6 +217,9 @@ lib/middleware.ts                      # 認證與速率限制中間件系統
 lib/middleware/rate-limiter.ts         # API速率限制核心實現
 lib/monitoring/connection-monitor.ts   # 系統連接狀態監控服務
 lib/monitoring/monitor-init.ts         # 監控系統初始化與生命周期管理
+lib/pdf/pdf-generator.ts               # PDF生成核心引擎 (Puppeteer整合)
+lib/pdf/proposal-pdf-template.ts       # 提案PDF專業範本系統
+lib/pdf/index.ts                       # PDF模組統一導出
 tests/integration/crm-integration.test.ts    # CRM整合測試套件
 tests/integration/system-integration.test.ts # 系統級整合測試套件
 types/ai.ts                            # AI 服務 TypeScript 類型定義
@@ -233,7 +237,10 @@ app/api/health/route.ts               # 系統健康檢查API
 app/api/[...slug]/route.ts           # API catch-all路由，處理404錯誤返回JSON格式
 lib/api/response-helper.ts           # 統一API響應格式助手模組
 app/api/proposal-templates/           # 提案範本管理API群組
+app/api/templates/[id]/export-pdf/    # 提案範本PDF導出API
+app/api/templates/export-pdf-test/    # 提案範本PDF測試API (創建頁面實時預覽)
 app/dashboard/proposals/              # 提案管理前端頁面群組
+app/dashboard/templates/[id]/preview/ # 提案範本預覽頁面 (含PDF導出)
 .env.example                   # 環境配置範例
 .env.production.example        # 生產環境配置範例
 docker-compose.dev.yml         # 開發環境容器配置
@@ -402,11 +409,11 @@ npm run test:integration:system # 執行系統級整合測試
     - 5/5服務健康狀態達成 ✅
 ```
 
-### MVP Phase 2 (企業級強化) - 🔄 進行中 (63%)
+### MVP Phase 2 (企業級強化) - 🔄 進行中 (67%)
 ```
 🎯 目標: 企業級功能強化 (54個任務)
 📅 時程: 8週 (4個Sprint)
-🚀 狀態: Sprint 1 + Sprint 2 + Sprint 4 完成 | Sprint 5 ~75% 完成 | Sprint 3 暫時跳過
+🚀 狀態: Sprint 1 + Sprint 2 + Sprint 4 完成 | Sprint 5 ~85% 完成 | Sprint 3 暫時跳過
 
 ✅ Sprint 1 (週1-2): API 網關與安全層 - 100% 完成 (6/6 任務)
     - 高級中間件系統 (10個核心中間件, 4,884行代碼)
@@ -436,7 +443,7 @@ npm run test:integration:system # 執行系統級整合測試
     - 智能重試策略 (4種退避算法, 29 tests)
     - 總計: 3,086行代碼, 198個測試 100%通過
 
-🔄 Sprint 5 (週9-10): 提案生成工作流程 - 進行中 (~75% 完成) ⭐ 最新進展
+🔄 Sprint 5 (週9-10): 提案生成工作流程 - 進行中 (~85% 完成) ⭐ 最新進展
     - ✅ 數據庫設計完成 (5個模型, 5個枚舉, 30+索引)
     - ✅ 工作流程引擎 (420行, 12狀態, 30+轉換)
     - ✅ 版本控制系統 (370行, 快照/差異/回滾)
@@ -451,7 +458,12 @@ npm run test:integration:system # 執行系統級整合測試
       - 範本管理API (6個REST API, 1,220行後端)
       - 範本前端頁面 (4個完整CRUD頁面, 2,370行)
       - Handlebars引擎 (25個Helper函數)
-    - 總計: 5,065行後端代碼 + ~3,870行前端代碼, 6個設計模式
+    - ✅ PDF導出功能 (Day 4完成)
+      - PDF生成核心引擎 (270行, Puppeteer整合, 單例模式)
+      - 專業PDF範本系統 (350行, 封面+內容頁, 完整CSS)
+      - PDF導出API (2個端點, 270行)
+      - 前端整合 (預覽頁面PDF導出按鈕, 70行)
+    - 總計: 6,025行後端代碼 + ~3,940行前端代碼, 7個設計模式
 ```
 
 ---
@@ -467,7 +479,7 @@ npm run test:integration:system # 執行系統級整合測試
 
 ## ⚡ 30秒項目摘要
 
-這是一個為馬來西亞/新加坡市場開發的 AI 銷售賦能平台，使用 Next.js 14 全棧架構，整合 Dynamics 365 CRM 和 Azure OpenAI，幫助銷售團隊通過 AI 搜索、智能提案生成和客戶360度視圖提升成交率。**✅ MVP Phase 1 已 100% 完成**，**🔄 MVP Phase 2 進行中 (63%)**：已完成 Sprint 1 API 網關安全層（10個核心中間件）、Sprint 2 企業級監控告警系統（OpenTelemetry + Prometheus + Grafana）、Sprint 4 性能優化與高可用性（API緩存、熔斷器、健康檢查、智能重試）。**🔄 Sprint 5 ~75%完成**：工作流程引擎（2,035行，12狀態機，版本控制，評論，審批，6個設計模式）+ 通知系統完整（1,600行後端 + 1,500行前端）+ 範本系統前端（1,220行後端 + 2,370行前端，Handlebars引擎），包含完整可觀測性（Metrics + Traces + Logs），系統已達企業級生產就緒狀態。⚠️ Sprint 3 (安全加固) 因優先級調整暫時跳過。
+這是一個為馬來西亞/新加坡市場開發的 AI 銷售賦能平台，使用 Next.js 14 全棧架構，整合 Dynamics 365 CRM 和 Azure OpenAI + Puppeteer，幫助銷售團隊通過 AI 搜索、智能提案生成和客戶360度視圖提升成交率。**✅ MVP Phase 1 已 100% 完成**，**🔄 MVP Phase 2 進行中 (67%)**：已完成 Sprint 1 API 網關安全層（10個核心中間件）、Sprint 2 企業級監控告警系統（OpenTelemetry + Prometheus + Grafana）、Sprint 4 性能優化與高可用性（API緩存、熔斷器、健康檢查、智能重試）。**🔄 Sprint 5 ~85%完成**：工作流程引擎（2,035行，12狀態機，版本控制，評論，審批，6個設計模式）+ 通知系統完整（1,600行後端 + 1,500行前端）+ 範本系統前端（1,220行後端 + 2,370行前端，Handlebars引擎）+ PDF導出功能（960行，Puppeteer整合，專業範本，雙API端點），包含完整可觀測性（Metrics + Traces + Logs），系統已達企業級生產就緒狀態。⚠️ Sprint 3 (安全加固) 因優先級調整暫時跳過。
 
 **🤖 AI 助手重要提醒**:
 - 這個項目有完整的4層索引系統，按 L0→L1→L2→L3 順序查找

@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月2日 - 完整索引同步完成（全面掃描lib/、app/、components/、docs/、scripts/等所有目錄）
+> **📅 最後更新**: 2025年10月2日 - Sprint 5 Week 10 Day 4 PDF導出功能完成（新增lib/pdf/系統，Puppeteer整合）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -206,7 +206,27 @@
 | **範本管理器**         | `lib/template/template-manager.ts`    | Repository Pattern，CRUD/搜索/權限/統計      | 700      | 🔴 極高  |
 | **範本引擎**           | `lib/template/template-engine.ts`     | Handlebars編譯/渲染/驗證/預覽                | 450      | 🔴 極高  |
 
-**🎯 API端點** (app/api/templates/):
+---
+
+### 📄 lib/pdf/ - PDF 生成系統 (Sprint 5 Week 10 Day 4完成)
+
+**用途**: 企業級 PDF 文檔生成引擎 - 提案範本轉專業 PDF
+
+**🎯 核心特點**:
+- **Puppeteer整合**: 無頭瀏覽器，完整 HTML/CSS 支援
+- **單例模式**: 瀏覽器實例復用，節省 2-3秒/請求
+- **高解析度渲染**: deviceScaleFactor 2x，清晰專業
+- **專業範本**: 封面頁（漸變背景）+ 內容頁（header/footer）
+- **安全措施**: HTML轉義防XSS，文件名sanitization
+- **完整樣式**: h1-h3、段落、列表、表格、引用、代碼塊 CSS
+
+| PDF模組                | 文件路徑                              | 用途說明                                     | 代碼行數 | 重要程度 |
+| ---------------------- | ------------------------------------- | -------------------------------------------- | -------- | -------- |
+| **PDF生成引擎**        | `lib/pdf/pdf-generator.ts`            | Puppeteer核心引擎，單例模式，HTML轉PDF       | 270      | 🔴 極高  |
+| **專業PDF範本**        | `lib/pdf/proposal-pdf-template.ts`    | 封面+內容頁範本，完整CSS樣式系統             | 350      | 🔴 極高  |
+| **統一導出**           | `lib/pdf/index.ts`                    | 所有PDF模組的統一導出入口                    | 20       | 🟡 高    |
+
+**🎯 範本 API端點** (app/api/templates/):
 - `route.ts`: 範本列表和創建 (GET/POST)
 - `[id]/route.ts`: 單個範本操作 (GET/PUT/DELETE)
 - `[id]/duplicate/route.ts`: 複製範本 (POST)
@@ -214,18 +234,23 @@
 - `preview-temp/route.ts`: 臨時範本預覽 (POST) - 用於創建頁面
 - `stats/route.ts`: 統計信息 (GET)
 
+**🎯 PDF導出 API端點** (app/api/templates/):
+- `[id]/export-pdf/route.ts`: 保存範本PDF導出 (POST) - 150行
+- `export-pdf-test/route.ts`: 測試範本PDF導出 (POST) - 120行，用於創建頁面實時預覽
+
 **🎨 前端頁面** (app/dashboard/templates/):
 - `page.tsx`: 範本列表頁（~450行）- 搜索/過濾/統計/分頁
 - `new/page.tsx`: 範本創建頁（~650行）- Tab界面/變數配置/預覽
 - `[id]/page.tsx`: 範本編輯頁（~700行）- 完整編輯功能
-- `[id]/preview/page.tsx`: 範本預覽頁（~500行）- 獨立預覽/變數輸入
+- `[id]/preview/page.tsx`: 範本預覽頁（~520行）- 獨立預覽/變數輸入/PDF導出
 
-**✅ 完成狀態**: Sprint 5 Week 10 Day 3 完成 (2025-10-02)
-- 後端: ~1,220行代碼（範本管理+引擎+6個API）✅
-- 前端: ~2,300行代碼（4個頁面完整UI）✅
-- 數據庫: 2個模型（ProposalTemplate + ProposalGeneration）已存在 ✅
-- API端點: 6個REST API ✅
-- PDF導出: 待整合 Puppeteer ⏳
+**✅ 完成狀態**: Sprint 5 Week 10 Day 3-4 完成 (2025-10-02)
+- 範本後端: ~1,220行代碼（範本管理+引擎+6個API）✅
+- 範本前端: ~2,370行代碼（4個頁面完整UI）✅
+- PDF系統: ~980行代碼（核心引擎270 + 範本350 + API 270 + 前端70 + 導出20）✅
+- 數據庫: 2個模型（ProposalTemplate + ProposalGeneration）✅
+- API端點: 6個範本API + 2個PDF導出API ✅
+- 前端整合: PDF導出按鈕 + 自動下載 + Toast通知 ✅
 
 ### 📊 lib/monitoring/ - 企業級監控告警系統 (Sprint 2完成)
 
@@ -949,7 +974,7 @@
 
 | 配置類型                  | 文件路徑                          | 用途說明                                           |
 | ------------------------- | --------------------------------- | -------------------------------------------------- |
-| **依賴管理**        | `package.json`                  | Next.js 14 專案依賴和腳本                          |
+| **依賴管理**        | `package.json`                  | Next.js 14 專案依賴和腳本（已新增 Puppeteer 24.23.0）|
 | **環境變數**        | `.env.example`                  | 環境變數配置範例                                   |
 | **容器化**          | `docker-compose.dev.yml`        | 開發環境 Docker 配置                               |
 | **開發容器**        | `Dockerfile.dev`                | 開發環境容器配置                                   |

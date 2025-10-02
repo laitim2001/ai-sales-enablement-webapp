@@ -74,6 +74,7 @@ export default function TemplatePreviewPage() {
   const [previewHtml, setPreviewHtml] = useState('');
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [useTestData, setUseTestData] = useState(true);
+  const [isExportingPDF, setIsExportingPDF] = useState(false);
 
   // 載入範本
   useEffect(() => {
@@ -169,6 +170,76 @@ export default function TemplatePreviewPage() {
     const newUseTestData = !useTestData;
     setUseTestData(newUseTestData);
     generatePreview(template, variableValues, newUseTestData);
+  };
+
+  // 導出 PDF
+  const exportPDF = async () => {
+    if (!template) return;
+
+    try {
+      setIsExportingPDF(true);
+      toast({
+        title: '正在生成 PDF...',
+        description: '請稍候，這可能需要幾秒鐘',
+      });
+
+      // 調用 PDF 導出 API
+      const response = await fetch(`/api/templates/${templateId}/export-pdf`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          variables: variableValues,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'PDF 生成失敗');
+      }
+
+      // 獲取 PDF Blob
+      const pdfBlob = await response.blob();
+
+      // 從響應頭獲取文件名
+      const contentDisposition = response.headers.get('Content-Disposition');
+      let fileName = `${template.name}_${Date.now()}.pdf`;
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename\*?=['"]?(?:UTF-\d['"]*)?([^;\r\n"']*)['"]?;?/);
+        if (match && match[1]) {
+          fileName = decodeURIComponent(match[1]);
+        }
+      }
+
+      // 創建下載鏈接
+      const url = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      // 獲取生成時間（如果有）
+      const generationTime = response.headers.get('X-Generation-Time');
+
+      toast({
+        title: 'PDF 導出成功！',
+        description: generationTime ? `耗時: ${generationTime}` : '文件已下載',
+      });
+
+    } catch (error) {
+      console.error('PDF 導出錯誤:', error);
+      toast({
+        title: 'PDF 導出失敗',
+        description: error instanceof Error ? error.message : '未知錯誤',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsExportingPDF(false);
+    }
   };
 
   // 渲染變數輸入組件
@@ -312,9 +383,22 @@ export default function TemplatePreviewPage() {
             <Settings className="mr-2 h-4 w-4" />
             編輯
           </Button>
-          <Button variant="outline" disabled>
-            <Download className="mr-2 h-4 w-4" />
-            導出 PDF
+          <Button
+            variant="outline"
+            onClick={exportPDF}
+            disabled={isExportingPDF}
+          >
+            {isExportingPDF ? (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                生成中...
+              </>
+            ) : (
+              <>
+                <Download className="mr-2 h-4 w-4" />
+                導出 PDF
+              </>
+            )}
           </Button>
         </div>
       </div>
