@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月3日 08:45 - Sprint 6 Week 12 Day 1 完整交付（麵包屑導航 + 快速跳轉搜索 + 批量上傳框架，累計~800行新代碼）
+> **📅 最後更新**: 2025年10月3日 - Sprint 6 Week 12 Day 3-4 Part 1 完成（文件解析器基礎設施 ~1,280行，支持PDF/Word/Excel/圖片）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -225,6 +225,41 @@
 | **PDF生成引擎**        | `lib/pdf/pdf-generator.ts`            | Puppeteer核心引擎，單例模式，HTML轉PDF       | 270      | 🔴 極高  |
 | **專業PDF範本**        | `lib/pdf/proposal-pdf-template.ts`    | 封面+內容頁範本，完整CSS樣式系統             | 350      | 🔴 極高  |
 | **統一導出**           | `lib/pdf/index.ts`                    | 所有PDF模組的統一導出入口                    | 20       | 🟡 高    |
+
+---
+
+### 📋 lib/parsers/ - 文件解析器系統 (Sprint 6 Week 12 Day 3-4完成)
+
+**用途**: 批量上傳文件解析基礎設施 - 多格式文件文本提取
+
+**🎯 核心特點**:
+- **多格式支持**: PDF, Word (.docx/.doc), Excel (.xlsx/.xls), CSV, 圖片 (PNG/JPG/JPEG)
+- **自動檢測**: 基於魔數的文件類型自動識別
+- **統一API**: 一致的解析器架構和接口設計
+- **元數據提取**: 文件信息、頁數、作者、創建時間等
+- **OCR支持**: 圖片文字識別，支援繁體中文、簡體中文、英文等多語言
+- **性能優化**: 文件大小限制、Worker重用、並行處理支持
+
+| 解析器模組             | 文件路徑                              | 用途說明                                     | 代碼行數 | 重要程度 |
+| ---------------------- | ------------------------------------- | -------------------------------------------- | -------- | -------- |
+| **PDF解析器**          | `lib/parsers/pdf-parser.ts`           | pdf-parse整合，多頁PDF，元數據提取           | 260      | 🔴 極高  |
+| **Word解析器**         | `lib/parsers/word-parser.ts`          | mammoth整合，.docx/.doc支持，HTML可選        | 270      | 🔴 極高  |
+| **Excel解析器**        | `lib/parsers/excel-parser.ts`         | xlsx整合，多工作表，結構化數據提取           | 280      | 🔴 極高  |
+| **圖片OCR解析器**      | `lib/parsers/image-ocr-parser.ts`     | tesseract.js整合，多語言OCR，置信度評分      | 290      | 🔴 極高  |
+| **統一導出**           | `lib/parsers/index.ts`                | 自動檔案類型檢測，統一解析接口，批量解析     | 180      | 🔴 極高  |
+
+**🎯 支持的文件格式**:
+- **PDF**: 文字提取，頁數統計，元數據（標題/作者/日期）
+- **Word**: .docx/.doc，文字/HTML提取，格式保留選項
+- **Excel**: .xlsx/.xls，多工作表，表格轉文字/JSON
+- **CSV**: 逗號分隔值文件，自動編碼檢測
+- **圖片**: PNG/JPG/JPEG/GIF，OCR文字識別，多語言支持
+
+**🔧 技術依賴**:
+- `pdf-parse@^2.1.1` - PDF文本提取
+- `mammoth@^1.11.0` - Word文檔解析
+- `xlsx@^0.18.5` - Excel/CSV處理
+- `tesseract.js@^6.0.1` - OCR引擎
 
 **🎯 範本 API端點** (app/api/templates/):
 - `route.ts`: 範本列表和創建 (GET/POST)

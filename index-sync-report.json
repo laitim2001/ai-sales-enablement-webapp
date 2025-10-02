@@ -1,17 +1,17 @@
 {
-  "timestamp": "2025-10-02T09:11:53.264Z",
+  "timestamp": "2025-10-02T16:30:05.523Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
-    "nodeVersion": "v22.20.0",
-    "workingDirectory": "C:\\Users\\laitim20012\\Documents\\AI Project\\ai-sales-enablement-webapp"
+    "nodeVersion": "v22.19.0",
+    "workingDirectory": "C:\\ai-sales-enablement-webapp"
   },
   "summary": {
-    "totalIssues": 12,
+    "totalIssues": 25,
     "highSeverity": 0,
-    "mediumSeverity": 12,
+    "mediumSeverity": 25,
     "lowSeverity": 0,
-    "suggestions": 34,
+    "suggestions": 35,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -102,16 +102,115 @@
       "reference": "[id]/preview/page.tsx",
       "severity": "medium",
       "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/preview/page.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "[id]/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "[id]/move/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: [id]/move/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "reorder/route.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: reorder/route.ts"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "knowledge-folder-tree.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: knowledge-folder-tree.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "knowledge-search.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: knowledge-search.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "folder-selector.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: folder-selector.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "breadcrumb-navigation.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: breadcrumb-navigation.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "quick-jump-search.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: quick-jump-search.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "bulk-upload.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: bulk-upload.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "page.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: page.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "folders/page.tsx",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: folders/page.tsx"
+    },
+    {
+      "type": "broken_reference",
+      "file": "PROJECT-INDEX.md",
+      "reference": "seed-folders.ts",
+      "severity": "medium",
+      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: seed-folders.ts"
     }
   ],
   "suggestions": [
+    {
+      "type": "add_to_index",
+      "file": "lib\\parsers\\index.ts",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: lib\\parsers\\index.ts",
+      "modifiedTime": "2025-10-02T16:26:15.992Z"
+    },
     {
       "type": "add_to_index",
       "file": "lib\\performance\\monitor.test.ts",
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\performance\\monitor.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.778Z"
+      "modifiedTime": "2025-10-01T09:35:16.051Z"
     },
     {
       "type": "add_to_index",
@@ -119,7 +218,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\performance\\query-optimizer.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.780Z"
+      "modifiedTime": "2025-10-01T09:22:39.965Z"
     },
     {
       "type": "add_to_index",
@@ -127,7 +226,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\performance\\response-cache.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.782Z"
+      "modifiedTime": "2025-10-01T09:04:34.390Z"
     },
     {
       "type": "add_to_index",
@@ -135,7 +234,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\resilience\\circuit-breaker.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.783Z"
+      "modifiedTime": "2025-10-01T09:42:40.159Z"
     },
     {
       "type": "add_to_index",
@@ -143,7 +242,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\resilience\\health-check.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.785Z"
+      "modifiedTime": "2025-10-01T09:51:01.648Z"
     },
     {
       "type": "add_to_index",
@@ -151,7 +250,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\resilience\\retry.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.786Z"
+      "modifiedTime": "2025-10-01T09:57:39.680Z"
     },
     {
       "type": "add_to_index",
@@ -159,7 +258,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\security\\audit-log.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.788Z"
+      "modifiedTime": "2025-10-01T08:50:02.733Z"
     },
     {
       "type": "add_to_index",
@@ -167,7 +266,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\security\\backup.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.789Z"
+      "modifiedTime": "2025-10-01T08:52:08.781Z"
     },
     {
       "type": "add_to_index",
@@ -175,7 +274,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\security\\encryption.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.790Z"
+      "modifiedTime": "2025-10-01T08:28:47.051Z"
     },
     {
       "type": "add_to_index",
@@ -183,7 +282,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\security\\permission-middleware.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.793Z"
+      "modifiedTime": "2025-10-01T08:44:58.875Z"
     },
     {
       "type": "add_to_index",
@@ -191,7 +290,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: lib\\security\\rbac.test.ts",
-      "modifiedTime": "2025-10-02T01:27:46.794Z"
+      "modifiedTime": "2025-10-01T08:31:15.658Z"
     },
     {
       "type": "add_to_index",
@@ -199,7 +298,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\knowledge-folders\\reorder\\route.ts",
-      "modifiedTime": "2025-10-02T08:53:25.765Z"
+      "modifiedTime": "2025-10-02T10:33:17.004Z"
     },
     {
       "type": "add_to_index",
@@ -207,7 +306,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\knowledge-folders\\route.ts",
-      "modifiedTime": "2025-10-02T08:50:00.818Z"
+      "modifiedTime": "2025-10-02T14:23:21.233Z"
     },
     {
       "type": "add_to_index",
@@ -215,7 +314,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\knowledge-folders\\[id]\\move\\route.ts",
-      "modifiedTime": "2025-10-02T08:52:30.090Z"
+      "modifiedTime": "2025-10-02T10:33:17.003Z"
     },
     {
       "type": "add_to_index",
@@ -223,7 +322,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\knowledge-folders\\[id]\\route.ts",
-      "modifiedTime": "2025-10-02T08:51:37.431Z"
+      "modifiedTime": "2025-10-02T10:33:17.003Z"
     },
     {
       "type": "add_to_index",
@@ -231,7 +330,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\proposals\\[id]\\route.ts",
-      "modifiedTime": "2025-10-02T08:00:23.549Z"
+      "modifiedTime": "2025-10-02T10:33:17.004Z"
     },
     {
       "type": "add_to_index",
@@ -239,7 +338,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\proposals\\[id]\\versions\\compare\\route.ts",
-      "modifiedTime": "2025-10-02T07:58:19.778Z"
+      "modifiedTime": "2025-10-02T10:33:17.005Z"
     },
     {
       "type": "add_to_index",
@@ -247,7 +346,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\proposals\\[id]\\versions\\restore\\route.ts",
-      "modifiedTime": "2025-10-02T07:59:04.502Z"
+      "modifiedTime": "2025-10-02T10:33:17.005Z"
     },
     {
       "type": "add_to_index",
@@ -255,7 +354,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\proposals\\[id]\\versions\\route.ts",
-      "modifiedTime": "2025-10-02T07:56:52.861Z"
+      "modifiedTime": "2025-10-02T10:33:17.005Z"
     },
     {
       "type": "add_to_index",
@@ -263,7 +362,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\proposals\\[id]\\versions\\[versionId]\\route.ts",
-      "modifiedTime": "2025-10-02T07:57:45.152Z"
+      "modifiedTime": "2025-10-02T10:33:17.005Z"
     },
     {
       "type": "add_to_index",
@@ -271,7 +370,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\export-pdf-test\\route.ts",
-      "modifiedTime": "2025-10-02T06:27:01.584Z"
+      "modifiedTime": "2025-10-02T10:33:17.006Z"
     },
     {
       "type": "add_to_index",
@@ -279,7 +378,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\preview-temp\\route.ts",
-      "modifiedTime": "2025-10-02T01:27:46.649Z"
+      "modifiedTime": "2025-10-01T17:45:00.574Z"
     },
     {
       "type": "add_to_index",
@@ -287,7 +386,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\route.ts",
-      "modifiedTime": "2025-10-02T01:27:46.650Z"
+      "modifiedTime": "2025-10-01T17:33:18.449Z"
     },
     {
       "type": "add_to_index",
@@ -295,7 +394,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\stats\\route.ts",
-      "modifiedTime": "2025-10-02T01:27:46.651Z"
+      "modifiedTime": "2025-10-01T17:33:48.561Z"
     },
     {
       "type": "add_to_index",
@@ -303,7 +402,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\[id]\\duplicate\\route.ts",
-      "modifiedTime": "2025-10-02T01:27:46.647Z"
+      "modifiedTime": "2025-10-01T17:33:40.220Z"
     },
     {
       "type": "add_to_index",
@@ -311,7 +410,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\[id]\\export-pdf\\route.ts",
-      "modifiedTime": "2025-10-02T06:26:30.616Z"
+      "modifiedTime": "2025-10-02T10:33:17.006Z"
     },
     {
       "type": "add_to_index",
@@ -319,7 +418,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\[id]\\preview\\route.ts",
-      "modifiedTime": "2025-10-02T01:27:46.648Z"
+      "modifiedTime": "2025-10-01T17:35:14.784Z"
     },
     {
       "type": "add_to_index",
@@ -327,7 +426,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\templates\\[id]\\route.ts",
-      "modifiedTime": "2025-10-02T01:27:46.648Z"
+      "modifiedTime": "2025-10-01T17:33:32.289Z"
     },
     {
       "type": "add_to_index",
@@ -335,7 +434,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\dashboard\\proposals\\[id]\\versions\\page.tsx",
-      "modifiedTime": "2025-10-02T07:59:59.640Z"
+      "modifiedTime": "2025-10-02T10:33:17.007Z"
     },
     {
       "type": "add_to_index",
@@ -343,7 +442,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\dashboard\\templates\\new\\page.tsx",
-      "modifiedTime": "2025-10-02T01:27:46.658Z"
+      "modifiedTime": "2025-10-01T17:40:25.014Z"
     },
     {
       "type": "add_to_index",
@@ -351,7 +450,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\dashboard\\templates\\page.tsx",
-      "modifiedTime": "2025-10-02T01:27:46.659Z"
+      "modifiedTime": "2025-10-01T17:39:22.771Z"
     },
     {
       "type": "add_to_index",
@@ -359,7 +458,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\dashboard\\templates\\[id]\\page.tsx",
-      "modifiedTime": "2025-10-02T01:27:46.654Z"
+      "modifiedTime": "2025-10-01T17:43:55.916Z"
     },
     {
       "type": "add_to_index",
@@ -367,7 +466,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\dashboard\\templates\\[id]\\preview\\page.tsx",
-      "modifiedTime": "2025-10-02T06:29:35.014Z"
+      "modifiedTime": "2025-10-02T10:33:17.007Z"
     },
     {
       "type": "add_to_index",
@@ -376,5 +475,5 @@
       "message": "建議將重要文件加入索引: Cai-sales-enablement-webapptempREADME.md"
     }
   ],
-  "lastUpdated": "2025-10-02T09:11:54.535Z"
+  "lastUpdated": "2025-10-02T16:30:05.523Z"
 }
