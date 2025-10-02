@@ -44,7 +44,8 @@
       "Bash(pkill:*)",
       "Bash(mkdir:*)",
       "Bash(dir node_modules)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

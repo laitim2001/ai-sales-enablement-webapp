@@ -5,10 +5,12 @@
  *
  * 【組件功能】
  * 提供知識庫文檔的編輯功能，包括標題、內容、類別、狀態、作者和標籤的
- * 修改，支持表單驗證、數據同步、錯誤處理和成功回饋，更新後自動跳轉。
+ * 修改，支持富文本編輯、自動保存、表單驗證、數據同步和錯誤處理。
  *
  * 【主要職責】
  * • 文檔加載 - 從後端API獲取現有文檔數據
+ * • 富文本編輯 - 整合Tiptap編輯器支持格式化內容
+ * • 自動保存 - 3秒防抖自動保存機制
  * • 表單管理 - 管理所有編輯表單欄位的狀態
  * • 數據驗證 - 對表單輸入進行基本驗證
  * • 數據更新 - 提交修改後的數據到後端
@@ -17,6 +19,12 @@
  * • 路由導航 - 提供取消和返回功能
  * • 資料格式 - 轉換標籤字符串為陣列格式
  *
+ * 【新增功能 - Sprint 6 Week 11 Day 2】
+ * • 富文本編輯器 - Tiptap編輯器整合 (替代原textarea)
+ * • 自動保存 - 3秒防抖自動保存，實時保存狀態顯示
+ * • 保存狀態 - idle/saving/saved/error 狀態管理
+ * • 手動保存 - 保留手動保存按鈕支持
+ *
  * 【Props介面】
  * • documentId - number - 要編輯的文檔ID
  *
@@ -24,66 +32,47 @@
  * • document - DocumentData | null - 原始文檔數據
  * • formData - 表單數據物件
  *   - title: string - 文檔標題
- *   - content: string - 文檔內容
+ *   - content: string - 文檔內容 (HTML格式)
  *   - category: string - 文檔類別
  *   - status: string - 文檔狀態
  *   - author: string - 作者資訊
  *   - tags: string - 標籤字符串(逗號分隔)
  * • loading - boolean - 數據加載狀態
- * • saving - boolean - 數據保存狀態
+ * • saveStatus - 'idle' | 'saving' | 'saved' | 'error' - 保存狀態
+ * • lastSaved - Date | null - 最後保存時間
  * • error - string | null - 錯誤訊息
  * • successMessage - string | null - 成功訊息
  *
  * 【用戶互動】
+ * • 富文本編輯 - 使用Tiptap編輯器編輯內容
  * • 表單輸入 - 即時更新表單狀態並清除錯誤
+ * • 自動保存 - 3秒後自動保存修改
+ * • 手動保存 - 點擊保存按鈕立即保存
  * • 表單提交 - 驗證通過後提交更新数據
  * • 取消操作 - 返回文檔詳情頁面
- * • 自動跳轉 - 成功後2秒自動跳轉
- *
- * 【渲染邏輯】
- * • 加載狀態 - 顯示載入動畫和提示
- * • 錯誤狀態 - 顯示錯誤訊息和重試按鈕
- * • 成功提示 - 顯示成功訊息和跳轉提示
- * • 編輯表單 - 所有可編輯的文檔屬性
- * • 操作按鈕 - 保存和取消按鈕
- *
- * 【Hook使用】
- * • useState - 管理文檔數據、表單狀態和錯誤狀態
- * • useEffect - 在組件加載時獲取文檔數據
- * • useRouter - 用於頁面跳轉和導航
- *
- * 【副作用處理】
- * • 數據加載 - 從/api/knowledge-base/[id]獲取文檔數據
- * • 數據更新 - 向/api/knowledge-base/[id]發送PUT請求
- * • JWT認證 - 在所有API請求中包含認證token
- * • 錯誤處理 - 捕獲和展示網路和API錯誤
- * • 成功處理 - 顯示成功訊息和定時器跳轉
  *
  * 【相關檔案】
  * • /api/knowledge-base/[id] - 文檔獲取和更新API端點
+ * • /components/knowledge/rich-text-editor.tsx - 富文本編輯器組件
  * • /components/ui/button.tsx - 按鈕組件
  * • /app/dashboard/knowledge/[id]/edit/page.tsx - 父頁面組件
  * • /app/dashboard/knowledge/[id]/page.tsx - 文檔詳情頁面
  *
- * 【開發注意】
- * • 數據驗證 - 在提交前進行必要的欄位驗證
- * • 錯誤處理 - 提供清晰的錯誤訊息和復原建議
- * • UX優化 - 提供即時回饋和載入狀態
- * • 數據同步 - 確保表單狀態與原始數據保持同步
- * • 自動跳轉 - 成功後提供合理的跳轉時間
- * • 內容變更 - 修改內容會觸發重新處理和向量化
+ * @updated 2025-10-02 - Sprint 6 Week 11 Day 2
  */
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   DocumentTextIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline'
+import { Loader2, Clock, Save } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { RichTextEditor } from '@/components/knowledge/rich-text-editor'
 
 interface DocumentData {
   id: number
@@ -127,6 +116,11 @@ const statusOptions = [
   { value: 'ARCHIVED', label: '歸檔' }
 ]
 
+/**
+ * 保存狀態類型
+ */
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error'
+
 export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps) {
   const [document, setDocument] = useState<DocumentData | null>(null)
   const [formData, setFormData] = useState({
@@ -138,7 +132,8 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
     tags: ''
   })
   const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const router = useRouter()
@@ -146,6 +141,21 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
   useEffect(() => {
     loadDocument()
   }, [documentId])
+
+  /**
+   * 自動保存功能 (3秒防抖)
+   * 當 title, content, category, status, author, tags 改變時觸發
+   */
+  useEffect(() => {
+    if (!document || saveStatus === 'saving') return
+
+    const timer = setTimeout(() => {
+      handleAutoSave()
+    }, 3000)
+
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.title, formData.content, formData.category, formData.status, formData.author, formData.tags])
 
   const loadDocument = async () => {
     try {
@@ -187,6 +197,71 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
     }
   }
 
+  /**
+   * 自動保存處理
+   */
+  const handleAutoSave = useCallback(async () => {
+    if (!document) return
+
+    try {
+      setSaveStatus('saving')
+
+      const updateData = {
+        title: formData.title.trim(),
+        content: formData.content.trim() || undefined,
+        category: formData.category,
+        status: formData.status,
+        author: formData.author.trim() || undefined,
+        tags: formData.tags
+          .split(',')
+          .map(tag => tag.trim())
+          .filter(tag => tag)
+      }
+
+      const response = await fetch(`/api/knowledge-base/${documentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`,
+        },
+        body: JSON.stringify(updateData)
+      })
+
+      if (!response.ok) {
+        throw new Error('自動保存失敗')
+      }
+
+      setSaveStatus('saved')
+      setLastSaved(new Date())
+
+      // 2秒後重置保存狀態
+      setTimeout(() => {
+        setSaveStatus('idle')
+      }, 2000)
+    } catch (err) {
+      console.error('自動保存失敗:', err)
+      setSaveStatus('error')
+      setTimeout(() => {
+        setSaveStatus('idle')
+      }, 3000)
+    }
+  }, [document, documentId, formData])
+
+  /**
+   * 手動保存處理
+   */
+  const handleManualSave = async () => {
+    await handleAutoSave()
+
+    if (saveStatus !== 'error') {
+      setSuccessMessage('文檔保存成功！')
+      setTimeout(() => setSuccessMessage(null), 3000)
+    }
+  }
+
+  /**
+   * 提交並返回 (原有的 handleSubmit)
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -196,7 +271,7 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
     }
 
     try {
-      setSaving(true)
+      setSaveStatus('saving')
       setError(null)
       setSuccessMessage(null)
 
@@ -228,9 +303,10 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
 
       const result = await response.json()
       if (result.success) {
-        setSuccessMessage('文檔更新成功！')
+        setSuccessMessage('文檔更新成功！正在跳轉...')
+        setSaveStatus('saved')
 
-        // 3秒後跳轉到文檔詳情頁
+        // 2秒後跳轉到文檔詳情頁
         setTimeout(() => {
           router.push(`/dashboard/knowledge/${documentId}`)
         }, 2000)
@@ -239,8 +315,7 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : '未知錯誤')
-    } finally {
-      setSaving(false)
+      setSaveStatus('error')
     }
   }
 
@@ -252,6 +327,42 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
 
     // 清除錯誤信息
     if (error) setError(null)
+  }
+
+  /**
+   * 渲染保存狀態指示器
+   */
+  const renderSaveStatus = () => {
+    switch (saveStatus) {
+      case 'saving':
+        return (
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span>保存中...</span>
+          </div>
+        )
+      case 'saved':
+        return (
+          <div className="flex items-center gap-2 text-sm text-green-600">
+            <CheckCircleIcon className="h-5 w-5" />
+            <span>已保存</span>
+          </div>
+        )
+      case 'error':
+        return (
+          <div className="flex items-center gap-2 text-sm text-red-600">
+            <ExclamationTriangleIcon className="h-5 w-5" />
+            <span>保存失敗</span>
+          </div>
+        )
+      default:
+        return lastSaved ? (
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <Clock className="h-4 w-4" />
+            <span>上次保存: {lastSaved.toLocaleTimeString()}</span>
+          </div>
+        ) : null
+    }
   }
 
   if (loading) {
@@ -282,6 +393,23 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
 
   return (
     <div className="space-y-6">
+      {/* 保存狀態欄 */}
+      <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-md">
+        {renderSaveStatus()}
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleManualSave}
+            disabled={saveStatus === 'saving'}
+          >
+            <Save className="h-4 w-4 mr-2" />
+            手動保存
+          </Button>
+        </div>
+      </div>
+
       {/* 成功訊息 */}
       {successMessage && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-md">
@@ -329,22 +457,23 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
           </div>
         </div>
 
-        {/* 內容 */}
+        {/* 內容 - 富文本編輯器 */}
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             文檔內容
           </label>
-          <textarea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={handleInputChange}
-            rows={12}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="輸入或貼上文檔內容"
+          <RichTextEditor
+            content={formData.content}
+            onUpdate={(content) => {
+              setFormData(prev => ({ ...prev, content }))
+              if (error) setError(null)
+            }}
+            placeholder="開始編寫文檔內容..."
+            minHeight="400px"
+            maxHeight="600px"
           />
-          <p className="text-xs text-gray-500 mt-1">
-            修改內容將觸發重新處理和向量化
+          <p className="text-xs text-gray-500 mt-2">
+            支持富文本格式化和Markdown語法。修改內容將觸發重新處理和向量化。
           </p>
         </div>
 
@@ -435,16 +564,16 @@ export function KnowledgeDocumentEdit({ documentId }: KnowledgeDocumentEditProps
             type="button"
             onClick={() => router.push(`/dashboard/knowledge/${documentId}`)}
             variant="outline"
-            disabled={saving}
+            disabled={saveStatus === 'saving'}
           >
             取消
           </Button>
 
           <Button
             type="submit"
-            disabled={saving}
+            disabled={saveStatus === 'saving'}
           >
-            {saving ? '保存中...' : '保存變更'}
+            {saveStatus === 'saving' ? '保存中...' : '保存變更'}
           </Button>
         </div>
       </form>

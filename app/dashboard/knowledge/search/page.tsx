@@ -132,7 +132,7 @@ export default function SearchKnowledgePage() {
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* 搜索區域 */}
+        {/* 搜索區域 - Sprint 6 Week 11 Day 2: 使用增強版搜索組件 */}
         <div className="lg:col-span-2">
           <KnowledgeSearch />
         </div>

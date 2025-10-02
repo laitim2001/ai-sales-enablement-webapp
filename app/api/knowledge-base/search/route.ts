@@ -78,6 +78,8 @@ const SearchKnowledgeBaseSchema = z.object({
   // === 基本篩選參數 ===
   category: z.nativeEnum(DocumentCategory).optional(),                      // 文檔分類篩選
   tags: z.array(z.string()).optional(),                                     // 標籤篩選陣列
+  folder_id: z.number().int().optional(),                                   // 資料夾ID篩選 (Sprint 6 Week 11 新增)
+  include_subfolders: z.boolean().default(true),                           // 是否包含子資料夾 (Sprint 6 Week 11 新增)
   limit: z.number().int().min(1).max(50).default(10),                      // 結果數量限制（1-50）
   similarity_threshold: z.number().min(0).max(1).default(0.7),             // 語義相似度閾值（0-1）
   include_chunks: z.boolean().default(true),                               // 是否包含文檔分塊詳情
@@ -174,6 +176,8 @@ export async function POST(request: NextRequest) {
       type,                     // 搜索類型（text/semantic/hybrid）
       category,                 // 文檔分類篩選
       tags,                     // 標籤篩選
+      folder_id,               // Sprint 6 Week 11: 資料夾ID篩選
+      include_subfolders,      // Sprint 6 Week 11: 是否包含子資料夾
       limit,                    // 結果數量限制
       similarity_threshold,     // 語義相似度閾值
       include_chunks,           // 是否包含分塊信息
@@ -225,7 +229,7 @@ export async function POST(request: NextRequest) {
            * - 向量搜索：語義理解和相關性
            * - 智能合併：優化的結果融合算法
            */
-          const textResults = await performTextSearch(query, category, tags, Math.floor(limit / 2))
+          const textResults = await performTextSearch(query, category, tags, folder_id, include_subfolders, Math.floor(limit / 2))
           results = mergeEnhancedSearchResults(textResults, vectorSearchResult.results, limit)
           searchMetadata = {
             ...vectorSearchResult.metadata,                           // 包含向量搜索元數據
@@ -255,11 +259,11 @@ export async function POST(request: NextRequest) {
         // 根據搜索類型執行對應的降級策略
         if (type === 'semantic') {
           // 語義搜索降級：使用傳統向量搜索
-          results = await performLegacySemanticSearch(query, category, tags, limit, similarity_threshold)
+          results = await performLegacySemanticSearch(query, category, tags, folder_id, include_subfolders, limit, similarity_threshold)
         } else {
           // 混合搜索降級：結合文本搜索和傳統語義搜索
-          const textResults = await performTextSearch(query, category, tags, limit)
-          const legacySemanticResults = await performLegacySemanticSearch(query, category, tags, limit, similarity_threshold)
+          const textResults = await performTextSearch(query, category, tags, folder_id, include_subfolders, limit)
+          const legacySemanticResults = await performLegacySemanticSearch(query, category, tags, folder_id, include_subfolders, limit, similarity_threshold)
           results = mergeSearchResults(textResults, legacySemanticResults, limit)
         }
 
@@ -274,7 +278,7 @@ export async function POST(request: NextRequest) {
        * 4.3 純文本搜索模式
        * 基於關鍵字匹配的傳統搜索，速度快，適合精確匹配
        */
-      results = await performTextSearch(query, category, tags, limit)
+      results = await performTextSearch(query, category, tags, folder_id, include_subfolders, limit)
       searchMetadata = {
         searchType: 'text',                                           // 搜索類型標識
         hybridSearch: false                                           // 非混合搜索
@@ -400,10 +404,32 @@ export async function POST(request: NextRequest) {
  * 基於關鍵字匹配的傳統搜索，支援標題、內容、作者的全文搜索
  * 包含智能相關性評分和排序機制
  */
+/**
+ * 遞歸獲取資料夾及其所有子資料夾的ID列表
+ * Sprint 6 Week 11 Day 2 新增
+ */
+async function getFolderIdsRecursively(folderId: number): Promise<number[]> {
+  const folderIds = [folderId]
+
+  const children = await prisma.knowledgeFolder.findMany({
+    where: { parent_id: folderId },
+    select: { id: true }
+  })
+
+  for (const child of children) {
+    const childIds = await getFolderIdsRecursively(child.id)
+    folderIds.push(...childIds)
+  }
+
+  return folderIds
+}
+
 async function performTextSearch(
   query: string,                    // 搜索關鍵字
   category?: DocumentCategory,      // 可選的文檔分類篩選
   tags?: string[],                  // 可選的標籤篩選
+  folder_id?: number,               // 可選的資料夾ID篩選 (Sprint 6 Week 11 新增)
+  include_subfolders: boolean = true, // 是否包含子資料夾 (Sprint 6 Week 11 新增)
   limit: number = 10               // 結果數量限制
 ) {
   const where: any = {
@@ -424,6 +450,18 @@ async function performTextSearch(
       some: {
         name: { in: tags }
       }
+    }
+  }
+
+  // 資料夾過濾邏輯 (Sprint 6 Week 11 新增)
+  if (folder_id !== undefined) {
+    if (include_subfolders) {
+      // 包含子資料夾：遞歸獲取所有子資料夾ID
+      const folderIds = await getFolderIdsRecursively(folder_id)
+      where.folder_id = { in: folderIds }
+    } else {
+      // 只包含當前資料夾
+      where.folder_id = folder_id
     }
   }
 
@@ -467,6 +505,8 @@ async function performSemanticSearch(
   query: string,
   category?: DocumentCategory,
   tags?: string[],
+  folder_id?: number,               // Sprint 6 Week 11 新增
+  include_subfolders: boolean = true, // Sprint 6 Week 11 新增
   limit: number = 10,
   similarity_threshold: number = 0.7
 ) {
@@ -491,6 +531,18 @@ async function performSemanticSearch(
       some: {
         name: { in: tags }
       }
+    }
+  }
+
+  // 資料夾過濾邏輯 (Sprint 6 Week 11 新增)
+  if (folder_id !== undefined) {
+    if (include_subfolders) {
+      // 包含子資料夾：遞歸獲取所有子資料夾ID
+      const folderIds = await getFolderIdsRecursively(folder_id)
+      baseWhere.folder_id = { in: folderIds }
+    } else {
+      // 只包含當前資料夾
+      baseWhere.folder_id = folder_id
     }
   }
 
@@ -779,6 +831,8 @@ async function performLegacySemanticSearch(
   query: string,
   category?: DocumentCategory,
   tags?: string[],
+  folder_id?: number,               // Sprint 6 Week 11 新增
+  include_subfolders: boolean = true, // Sprint 6 Week 11 新增
   limit: number = 10,
   similarity_threshold: number = 0.7
 ) {
@@ -802,6 +856,18 @@ async function performLegacySemanticSearch(
       some: {
         name: { in: tags }
       }
+    }
+  }
+
+  // 資料夾過濾邏輯 (Sprint 6 Week 11 新增)
+  if (folder_id !== undefined) {
+    if (include_subfolders) {
+      // 包含子資料夾：遞歸獲取所有子資料夾ID
+      const folderIds = await getFolderIdsRecursively(folder_id)
+      baseWhere.folder_id = { in: folderIds }
+    } else {
+      // 只包含當前資料夾
+      baseWhere.folder_id = folder_id
     }
   }
 
