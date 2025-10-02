@@ -36,6 +36,8 @@ model User {
   salesOpportunities   SalesOpportunity[]
   createdKnowledgeBase KnowledgeBase[]    @relation("KnowledgeCreator")
   updatedKnowledgeBase KnowledgeBase[]    @relation("KnowledgeUpdater")
+  createdFolders       KnowledgeFolder[]  @relation("FolderCreator")
+  updatedFolders       KnowledgeFolder[]  @relation("FolderUpdater")
 
   // Sprint 5: AI提案生成相關關聯
   createdTemplates    ProposalTemplate[]   @relation("TemplateCreator")
@@ -196,6 +198,35 @@ model ProposalItem {
   @@map("proposal_items")
 }
 
+// 知識庫資料夾模型（樹狀結構）
+model KnowledgeFolder {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  parent_id   Int? // 父資料夾ID (null表示根資料夾)
+  path        String? // 完整路徑 (如 /產品/硬體/伺服器)
+  icon        String?  @default("folder") // 資料夾圖示
+  color       String?  @default("#3B82F6") // 資料夾顏色
+  sort_order  Int      @default(0) // 排序順序
+  is_system   Boolean  @default(false) // 系統資料夾不可刪除
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  created_by  Int? // 創建者ID
+  updated_by  Int? // 更新者ID
+
+  // 關聯關係
+  parent       KnowledgeFolder?  @relation("FolderHierarchy", fields: [parent_id], references: [id], onDelete: Cascade)
+  children     KnowledgeFolder[] @relation("FolderHierarchy")
+  creator      User?             @relation("FolderCreator", fields: [created_by], references: [id])
+  updater      User?             @relation("FolderUpdater", fields: [updated_by], references: [id])
+  knowledge_base KnowledgeBase[] // 資料夾內的文檔
+
+  @@index([parent_id], name: "IX_Folder_Parent")
+  @@index([path], name: "IX_Folder_Path")
+  @@index([sort_order], name: "IX_Folder_Sort")
+  @@map("knowledge_folders")
+}
+
 // 知識庫文檔模型
 model KnowledgeBase {
   id                Int              @id @default(autoincrement())
@@ -208,6 +239,7 @@ model KnowledgeBase {
   version           Int              @default(1)
   status            DocumentStatus   @default(ACTIVE)
   category          DocumentCategory @default(GENERAL)
+  folder_id         Int? // 所屬資料夾ID
   source            String? // 來源系統/路徑
   author            String? // 文檔作者
   language          String?          @default("zh-TW") // 語言代碼
@@ -220,6 +252,7 @@ model KnowledgeBase {
   updated_by        Int? // 更新者ID
 
   // 關聯關係
+  folder           KnowledgeFolder? @relation(fields: [folder_id], references: [id], onDelete: SetNull)
   creator          User?            @relation("KnowledgeCreator", fields: [created_by], references: [id])
   updater          User?            @relation("KnowledgeUpdater", fields: [updated_by], references: [id])
   chunks           KnowledgeChunk[] // 內容分塊
@@ -231,6 +264,7 @@ model KnowledgeBase {
   @@index([created_at], name: "IX_KB_Created")
   @@index([hash], name: "IX_KB_Hash")
   @@index([source, version], name: "IX_KB_Source_Version")
+  @@index([folder_id], name: "IX_KB_Folder")
   @@map("knowledge_base")
 }
 
