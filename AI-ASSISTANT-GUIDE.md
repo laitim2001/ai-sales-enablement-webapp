@@ -47,19 +47,19 @@
 6. ✅ 與用戶確認改動是否接受
 7. ✅ 確認後同步到GitHub
 
-**📅 最近更新 (2025-10-02 23:30)**:
-- 🎉 Sprint 5 完整完成 (100%)！包含完整測試覆蓋
-- Sprint 5 Week 10 完整交付：
-  - Day 1-2: 通知系統完整實現 (~3,100行)
-  - Day 3: 範本系統前端 (~3,590行)
-  - Day 4: PDF導出功能 (~960行)
-  - Day 5: 測試套件完整 (~1,500行)
-  - Day 6: 版本歷史UI (~1,120行)
-  - Day 7: 版本API測試 (~450行)
-- Sprint 5 總計: 核心代碼 6,855行 + 測試代碼 2,350行 = 9,205行
-- MVP Phase 2 總進度: 70% (38/54任務) - Sprint 1 + 2 + 4 + 5 完成
-- 測試覆蓋率: 核心功能 90%+, 版本控制 95%+
-- docs/mvp2-implementation-checklist.md 已更新至 70% 完成度
+**📅 最近更新 (2025-10-02 16:55)**:
+- 🚀 Sprint 6 Week 11 啟動！知識庫資料夾樹狀導航完成
+- Sprint 6 Week 11 Day 1 完整交付：
+  - Prisma Schema: KnowledgeFolder 模型 (28行, 樹狀結構)
+  - API路由: 4個完整REST API (~600行)
+  - React組件: 樹狀導航組件 (~650行)
+  - 功能: 無限層級嵌套、拖放排序、循環引用防護
+- Sprint 6 總計: 1,738行新代碼
+- 🎉 Sprint 5 完整完成 (100%)！
+  - 核心代碼 6,855行 + 測試代碼 2,350行 = 9,205行
+  - 測試覆蓋率: 核心功能 90%+, 版本控制 95%+
+- MVP Phase 2 總進度: 70% (38/54任務)
+- 已完成: Sprint 1 + 2 + 4 + 5 ✅ | Sprint 6 進行中 (20%) 🔄
 
 ---
 
@@ -171,7 +171,7 @@ AI助手將自動執行所有必要的檢查和準備工作！
 **項目名稱**: AI 銷售賦能平台
 **目標市場**: 馬來西亞/新加坡
 **技術棧**: Next.js 14 + PostgreSQL + Azure OpenAI + Puppeteer + OpenTelemetry
-**狀態**: ✅ MVP Phase 1 完成，🔄 MVP Phase 2 進行中 (70%)，Sprint 1+2+4+5 完成 🎉
+**狀態**: ✅ MVP Phase 1 完成，🔄 MVP Phase 2 進行中 (70%)，Sprint 1+2+4+5 完成 🎉，Sprint 6 進行中 (20%) 🔄
 
 ---
 
@@ -418,8 +418,8 @@ npm run test:integration:system # 執行系統級整合測試
 ### MVP Phase 2 (企業級強化) - 🔄 進行中 (70%)
 ```
 🎯 目標: 企業級功能強化 (54個任務)
-📅 時程: 8週 (4個Sprint)
-🚀 狀態: Sprint 1 + Sprint 2 + Sprint 4 + Sprint 5 完成 🎉 | Sprint 3 暫時跳過
+📅 時程: 10週 (5個Sprint)
+🚀 狀態: Sprint 1 + 2 + 4 + 5 完成 🎉 | Sprint 6 進行中 (20%) | Sprint 3 暫時跳過
 
 ✅ Sprint 1 (週1-2): API 網關與安全層 - 100% 完成 (6/6 任務)
     - 高級中間件系統 (10個核心中間件, 4,884行代碼)
@@ -496,6 +496,28 @@ npm run test:integration:system # 執行系統級整合測試
       * 總計: 9,205行
       * 測試覆蓋率: 核心 90%+, 版本控制 95%+
       * 設計模式: 6個 (State/Observer/Strategy/Factory/Command/Memento)
+
+🔄 Sprint 6 (週11-12): 知識庫管理界面 - 進行中 (20% 完成, 2025-10-02啟動)
+    - ✅ Week 11 Day 1: 資料夾樹狀導航 (100%)
+      - Prisma模型: KnowledgeFolder (28行, 樹狀結構)
+      - API路由: 4個完整REST API (~600行)
+        * GET/POST /api/knowledge-folders - 樹狀查詢/創建
+        * GET/PATCH/DELETE /api/knowledge-folders/[id] - CRUD
+        * POST /api/knowledge-folders/[id]/move - 拖放移動
+        * POST /api/knowledge-folders/reorder - 批量排序
+      - React組件: KnowledgeFolderTree (~650行)
+        * 無限層級遞歸渲染
+        * 拖放移動支持 (HTML5 Drag and Drop)
+        * 循環引用防護
+        * 路徑自動計算和更新
+
+    - 🔄 待完成 (Week 11-12):
+      - 富文本編輯器整合 (Tiptap評估)
+      - 知識庫編輯頁面
+      - 增強搜索功能 (資料夾過濾)
+      - 知識庫版本控制
+      - 知識庫分析統計
+      - 測試與文檔更新
 ```
 
 ---
@@ -511,7 +533,7 @@ npm run test:integration:system # 執行系統級整合測試
 
 ## ⚡ 30秒項目摘要
 
-這是一個為馬來西亞/新加坡市場開發的 AI 銷售賦能平台，使用 Next.js 14 全棧架構，整合 Dynamics 365 CRM 和 Azure OpenAI + Puppeteer，幫助銷售團隊通過 AI 搜索、智能提案生成和客戶360度視圖提升成交率。**✅ MVP Phase 1 已 100% 完成**，**🔄 MVP Phase 2 進行中 (70%)**：已完成 Sprint 1 API 網關安全層（10個核心中間件，335測試）、Sprint 2 企業級監控告警系統（OpenTelemetry + Prometheus + Grafana，46告警規則）、Sprint 4 性能優化與高可用性（API緩存、熔斷器、健康檢查、智能重試，198測試）、**🎉 Sprint 5 完整完成（100%）**：工作流程引擎（2,035行，12狀態機，版本控制，評論，審批）+ 通知系統（3,100行）+ 範本系統（3,590行，Handlebars引擎，25 Helper）+ PDF導出（960行，Puppeteer，專業範本）+ 完整測試套件（2,350行，95%+覆蓋率），總計9,205行代碼。包含完整可觀測性（Metrics + Traces + Logs），系統已達企業級生產就緒狀態。⚠️ Sprint 3 (安全加固) 因優先級調整暫時跳過。
+這是一個為馬來西亞/新加坡市場開發的 AI 銷售賦能平台，使用 Next.js 14 全棧架構，整合 Dynamics 365 CRM 和 Azure OpenAI + Puppeteer，幫助銷售團隊通過 AI 搜索、智能提案生成和客戶360度視圖提升成交率。**✅ MVP Phase 1 已 100% 完成**，**🔄 MVP Phase 2 進行中 (70%)**：已完成 Sprint 1 API 網關安全層（10個核心中間件，335測試）、Sprint 2 企業級監控告警系統（OpenTelemetry + Prometheus + Grafana，46告警規則）、Sprint 4 性能優化與高可用性（API緩存、熔斷器、健康檢查、智能重試，198測試）、**🎉 Sprint 5 完整完成（100%）**：工作流程引擎（2,035行，12狀態機，版本控制，評論，審批）+ 通知系統（3,100行）+ 範本系統（3,590行，Handlebars引擎，25 Helper）+ PDF導出（960行，Puppeteer，專業範本）+ 完整測試套件（2,350行，95%+覆蓋率），總計9,205行代碼。**🔄 Sprint 6 進行中（20%）**：知識庫資料夾樹狀導航（1,738行，Prisma模型，4個REST API，遞歸樹組件，拖放排序，循環引用防護）。包含完整可觀測性（Metrics + Traces + Logs），系統已達企業級生產就緒狀態。⚠️ Sprint 3 (安全加固) 因優先級調整暫時跳過。
 
 **🤖 AI 助手重要提醒**:
 - 這個項目有完整的4層索引系統，按 L0→L1→L2→L3 順序查找

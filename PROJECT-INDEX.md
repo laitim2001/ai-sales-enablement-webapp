@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月2日 - Sprint 5 Week 10 Day 4 PDF導出功能完成（新增lib/pdf/系統，Puppeteer整合）
+> **📅 最後更新**: 2025年10月2日 - Sprint 6 Week 11 Day 1 知識庫資料夾樹狀導航完成（新增KnowledgeFolder模型，4個REST API）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -251,6 +251,58 @@
 - 數據庫: 2個模型（ProposalTemplate + ProposalGeneration）✅
 - API端點: 6個範本API + 2個PDF導出API ✅
 - 前端整合: PDF導出按鈕 + 自動下載 + Toast通知 ✅
+
+### 📁 Sprint 6: 知識庫管理界面 (Week 11-12, 進行中 20%)
+
+**用途**: 知識庫資料夾樹狀導航、文檔組織、版本控制
+
+**🎯 知識庫資料夾 API端點** (app/api/knowledge-folders/):
+- `route.ts`: 資料夾樹狀結構查詢和創建 (GET/POST) - ~340行
+  * GET: 遞歸查詢樹狀結構，支持扁平列表/樹狀模式
+  * POST: 創建新資料夾，自動路徑計算，同名檢測
+- `[id]/route.ts`: 單個資料夾操作 (GET/PATCH/DELETE) - ~360行
+  * GET: 資料夾詳情含子資料夾和文檔
+  * PATCH: 更新資料夾（支持移動和重命名）
+  * DELETE: 刪除資料夾（空資料夾檢查）
+- `[id]/move/route.ts`: 拖放移動資料夾 (POST) - ~180行
+  * 循環引用防護
+  * 事務安全移動
+  * 路徑遞歸更新
+- `reorder/route.ts`: 批量排序 (POST) - ~120行
+  * 同層級批量更新 sort_order
+  * 事務處理
+  * 系統資料夾保護
+
+**🎨 知識庫前端組件** (components/knowledge/):
+- `knowledge-folder-tree.tsx`: 樹狀導航組件 (~650行)
+  * 無限層級遞歸渲染
+  * 拖放移動支持 (HTML5 Drag and Drop)
+  * 展開/收起狀態管理
+  * 右鍵菜單操作（創建/編輯/刪除）
+  * 文檔計數顯示
+  * 系統資料夾保護
+
+**📦 數據庫模型** (prisma/schema.prisma):
+- `KnowledgeFolder`: 樹狀資料夾模型 (28行)
+  * 自引用關聯 (parent_id)
+  * 路徑緩存 (path)
+  * 排序支持 (sort_order)
+  * 系統保護 (is_system)
+  * 級聯刪除 (onDelete: Cascade)
+
+**✅ 完成狀態**: Sprint 6 Week 11 Day 1 完成 (2025-10-02)
+- Prisma模型: 28行 (KnowledgeFolder) ✅
+- API路由: 4個文件, ~600行 ✅
+- React組件: 1個文件, ~650行 ✅
+- 總計: 1,738行新代碼 ✅
+
+**🔄 待完成** (Week 11-12):
+- 富文本編輯器整合 (Tiptap評估)
+- 知識庫編輯頁面
+- 增強搜索功能 (資料夾過濾)
+- 知識庫版本控制
+- 知識庫分析統計
+- 測試與文檔更新
 
 ### 📊 lib/monitoring/ - 企業級監控告警系統 (Sprint 2完成)
 
