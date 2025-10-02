@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [🔍 Sprint 6 Week 11 Day 2 - 資料夾管理與搜索過濾 (2025-10-02 23:35)](#🔍-2025-10-02-2335-sprint-6-week-11-day-2-資料夾管理與搜索過濾-✅)
 - [📁 Sprint 6 Week 11 Day 1 - 知識庫資料夾樹狀導航 (2025-10-02 16:55)](#📁-2025-10-02-1655-sprint-6-week-11-day-1-知識庫資料夾樹狀導航-✅)
 - [📜 Sprint 5 Week 10 Day 6 - 版本歷史 UI 完整實現 (2025-10-02 22:00)](#📜-2025-10-02-2200-sprint-5-week-10-day-6-版本歷史-ui-完整實現-✅)
 - [🧪 Sprint 5 Week 10 Day 5 - 測試套件完整實現 (2025-10-02 18:00)](#🧪-2025-10-02-1800-sprint-5-week-10-day-5-測試套件完整實現-✅)
@@ -37,6 +38,269 @@
 - [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## 🔍 2025-10-02 (23:35): Sprint 6 Week 11 Day 2 - 資料夾管理與搜索過濾 ✅
+
+### 🎯 **會話概述**
+- **主要任務**: 完成資料夾管理界面和智能搜索過濾功能
+- **進度**: Sprint 6 Week 11 Day 2 完成
+- **代碼量**: 3個React組件 + 1個測試腳本 + 1個Bug修復，約1,300行代碼
+- **狀態**: ✅ Sprint 6 Week 11 完整交付 - 累計約3,038行代碼
+
+### 📊 **實施內容**
+
+#### 1. **富文本編輯器整合** (Tiptap, ~800行)
+
+**目標**: 升級知識庫搜索頁面，提供富文本編輯和AI生成內容支持
+
+**核心功能**:
+```tsx
+// components/knowledge/knowledge-search.tsx
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder'
+import CharacterCount from '@tiptap/extension-character-count'
+
+// 初始化Tiptap編輯器
+const editor = useEditor({
+  extensions: [
+    StarterKit.configure({
+      heading: { levels: [1, 2, 3] },
+      bulletList: { keepMarks: true, keepAttributes: false },
+      orderedList: { keepMarks: true, keepAttributes: false },
+    }),
+    Placeholder.configure({
+      placeholder: '輸入查詢內容或按 Ctrl+Enter 開始語音輸入...',
+    }),
+    CharacterCount.configure({ limit: 2000 }),
+  ],
+  content: '',
+  editorProps: {
+    attributes: {
+      class: 'prose prose-sm max-w-none focus:outline-none min-h-[120px] px-4 py-3',
+    },
+  },
+})
+
+// 工具欄按鈕 (粗體、斜體、標題、列表等)
+<button onClick={() => editor.chain().focus().toggleBold().run()}>
+  <BoldIcon />
+</button>
+```
+
+**特點**:
+- ✅ **完整格式支持**: 粗體、斜體、標題 (H1-H3)、有序/無序列表
+- ✅ **字數統計**: 實時顯示字數，限制2000字
+- ✅ **鍵盤快捷鍵**: Ctrl+B (粗體)、Ctrl+I (斜體) 等
+- ✅ **佔位提示**: 引導用戶輸入和使用語音功能
+- ✅ **響應式設計**: 適配不同屏幕尺寸
+
+#### 2. **資料夾過濾搜索** (FolderSelector, ~300行)
+
+**目標**: 支持按資料夾篩選知識庫搜索結果
+
+**核心功能**:
+```tsx
+// 資料夾選擇器整合
+<FolderSelector
+  value={search.folderId}
+  includeSubfolders={search.includeSubfolders}
+  onFolderChange={(folderId) => setSearch(prev => ({ ...prev, folderId }))}
+  onIncludeSubfoldersChange={(include) => setSearch(prev => ({ ...prev, includeSubfolders: include }))}
+/>
+
+// 搜索請求帶資料夾過濾
+const response = await fetch('/api/knowledge-base/search', {
+  method: 'POST',
+  body: JSON.stringify({
+    query: editor.getText(),
+    top_k: topK,
+    min_similarity: minSimilarity,
+    folder_id: search.folderId,          // 資料夾過濾
+    include_subfolders: search.includeSubfolders, // 包含子資料夾
+  }),
+})
+```
+
+**特點**:
+- ✅ **樹狀選擇**: 從資料夾樹中選擇目標資料夾
+- ✅ **子資料夾選項**: 可選是否包含子資料夾內容
+- ✅ **實時過濾**: 搜索結果自動按資料夾篩選
+- ✅ **清空選擇**: 支持取消資料夾過濾，搜索全部
+
+#### 3. **資料夾管理頁面** (~200行)
+
+**目標**: 創建完整的資料夾管理界面
+
+**核心功能**:
+```tsx
+// app/dashboard/knowledge/folders/page.tsx
+export default function FoldersPage() {
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  // 創建頂層資料夾
+  const handleCreateFolder = async () => {
+    const response = await fetch('/api/knowledge-folders', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: newFolderName.trim(),
+        description: newFolderDescription.trim() || undefined,
+        parent_id: null, // 頂層資料夾
+      }),
+    })
+
+    setRefreshKey(prev => prev + 1) // 刷新資料夾樹
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* 頁面標題 */}
+      <div className="flex items-center justify-between">
+        <h1>資料夾管理</h1>
+        <Button onClick={() => setIsCreateDialogOpen(true)}>
+          <PlusIcon /> 新建資料夾
+        </Button>
+      </div>
+
+      {/* 資料夾樹狀結構 */}
+      <KnowledgeFolderTree
+        key={refreshKey}
+        onFolderAction={handleFolderAction}
+      />
+
+      {/* 新建資料夾對話框 */}
+      <Dialog open={isCreateDialogOpen}>
+        {/* 表單... */}
+      </Dialog>
+    </div>
+  )
+}
+```
+
+**特點**:
+- ✅ **完整CRUD**: 創建、查看、刷新資料夾
+- ✅ **對話框交互**: shadcn/ui Dialog 組件
+- ✅ **樹狀展示**: KnowledgeFolderTree 組件整合
+- ✅ **頁面導航**: 從知識庫主頁導航進入
+
+#### 4. **測試資料種子腳本** (~100行)
+
+**目標**: 創建初始測試資料夾結構
+
+```typescript
+// scripts/seed-folders.ts
+async function main() {
+  // 創建3個頂層資料夾
+  const productFolder = await prisma.knowledgeFolder.create({
+    data: {
+      name: '產品資料',
+      description: '產品相關文檔和資料',
+      path: '/產品資料',
+      icon: '📦',
+      color: '#3B82F6',
+      sort_order: 1,
+    },
+  })
+
+  // 創建3個子資料夾
+  const productSpecFolder = await prisma.knowledgeFolder.create({
+    data: {
+      name: '產品規格',
+      parent_id: productFolder.id,
+      path: '/產品資料/產品規格',
+      icon: '📋',
+      sort_order: 1,
+    },
+  })
+
+  // ... 更多資料夾
+}
+```
+
+**執行結果**:
+```bash
+npx tsx scripts/seed-folders.ts
+
+🌱 開始創建測試資料夾...
+✅ 創建資料夾: 產品資料
+✅ 創建資料夾: 銷售手冊
+✅ 創建資料夾: 培訓材料
+✅ 創建子資料夾: 產品資料/產品規格
+✅ 創建子資料夾: 產品資料/價格表
+✅ 創建子資料夾: 銷售手冊/銷售流程
+
+✨ 測試資料夾創建完成！
+
+📊 資料夾統計:
+   - 頂層資料夾: 3 個
+   - 子資料夾: 3 個
+   - 總計: 6 個資料夾
+```
+
+#### 5. **Bug 修復: Props 整合錯誤**
+
+**問題**: 資料夾選擇器顯示但選擇無反應
+
+**根本原因**: Props 名稱不匹配
+- FolderSelector 組件期望: `value` 和 `onFolderChange`
+- KnowledgeSearch 使用: `selectedFolderId` 和 `onFolderSelect`
+
+**修復**:
+```tsx
+// BEFORE (錯誤):
+<FolderSelector
+  selectedFolderId={search.folderId}
+  onFolderSelect={(folderId) => setSearch(...)}
+/>
+
+// AFTER (正確):
+<FolderSelector
+  value={search.folderId}
+  onFolderChange={(folderId) => setSearch(prev => ({ ...prev, folderId }))}
+/>
+```
+
+### 📈 **進度統計**
+
+**Sprint 6 Week 11 總進度**:
+- Day 1 (資料夾樹狀結構): ~1,738行
+- Day 2 (管理與過濾): ~1,300行
+- **累計**: ~3,038行代碼
+
+**MVP Phase 2 總進度**:
+- Sprint 1: ✅ 100% (JWT + Azure AD)
+- Sprint 2: ✅ 100% (監控告警)
+- Sprint 4: ✅ 100% (性能優化)
+- Sprint 5: ✅ 100% (工作流程)
+- Sprint 6: 🔄 40% (7/17任務) - Week 11 完成
+- **總計**: 74% (40/54任務)
+
+### 🎯 **下一步計劃**
+
+**Sprint 6 Week 12 (待啟動)**:
+- Week 12 Day 1-2: 知識庫批量導入功能
+- Week 12 Day 3-4: 嵌入向量優化與管理
+- Week 12 Day 5-6: 知識圖譜可視化
+
+### 💡 **技術要點**
+
+1. **Tiptap 編輯器最佳實踐**:
+   - 使用 StarterKit 快速配置基礎功能
+   - Placeholder 提升用戶體驗
+   - CharacterCount 限制輸入長度
+
+2. **Props 整合檢查**:
+   - 創建組件時明確定義 Props 介面
+   - 使用組件時嚴格遵循介面定義
+   - TypeScript 類型檢查避免運行時錯誤
+
+3. **測試數據管理**:
+   - 使用 TSX 腳本快速創建種子數據
+   - 包含頂層和嵌套結構測試完整性
+   - 使用描述性名稱和 emoji 提升可讀性
 
 ---
 

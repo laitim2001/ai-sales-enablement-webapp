@@ -426,8 +426,8 @@ export function KnowledgeSearch() {
                   資料夾篩選
                 </label>
                 <FolderSelector
-                  selectedFolderId={search.folderId}
-                  onFolderSelect={(folderId) => setSearch(prev => ({ ...prev, folderId }))}
+                  value={search.folderId}
+                  onFolderChange={(folderId) => setSearch(prev => ({ ...prev, folderId }))}
                   includeSubfolders={search.includeSubfolders}
                   onIncludeSubfoldersChange={(includeSubfolders) =>
                     setSearch(prev => ({ ...prev, includeSubfolders }))

@@ -47,19 +47,20 @@
 6. ✅ 與用戶確認改動是否接受
 7. ✅ 確認後同步到GitHub
 
-**📅 最近更新 (2025-10-02 16:55)**:
-- 🚀 Sprint 6 Week 11 啟動！知識庫資料夾樹狀導航完成
-- Sprint 6 Week 11 Day 1 完整交付：
-  - Prisma Schema: KnowledgeFolder 模型 (28行, 樹狀結構)
-  - API路由: 4個完整REST API (~600行)
-  - React組件: 樹狀導航組件 (~650行)
-  - 功能: 無限層級嵌套、拖放排序、循環引用防護
-- Sprint 6 總計: 1,738行新代碼
+**📅 最近更新 (2025-10-02 23:35)**:
+- 🎉 Sprint 6 Week 11 Day 2 完整交付！資料夾管理與搜索過濾功能
+- Sprint 6 Week 11 Day 2 成果：
+  - 富文本編輯器整合 (Tiptap, ~800行, SSR支持)
+  - 資料夾過濾搜索 (FolderSelector組件, ~300行)
+  - 資料夾管理頁面 (完整CRUD界面, ~200行)
+  - 測試資料夾種子數據 (6個資料夾, 樹狀結構)
+  - Bug修復: FolderSelector props整合問題
+- Sprint 6 Week 11 累計: ~3,038行新代碼 (Day 1: 1,738行 + Day 2: 1,300行)
 - 🎉 Sprint 5 完整完成 (100%)！
   - 核心代碼 6,855行 + 測試代碼 2,350行 = 9,205行
   - 測試覆蓋率: 核心功能 90%+, 版本控制 95%+
-- MVP Phase 2 總進度: 70% (38/54任務)
-- 已完成: Sprint 1 + 2 + 4 + 5 ✅ | Sprint 6 進行中 (20%) 🔄
+- MVP Phase 2 總進度: 74% (40/54任務)
+- 已完成: Sprint 1 + 2 + 4 + 5 ✅ | Sprint 6 進行中 (40%) 🔄
 
 ---
 
@@ -497,7 +498,7 @@ npm run test:integration:system # 執行系統級整合測試
       * 測試覆蓋率: 核心 90%+, 版本控制 95%+
       * 設計模式: 6個 (State/Observer/Strategy/Factory/Command/Memento)
 
-🔄 Sprint 6 (週11-12): 知識庫管理界面 - 進行中 (20% 完成, 2025-10-02啟動)
+🔄 Sprint 6 (週11-12): 知識庫管理界面 - 進行中 (40% 完成, 2025-10-02啟動)
     - ✅ Week 11 Day 1: 資料夾樹狀導航 (100%)
       - Prisma模型: KnowledgeFolder (28行, 樹狀結構)
       - API路由: 4個完整REST API (~600行)
@@ -511,13 +512,31 @@ npm run test:integration:system # 執行系統級整合測試
         * 循環引用防護
         * 路徑自動計算和更新
 
+    - ✅ Week 11 Day 2: 資料夾管理與搜索過濾 (100%)
+      - 富文本編輯器 (~800行)
+        * Tiptap整合 (完整功能評估與實現)
+        * RichTextEditor組件 (Markdown/圖片/格式化)
+        * SSR支持 (動態導入優化)
+        * 知識庫編輯頁面 (自動保存)
+      - 資料夾過濾搜索 (~300行)
+        * FolderSelector組件 (樹狀下拉選擇)
+        * 搜索API整合 (folder_id + include_subfolders)
+        * 子資料夾包含選項
+      - 資料夾管理頁面 (~200行)
+        * app/dashboard/knowledge/folders/page.tsx
+        * 完整CRUD界面 (新建/編輯/刪除)
+        * 導航整合 (知識庫主頁面連結)
+      - 測試數據與修復
+        * 種子腳本 (scripts/seed-folders.ts)
+        * 6個測試資料夾 (3頂層 + 3子資料夾)
+        * Props整合修復 (value/onFolderChange)
+
     - 🔄 待完成 (Week 11-12):
-      - 富文本編輯器整合 (Tiptap評估)
-      - 知識庫編輯頁面
-      - 增強搜索功能 (資料夾過濾)
-      - 知識庫版本控制
-      - 知識庫分析統計
-      - 測試與文檔更新
+      - 知識庫版本控制UI整合
+      - 知識庫分析統計儀表板
+      - 進階搜索功能 (標籤/日期過濾)
+      - 完整測試套件
+      - 文檔更新與用戶手冊
 ```
 
 ---
