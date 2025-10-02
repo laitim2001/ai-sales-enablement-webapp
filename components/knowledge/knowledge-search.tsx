@@ -89,6 +89,7 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/button'
+import { FolderSelector } from '@/components/knowledge/folder-selector'
 
 interface SearchResult {
   id: number
@@ -131,6 +132,9 @@ interface SearchState {
   category?: string
   tags: string[]
   hasSearched: boolean
+  // Sprint 6 Week 11 Day 2: 資料夾過濾功能
+  folderId?: number | null
+  includeSubfolders: boolean
 }
 
 const categoryOptions = [
@@ -173,7 +177,10 @@ export function KnowledgeSearch() {
     showAdvanced: false,
     category: '',
     tags: [],
-    hasSearched: false
+    hasSearched: false,
+    // Sprint 6 Week 11 Day 2: 資料夾過濾初始狀態
+    folderId: null,
+    includeSubfolders: true
   })
 
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -196,6 +203,8 @@ export function KnowledgeSearch() {
         type: search.searchType,
         category: search.category || undefined,
         tags: search.tags.length > 0 ? search.tags : undefined,
+        folder_id: search.folderId !== null && search.folderId !== undefined ? search.folderId : undefined,
+        include_subfolders: search.includeSubfolders,
         limit: 20,
         similarity_threshold: 0.6, // 較低的閾值以獲得更多結果
         include_chunks: true
@@ -250,7 +259,9 @@ export function KnowledgeSearch() {
       showAdvanced: false,
       category: '',
       tags: [],
-      hasSearched: false
+      hasSearched: false,
+      folderId: null,
+      includeSubfolders: true
     })
     searchInputRef.current?.focus()
   }
@@ -352,58 +363,75 @@ export function KnowledgeSearch() {
 
           {/* 高級選項 */}
           {search.showAdvanced && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
-              {/* 類別篩選 */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  限制類別
-                </label>
-                <select
-                  value={search.category}
-                  onChange={(e) => setSearch(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2"
-                >
-                  {categoryOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+            <div className="space-y-4 pt-4 border-t border-gray-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* 類別篩選 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    限制類別
+                  </label>
+                  <select
+                    value={search.category}
+                    onChange={(e) => setSearch(prev => ({ ...prev, category: e.target.value }))}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  >
+                    {categoryOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* 標籤篩選 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    標籤篩選
+                  </label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {search.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                      >
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => removeTag(tag)}
+                          className="ml-1 h-3 w-3 flex items-center justify-center hover:bg-blue-200 rounded-full"
+                        >
+                          <XMarkIcon className="h-2 w-2" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="輸入標籤名稱後按Enter"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        addTag(e.currentTarget.value)
+                        e.currentTarget.value = ''
+                      }
+                    }}
+                  />
+                </div>
               </div>
 
-              {/* 標籤篩選 */}
+              {/* 資料夾篩選 - Sprint 6 Week 11 Day 2 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  標籤篩選
+                  資料夾篩選
                 </label>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {search.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                    >
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => removeTag(tag)}
-                        className="ml-1 h-3 w-3 flex items-center justify-center hover:bg-blue-200 rounded-full"
-                      >
-                        <XMarkIcon className="h-2 w-2" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-                <input
-                  type="text"
-                  placeholder="輸入標籤名稱後按Enter"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      addTag(e.currentTarget.value)
-                      e.currentTarget.value = ''
-                    }
-                  }}
+                <FolderSelector
+                  selectedFolderId={search.folderId}
+                  onFolderSelect={(folderId) => setSearch(prev => ({ ...prev, folderId }))}
+                  includeSubfolders={search.includeSubfolders}
+                  onIncludeSubfoldersChange={(includeSubfolders) =>
+                    setSearch(prev => ({ ...prev, includeSubfolders }))
+                  }
                 />
               </div>
             </div>
