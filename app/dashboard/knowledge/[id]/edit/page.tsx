@@ -69,7 +69,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
-import { KnowledgeDocumentEditWithVersion } from '@/components/knowledge/knowledge-document-edit-with-version'
+import { KnowledgeDocumentEdit } from '@/components/knowledge/knowledge-document-edit'
 import { Button } from '@/components/ui/button'
 
 interface PageProps {
@@ -179,9 +179,9 @@ export default function EditKnowledgePage({ params }: PageProps) {
         </ol>
       </nav>
 
-      {/* 編輯表單（含版本控制） */}
-      <div className="max-w-6xl">
-        <KnowledgeDocumentEditWithVersion documentId={documentId} />
+      {/* 編輯表單 */}
+      <div className="max-w-4xl">
+        <KnowledgeDocumentEdit documentId={documentId} />
       </div>
     </div>
   )

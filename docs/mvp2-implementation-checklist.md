@@ -1,16 +1,16 @@
 # MVP Phase 2 實施檢查清單
 
-> **最後更新**: 2025-10-03 21:00 (Sprint 6 Week 12 - **知識庫版本控制系統完成 🎉**)
+> **最後更新**: 2025-10-03 17:30 (Sprint 6 Week 12 Day 3-4 - **文件解析器與批量上傳API完成 🎉**)
 > **目標**: 確保 14 週 MVP Phase 2 開發按計劃執行，所有關鍵里程碑按時達成
 > **團隊**: 5-7 人開發團隊
 > **架構**: Next.js 14 全棧開發 (基於MVP Phase 1)
 > **策略**: A+C 混合方案 - 企業就緒優先 + 用戶體驗提升
-> **新增**: Sprint 6 Week 12 完整交付 (版本控制系統2,900行 + 文件解析器1,830行 + 導航增強800行，累計~5,530行新代碼)
+> **新增**: Sprint 6 Week 12 Day 3-4 完整交付 (5個文件解析器 + 批量上傳API，累計~1,830行新代碼，支持PDF/Word/Excel/圖片)
 
 ---
 
-📊 **總體進度**: 44/54 (81%) **✅ Sprint 1 + Sprint 2 + Sprint 4 + Sprint 5 完成, Sprint 6 進行中 (67%)**
-████████████████░░░░ 81%
+📊 **總體進度**: 42/54 (78%) **✅ Sprint 1 + Sprint 2 + Sprint 4 + Sprint 5 完成, Sprint 6 進行中 (53%)**
+████████████████░░░░ 78%
 
 ---
 
@@ -1256,10 +1256,9 @@
 **Week 12 Day 1-4 成果統計**:
 - Day 1 代碼量: ~800行 (麵包屑導航 + 快速跳轉 + 批量上傳框架)
 - Day 3-4 代碼量: ~1,830行 (5個文件解析器 + 批量上傳API)
-- **版本控制**: ~2,900行 (數據模型 + 服務 + API + UI + 整合)
-- **Week 12 累計**: ~5,530行新代碼
-- **Sprint 6 累計**: ~8,568行新代碼 (Week 11: 3,038行 + Week 12: 5,530行)
-- **進度**: Sprint 6 從40% → 67% (11/17任務完成)
+- **Week 12 累計**: ~2,630行新代碼
+- **Sprint 6 累計**: ~5,668行新代碼 (Week 11: 3,038行 + Week 12: 2,630行)
+- **進度**: Sprint 6 從40% → 53% (9/17任務完成)
 
 ---
 
@@ -1360,60 +1359,24 @@
 - **累計代碼**: ~1,830行新代碼
 - **Git提交**: 2次提交，2次推送到GitHub
 
-#### 版本控制系統 ✅ **已完成 (2025-10-03)**
-- [x] **版本管理功能** ✅ **完成** (lib/knowledge/version-control.ts, ~500行)
-  - [x] 設計版本數據模型 (KnowledgeVersion + KnowledgeVersionComment)
-  - [x] 實現自動版本保存 (createVersion with snapshot)
-  - [x] 實現手動版本創建 (API端點支持)
-  - [x] 實現版本命名和註釋 (changeSummary + tags)
-  - [x] 實現父子版本關係追蹤 (parent_version)
-  - [x] 實現主要/次要版本標記 (is_major flag)
-  - [x] 實現版本標籤系統 (tags array + findVersionsByTag)
+#### 版本控制系統
+- [ ] **版本管理功能**
+  - [ ] 設計版本數據模型
+  - [ ] 實現自動版本保存
+  - [ ] 實現手動版本創建
+  - [ ] 實現版本命名和註釋
 
-- [x] **版本比較功能** ✅ **完成** (compareVersions + UI組件, ~300行)
-  - [x] 實現版本差異計算 (compareVersions method)
-  - [x] 創建版本對比介面 (KnowledgeVersionComparison.tsx)
-  - [x] 實現並排比較視圖 (side-by-side tabs)
-  - [x] 實現變更高亮顯示 (added/modified/removed)
-  - [x] 實現變更統計摘要 (change stats)
-  - [x] 支持長文本和結構化數據比較
+- [ ] **版本比較功能**
+  - [ ] 實現版本差異計算
+  - [ ] 創建版本對比介面
+  - [ ] 實現並排比較視圖
+  - [ ] 實現變更高亮顯示
 
-- [x] **版本恢復功能** ✅ **完成** (revertToVersion + UI組件, ~900行)
-  - [x] 實現版本回滾功能 (revertToVersion with backup)
-  - [x] 實現回滾前自動備份 (pre-revert snapshot)
-  - [x] 實現回滾原因記錄 (reason field required)
-  - [x] 實現影響範圍分析 (impact analysis UI)
-  - [x] 實現安全確認機制 (KnowledgeVersionRestore.tsx)
-  - [x] 實現當前版本保護 (cannot delete current version)
-
-- [x] **API 路由層** ✅ **完成** (~400行, 4個端點)
-  - [x] GET/POST /api/knowledge-base/[id]/versions - 列表和創建
-  - [x] POST /api/knowledge-base/[id]/versions/compare - 版本比較
-  - [x] POST /api/knowledge-base/[id]/versions/revert - 版本回滾
-  - [x] GET/DELETE /api/knowledge-base/[id]/versions/[versionId] - 單版本操作
-
-- [x] **UI 組件層** ✅ **完成** (~1,200行, 4個組件)
-  - [x] KnowledgeVersionHistory.tsx - 版本歷史列表
-  - [x] CompactKnowledgeVersionHistory - 精簡版側邊欄
-  - [x] KnowledgeVersionComparison.tsx - 版本比較組件
-  - [x] KnowledgeVersionRestore.tsx - 版本回滾對話框
-
-- [x] **編輯頁面整合** ✅ **完成** (~700行)
-  - [x] KnowledgeDocumentEditWithVersion.tsx - 整合組件
-  - [x] 雙標籤頁設計 (編輯 / 版本歷史)
-  - [x] 版本創建對話框
-  - [x] 版本比較對話框
-  - [x] 版本回滾對話框
-
-**版本控制成果統計** (2025-10-03):
-- **數據模型**: +60行 (2個Prisma模型)
-- **版本控制服務**: ~500行 (8個核心方法)
-- **API路由**: ~400行 (4個RESTful端點)
-- **UI組件**: ~1,200行 (4個React組件)
-- **編輯頁面整合**: ~700行 (雙標籤頁設計)
-- **累計代碼**: ~2,860行新代碼
-- **安全特性**: JWT驗證、權限控制、數據保護、審計追蹤
-- **Git提交**: 1次提交，已推送到GitHub
+- [ ] **版本恢復功能**
+  - [ ] 實現版本回滾功能
+  - [ ] 實現版本分支（可選）
+  - [ ] 實現版本合併（可選）
+  - [ ] 實現版本衝突處理
 
 #### 審核工作流程
 - [ ] **內容審核系統**
