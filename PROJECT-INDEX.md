@@ -641,6 +641,9 @@
 | **知識庫創建** | `app/dashboard/knowledge/create/page.tsx`    | 創建新知識庫項目頁面     | 🟡 高    |
 | **文檔上傳**   | `app/dashboard/knowledge/upload/page.tsx`    | 文檔上傳處理頁面         | 🟡 高    |
 | **智能搜索**   | `app/dashboard/knowledge/search/page.tsx`    | AI智能搜索功能頁面       | 🟡 高    |
+| **進階搜索**   | `app/dashboard/knowledge/advanced-search/page.tsx` | 多條件組合搜索頁面 | 🟡 高    |
+| **資料夾管理** | `app/dashboard/knowledge/folders/page.tsx`   | 資料夾樹狀管理頁面       | 🟡 高    |
+| **分析統計**   | `app/dashboard/knowledge/analytics/page.tsx` | 知識庫分析儀表板頁面     | 🟡 高    |
 | **文檔詳情**   | `app/dashboard/knowledge/[id]/page.tsx`      | 文檔詳情查看頁面         | 🟡 高    |
 | **文檔編輯**   | `app/dashboard/knowledge/[id]/edit/page.tsx` | 文檔內容編輯頁面         | 🟢 中    |
 
@@ -721,10 +724,17 @@
 | **文檔內容**  | `app/api/knowledge-base/[id]/content/route.ts` | 文檔內容獲取和處理     | GET              |
 | **文檔下載**  | `app/api/knowledge-base/[id]/download/route.ts` | 文檔下載服務           | GET              |
 | **智能搜索**  | `app/api/knowledge-base/search/route.ts`     | 文本、語義、混合搜索     | POST             |
+| **進階搜索**  | `app/api/knowledge-base/advanced-search/route.ts` | 多條件組合搜索，支持嵌套邏輯運算 | POST             |
 | **搜索建議**  | `app/api/knowledge-base/suggestions/route.ts` | 智能搜索建議和自動補全   | GET, POST        |
 | **文件上傳**  | `app/api/knowledge-base/upload/route.ts`     | 多格式文件上傳處理       | GET, POST        |
+| **批量上傳**  | `app/api/knowledge-base/bulk-upload/route.ts` | 批量文件上傳，自動解析   | POST             |
 | **標籤管理**  | `app/api/knowledge-base/tags/route.ts`       | 層次化標籤CRUD操作       | GET, POST        |
 | **處理任務**  | `app/api/knowledge-base/processing/route.ts` | 異步處理任務管理         | GET, POST        |
+| **分析統計**  | `app/api/knowledge-base/analytics/route.ts`  | 知識庫統計分析API        | GET              |
+| **版本列表**  | `app/api/knowledge-base/[id]/versions/route.ts` | 文檔版本列表和創建    | GET, POST        |
+| **單個版本**  | `app/api/knowledge-base/[id]/versions/[versionId]/route.ts` | 版本查看和刪除 | GET, DELETE      |
+| **版本比較**  | `app/api/knowledge-base/[id]/versions/compare/route.ts` | 版本差異比較     | POST             |
+| **版本回滾**  | `app/api/knowledge-base/[id]/versions/revert/route.ts` | 版本回滾功能     | POST             |
 
 ### 🧩 components/ - React 組件庫
 
@@ -786,6 +796,39 @@
 | **文檔創建表單** | `components/knowledge/knowledge-create-form.tsx`   | 新知識庫項目創建表單             | 🟡 高    |
 | **文檔預覽器** | `components/knowledge/document-preview.tsx`        | 文檔內容預覽組件                 | 🟢 中    |
 | **列表優化版** | `components/knowledge/knowledge-base-list-optimized.tsx` | 性能優化的知識庫列表組件 | 🟡 高    |
+
+##### Sprint 6 Week 11-12 新增組件
+
+| 組件名稱             | 文件路徑                                             | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ---------------------------------------------------- | -------------------------------- | -------- | -------- |
+| **資料夾樹狀導航** | `components/knowledge/knowledge-folder-tree.tsx`   | 無限層級資料夾樹，拖放排序       | ~650行   | 🔴 極高  |
+| **富文本編輯器**   | `components/knowledge/rich-text-editor.tsx`        | Tiptap編輯器，完整工具欄         | ~800行   | 🔴 極高  |
+| **資料夾選擇器**   | `components/knowledge/folder-selector.tsx`         | 下拉資料夾選擇，子資料夾選項     | ~300行   | 🟡 高    |
+| **進階搜索構建器** | `components/knowledge/advanced-search-builder.tsx` | 可視化查詢構建器，無限嵌套       | ~680行   | 🔴 極高  |
+| **搜索建議**       | `components/knowledge/search-suggestions.tsx`      | 智能搜索建議，實時補全           | ~200行   | 🟡 高    |
+| **搜索結果優化器** | `components/knowledge/search-results-optimizer.tsx` | 搜索結果排序和優化             | ~250行   | 🟡 高    |
+| **搜索分析儀表板** | `components/knowledge/search-analytics-dashboard.tsx` | 搜索統計分析儀表板           | ~300行   | 🟡 高    |
+| **麵包屑導航**     | `components/knowledge/breadcrumb-navigation.tsx`   | 資料夾路徑導航，智能省略         | ~180行   | 🟡 高    |
+| **快速跳轉搜索**   | `components/knowledge/quick-jump-search.tsx`       | Cmd+K快速跳轉，並行搜索          | ~300行   | 🔴 極高  |
+| **批量上傳**       | `components/knowledge/bulk-upload.tsx`             | 拖放批量上傳，文件預覽           | ~320行   | 🟡 高    |
+| **版本編輯整合**   | `components/knowledge/knowledge-document-edit-with-version.tsx` | 雙標籤頁編輯+版本歷史 | ~700行   | 🔴 極高  |
+
+##### 版本控制組件 (components/knowledge/version/)
+
+| 組件名稱             | 文件路徑                                             | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ---------------------------------------------------- | -------------------------------- | -------- | -------- |
+| **版本歷史**       | `components/knowledge/version/KnowledgeVersionHistory.tsx` | 版本列表，時間線顯示       | ~300行   | 🔴 極高  |
+| **版本比較**       | `components/knowledge/version/KnowledgeVersionComparison.tsx` | 版本差異對比，並排顯示   | ~250行   | 🔴 極高  |
+| **版本回滾**       | `components/knowledge/version/KnowledgeVersionRestore.tsx` | 版本回滾，影響分析       | ~250行   | 🔴 極高  |
+
+##### 分析統計組件 (components/knowledge/analytics/)
+
+| 組件名稱             | 文件路徑                                             | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ---------------------------------------------------- | -------------------------------- | -------- | -------- |
+| **統計卡片**       | `components/knowledge/analytics/StatsCard.tsx`     | 統計卡片，值+增長率+趨勢         | ~86行    | 🟡 高    |
+| **條形圖**         | `components/knowledge/analytics/BarChart.tsx`      | 純CSS條形圖組件                  | ~105行   | 🟡 高    |
+| **圓餅圖**         | `components/knowledge/analytics/PieChart.tsx`      | 純SVG圓餅圖組件                  | ~149行   | 🟡 高    |
+| **文檔列表**       | `components/knowledge/analytics/DocumentList.tsx`  | 文檔排行榜組件                   | ~150行   | 🟡 高    |
 
 #### 🔍 搜索組件 (components/search/)
 
@@ -877,6 +920,22 @@
 | **Azure OpenAI服務** | `lib/ai/azure-openai-service.ts` | Azure OpenAI企業級服務封裝 | 🔴 極高  |
 | **提案生成服務**  | `lib/ai/proposal-generation-service.ts` | AI驅動的提案內容生成服務 | 🔴 極高  |
 | **類型定義**      | `lib/ai/types.ts`             | AI 相關 TypeScript 類型 | 🟡 高    |
+
+#### 📚 知識庫核心模組 (lib/knowledge/) - Sprint 6 Week 12
+
+| 模組名稱                | 文件路徑                        | 用途說明                | 代碼行數 | 重要程度 |
+| ----------------------- | ------------------------------- | ----------------------- | -------- | -------- |
+| **全文檢索引擎**  | `lib/knowledge/full-text-search.ts` | PostgreSQL全文檢索封裝，中文分詞，搜索高亮，相關性評分 | ~462行 | 🔴 極高  |
+| **搜索歷史管理**  | `lib/knowledge/search-history-manager.ts` | 搜索歷史記錄，localStorage持久化，保存查詢功能 | ~220行 | 🟡 高    |
+| **版本控制服務**  | `lib/knowledge/version-control.ts` | 文檔版本管理，快照創建，差異比較，版本回滾 | ~500行 | 🔴 極高  |
+| **分析統計服務**  | `lib/knowledge/analytics-service.ts` | 知識庫統計分析，熱門文檔，分布統計，用戶活動 | ~717行 | 🔴 極高  |
+| **統一導出**      | `lib/knowledge/index.ts`      | 知識庫模組統一入口和導出 | ~20行 | 🟡 高    |
+
+**技術特性**:
+- ✅ **全文檢索**: PostgreSQL ts_query/ts_vector，中文停用詞過濾，搜索結果高亮
+- ✅ **搜索歷史**: LocalStorage持久化，最近10次記錄，保存查詢功能
+- ✅ **版本控制**: 快照管理，JSON diff差異計算，安全回滾機制
+- ✅ **數據分析**: Prisma groupBy聚合，基於AuditLog統計，增長率計算
 
 ### 🔗 lib/integrations/ - 外部系統整合
 
