@@ -114,10 +114,10 @@ export interface ExtractedKeywords {
  * 智能查詢處理器類
  */
 export class QueryProcessor {
-  private stopWords: Set<string>
-  private synonyms: Map<string, string[]>
-  private technicalTerms: Set<string>
-  private categoryKeywords: Map<string, DocumentCategory>
+  private stopWords: Set<string> = new Set()
+  private synonyms: Map<string, string[]> = new Map()
+  private technicalTerms: Set<string> = new Set()
+  private categoryKeywords: Map<string, DocumentCategory> = new Map()
 
   constructor() {
     this.initializeStopWords()
@@ -230,17 +230,17 @@ export class QueryProcessor {
   }
 
   /**
-   * 檢測查詢意圖
+   * 檢測查詢意圖 (公共接口)
    */
-  async detectIntent(query: string): Promise<SearchIntent> {
+  async detectQueryIntent(query: string): Promise<SearchIntent> {
     const { intent } = this.detectIntent(query, [], [])
     return intent
   }
 
   /**
-   * 提取關鍵詞
+   * 提取關鍵詞 (公共接口)
    */
-  async extractKeywords(query: string): Promise<string[]> {
+  async extractQueryKeywords(query: string): Promise<string[]> {
     const keywords = await this.extractKeywords(query)
     return keywords.primary
   }
@@ -696,9 +696,9 @@ export async function expandQuery(query: string): Promise<string[]> {
 }
 
 export async function detectQueryIntent(query: string): Promise<SearchIntent> {
-  return queryProcessor.detectIntent(query)
+  return queryProcessor.detectQueryIntent(query)
 }
 
 export async function extractQueryKeywords(query: string): Promise<string[]> {
-  return queryProcessor.extractKeywords(query)
+  return queryProcessor.extractQueryKeywords(query)
 }
