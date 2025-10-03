@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -c core.hooksPath=/dev/null commit -m \"chore: 更新權限設定以允許pgvector-search提交\")"
+      "Bash(git -c core.hooksPath=/dev/null commit -m \"chore: 更新權限設定\")"
     ],
     "deny": [],
     "ask": []
