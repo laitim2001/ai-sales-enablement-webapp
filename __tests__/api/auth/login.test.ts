@@ -104,7 +104,10 @@ describe('/api/auth/login', () => {
       is_active: true,
       created_at: new Date(),
       updated_at: new Date(),
-      last_login: new Date()
+      last_login: new Date(),
+      azure_ad_oid: null,
+      email_verified: true,
+      last_login_at: new Date()
     }
     const mockToken = 'mock-jwt-token'
 
@@ -143,7 +146,10 @@ describe('/api/auth/login', () => {
       is_active: true,
       created_at: new Date(),
       updated_at: new Date(),
-      last_login: new Date()
+      last_login: new Date(),
+      azure_ad_oid: null,
+      email_verified: true,
+      last_login_at: new Date()
     }
     const mockToken = 'mock-jwt-token'
 
@@ -180,7 +186,10 @@ describe('/api/auth/login', () => {
       is_active: true,
       created_at: new Date(),
       updated_at: new Date(),
-      last_login: new Date()
+      last_login: new Date(),
+      azure_ad_oid: null,
+      email_verified: true,
+      last_login_at: new Date()
     }
     const mockToken = 'mock-jwt-token'
 

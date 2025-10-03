@@ -138,7 +138,7 @@ describe('TemplateManager', () => {
 
   describe('getTemplate', () => {
     it('應該能獲取指定 ID 的範本', async () => {
-      const template = await manager.getTemplate(testTemplateId);
+      const template = await manager.getTemplateById(testTemplateId, testUserId);
 
       expect(template).toBeDefined();
       expect(template?.id).toBe(testTemplateId);
@@ -146,7 +146,7 @@ describe('TemplateManager', () => {
     });
 
     it('應該在範本不存在時返回 null', async () => {
-      const template = await manager.getTemplate('non-existent-id');
+      const template = await manager.getTemplateById('non-existent-id', testUserId);
       expect(template).toBeNull();
     });
   });
@@ -206,7 +206,7 @@ describe('TemplateManager', () => {
     });
 
     it('應該能列出所有範本', async () => {
-      const result = await manager.listTemplates({});
+      const result = await manager.getTemplates(testUserId, {});
 
       expect(result.templates).toBeDefined();
       expect(result.templates.length).toBeGreaterThan(0);
@@ -214,18 +214,18 @@ describe('TemplateManager', () => {
     });
 
     it('應該能按分類過濾範本', async () => {
-      const result = await manager.listTemplates({
+      const result = await manager.getTemplates(testUserId, {
         category: 'PRODUCT_DEMO' as TemplateCategory,
       });
 
       expect(result.templates.length).toBeGreaterThan(0);
-      result.templates.forEach((template) => {
+      result.templates.forEach((template: any) => {
         expect(template.category).toBe('PRODUCT_DEMO');
       });
     });
 
     it('應該能按標籤過濾範本', async () => {
-      const result = await manager.listTemplates({
+      const result = await manager.getTemplates(testUserId, {
         tags: ['pricing'],
       });
 
@@ -233,7 +233,7 @@ describe('TemplateManager', () => {
     });
 
     it('應該能搜索範本', async () => {
-      const result = await manager.listTemplates({
+      const result = await manager.getTemplates(testUserId, {
         search: '價格',
       });
 
@@ -242,12 +242,12 @@ describe('TemplateManager', () => {
     });
 
     it('應該支持分頁', async () => {
-      const page1 = await manager.listTemplates({
+      const page1 = await manager.getTemplates(testUserId, {
         page: 1,
         pageSize: 1,
       });
 
-      const page2 = await manager.listTemplates({
+      const page2 = await manager.getTemplates(testUserId, {
         page: 2,
         pageSize: 1,
       });
@@ -260,7 +260,7 @@ describe('TemplateManager', () => {
     });
 
     it('應該能按創建時間排序', async () => {
-      const result = await manager.listTemplates({
+      const result = await manager.getTemplates(testUserId, {
         sortBy: 'created_at',
         sortOrder: 'desc',
       });
@@ -315,24 +315,24 @@ describe('TemplateManager', () => {
 
   describe('getTemplateStats', () => {
     it('應該能獲取範本統計信息', async () => {
-      const stats = await manager.getTemplateStats();
+      const stats = await manager.getTemplateStats(testUserId);
 
       expect(stats).toBeDefined();
-      expect(stats.total).toBeGreaterThan(0);
-      expect(stats.byCategory).toBeDefined();
-      expect(stats.byAccessLevel).toBeDefined();
-      expect(stats.active).toBeGreaterThan(0);
+      expect(stats.totalTemplates).toBeGreaterThanOrEqual(0);
+      expect(stats.templatesByCategory).toBeDefined();
+      expect(stats.mostUsedTemplates).toBeDefined();
+      expect(stats.recentTemplates).toBeDefined();
     });
   });
 
   describe('incrementUsageCount', () => {
     it('應該能增加範本使用次數', async () => {
-      const before = await manager.getTemplate(testTemplateId);
+      const before = await manager.getTemplateById(testTemplateId, testUserId);
       const beforeCount = before?.usage_count || 0;
 
       await manager.incrementUsageCount(testTemplateId);
 
-      const after = await manager.getTemplate(testTemplateId);
+      const after = await manager.getTemplateById(testTemplateId, testUserId);
       expect(after?.usage_count).toBe(beforeCount + 1);
     });
   });

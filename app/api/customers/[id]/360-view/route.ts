@@ -46,7 +46,7 @@ export async function GET(
 
     // 獲取客戶360度視圖數據
     const customer360Data = await customer360Service.getCustomer360View(customerId, {
-      include_inactive: includeInactive,
+      includeInactive: includeInactive,
       knowledge_limit: knowledgeLimit,
       include_ai_insights: true,
       include_related_knowledge: true

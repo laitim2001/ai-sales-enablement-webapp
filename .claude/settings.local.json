@@ -47,7 +47,13 @@
       "Bash(npx:*)",
       "WebSearch",
       "Bash(git log:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(git reset:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(tee:*)",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": []

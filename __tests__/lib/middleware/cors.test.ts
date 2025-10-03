@@ -275,11 +275,11 @@ describe('CorsMiddleware', () => {
     const originalEnv = process.env.NODE_ENV
 
     afterEach(() => {
-      process.env.NODE_ENV = originalEnv
+      Object.defineProperty(process.env, 'NODE_ENV', { value: originalEnv, writable: true })
     })
 
     it('should use development origins in development', () => {
-      process.env.NODE_ENV = 'development'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'development', writable: true })
       const cors = new CorsMiddleware({})
 
       const request = createMockNextRequest('http://localhost/api/test', {
@@ -292,7 +292,7 @@ describe('CorsMiddleware', () => {
     })
 
     it('should respect ALLOWED_ORIGINS env variable in production', () => {
-      process.env.NODE_ENV = 'production'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
       process.env.ALLOWED_ORIGINS = 'https://prod.example.com,https://app.example.com'
 
       const cors = new CorsMiddleware({})

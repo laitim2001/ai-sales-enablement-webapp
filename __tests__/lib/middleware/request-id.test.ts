@@ -284,11 +284,11 @@ describe('Convenience Functions', () => {
     const originalEnv = process.env.NODE_ENV
 
     afterEach(() => {
-      process.env.NODE_ENV = originalEnv
+      Object.defineProperty(process.env, 'NODE_ENV', { value: originalEnv, writable: true })
     })
 
     it('should use UUID strategy in production', () => {
-      process.env.NODE_ENV = 'production'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
       const generator = getEnvironmentGenerator()
       const id = generator.generate()
 
@@ -296,7 +296,7 @@ describe('Convenience Functions', () => {
     })
 
     it('should use short strategy in development', () => {
-      process.env.NODE_ENV = 'development'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'development', writable: true })
       const generator = getEnvironmentGenerator()
       const id = generator.generate()
 
@@ -304,7 +304,7 @@ describe('Convenience Functions', () => {
     })
 
     it('should accept client IDs in development', () => {
-      process.env.NODE_ENV = 'development'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'development', writable: true })
       const generator = getEnvironmentGenerator()
 
       const clientId = 'client-dev-123'
@@ -318,7 +318,7 @@ describe('Convenience Functions', () => {
     })
 
     it('should reject client IDs in production', () => {
-      process.env.NODE_ENV = 'production'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
       const generator = getEnvironmentGenerator()
 
       const clientId = 'client-prod-123'

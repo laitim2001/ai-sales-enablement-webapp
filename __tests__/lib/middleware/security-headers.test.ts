@@ -351,11 +351,11 @@ describe('SecurityHeadersMiddleware', () => {
     const originalEnv = process.env.NODE_ENV
 
     afterEach(() => {
-      process.env.NODE_ENV = originalEnv
+      Object.defineProperty(process.env, 'NODE_ENV', { value: originalEnv, writable: true })
     })
 
     it('should use stricter CSP in production', () => {
-      process.env.NODE_ENV = 'production'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
       const security = new SecurityHeadersMiddleware({})
 
       const response = NextResponse.json(null, { status: 200 })
@@ -366,7 +366,7 @@ describe('SecurityHeadersMiddleware', () => {
     })
 
     it('should use more permissive CSP in development', () => {
-      process.env.NODE_ENV = 'development'
+      Object.defineProperty(process.env, 'NODE_ENV', { value: 'development', writable: true })
       const security = new SecurityHeadersMiddleware({})
 
       const response = NextResponse.json(null, { status: 200 })

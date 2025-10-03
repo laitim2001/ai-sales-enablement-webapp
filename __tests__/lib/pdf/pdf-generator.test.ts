@@ -234,9 +234,7 @@ describe('PDF Generator', () => {
       `;
 
       // 應該在超時後仍然生成 PDF
-      const pdfBuffer = await generatePDFFromHTML(html, {
-        waitUntil: 'networkidle0',
-      });
+      const pdfBuffer = await generatePDFFromHTML(html);
 
       expect(pdfBuffer).toBeInstanceOf(Buffer);
     }, 35000);

@@ -25,7 +25,7 @@ describe('Proposal Versions API', () => {
   let versionControl: VersionControl;
 
   beforeAll(async () => {
-    versionControl = new VersionControl();
+    versionControl = new VersionControl(prisma);
 
     // 創建測試用戶
     const testUser = await prisma.user.create({
@@ -88,7 +88,7 @@ describe('Proposal Versions API', () => {
 
   describe('創建版本快照', () => {
     it('應該能成功創建版本快照', async () => {
-      const version = await versionControl.createSnapshot(
+      const version = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '初始版本',
@@ -97,41 +97,41 @@ describe('Proposal Versions API', () => {
 
       expect(version).toBeDefined();
       expect(version.proposal_id).toBe(testProposalId);
-      expect(version.created_by_id).toBe(testUserId);
-      expect(version.label).toBe('初始版本');
+      expect(version.created_by).toBe(testUserId);
+      expect(version.change_summary).toBe('初始版本');
       expect(version.description).toBe('第一個版本快照');
       expect(version.version).toBe(1);
-      expect(version.snapshot_data).toBeDefined();
+      expect(version.content).toBeDefined();
     });
 
-    it('應該能創建帶標籤的版本', async () => {
-      const version = await versionControl.createSnapshot(
+    it('應該能創建帶變更摘要的版本', async () => {
+      const version = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '里程碑 v1.0'
       );
 
-      expect(version.label).toBe('里程碑 v1.0');
+      expect(version.change_summary).toBe('里程碑 v1.0');
     });
 
-    it('應該能創建不帶標籤的版本', async () => {
-      const version = await versionControl.createSnapshot(
+    it('應該能創建不帶變更摘要的版本', async () => {
+      const version = await versionControl.createVersion(
         testProposalId,
         testUserId
       );
 
-      expect(version.label).toBeNull();
+      expect(version.change_summary).toBeNull();
       expect(version.description).toBeNull();
     });
 
     it('應該正確遞增版本號', async () => {
-      const version1 = await versionControl.createSnapshot(
+      const version1 = await versionControl.createVersion(
         testProposalId,
         testUserId,
         'v1'
       );
 
-      const version2 = await versionControl.createSnapshot(
+      const version2 = await versionControl.createVersion(
         testProposalId,
         testUserId,
         'v2'
@@ -144,17 +144,17 @@ describe('Proposal Versions API', () => {
   describe('獲取版本列表', () => {
     beforeAll(async () => {
       // 創建多個版本
-      await versionControl.createSnapshot(
+      await versionControl.createVersion(
         testProposalId,
         testUserId,
         '版本 A'
       );
-      await versionControl.createSnapshot(
+      await versionControl.createVersion(
         testProposalId,
         testUserId,
         '版本 B'
       );
-      await versionControl.createSnapshot(
+      await versionControl.createVersion(
         testProposalId,
         testUserId,
         '版本 C'
@@ -204,10 +204,10 @@ describe('Proposal Versions API', () => {
   });
 
   describe('獲取單個版本', () => {
-    let testVersionId: number;
+    let testVersionId: string;
 
     beforeAll(async () => {
-      const version = await versionControl.createSnapshot(
+      const version = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '測試單版本'
@@ -227,7 +227,7 @@ describe('Proposal Versions API', () => {
 
       expect(version).toBeDefined();
       expect(version?.id).toBe(testVersionId);
-      expect(version?.label).toBe('測試單版本');
+      expect(version?.change_summary).toBe('測試單版本');
     });
 
     it('應該返回完整的快照數據', async () => {
@@ -235,8 +235,8 @@ describe('Proposal Versions API', () => {
         where: { id: testVersionId },
       });
 
-      expect(version?.snapshot_data).toBeDefined();
-      expect(typeof version?.snapshot_data).toBe('object');
+      expect(version?.content).toBeDefined();
+      expect(typeof version?.content).toBe('object');
     });
   });
 
@@ -246,7 +246,7 @@ describe('Proposal Versions API', () => {
 
     beforeAll(async () => {
       // 創建版本 A
-      const versionA = await versionControl.createSnapshot(
+      const versionA = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '版本 A - 比較測試'
@@ -263,7 +263,7 @@ describe('Proposal Versions API', () => {
       });
 
       // 創建版本 B
-      const versionB = await versionControl.createSnapshot(
+      const versionB = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '版本 B - 比較測試'
@@ -327,7 +327,7 @@ describe('Proposal Versions API', () => {
         },
       });
 
-      const originalVersion = await versionControl.createSnapshot(
+      const originalVersion = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '原始版本'
@@ -343,7 +343,7 @@ describe('Proposal Versions API', () => {
         },
       });
 
-      const modifiedVersion = await versionControl.createSnapshot(
+      const modifiedVersion = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '修改版本'
@@ -358,12 +358,12 @@ describe('Proposal Versions API', () => {
       );
 
       expect(restoredVersion).toBeDefined();
-      expect(restoredVersion.snapshot_data).toEqual(
+      expect(restoredVersion.content).toEqual(
         (
           await prisma.proposalVersion.findUnique({
             where: { id: originalVersionId },
           })
-        )?.snapshot_data
+        )?.content
       );
     });
 
@@ -400,7 +400,7 @@ describe('Proposal Versions API', () => {
     let versionToDeleteId: number;
 
     beforeAll(async () => {
-      const version = await versionControl.createSnapshot(
+      const version = await versionControl.createVersion(
         testProposalId,
         testUserId,
         '待刪除版本'
@@ -441,49 +441,34 @@ describe('Proposal Versions API', () => {
       // 驗證所有版本都有有效的數據
       versions.forEach((version) => {
         expect(version.proposal_id).toBe(testProposalId);
-        expect(version.snapshot_data).toBeDefined();
-        expect(version.created_by_id).toBeDefined();
+        expect(version.content).toBeDefined();
+        expect(version.created_by).toBeDefined();
       });
     });
   });
 
   describe('版本元數據', () => {
-    it('應該能在版本中保存自定義元數據', async () => {
-      const metadata = {
-        environment: 'test',
-        feature_flags: ['feature_a', 'feature_b'],
-        custom_data: { key: 'value' },
-      };
+    // 注意：metadata字段在schema中不存在，故此測試已註釋
+    // it('應該能在版本中保存自定義元數據', async () => {
+    //   可以在content字段中儲存元數據
+    // });
 
-      const version = await prisma.proposalVersion.create({
-        data: {
-          proposal_id: testProposalId,
-          version: 999, // 使用特殊版本號避免衝突
-          snapshot_data: { test: 'data' },
-          created_by_id: testUserId,
-          metadata: metadata,
-        },
-      });
-
-      expect(version.metadata).toEqual(metadata);
-    });
-
-    it('應該能更新版本的描述和標籤', async () => {
-      const version = await versionControl.createSnapshot(
+    it('應該能更新版本的描述和變更摘要', async () => {
+      const version = await versionControl.createVersion(
         testProposalId,
         testUserId,
-        '原始標籤'
+        '原始變更摘要'
       );
 
       const updatedVersion = await prisma.proposalVersion.update({
         where: { id: version.id },
         data: {
-          label: '更新後標籤',
+          change_summary: '更新後變更摘要',
           description: '更新後的描述',
         },
       });
 
-      expect(updatedVersion.label).toBe('更新後標籤');
+      expect(updatedVersion.change_summary).toBe('更新後變更摘要');
       expect(updatedVersion.description).toBe('更新後的描述');
     });
   });
@@ -491,7 +476,7 @@ describe('Proposal Versions API', () => {
   describe('並發版本創建', () => {
     it('應該能處理並發創建版本', async () => {
       const promises = Array.from({ length: 3 }, (_, i) =>
-        versionControl.createSnapshot(
+        versionControl.createVersion(
           testProposalId,
           testUserId,
           `並發版本 ${i + 1}`
@@ -517,7 +502,7 @@ describe('Proposal Versions API', () => {
   describe('錯誤處理', () => {
     it('應該拒絕對不存在的提案創建版本', async () => {
       await expect(
-        versionControl.createSnapshot(999999, testUserId)
+        versionControl.createVersion(999999, testUserId)
       ).rejects.toThrow();
     });
 
@@ -537,7 +522,7 @@ describe('Proposal Versions API', () => {
   describe('性能測試', () => {
     it('應該快速創建版本快照', async () => {
       const start = Date.now();
-      await versionControl.createSnapshot(testProposalId, testUserId);
+      await versionControl.createVersion(testProposalId, testUserId);
       const duration = Date.now() - start;
 
       console.log(`版本創建時間: ${duration}ms`);
