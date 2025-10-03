@@ -151,6 +151,11 @@ export class FullTextSearch {
    * @returns 處理後的查詢字符串
    */
   static preprocessQuery(query: string): string {
+    // 處理 null/undefined
+    if (!query) {
+      return '';
+    }
+
     // 1. 去除特殊字符（保留中文、英文、數字、空格）
     let processed = query.replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s]/g, ' ');
 
@@ -207,6 +212,11 @@ export class FullTextSearch {
     query: string,
     config: FullTextSearchConfig = {}
   ): string {
+    // 處理空值
+    if (!text || !query) {
+      return text || '';
+    }
+
     const conf = { ...this.DEFAULT_CONFIG, ...config };
     const { startSel, stopSel } = conf.highlightOptions!;
 
@@ -319,6 +329,11 @@ export class FullTextSearch {
    * @returns 相關性評分 (0-1)
    */
   static calculateRelevanceScore(text: string, query: string): number {
+    // 處理空值
+    if (!text || !query) {
+      return 0;
+    }
+
     const keywords = this.extractKeywords(query);
 
     if (keywords.length === 0) {

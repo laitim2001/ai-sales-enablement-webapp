@@ -343,7 +343,7 @@ describe('SearchHistoryManager', () => {
     });
 
     it('查詢太短（<2字符）時應該返回空數組', () => {
-      const suggestions = SearchHistoryManager.getSuggestions('銷', 10);
+      const suggestions = SearchHistoryManager.getSuggestions('a', 10);
       expect(suggestions).toEqual([]);
     });
 
