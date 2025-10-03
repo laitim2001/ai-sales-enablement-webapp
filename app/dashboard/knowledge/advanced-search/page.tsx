@@ -35,6 +35,10 @@ import {
   AdvancedSearchBuilder,
   SearchConditionGroup
 } from '@/components/knowledge/advanced-search-builder';
+import {
+  SearchResultsOptimizer,
+  SearchResult as OptimizerSearchResult
+} from '@/components/knowledge/search-results-optimizer';
 
 /**
  * 搜索結果介面
@@ -273,60 +277,32 @@ export default function AdvancedSearchPage() {
                 </CardContent>
               </Card>
             ) : results.length > 0 ? (
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle>
-                      搜索結果 ({results.length})
-                    </CardTitle>
-                    {currentQuery && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={saveCurrentSearch}
-                      >
-                        <BookmarkIcon className="h-4 w-4 mr-2" />
-                        保存此查詢
-                      </Button>
-                    )}
+              <>
+                {/* 保存查詢按鈕 */}
+                {currentQuery && (
+                  <div className="flex justify-end mb-4">
+                    <Button
+                      variant="outline"
+                      onClick={saveCurrentSearch}
+                    >
+                      <BookmarkIcon className="h-4 w-4 mr-2" />
+                      保存此查詢
+                    </Button>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {results.map((result) => (
-                      <Link
-                        key={result.id}
-                        href={`/dashboard/knowledge/${result.id}`}
-                        className="block p-4 border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition-all"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 hover:text-indigo-600">
-                              {result.title}
-                            </h3>
-                            <p className="mt-1 text-sm text-gray-600 line-clamp-2">
-                              {result.content}
-                            </p>
-                            <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
-                              <span>分類：{result.category}</span>
-                              <span>作者：{result.author}</span>
-                              <span>更新：{formatDate(result.updated_at)}</span>
-                            </div>
-                          </div>
-                          {result.relevance_score && (
-                            <div className="ml-4 text-right">
-                              <div className="text-sm font-medium text-indigo-600">
-                                {Math.round(result.relevance_score * 100)}%
-                              </div>
-                              <div className="text-xs text-gray-500">相關度</div>
-                            </div>
-                          )}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                )}
+
+                {/* 使用搜索結果優化器 */}
+                <SearchResultsOptimizer
+                  results={results}
+                  searchQuery=""
+                  onResultClick={(result) => {
+                    window.location.href = `/dashboard/knowledge/${result.id}`;
+                  }}
+                  showFacets={true}
+                  defaultSortBy="relevance"
+                  defaultViewMode="list"
+                />
+              </>
             ) : currentQuery ? (
               <Card>
                 <CardContent className="py-12">
