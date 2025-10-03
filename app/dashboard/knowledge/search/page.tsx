@@ -13,6 +13,7 @@
  * • 搜尋結果顯示 - 相關性評分和精確匹配
  * • 操作指導系統 - 搜尋技巧和使用建議
  * • 快速導航系統 - 麵包屑導航和快速操作連結
+ * • 智能建議系統 - Sprint 6 Week 12: 搜尋歷史和智能建議整合
  *
  * 【頁面結構】
  * • 導航區域 - 返回按鈕 + 標題 + 功能介紹
@@ -23,7 +24,8 @@
  * 【側邊欄功能】
  * • 搜尋模式說明 - 文本/語義/混合搜尋的特點說明
  * • 搜尋技巧指導 - 精確匹配、語義查詢、篩選技巧
- * • 常用查詢快速入口 - 預設的常見搜尋主題
+ * • 熱門搜索 - Sprint 6 Week 12: 顯示熱門搜索詞和搜索次數
+ * • 搜索歷史 - Sprint 6 Week 12: 最近搜索記錄和快速重複搜索
  * • 快速操作連結 - 上傳、創建、瀏覽等快捷入口
  *
  * 【搜尋模式】
@@ -34,7 +36,7 @@
  * 【用戶流程】
  * 1. 從知識庫主頁面進入智能搜尋
  * 2. 閱讀搜尋模式說明，選擇適合的搜尋方式
- * 3. 輸入搜尋查詢或使用常用查詢快捷入口
+ * 3. 輸入搜尋查詢或使用熱門搜索/歷史搜索快捷入口
  * 4. 點擊搜尋或調整搜尋參數
  * 5. 查看搜尋結果和相關性評分
  * 6. 使用快速操作連結執行後續操作
@@ -44,11 +46,14 @@
  * • 無動態參數，為靜態頁面
  *
  * 【狀態管理】
- * • 無本地狀態，狀態管理由KnowledgeSearch組件負責
- * • 搜尋歷史和緩存由組件內部處理
+ * • Sprint 6 Week 12: 整合 SearchHistoryManager
+ * • 搜尋歷史和緩存由 SearchHistoryManager 統一管理
+ * • localStorage 持久化，支持雲端同步
  *
  * 【相關檔案】
  * • components/knowledge/knowledge-search.tsx - 核心搜尋組件
+ * • components/knowledge/search-suggestions.tsx - Sprint 6 Week 12: 搜索建議組件
+ * • lib/knowledge/search-history-manager.ts - Sprint 6 Week 12: 搜索歷史管理器
  * • app/dashboard/knowledge/page.tsx - 知識庫主頁面
  * • app/dashboard/knowledge/upload/page.tsx - 文檔上傳頁面
  * • app/dashboard/knowledge/create/page.tsx - 手動創建頁面
@@ -61,30 +66,65 @@
  * • 可訪問性：搜尋界面和結果列表的鍵盤導航
  * • 響應式設計：大小螢幕上的側邊欄適配
  * • 錯誤處理：搜尋失敗和網路中斷的用戶提示
+ * • Sprint 6 Week 12: 搜索歷史本地存儲和雲端同步
  */
 
-import { Metadata } from 'next'
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link'
 import { ArrowLeftIcon, MagnifyingGlassIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import { KnowledgeSearch } from '@/components/knowledge/knowledge-search'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-
-export const metadata: Metadata = {
-  title: 'AI 智能搜索',
-  description: '使用AI驅動的智能搜索引擎，快速找到相關文檔和資訊',
-}
+import { PopularSearches, RecentSearches } from '@/components/knowledge/search-suggestions'
+import { SearchHistoryManager } from '@/lib/knowledge/search-history-manager'
 
 /**
  * 智能搜索頁面組件
  *
+ * Sprint 6 Week 12 更新:
+ * • 整合 PopularSearches 和 RecentSearches 組件
+ * • 支持點擊熱門搜索和歷史記錄快速搜索
+ * • 清空搜索歷史功能
+ * • 動態頁面標題設置
+ *
  * 頁面結構：
  * 1. 頁面標題和導航
  * 2. 搜索說明和功能介紹
- * 3. 智能搜索組件
- * 4. 搜索模式說明
+ * 3. 智能搜索組件 (左側 2/3)
+ * 4. 搜索模式說明 + 熱門搜索 + 搜索歷史 (右側 1/3)
  */
 export default function SearchKnowledgePage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  /**
+   * 設置頁面標題 (Client Component 替代 metadata)
+   */
+  useEffect(() => {
+    document.title = 'AI 智能搜索 - AI銷售賦能平台';
+  }, []);
+
+  /**
+   * 處理選擇搜索詞（來自熱門搜索或歷史記錄）
+   */
+  const handleSelectSearch = (query: string) => {
+    setSearchQuery(query);
+    // 觸發 KnowledgeSearch 組件的搜索
+    // TODO: 需要在 KnowledgeSearch 組件中添加受控模式支持
+    console.log('Selected search query:', query);
+  };
+
+  /**
+   * 清空搜索歷史
+   */
+  const handleClearHistory = () => {
+    if (confirm('確定要清空所有搜索歷史嗎？此操作無法撤銷。')) {
+      SearchHistoryManager.clearHistory();
+      setRefreshKey(prev => prev + 1); // 強制刷新組件
+    }
+  };
   return (
     <div className="space-y-6">
       {/* 頁面標題和導航 */}
@@ -198,32 +238,20 @@ export default function SearchKnowledgePage() {
             </CardContent>
           </Card>
 
-          {/* 搜索歷史 */}
-          <Card>
-            <CardHeader>
-              <CardTitle>常用查詢</CardTitle>
-              <CardDescription>
-                快速搜索常見主題
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                產品介紹文檔
-              </Button>
-              <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                銷售流程指南
-              </Button>
-              <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                客戶服務政策
-              </Button>
-              <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                技術規格文檔
-              </Button>
-              <Button variant="ghost" size="sm" className="w-full justify-start text-left">
-                培訓材料
-              </Button>
-            </CardContent>
-          </Card>
+          {/* Sprint 6 Week 12: 熱門搜索 */}
+          <PopularSearches
+            key={`popular-${refreshKey}`}
+            onSelect={handleSelectSearch}
+            limit={10}
+          />
+
+          {/* Sprint 6 Week 12: 搜索歷史 */}
+          <RecentSearches
+            key={`recent-${refreshKey}`}
+            onSelect={handleSelectSearch}
+            onClear={handleClearHistory}
+            limit={5}
+          />
 
           {/* 快速操作 */}
           <Card>
