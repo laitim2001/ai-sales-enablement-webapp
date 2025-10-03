@@ -493,8 +493,8 @@ describe('Advanced Search API', () => {
           conditions: [],
           operator: 'AND',
           groups: [],
-          page: 2,
-          pageSize: 10
+          offset: 10,
+          limit: 10
         })
       });
 
@@ -519,8 +519,8 @@ describe('Advanced Search API', () => {
           conditions: [],
           operator: 'AND',
           groups: [],
-          sortBy: 'created_at',
-          sortOrder: 'desc'
+          sort_by: 'created_at',
+          sort_order: 'desc'
         })
       });
 
@@ -584,8 +584,9 @@ describe('Advanced Search API', () => {
       expect(data).toHaveProperty('success');
       expect(data).toHaveProperty('results');
       expect(data).toHaveProperty('total');
-      expect(data).toHaveProperty('page');
-      expect(data).toHaveProperty('pageSize');
+      expect(data).toHaveProperty('metadata');
+      expect(data.metadata).toHaveProperty('limit');
+      expect(data.metadata).toHaveProperty('offset');
     });
 
     it('錯誤響應應該包含錯誤信息', async () => {
