@@ -15,6 +15,7 @@ import { POST } from '@/app/api/knowledge-base/advanced-search/route';
 import { NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
+import { verifyToken } from '@/lib/auth-server';
 
 // Mock Prisma
 jest.mock('@prisma/client', () => {
@@ -34,15 +35,28 @@ const prisma = new PrismaClient();
 // Mock JWT
 jest.mock('jsonwebtoken');
 
+// Mock auth-server
+jest.mock('@/lib/auth-server', () => ({
+  verifyToken: jest.fn()
+}));
+
 describe('Advanced Search API', () => {
   const validToken = 'valid.jwt.token';
   const userId = 1;
 
+  // 輔助函數：創建帶 id 的條件
+  const createCondition = (field: string, operator: string, value: string | string[], id?: string) => ({
+    id: id || Math.random().toString(36).substring(7),
+    field,
+    operator,
+    value
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // Mock JWT 驗證
-    (jwt.verify as jest.Mock).mockReturnValue({
+    // Mock verifyToken
+    (verifyToken as jest.Mock).mockResolvedValue({
       userId,
       email: 'test@example.com'
     });
@@ -73,11 +87,7 @@ describe('Advanced Search API', () => {
         },
         body: JSON.stringify({
           conditions: [
-            {
-              field: 'title',
-              operator: 'contains',
-              value: '測試'
-            }
+            createCondition('title', 'contains', '測試')
           ],
           operator: 'AND',
           groups: []
@@ -102,16 +112,8 @@ describe('Advanced Search API', () => {
         },
         body: JSON.stringify({
           conditions: [
-            {
-              field: 'title',
-              operator: 'contains',
-              value: '測試'
-            },
-            {
-              field: 'category',
-              operator: 'equals',
-              value: 'test'
-            }
+            createCondition('title', 'contains', '測試'),
+            createCondition('category', 'equals', 'test')
           ],
           operator: 'AND',
           groups: []
@@ -139,16 +141,8 @@ describe('Advanced Search API', () => {
         },
         body: JSON.stringify({
           conditions: [
-            {
-              field: 'title',
-              operator: 'contains',
-              value: '測試'
-            },
-            {
-              field: 'content',
-              operator: 'contains',
-              value: '測試'
-            }
+            createCondition('title', 'contains', '測試'),
+            createCondition('content', 'contains', '測試')
           ],
           operator: 'OR',
           groups: []
@@ -178,11 +172,7 @@ describe('Advanced Search API', () => {
         },
         body: JSON.stringify({
           conditions: [
-            {
-              field: 'title',
-              operator: 'contains',
-              value: '測試'
-            }
+            createCondition('title', 'contains', '測試')
           ],
           operator: 'AND',
           groups: []
@@ -203,11 +193,7 @@ describe('Advanced Search API', () => {
         },
         body: JSON.stringify({
           conditions: [
-            {
-              field: 'category',
-              operator: 'equals',
-              value: 'test'
-            }
+            createCondition('category', 'equals', 'test')
           ],
           operator: 'AND',
           groups: []
@@ -228,11 +214,7 @@ describe('Advanced Search API', () => {
         },
         body: JSON.stringify({
           conditions: [
-            {
-              field: 'title',
-              operator: 'starts_with',
-              value: '測試'
-            }
+            createCondition('title', 'starts_with', '測試')
           ],
           operator: 'AND',
           groups: []
@@ -253,11 +235,7 @@ describe('Advanced Search API', () => {
         },
         body: JSON.stringify({
           conditions: [
-            {
-              field: 'created_at',
-              operator: 'after',
-              value: '2025-01-01'
-            }
+            createCondition('created_at', 'after', '2025-01-01')
           ],
           operator: 'AND',
           groups: []
@@ -286,16 +264,8 @@ describe('Advanced Search API', () => {
               id: 'group1',
               operator: 'OR',
               conditions: [
-                {
-                  field: 'title',
-                  operator: 'contains',
-                  value: '測試1'
-                },
-                {
-                  field: 'title',
-                  operator: 'contains',
-                  value: '測試2'
-                }
+                createCondition('title', 'contains', '測試1'),
+                createCondition('title', 'contains', '測試2')
               ],
               groups: []
             }
@@ -324,22 +294,14 @@ describe('Advanced Search API', () => {
               id: 'group1',
               operator: 'OR',
               conditions: [
-                {
-                  field: 'title',
-                  operator: 'contains',
-                  value: '測試1'
-                }
+                createCondition('title', 'contains', '測試1')
               ],
               groups: [
                 {
                   id: 'group2',
                   operator: 'AND',
                   conditions: [
-                    {
-                      field: 'category',
-                      operator: 'equals',
-                      value: 'test'
-                    }
+                    createCondition('category', 'equals', 'test')
                   ],
                   groups: []
                 }
@@ -375,9 +337,7 @@ describe('Advanced Search API', () => {
     });
 
     it('無效 token 應該返回 401', async () => {
-      (jwt.verify as jest.Mock).mockImplementation(() => {
-        throw new Error('Invalid token');
-      });
+      (verifyToken as jest.Mock).mockRejectedValue(new Error('Invalid token'));
 
       const request = new NextRequest('http://localhost:3000/api/knowledge-base/advanced-search', {
         method: 'POST',
@@ -545,11 +505,9 @@ describe('Advanced Search API', () => {
           'Authorization': `Bearer ${validToken}`
         },
         body: JSON.stringify({
-          conditions: Array(10).fill(0).map((_, i) => ({
-            field: 'title',
-            operator: 'contains',
-            value: `測試${i}`
-          })),
+          conditions: Array(10).fill(0).map((_, i) =>
+            createCondition('title', 'contains', `測試${i}`)
+          ),
           operator: 'OR',
           groups: []
         })
