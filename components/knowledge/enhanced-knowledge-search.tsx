@@ -71,10 +71,16 @@ import { Button } from '@/components/ui/button'
 // Sprint 6 Week 11 Day 2: 資料夾選擇器組件
 import { FolderSelector } from '@/components/knowledge/folder-selector'
 
+// 建議項目介面 (moved up for function stubs)
+interface SuggestionItem {
+  text: string
+  type: 'completion' | 'related' | 'popular' | 'correction'
+  score: number
+}
+
 // Type stubs for disabled Week 6 features
 type SemanticAnalysis = any
 type ConversationContext = any
-type EnhancedSearchResult = BaseSearchResult
 type ResultCluster = any
 type SearchInsightReport = any
 type SearchEventType = string
@@ -104,6 +110,48 @@ interface BaseSearchResult {
     chunk_index: number
     similarity_score?: number
   }
+}
+
+// EnhancedSearchResult type (extends BaseSearchResult)
+type EnhancedSearchResult = BaseSearchResult & {
+  baseResult?: BaseSearchResult
+  enhancement?: {
+    summary?: string
+    keyPoints?: string[]
+    relatedTopics?: string[]
+    suggestedActions?: Array<{ label: string; description: string }>
+    sentiment?: string
+    readingLevel?: string
+  }
+}
+
+// Function stubs for disabled Week 6 features
+const getSearchSuggestionService = () => ({
+  getSuggestions: async () => [] as SuggestionItem[]
+})
+
+const recordSearchEvent = (eventType: SearchEventType, data: any) => {
+  // Stub implementation - do nothing
+  console.debug('Search event:', eventType, data)
+}
+
+const processConversationalQuery = async (query: string, context: any) => {
+  // Stub implementation - return the query as-is
+  return { processedQuery: query, context: null }
+}
+
+const analyzeSemanticQuery = async (query: string) => {
+  // Stub implementation - return basic analysis
+  return {
+    intent: 'search',
+    entities: [],
+    keywords: query.split(' ')
+  }
+}
+
+const enhanceSearchResults = async (results: BaseSearchResult[]) => {
+  // Stub implementation - return results as EnhancedSearchResult
+  return results.map(r => ({ ...r, baseResult: r } as EnhancedSearchResult))
 }
 
 // 增強版搜索狀態
@@ -139,12 +187,7 @@ interface EnhancedSearchState {
   currentView: 'list' | 'clusters' | 'insights'
 }
 
-// 建議項目介面
-interface SuggestionItem {
-  text: string
-  type: 'completion' | 'related' | 'popular' | 'correction'
-  score: number
-}
+// Note: SuggestionItem interface is defined earlier in the file (line 75-79)
 
 const categoryOptions = [
   { value: '', label: '所有類別' },
@@ -936,7 +979,7 @@ export function EnhancedKnowledgeSearch() {
                 <div className="bg-blue-50 p-4 rounded-lg max-w-md mx-auto">
                   <h4 className="text-sm font-medium text-blue-900 mb-2">AI建議：</h4>
                   <ul className="text-sm text-blue-800 space-y-1">
-                    {search.semanticAnalysis.recommendations.queryOptimizations.map((suggestion, index) => (
+                    {search.semanticAnalysis.recommendations.queryOptimizations.map((suggestion: string, index: number) => (
                       <li key={index}>• {suggestion}</li>
                     ))}
                   </ul>
@@ -1083,7 +1126,7 @@ function ResultsListView({
                       建議行動：
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {enhanced.enhancement.actionRecommendations.slice(0, 2).map((action, idx) => (
+                      {enhanced.enhancement.actionRecommendations.slice(0, 2).map((action: any, idx: number) => (
                         <span key={idx} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                           {action.action}
                         </span>
@@ -1198,8 +1241,8 @@ function ClustersView({
           </div>
 
           <div className="divide-y divide-gray-200">
-            {cluster.results.slice(0, 3).map((enhanced, index) => (
-              <div key={enhanced.baseResult.id} className="p-4 hover:bg-gray-50">
+            {cluster.results.slice(0, 3).map((enhanced: EnhancedSearchResult, index: number) => (
+              <div key={enhanced.baseResult?.id || enhanced.id} className="p-4 hover:bg-gray-50">
                 <button
                   onClick={() => onResultClick(enhanced.baseResult as any, index)}
                   className="text-left w-full"
@@ -1277,7 +1320,7 @@ function InsightsView({
             <div>
               <span className="text-green-700">推薦重點:</span>
               <div className="mt-1">
-                {insights.userInsights.recommendedFocus.slice(0, 2).map((focus, index) => (
+                {insights.userInsights.recommendedFocus.slice(0, 2).map((focus: string, index: number) => (
                   <span key={index} className="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs mr-1 mb-1">
                     {focus}
                   </span>
@@ -1318,7 +1361,7 @@ function InsightsView({
               <div>
                 <h4 className="text-sm font-medium text-yellow-800 mb-2">查詢優化:</h4>
                 <ul className="text-sm text-yellow-700 space-y-1">
-                  {insights.improvements.queryOptimizations.slice(0, 3).map((opt, index) => (
+                  {insights.improvements.queryOptimizations.slice(0, 3).map((opt: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-yellow-600">•</span>
                       <span>{opt}</span>
@@ -1332,7 +1375,7 @@ function InsightsView({
               <div>
                 <h4 className="text-sm font-medium text-yellow-800 mb-2">體驗改進:</h4>
                 <ul className="text-sm text-yellow-700 space-y-1">
-                  {insights.improvements.userExperience.slice(0, 3).map((imp, index) => (
+                  {insights.improvements.userExperience.slice(0, 3).map((imp: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-yellow-600">•</span>
                       <span>{imp.improvement}</span>

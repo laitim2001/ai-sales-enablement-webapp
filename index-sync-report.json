@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-03T16:00:48.549Z",
+  "timestamp": "2025-10-03T16:08:15.528Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -11,7 +11,7 @@
     "highSeverity": 0,
     "mediumSeverity": 17,
     "lowSeverity": 0,
-    "suggestions": 2,
+    "suggestions": 1,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -147,13 +147,7 @@
       "severity": "low",
       "message": "建議將重要文件加入索引: docs\\index-maintenance-root-cause-analysis.md",
       "modifiedTime": "2025-10-03T15:14:43.979Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "Cai-sales-enablement-webapptempREADME.md",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: Cai-sales-enablement-webapptempREADME.md"
     }
   ],
-  "lastUpdated": "2025-10-03T16:00:48.549Z"
+  "lastUpdated": "2025-10-03T16:08:15.528Z"
 }
