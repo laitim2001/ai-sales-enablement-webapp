@@ -72,6 +72,11 @@ export interface SearchResult {
     timeDecayFactor?: number
     userPreferenceBoost?: number
     originalSimilarity: number
+    hybridScore?: number
+    vectorScore?: number
+    textScore?: number
+    vectorWeight?: number
+    textWeight?: number
   }
 }
 

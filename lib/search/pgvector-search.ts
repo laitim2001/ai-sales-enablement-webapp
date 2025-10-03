@@ -154,7 +154,7 @@ export class PgVectorSearchService {
 
     } catch (error) {
       console.error('PgVector search error:', error)
-      throw new AppError('Vector search failed', 500, { originalError: error })
+      throw AppError.internal('Vector search failed', { timestamp: new Date(), additional: { originalError: error } })
     }
   }
 
@@ -166,7 +166,7 @@ export class PgVectorSearchService {
     options: Omit<PgVectorSearchOptions, 'query'>
   ): Promise<PgVectorSearchResult[]> {
     const results = await Promise.allSettled(
-      queries.map(query => this.search({ ...options, query }))
+      queries.map(query => this.search({ ...options, query } as PgVectorSearchOptions))
     )
 
     return results.map(result => {
@@ -201,30 +201,30 @@ export class PgVectorSearchService {
       const targetDocument = await prisma.knowledgeChunk.findFirst({
         where: {
           knowledge_base_id: documentId,
-          vector_embedding_pgvector: { not: null }
+          vector_embedding: { not: null }
         },
         select: {
-          vector_embedding_pgvector: true
+          vector_embedding: true
         },
         orderBy: {
           chunk_index: 'asc'
         }
       })
 
-      if (!targetDocument?.vector_embedding_pgvector) {
-        throw new AppError('Document vector not found', 404)
+      if (!targetDocument?.vector_embedding) {
+        throw AppError.notFound('Document vector not found')
       }
 
       // 使用文檔向量進行相似度搜索
       const searchQuery = this.buildSimilarityQuery(
-        targetDocument.vector_embedding_pgvector as any,
+        targetDocument.vector_embedding as any,
         options,
         documentId
       )
 
       const startTime = Date.now()
       const rawResults = await this.executeSearch(searchQuery)
-      const results = this.processResults(rawResults, options)
+      const results = this.processResults(rawResults, { ...options, query: '' } as PgVectorSearchOptions)
 
       return {
         results,
@@ -240,7 +240,7 @@ export class PgVectorSearchService {
 
     } catch (error) {
       console.error('Similar documents search error:', error)
-      throw new AppError('Similar documents search failed', 500, { originalError: error })
+      throw AppError.internal('Similar documents search failed', { timestamp: new Date(), additional: { originalError: error } })
     }
   }
 
@@ -309,7 +309,7 @@ export class PgVectorSearchService {
 
     } catch (error) {
       console.error('Hybrid search error:', error)
-      throw new AppError('Hybrid search failed', 500, { originalError: error })
+      throw AppError.internal('Hybrid search failed', { timestamp: new Date(), additional: { originalError: error } })
     }
   }
 
@@ -327,7 +327,7 @@ export class PgVectorSearchService {
       return embedding.embedding
     } catch (error) {
       console.error('Failed to generate query embedding:', error)
-      throw new AppError('Failed to generate query embedding', 500)
+      throw AppError.internal('Failed to generate query embedding')
     }
   }
 
@@ -466,7 +466,7 @@ export class PgVectorSearchService {
       return await queryPromise
     } catch (error) {
       console.error('Database query execution error:', error)
-      throw new AppError('Database query failed', 500, { originalError: error })
+      throw AppError.internal('Database query failed', { timestamp: new Date(), additional: { originalError: error } })
     }
   }
 
@@ -609,6 +609,8 @@ export class PgVectorSearchService {
         ...result,
         relevanceScore: hybridScore,
         searchMetadata: {
+          searchType: result.searchMetadata?.searchType || 'vector',
+          originalSimilarity: result.similarity,
           ...result.searchMetadata,
           hybridScore,
           vectorScore: result.similarity,
@@ -627,11 +629,12 @@ export class PgVectorSearchService {
         const hybridScore = (existingResult.searchMetadata?.vectorScore || 0) * vectorWeight + textScore * textWeight
         existingResult.relevanceScore = hybridScore
         existingResult.searchMetadata = {
+          searchType: 'hybrid',
+          originalSimilarity: existingResult.searchMetadata?.originalSimilarity || textScore,
           ...existingResult.searchMetadata,
           hybridScore,
           textScore,
-          textWeight,
-          searchType: 'hybrid'
+          textWeight
         }
       } else {
         // 新結果（僅文本匹配）
@@ -651,6 +654,7 @@ export class PgVectorSearchService {
           tags: result.tags,
           searchMetadata: {
             searchType: 'text_only',
+            originalSimilarity: textScore,
             hybridScore,
             textScore,
             textWeight
@@ -684,19 +688,19 @@ export class PgVectorSearchService {
    */
   private validateOptions(options: PgVectorSearchOptions): void {
     if (!options.query || options.query.trim().length === 0) {
-      throw new AppError('Search query cannot be empty', 400)
+      throw AppError.badRequest('Search query cannot be empty')
     }
 
     if (options.limit !== undefined && (options.limit < 1 || options.limit > 100)) {
-      throw new AppError('Limit must be between 1 and 100', 400)
+      throw AppError.badRequest('Limit must be between 1 and 100')
     }
 
     if (options.threshold !== undefined && (options.threshold < 0 || options.threshold > 2)) {
-      throw new AppError('Threshold must be between 0 and 2', 400)
+      throw AppError.badRequest('Threshold must be between 0 and 2')
     }
 
     if (options.offset !== undefined && options.offset < 0) {
-      throw new AppError('Offset must be non-negative', 400)
+      throw AppError.badRequest('Offset must be non-negative')
     }
   }
 }
