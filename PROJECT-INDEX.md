@@ -226,6 +226,31 @@
 | **專業PDF範本**        | `lib/pdf/proposal-pdf-template.ts`    | 封面+內容頁範本，完整CSS樣式系統             | 350      | 🔴 極高  |
 | **統一導出**           | `lib/pdf/index.ts`                    | 所有PDF模組的統一導出入口                    | 20       | 🟡 高    |
 
+### 📚 lib/knowledge/ - 知識庫服務模組 (Sprint 6 Week 12 新增)
+
+**用途**: 知識庫版本控制核心服務層
+
+| 模組名稱           | 文件路徑                          | 用途說明                                     | 代碼行數 | 重要程度 |
+| ------------------ | --------------------------------- | -------------------------------------------- | -------- | -------- |
+| **版本控制服務**   | `lib/knowledge/version-control.ts` | 完整版本管理（創建/比較/回滾/歷史/統計）     | 500      | 🔴 極高  |
+| **統一導出**       | `lib/knowledge/index.ts`          | 知識庫服務統一導出入口                       | 10       | 🟡 高    |
+
+**🎯 版本控制核心功能**:
+- **createVersion()**: 創建版本快照，自動計算差異欄位
+- **compareVersions()**: 版本差異計算，支持欄位級比較
+- **revertToVersion()**: 安全回滾，自動創建備份
+- **getVersionHistory()**: 版本歷史查詢，支持分頁
+- **getVersionDetail()**: 單版本詳情，包含創建者
+- **getVersionStats()**: 版本統計，總數/主要版本/最新版本
+- **版本標籤管理**: addVersionTags() + findVersionsByTag()
+
+**🔒 安全特性**:
+- JWT Token 驗證
+- 創建者/管理員權限檢查
+- 當前版本保護（禁止刪除）
+- 回滾前自動備份
+- 完整審計追蹤
+
 ---
 
 ### 📋 lib/parsers/ - 文件解析器系統 (Sprint 6 Week 12 Day 3-4完成)
@@ -439,9 +464,9 @@
 | ---------------------- | --------------------------------------- | -------------------------------------------- | -------- |
 | **DB優化腳本**         | `scripts/enhanced-db-optimization.sql` | pgvector安裝，HNSW索引，性能測試            | 🟡 高    |
 
-### 🌐 app/api/knowledge-base/ - API端點 (Sprint 6 Week 12 新增批量上傳)
+### 🌐 app/api/knowledge-base/ - API端點 (Sprint 6 Week 12 完整擴展)
 
-**用途**: 知識庫核心API端點，包含搜索建議和批量上傳功能
+**用途**: 知識庫核心API端點，包含搜索建議、批量上傳和版本控制功能
 
 | 功能模組               | 文件路徑                                      | 用途說明                                     | 重要程度 |
 | ---------------------- | --------------------------------------------- | -------------------------------------------- | -------- |
@@ -455,6 +480,26 @@
 - **智能檢測**: MIME類型 + 文件頭雙重驗證
 - **安全機制**: 文件大小限制、重複檢測、安全文件名處理
 - **統計信息**: 返回解析時間、文本長度等詳細統計
+
+### 📚 app/api/knowledge-base/[id]/versions/ - 版本控制API (Sprint 6 Week 12 新增)
+
+**用途**: 知識庫版本控制RESTful API端點
+
+| 功能模組               | 文件路徑                                                   | 用途說明                                     | 重要程度 |
+| ---------------------- | ---------------------------------------------------------- | -------------------------------------------- | -------- |
+| **版本列表/創建**      | `app/api/knowledge-base/[id]/versions/route.ts`           | GET版本列表+統計, POST創建版本快照           | 🔴 極高  |
+| **版本比較**           | `app/api/knowledge-base/[id]/versions/compare/route.ts`   | POST比較兩個版本差異                         | 🟡 高    |
+| **版本回滾**           | `app/api/knowledge-base/[id]/versions/revert/route.ts`    | POST回滾到指定版本                           | 🔴 極高  |
+| **單版本操作**         | `app/api/knowledge-base/[id]/versions/[versionId]/route.ts` | GET版本詳情, DELETE刪除版本               | 🟡 高    |
+
+**🆕 版本控制 API 特性** (Sprint 6 Week 12):
+- **版本快照**: 自動創建內容快照，支持主要/次要版本標記
+- **父子關係**: parent_version 追蹤版本演進路徑
+- **差異計算**: compareVersions 自動計算欄位級差異
+- **安全回滾**: 回滾前自動備份，強制填寫原因
+- **權限控制**: JWT驗證，創建者/管理員權限檢查
+- **當前版本保護**: 禁止刪除當前使用版本
+- **版本標籤**: tags 陣列支持，支持按標籤查找
 
 ### 🔐 app/api/auth/ - 認證API增強 (MVP Phase 2)
 
@@ -737,9 +782,30 @@
 | **增強搜索**   | `components/knowledge/enhanced-knowledge-search.tsx` | 增強版知識庫搜索界面           | 🔴 極高  |
 | **文檔預覽**   | `components/knowledge/knowledge-document-view.tsx` | 文檔詳細信息預覽、內容和統計顯示 | 🟢 高    |
 | **文檔編輯**   | `components/knowledge/knowledge-document-edit.tsx` | 文檔內容和屬性編輯表單           | 🟢 高    |
+| **文檔編輯（含版本）** | `components/knowledge/knowledge-document-edit-with-version.tsx` | 整合版本控制的編輯組件，雙標籤頁設計 | 🔴 極高  |
 | **文檔創建表單** | `components/knowledge/knowledge-create-form.tsx`   | 新知識庫項目創建表單             | 🟡 高    |
 | **文檔預覽器** | `components/knowledge/document-preview.tsx`        | 文檔內容預覽組件                 | 🟢 中    |
 | **列表優化版** | `components/knowledge/knowledge-base-list-optimized.tsx` | 性能優化的知識庫列表組件 | 🟡 高    |
+
+#### 📚 知識庫版本控制組件 (components/knowledge/version/) - Sprint 6 Week 12 新增
+
+**用途**: 完整的知識庫版本控制 UI 系統
+
+| 組件名稱             | 文件路徑                                                  | 用途說明                                | 代碼行數 | 重要程度 |
+| -------------------- | --------------------------------------------------------- | --------------------------------------- | -------- | -------- |
+| **版本歷史列表**     | `components/knowledge/version/KnowledgeVersionHistory.tsx` | 版本時間線、選擇比較、操作按鈕          | 400      | 🔴 極高  |
+| **精簡版本歷史**     | `components/knowledge/version/KnowledgeVersionHistory.tsx` | 側邊欄精簡版本列表（CompactVersionHistory） | 100  | 🟡 高    |
+| **版本比較**         | `components/knowledge/version/KnowledgeVersionComparison.tsx` | 並排差異對比、變更統計、雙標籤頁    | 300      | 🔴 極高  |
+| **版本回滾**         | `components/knowledge/version/KnowledgeVersionRestore.tsx` | 回滾確認對話框、影響分析、安全確認   | 400      | 🔴 極高  |
+| **統一導出**         | `components/knowledge/version/index.ts`                    | 版本控制組件統一導出入口             | 10       | 🟡 高    |
+
+**🎯 版本控制 UI 特性**:
+- **版本歷史**: 時間線顯示、主要版本標記、版本標籤、創建者信息
+- **版本選擇**: 最多選擇2個版本進行比較
+- **版本比較**: 並排對比、變更列表、高亮差異（added/modified/removed）
+- **版本回滾**: 影響範圍分析、回滾原因記錄、安全確認機制
+- **版本操作**: 下載版本、刪除版本（非當前）、創建快照
+- **雙標籤頁**: 變更列表視圖 / 並排比較視圖切換
 
 #### 🔍 搜索組件 (components/search/)
 

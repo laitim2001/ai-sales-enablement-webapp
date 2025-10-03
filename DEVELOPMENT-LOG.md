@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [📚 Sprint 6 Week 12 - 知識庫版本控制系統 (2025-10-03)](#📚-2025-10-03-sprint-6-week-12-知識庫版本控制系統完整實現-✅)
 - [📦 Sprint 6 Week 12 Day 3-4 - 文件解析器與批量上傳API (2025-10-03)](#📦-2025-10-03-sprint-6-week-12-day-3-4-文件解析器與批量上傳api-✅)
 - [🧭 Sprint 6 Week 12 Day 1 - 導航增強與批量上傳框架 (2025-10-03 08:45)](#🧭-2025-10-03-0845-sprint-6-week-12-day-1-導航增強與批量上傳框架-✅)
 - [🔍 Sprint 6 Week 11 Day 2 - 資料夾管理與搜索過濾 (2025-10-02 23:35)](#🔍-2025-10-02-2335-sprint-6-week-11-day-2-資料夾管理與搜索過濾-✅)
@@ -40,6 +41,261 @@
 - [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## 📚 2025-10-03: Sprint 6 Week 12 - 知識庫版本控制系統完整實現 ✅
+
+### 🎯 **會話概述**
+- **主要任務**: 實現知識庫完整版本控制系統（參考Sprint 5工作流程版本控制架構）
+- **進度**: Sprint 6 Week 12 版本控制功能完成
+- **代碼量**: 14個新文件，約2,900行TypeScript/React代碼
+- **Git提交**: 4873787 - 已推送至GitHub
+
+### ✅ **完成內容**
+
+#### **1. 數據模型設計** (Prisma Schema, +60行)
+
+**KnowledgeVersion 模型**:
+```prisma
+model KnowledgeVersion {
+  id                String   @id @default(uuid())  // UUID主鍵
+  knowledge_base_id Int                             // 知識庫ID
+  version           Int                             // 版本號
+  title             String                          // 版本標題
+  content           String?                         // 內容快照
+  file_path         String?                         // 文件路徑
+  file_size         Int?                            // 文件大小
+  mime_type         String?                         // MIME類型
+  metadata          Json?                           // 元數據
+  change_summary    String?                         // 變更摘要
+  changed_fields    Json?                           // 變更欄位
+  parent_version    Int?                            // 父版本號
+  is_major          Boolean  @default(false)        // 主要版本標記
+  tags              String[] @default([])           // 版本標籤
+  created_at        DateTime @default(now())
+  created_by        Int
+}
+```
+
+**KnowledgeVersionComment 模型**:
+- 版本評論系統
+- 支持版本討論和協作
+
+#### **2. 版本控制服務層** (lib/knowledge/version-control.ts, ~500行)
+
+**核心功能**:
+1. **createVersion()** - 創建版本快照
+   - 自動拍攝當前狀態快照
+   - 計算與父版本的差異欄位
+   - 支持主要/次要版本標記
+   - 版本號自動遞增
+
+2. **compareVersions()** - 版本比較
+   - 並排比較兩個版本
+   - 計算欄位級差異
+   - 返回變更類型（added/modified/removed）
+
+3. **revertToVersion()** - 版本回滾
+   - 安全回滾機制
+   - 自動創建回滾前備份
+   - 完整的回滾原因記錄
+   - 防止回滾到相同版本
+
+4. **getVersionHistory()** - 版本歷史列表
+   - 分頁查詢支持
+   - 按版本號倒序排列
+   - 包含創建者信息
+
+5. **getVersionDetail()** - 版本詳情
+   - 單個版本完整信息
+   - 包含創建者和評論
+
+6. **getVersionStats()** - 版本統計
+   - 總版本數
+   - 主要版本數
+   - 最新版本信息
+
+7. **版本標籤管理**
+   - addVersionTags() - 添加標籤
+   - findVersionsByTag() - 按標籤查找
+
+#### **3. API 路由層** (~400行，4個文件)
+
+1. **GET/POST /api/knowledge-base/[id]/versions** (route.ts)
+   - GET: 獲取版本列表（分頁 + 統計）
+   - POST: 創建新版本快照
+   - 支持 changeSummary、isMajor、tags 參數
+
+2. **POST /api/knowledge-base/[id]/versions/compare** (compare/route.ts)
+   - 比較兩個版本差異
+   - 返回 diff、version1、version2
+   - 支持任意兩個版本比較
+
+3. **POST /api/knowledge-base/[id]/versions/revert** (revert/route.ts)
+   - 版本回滾功能
+   - 權限檢查（創建者或管理員）
+   - 強制填寫回滾原因
+   - 自動創建回滾前備份
+
+4. **GET/DELETE /api/knowledge-base/[id]/versions/[versionId]** ([versionId]/route.ts)
+   - GET: 單個版本詳情
+   - DELETE: 刪除版本（非當前版本）
+   - 當前版本保護機制
+
+#### **4. UI 組件層** (~1,200行，4個組件)
+
+**components/knowledge/version/**:
+
+1. **KnowledgeVersionHistory.tsx** (~400行)
+   - 版本歷史列表組件
+   - 時間線顯示
+   - 版本選擇和比較
+   - 版本操作（回滾/刪除/下載）
+   - 主要版本、標籤顯示
+   - CompactKnowledgeVersionHistory - 精簡版側邊欄組件
+
+2. **KnowledgeVersionComparison.tsx** (~300行)
+   - 並排版本比較組件
+   - 雙標籤頁（變更列表/並排比較）
+   - 變更統計摘要
+   - 高亮顯示差異
+   - 支持長文本和結構化數據
+
+3. **KnowledgeVersionRestore.tsx** (~400行)
+   - 版本回滾確認對話框
+   - 影響範圍分析
+   - 變更欄位詳情
+   - 回滾原因強制填寫
+   - 安全確認機制
+
+4. **index.ts** - 組件統一導出
+
+#### **5. 編輯頁面整合** (~700行)
+
+**KnowledgeDocumentEditWithVersion.tsx**:
+- 雙標籤頁設計（編輯 / 版本歷史）
+- 整合所有版本控制功能
+- 版本創建對話框
+- 版本比較對話框
+- 版本回滾對話框
+- 完整的狀態管理
+- 自動保存 + 版本控制
+
+**app/dashboard/knowledge/[id]/edit/page.tsx**:
+- 更新使用新的整合組件
+- 最大寬度調整為 max-w-6xl
+
+### 🛡️ **安全特性**
+
+1. **權限控制**:
+   - JWT Token 驗證（所有API端點）
+   - 創建者/管理員權限檢查
+   - 刪除和回滾操作權限驗證
+
+2. **數據保護**:
+   - 當前版本刪除保護
+   - 回滾前自動創建備份版本
+   - 防止回滾到相同版本
+
+3. **審計追蹤**:
+   - 完整的版本歷史記錄
+   - 變更原因強制記錄
+   - 創建者和時間戳記錄
+
+### 📊 **技術特色**
+
+1. **完整的版本控制流程**:
+   ```
+   創建快照 → 查看歷史 → 比較版本 → 安全回滾
+   ```
+
+2. **架構設計**:
+   - 參考 Sprint 5 工作流程版本控制
+   - 複用成功的設計模式
+   - UUID 主鍵 + 版本號雙重索引
+   - 父子版本關係追蹤
+
+3. **元數據豐富**:
+   - 主要/次要版本標記（is_major）
+   - 版本標籤系統（tags 陣列）
+   - 變更欄位追蹤（changed_fields JSON）
+   - 變更摘要（change_summary）
+
+4. **用戶體驗**:
+   - 雙標籤頁無縫切換
+   - 並排差異顯示
+   - 影響範圍可視化
+   - 完整的操作確認流程
+
+### 📈 **代碼統計**
+
+| 模組 | 文件數 | 代碼行數 |
+|------|--------|----------|
+| Prisma Schema | 1 | +60 |
+| 版本控制服務 | 1 | ~500 |
+| API 路由 | 4 | ~400 |
+| UI 組件 | 4 | ~1,200 |
+| 編輯頁面整合 | 2 | ~700 |
+| **總計** | **12** | **~2,860** |
+
+### 🔄 **工作流程示例**
+
+1. **用戶編輯文檔** → 自動保存
+2. **完成重要更新** → 手動創建版本快照
+3. **需要回顧** → 查看版本歷史時間線
+4. **對比變更** → 選擇兩個版本並排比較
+5. **發現問題** → 安全回滾到指定版本
+6. **系統自動** → 創建回滾前備份版本
+
+### 🎯 **下一步計劃**
+
+1. ✅ 版本控制系統已完成
+2. 📝 待實現功能：
+   - 版本控制測試套件
+   - 知識庫審計工作流程
+   - 知識庫分析統計
+   - 協作功能增強
+
+### 📝 **相關文件**
+
+**數據模型**:
+- `prisma/schema.prisma` - KnowledgeVersion 和 KnowledgeVersionComment
+
+**後端服務**:
+- `lib/knowledge/version-control.ts` - 版本控制核心服務
+- `lib/knowledge/index.ts` - 服務統一導出
+
+**API 路由**:
+- `app/api/knowledge-base/[id]/versions/route.ts`
+- `app/api/knowledge-base/[id]/versions/compare/route.ts`
+- `app/api/knowledge-base/[id]/versions/revert/route.ts`
+- `app/api/knowledge-base/[id]/versions/[versionId]/route.ts`
+
+**UI 組件**:
+- `components/knowledge/version/KnowledgeVersionHistory.tsx`
+- `components/knowledge/version/KnowledgeVersionComparison.tsx`
+- `components/knowledge/version/KnowledgeVersionRestore.tsx`
+- `components/knowledge/version/index.ts`
+
+**頁面整合**:
+- `components/knowledge/knowledge-document-edit-with-version.tsx`
+- `app/dashboard/knowledge/[id]/edit/page.tsx`
+
+### ✨ **總結**
+
+成功實現知識庫完整版本控制系統，包括：
+- ✅ 完整的數據模型設計（2個新表）
+- ✅ 強大的版本控制服務（8個核心方法）
+- ✅ 完善的API層（4個RESTful端點）
+- ✅ 豐富的UI組件（4個React組件）
+- ✅ 無縫的編輯頁面整合
+- ✅ 企業級安全和權限控制
+- ✅ 完整的審計追蹤機制
+
+**代碼質量**: 完整的中文註釋、TypeScript嚴格類型、參考成功架構
+**安全性**: JWT驗證、權限控制、數據保護、審計記錄
+**用戶體驗**: 雙標籤頁設計、並排比較、影響分析、安全確認
 
 ---
 
