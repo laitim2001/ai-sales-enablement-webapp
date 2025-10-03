@@ -148,6 +148,14 @@ export default function KnowledgePage({ searchParams }: PageProps) {
             </Button>
           </Link>
 
+          {/* 高級搜索按鈕 - Sprint 6 Week 12 Day 6 */}
+          <Link href="/dashboard/knowledge/advanced-search">
+            <Button variant="outline">
+              <MagnifyingGlassIcon className="h-4 w-4 mr-2" />
+              高級搜索
+            </Button>
+          </Link>
+
           {/* 智能搜索按鈕 - 跳轉到專門的搜索頁面 */}
           <Link href="/dashboard/knowledge/search">
             <Button variant="outline">
