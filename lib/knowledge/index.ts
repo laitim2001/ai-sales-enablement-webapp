@@ -3,6 +3,7 @@
  *
  * 包含：
  * - 知識庫版本控制服務
+ * - 知識庫分析統計服務
  *
  * 作者：Claude Code
  * 日期：2025-10-03
@@ -10,3 +11,4 @@
  */
 
 export * from './version-control';
+export * from './analytics-service';

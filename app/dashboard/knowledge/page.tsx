@@ -61,7 +61,7 @@ import { KnowledgeBaseFilters } from '@/components/knowledge/knowledge-base-filt
 import { BreadcrumbNavigation } from '@/components/knowledge/breadcrumb-navigation'  // 麵包屑導航組件
 import { Button } from '@/components/ui/button'             // UI按鈕組件
 import Link from 'next/link'                                // Next.js路由連結
-import { PlusIcon, MagnifyingGlassIcon, FolderIcon } from '@heroicons/react/24/outline'  // Heroicons圖示
+import { PlusIcon, MagnifyingGlassIcon, FolderIcon, ChartBarIcon } from '@heroicons/react/24/outline'  // Heroicons圖示
 
 // 頁面元資料配置 - 用於SEO和瀏覽器標題
 export const metadata: Metadata = {
@@ -132,6 +132,14 @@ export default function KnowledgePage({ searchParams }: PageProps) {
 
         {/* 右側：快速操作按鈕組 */}
         <div className="flex items-center gap-3">
+          {/* 分析統計按鈕 - Sprint 6 Week 12 */}
+          <Link href="/dashboard/knowledge/analytics">
+            <Button variant="outline">
+              <ChartBarIcon className="h-4 w-4 mr-2" />
+              分析統計
+            </Button>
+          </Link>
+
           {/* 資料夾管理按鈕 - Sprint 6 Week 11 Day 2 */}
           <Link href="/dashboard/knowledge/folders">
             <Button variant="outline">

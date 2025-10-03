@@ -45,7 +45,9 @@
       "Bash(mkdir:*)",
       "Bash(dir node_modules)",
       "Bash(npx:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(git log:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
