@@ -138,16 +138,22 @@ export async function POST(req: NextRequest) {
         title: true,
         content: true,
         category: true,
-        tags: true,
         status: true,
         file_path: true,
-        file_type: true,
+        mime_type: true,
         created_at: true,
         updated_at: true,
-        user: {
+        creator: {
+          select: {
+            first_name: true,
+            last_name: true,
+            email: true
+          }
+        },
+        tags: {
           select: {
             name: true,
-            email: true
+            color: true
           }
         }
       }
@@ -161,12 +167,12 @@ export async function POST(req: NextRequest) {
         title: r.title,
         content: r.content ? r.content.substring(0, 200) + '...' : '',
         category: r.category,
-        author: r.user.name || r.user.email,
+        author: r.creator ? `${r.creator.first_name} ${r.creator.last_name}` : 'Unknown',
         created_at: r.created_at.toISOString(),
         updated_at: r.updated_at.toISOString(),
-        tags: r.tags,
+        tags: r.tags.map((t: { name: string; color: string | null }) => t.name),
         status: r.status,
-        file_type: r.file_type
+        file_type: r.mime_type
       })),
       total,
       metadata: {
@@ -210,10 +216,10 @@ function buildWhereClause(
   const allClauses = [...conditionClauses, ...groupClauses];
 
   if (allClauses.length === 0) {
-    return { user_id: userId };
+    return { created_by: userId };
   }
 
-  const baseClause = { user_id: userId };
+  const baseClause = { created_by: userId };
 
   if (operator === 'AND') {
     return {
@@ -319,9 +325,10 @@ function buildAuthorCondition(
   switch (operator) {
     case 'equals':
       return {
-        user: {
+        creator: {
           OR: [
-            { name: { equals: strValue, mode: 'insensitive' } },
+            { first_name: { equals: strValue, mode: 'insensitive' } },
+            { last_name: { equals: strValue, mode: 'insensitive' } },
             { email: { equals: strValue, mode: 'insensitive' } }
           ]
         }
@@ -329,29 +336,33 @@ function buildAuthorCondition(
 
     case 'not_equals':
       return {
-        user: {
-          AND: [
-            { name: { not: { equals: strValue, mode: 'insensitive' } } },
-            { email: { not: { equals: strValue, mode: 'insensitive' } } }
-          ]
+        NOT: {
+          creator: {
+            OR: [
+              { first_name: { equals: strValue, mode: 'insensitive' } },
+              { last_name: { equals: strValue, mode: 'insensitive' } },
+              { email: { equals: strValue, mode: 'insensitive' } }
+            ]
+          }
         }
       };
 
     case 'contains':
       return {
-        user: {
+        creator: {
           OR: [
-            { name: { contains: strValue, mode: 'insensitive' } },
+            { first_name: { contains: strValue, mode: 'insensitive' } },
+            { last_name: { contains: strValue, mode: 'insensitive' } },
             { email: { contains: strValue, mode: 'insensitive' } }
           ]
         }
       };
 
     case 'is_empty':
-      return { user: { name: null } };
+      return { creator: null };
 
     case 'is_not_empty':
-      return { user: { name: { not: null } } };
+      return { creator: { isNot: null } };
 
     default:
       return {};
