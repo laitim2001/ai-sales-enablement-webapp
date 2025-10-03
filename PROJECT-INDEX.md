@@ -1,7 +1,7 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月3日 - Sprint 6 Week 12 Day 3-4 Part 1 完成（文件解析器基礎設施 ~1,280行，支持PDF/Word/Excel/圖片）
+> **📅 最後更新**: 2025年10月3日 - Sprint 6 Week 12 Day 5 完成（知識庫分析統計儀表板 ~1,788行，純CSS/SVG可視化）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 
 ---
@@ -30,7 +30,7 @@
 
 **📊 進度追蹤文件**:
 - `docs/mvp-implementation-checklist.md` - MVP Phase 1 實施進度檢查清單 (已完成100%)
-- `docs/mvp2-implementation-checklist.md` - MVP Phase 2 實施進度檢查清單 (進行中 74%，Sprint 1 + 2 + 4 + 5 完成，Sprint 6 Week 11完成 40%)
+- `docs/mvp2-implementation-checklist.md` - MVP Phase 2 實施進度檢查清單 (進行中 81%，Sprint 1 + 2 + 4 + 5 完成，Sprint 6 進行中 73%)
 
 | 文檔類型           | 文件路徑        | 用途說明                       | 重要程度 |
 | ------------------ | --------------- | ------------------------------ | -------- |
@@ -287,9 +287,9 @@
 - API端點: 6個範本API + 2個PDF導出API ✅
 - 前端整合: PDF導出按鈕 + 自動下載 + Toast通知 ✅
 
-### 📁 Sprint 6: 知識庫管理界面 (Week 11-12, 進行中 40%)
+### 📁 Sprint 6: 知識庫管理界面 (Week 11-12, 進行中 73%)
 
-**用途**: 知識庫資料夾樹狀導航、文檔組織、富文本編輯、版本控制
+**用途**: 知識庫資料夾樹狀導航、文檔組織、富文本編輯、版本控制、分析統計
 
 **🎯 知識庫資料夾 API端點** (app/api/knowledge-folders/):
 - `route.ts`: 資料夾樹狀結構查詢和創建 (GET/POST) - ~340行
@@ -388,12 +388,58 @@
 - **Week 11 累計**: ~3,038行新代碼 ✅
 - **Sprint 6 進度**: 20% → 40% (7/17任務完成)
 
+**📊 知識庫分析統計系統** (Week 12 Day 5, 2025-10-03):
+- `lib/knowledge/analytics-service.ts`: 分析統計服務層 (~717行)
+  * getOverview() - 總體統計概覽（文檔數/查看/編輯/下載，含增長率）
+  * getTopViewedDocuments() - 熱門查看文檔Top N排行
+  * getTopEditedDocuments() - 熱門編輯文檔Top N排行
+  * getTypeDistribution() - 文檔類型分布統計（Prisma groupBy聚合）
+  * getCategoryDistribution() - 文檔分類分布統計
+  * getStatusDistribution() - 文檔狀態分布統計
+  * getFolderUsage() - 資料夾使用情況（文檔數+儲存空間）
+  * getUserActivity() - 用戶活動統計（僅admin/manager）
+- `app/api/knowledge-base/analytics/route.ts`: Analytics API端點 (~244行)
+  * GET /api/knowledge-base/analytics - 8種統計類型
+  * 查詢參數：type, timeRange (today/week/month/custom), limit, startDate, endDate
+  * JWT認證，角色權限控制
+- `components/knowledge/analytics/`: UI組件 (~508行，4個組件)
+  * StatsCard.tsx - 統計卡片（值+增長率+趨勢圖標）~86行
+  * BarChart.tsx - 純CSS條形圖組件 ~105行
+  * PieChart.tsx - 純SVG圓餅圖組件 ~149行
+  * DocumentList.tsx - 文檔排行榜組件 ~150行
+  * index.ts - 統一導出 ~18行
+- `app/dashboard/knowledge/analytics/page.tsx`: 分析儀表板頁面 (~305行)
+  * 時間範圍選擇器（今日/本週/本月/自定義）
+  * 總體統計卡片（4個指標）
+  * 熱門文檔排行（Top 10查看/編輯）
+  * 數據分布圖表（圓餅圖 - 分類/類型）
+  * 資料夾使用圖表（條形圖）
+  * 儲存空間統計（Top 3資料夾）
+  * 並行API請求（Promise.all）
+
+**🎨 技術亮點**:
+- ✅ 零依賴數據可視化（純CSS/SVG，無Chart.js/Recharts）
+- ✅ 高效數據聚合（Prisma groupBy數據庫級聚合）
+- ✅ 並行數據獲取（Promise.all同時發起6個請求）
+- ✅ 基於AuditLog統計（複用現有審計追蹤表，避免數據冗餘）
+- ✅ 增長率計算（相比上一期間的百分比變化）
+
+**✅ 完成狀態**: Sprint 6 Week 12 Day 5 (2025-10-03 23:30)
+- **分析統計成果**: ~1,788行新代碼
+  * 服務層: ~717行
+  * API層: ~244行
+  * UI組件: ~508行 (4組件)
+  * 儀表板頁面: ~305行
+  * 統一導出: ~14行
+- **Sprint 6 累計**: ~10,356行新代碼
+- **Sprint 6 進度**: 40% → 73% (12/17任務完成)
+
 **🔄 待完成** (Week 12):
-- 導航增強功能 (麵包屑/快速跳轉/最近訪問)
-- 知識庫版本控制系統
-- 知識庫分析統計
-- 審核工作流程
-- 測試與文檔更新
+- ✅ 導航增強功能 (麵包屑/快速跳轉/最近訪問) - Day 1完成
+- ✅ 知識庫版本控制系統 - Day 2-3完成
+- ✅ 知識庫分析統計 - Day 5完成
+- ⏳ 審核工作流程 (延後到Sprint 7)
+- ⏳ 協作功能 (延後到Sprint 7)
 
 ### 📊 lib/monitoring/ - 企業級監控告警系統 (Sprint 2完成)
 

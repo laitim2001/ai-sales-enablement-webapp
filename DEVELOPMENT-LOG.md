@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [📊 Sprint 6 Week 12 - 知識庫分析統計儀表板 (2025-10-03)](#📊-2025-10-03-sprint-6-week-12-知識庫分析統計儀表板完整實現-✅)
 - [📚 Sprint 6 Week 12 - 知識庫版本控制系統 (2025-10-03)](#📚-2025-10-03-sprint-6-week-12-知識庫版本控制系統完整實現-✅)
 - [📦 Sprint 6 Week 12 Day 3-4 - 文件解析器與批量上傳API (2025-10-03)](#📦-2025-10-03-sprint-6-week-12-day-3-4-文件解析器與批量上傳api-✅)
 - [🧭 Sprint 6 Week 12 Day 1 - 導航增強與批量上傳框架 (2025-10-03 08:45)](#🧭-2025-10-03-0845-sprint-6-week-12-day-1-導航增強與批量上傳框架-✅)
@@ -41,6 +42,539 @@
 - [前端認證修復 (2025-09-28 23:25)](#🔧-2025-09-28-2325-前端認證和渲染性能重大修復-✅)
 - [系統整合測試 (2025-09-28 20:05)](#🚀-2025-09-28-2005-系統整合測試修復和外部服務配置完善-✅)
 - [查看所有記錄](#完整開發記錄)
+
+---
+
+## 📊 2025-10-03: Sprint 6 Week 12 - 知識庫分析統計儀表板完整實現 ✅
+
+### 🎯 **會話概述**
+- **主要任務**: 實現知識庫分析統計儀表板系統（數據可視化優先級 #1）
+- **進度**: Sprint 6 Week 12 Day 5 完成 - 分析統計儀表板
+- **代碼量**: 10個新文件，約1,788行TypeScript/React代碼
+- **Git提交**: 待提交 - 即將推送至GitHub
+- **MVP進度**: Phase 2 從 78% → 81% (44/54任務)
+- **Sprint 6進度**: 從 53% → 73%
+
+### ✅ **完成內容**
+
+#### **1. 分析統計服務層** (lib/knowledge/analytics-service.ts, ~717行)
+
+**核心功能**:
+1. **getOverview()** - 總體統計概覽
+   - 文檔總數、總查看次數、總編輯次數、總下載次數
+   - 計算增長率（相比上一期間）
+   - 支持時間範圍：today/week/month/custom
+   - 基於AuditLog表的action字段統計（VIEW/EDIT/DOWNLOAD）
+
+2. **getTopViewedDocuments()** - 熱門查看文檔排行
+   - Top N文檔（默認10）
+   - 按查看次數降序排序
+   - 包含文檔標題、分類、查看數、編輯數、下載數
+
+3. **getTopEditedDocuments()** - 熱門編輯文檔排行
+   - Top N文檔（默認10）
+   - 按編輯次數降序排序
+   - 統計維度同上
+
+4. **getTypeDistribution()** - 文檔類型分布
+   - 按MIME類型分組統計
+   - 計算每種類型的文檔數量和百分比
+   - 使用Prisma groupBy進行高效聚合
+
+5. **getCategoryDistribution()** - 文檔分類分布
+   - 按知識庫分類分組
+   - 計算分類占比
+
+6. **getStatusDistribution()** - 文檔狀態分布
+   - processing/completed/failed等狀態統計
+   - 百分比計算
+
+7. **getFolderUsage()** - 資料夾使用情況
+   - Top N資料夾（按文檔數量）
+   - 計算每個資料夾的總儲存空間
+   - 文檔數量統計
+
+8. **getUserActivity()** - 用戶活動統計
+   - Top N活躍用戶
+   - 統計每個用戶的查看/編輯/下載次數
+   - 僅限admin/manager角色訪問
+
+**關鍵實現細節**:
+```typescript
+// 時間範圍計算
+private getDateRange(timeRange: TimeRange, customStart?: Date, customEnd?: Date) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  switch (timeRange) {
+    case 'today':
+      return { start: today, end: now };
+    case 'week':
+      const weekAgo = new Date(today);
+      weekAgo.setDate(today.getDate() - 7);
+      return { start: weekAgo, end: now };
+    // ...
+  }
+}
+
+// 增長率計算
+private calculateGrowth(current: number, previous: number): number {
+  if (previous === 0) return current > 0 ? 100 : 0;
+  return Math.round(((current - previous) / previous) * 100);
+}
+
+// 使用Prisma groupBy進行高效聚合
+const typeStats = await this.prisma.knowledgeBase.groupBy({
+  by: ['mime_type'],
+  _count: { id: true },
+  where: { user_id: userId }
+});
+```
+
+#### **2. Analytics API端點** (app/api/knowledge-base/analytics/route.ts, ~244行)
+
+**端點**: `GET /api/knowledge-base/analytics`
+
+**查詢參數**:
+- `type` - 統計類型（必填）
+  - overview: 總體概覽
+  - top-viewed: 熱門查看文檔
+  - top-edited: 熱門編輯文檔
+  - type-distribution: 文檔類型分布
+  - category-distribution: 文檔分類分布
+  - status-distribution: 文檔狀態分布
+  - folder-usage: 資料夾使用情況
+  - user-activity: 用戶活動統計
+- `timeRange` - 時間範圍（today/week/month/custom）
+- `limit` - 返回數量限制（默認10）
+- `startDate` - 自定義開始日期（ISO格式）
+- `endDate` - 自定義結束日期（ISO格式）
+
+**認證與授權**:
+- JWT token驗證（所有請求）
+- user-activity類型僅限admin/manager角色
+
+**錯誤處理**:
+- 400: 參數錯誤（缺少type、無效timeRange）
+- 401: 未認證
+- 403: 權限不足
+- 500: 服務器錯誤
+
+#### **3. 分析統計UI組件** (~508行，4個組件)
+
+**StatsCard** (components/knowledge/analytics/StatsCard.tsx, ~86行):
+- 統計卡片組件
+- 顯示單個指標（值、增長率、趨勢圖標）
+- 增長率顏色編碼：綠色（正增長）、紅色（負增長）、灰色（無變化）
+- Lucide React圖標：TrendingUp/TrendingDown/Minus
+
+**BarChart** (components/knowledge/analytics/BarChart.tsx, ~105行):
+- 純CSS水平條形圖
+- 無第三方依賴（不使用Chart.js/Recharts）
+- Tailwind動畫過渡效果
+- 顯示標籤、數值、百分比
+
+**PieChart** (components/knowledge/analytics/PieChart.tsx, ~149行):
+- 純SVG圓餅圖實現
+- 極坐標到笛卡爾坐標轉換
+- SVG路徑生成（弧形切片）
+- 圖例與百分比標籤
+- 顏色調色板：10種預設顏色
+
+**關鍵SVG實現**:
+```typescript
+const polarToCartesian = (centerX: number, centerY: number, radius: number, angleInDegrees: number) => {
+  const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+  return {
+    x: centerX + radius * Math.cos(angleInRadians),
+    y: centerY + radius * Math.sin(angleInRadians)
+  };
+};
+
+const describeArc = (x: number, y: number, radius: number, startAngle: number, endAngle: number) => {
+  const start = polarToCartesian(x, y, radius, endAngle);
+  const end = polarToCartesian(x, y, radius, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+
+  return [
+    'M', start.x, start.y,
+    'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+    'L', x, y,
+    'Z'
+  ].join(' ');
+};
+```
+
+**DocumentList** (components/knowledge/analytics/DocumentList.tsx, ~150行):
+- 文檔排行榜組件
+- 顯示Top文檔（查看/編輯排行）
+- 排名徽章（金/銀/銅配色）
+- 鏈接到文檔詳情頁
+- 統計數據：查看數、編輯數、下載數
+
+**統一導出** (components/knowledge/analytics/index.ts, ~18行):
+```typescript
+export { StatsCard } from './StatsCard';
+export { BarChart } from './BarChart';
+export { PieChart } from './PieChart';
+export { DocumentList } from './DocumentList';
+```
+
+#### **4. 分析儀表板頁面** (app/dashboard/knowledge/analytics/page.tsx, ~305行)
+
+**頁面功能**:
+- 客戶端數據獲取（'use client'）
+- 時間範圍選擇器（今日/本週/本月/自定義）
+- 並行數據請求（Promise.all同時獲取6種統計）
+- 加載狀態動畫（旋轉圖標）
+- 響應式網格佈局
+
+**頁面結構**:
+```
+┌─────────────────────────────────────────────┐
+│ 標題 + 時間範圍選擇器                          │
+├─────────────────────────────────────────────┤
+│ 總體統計卡片 (4個)                            │
+│ [文檔總數] [總查看] [總編輯] [總下載]          │
+├─────────────────────────────────────────────┤
+│ 熱門文檔排行 (2列)                            │
+│ [最常查看Top10] [最常編輯Top10]               │
+├─────────────────────────────────────────────┤
+│ 數據分布圖表 (2列)                            │
+│ [文檔分類分布] [文檔類型分布]                  │
+├─────────────────────────────────────────────┤
+│ 資料夾使用情況 (條形圖)                       │
+├─────────────────────────────────────────────┤
+│ 儲存空間統計 (Top 3資料夾)                    │
+└─────────────────────────────────────────────┘
+```
+
+**數據獲取邏輯**:
+```typescript
+const fetchAnalytics = async () => {
+  setLoading(true);
+  try {
+    const token = localStorage.getItem('token');
+
+    // 並行請求6種統計數據
+    const [overviewRes, topViewedRes, topEditedRes,
+           categoryDistRes, typeDistRes, folderUsageRes] = await Promise.all([
+      fetch(`/api/knowledge-base/analytics?type=overview&timeRange=${timeRange}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      }),
+      // ... 其他5個請求
+    ]);
+
+    // 解析所有響應
+    const [overviewData, topViewedData, ...] = await Promise.all([
+      overviewRes.json(),
+      topViewedRes.json(),
+      // ...
+    ]);
+
+    // 更新狀態
+    if (overviewData.success) setOverview(overviewData.data);
+    // ...
+  } catch (error) {
+    console.error('獲取統計數據失敗:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+**文件大小格式化**:
+```typescript
+const formatFileSize = (bytes: number): string => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+};
+```
+
+#### **5. 導航集成** (app/dashboard/knowledge/page.tsx)
+
+**新增分析統計按鈕**:
+```typescript
+import { ChartBarIcon } from '@heroicons/react/24/outline';
+
+<Link href="/dashboard/knowledge/analytics">
+  <Button variant="outline">
+    <ChartBarIcon className="h-4 w-4 mr-2" />
+    分析統計
+  </Button>
+</Link>
+```
+
+**按鈕順序**:
+1. 分析統計（新增）
+2. 資料夾管理
+3. 智能搜索
+4. 新建項目
+5. 上傳文檔
+
+#### **6. 服務層統一導出** (lib/knowledge/index.ts)
+
+**新增導出**:
+```typescript
+export * from './analytics-service';
+```
+
+**完整導出列表**:
+- knowledge-service.ts - 知識庫CRUD服務
+- folder-service.ts - 資料夾管理服務
+- version-control.ts - 版本控制服務
+- analytics-service.ts - 分析統計服務（新增）
+
+### 📊 **技術亮點**
+
+#### **1. 零依賴數據可視化**
+- **純CSS條形圖**: 使用Tailwind和CSS動畫
+- **純SVG圓餅圖**: 手動計算SVG路徑
+- **優勢**:
+  - 減少bundle大小（無Chart.js/Recharts依賴）
+  - 完全自定義樣式
+  - 更好的性能（無庫解析開銷）
+
+#### **2. 高效數據聚合**
+- 使用Prisma `groupBy()`進行數據庫級聚合
+- 避免應用層遍歷和計算
+- 減少內存佔用和查詢時間
+
+**示例**:
+```typescript
+// ❌ 應用層聚合（效率低）
+const docs = await prisma.knowledgeBase.findMany();
+const typeCount = docs.reduce((acc, doc) => {
+  acc[doc.mime_type] = (acc[doc.mime_type] || 0) + 1;
+  return acc;
+}, {});
+
+// ✅ 數據庫級聚合（高效）
+const typeStats = await prisma.knowledgeBase.groupBy({
+  by: ['mime_type'],
+  _count: { id: true }
+});
+```
+
+#### **3. 並行數據獲取**
+- 使用`Promise.all`同時發起6個API請求
+- 減少總等待時間（從順序6x到並行1x）
+- 提升用戶體驗
+
+#### **4. 基於AuditLog的統計**
+- 複用現有AuditLog表
+- 無需新建tracking表
+- 減少數據冗餘
+- 統一審計追蹤
+
+**AuditLog action類型**:
+- `VIEW` - 查看文檔
+- `EDIT` - 編輯文檔
+- `DOWNLOAD` - 下載文檔
+- `CREATE` - 創建文檔
+- `DELETE` - 刪除文檔
+
+### 🔧 **架構決策**
+
+#### **1. 為何不使用Chart.js/Recharts?**
+- **Bundle大小**: Chart.js ~300KB，Recharts ~500KB
+- **過度設計**: 本項目僅需簡單圖表
+- **自定義限制**: 第三方庫樣式調整複雜
+- **學習成本**: SVG/CSS實現更易理解和維護
+
+#### **2. 為何使用AuditLog而非新表?**
+- **避免冗餘**: AuditLog已記錄所有操作
+- **一致性**: 審計追蹤與分析統計統一數據源
+- **簡化維護**: 無需同時更新多表
+- **GDPR合規**: 統一數據保留策略
+
+#### **3. 為何客戶端渲染而非SSR?**
+- **實時更新**: 時間範圍切換無需頁面刷新
+- **互動性**: 圖表懸停、工具提示
+- **用戶體驗**: 加載狀態動畫
+- **API複用**: 同一API可用於其他客戶端
+
+### 📈 **性能優化**
+
+#### **1. 數據庫查詢優化**
+- 使用索引欄位（created_at, user_id, action）
+- groupBy聚合減少數據傳輸
+- WHERE條件過濾（時間範圍、用戶ID）
+
+#### **2. 前端性能**
+- React狀態管理（避免不必要的重渲染）
+- 條件渲染（僅顯示有數據的部分）
+- CSS動畫硬件加速（transform, opacity）
+
+#### **3. API響應優化**
+- 僅返回必要欄位（不返回完整文檔內容）
+- 分頁限制（Top N，默認10）
+- 快取策略（未來可增加Redis快取）
+
+### 🧪 **測試建議**（未實現）
+
+#### **單元測試**:
+```typescript
+// analytics-service.test.ts
+describe('AnalyticsService', () => {
+  it('should calculate overview correctly', async () => {
+    const overview = await analyticsService.getOverview('month');
+    expect(overview.totalDocuments).toBeGreaterThanOrEqual(0);
+    expect(overview.documentsGrowth).toBeDefined();
+  });
+
+  it('should return top viewed documents', async () => {
+    const topDocs = await analyticsService.getTopViewedDocuments(10, 'week');
+    expect(topDocs.length).toBeLessThanOrEqual(10);
+    expect(topDocs[0].viewCount).toBeGreaterThanOrEqual(topDocs[1]?.viewCount || 0);
+  });
+});
+```
+
+#### **集成測試**:
+```typescript
+// analytics.api.test.ts
+describe('GET /api/knowledge-base/analytics', () => {
+  it('should return overview data', async () => {
+    const response = await fetch('/api/knowledge-base/analytics?type=overview&timeRange=month', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data.success).toBe(true);
+    expect(data.data.totalDocuments).toBeDefined();
+  });
+
+  it('should reject unauthorized requests', async () => {
+    const response = await fetch('/api/knowledge-base/analytics?type=overview');
+    expect(response.status).toBe(401);
+  });
+});
+```
+
+### 🎯 **用戶故事驗證**
+
+✅ **作為知識庫管理員，我希望看到文檔使用統計，以了解哪些內容最受歡迎**
+- 實現：Top查看/編輯文檔排行榜
+- 驗證：DocumentList組件顯示排名、查看數、編輯數
+
+✅ **作為數據分析師，我希望了解知識庫的數據分布，以優化內容結構**
+- 實現：分類/類型/狀態分布圖表
+- 驗證：PieChart顯示百分比和數量
+
+✅ **作為系統管理員，我希望監控資料夾使用情況，以管理儲存空間**
+- 實現：資料夾使用情況條形圖和儲存空間統計
+- 驗證：BarChart + 儲存空間Top 3卡片
+
+✅ **作為產品經理，我希望看到知識庫增長趨勢，以評估平台價值**
+- 實現：總體概覽卡片with增長率
+- 驗證：StatsCard顯示增長百分比和趨勢圖標
+
+### 📦 **文件清單**
+
+#### **新增文件** (10個):
+```
+lib/knowledge/
+├── analytics-service.ts          (~717行) - 分析統計服務層
+└── index.ts                      (修改) - 新增analytics導出
+
+app/api/knowledge-base/analytics/
+└── route.ts                      (~244行) - Analytics API端點
+
+components/knowledge/analytics/
+├── StatsCard.tsx                 (~86行) - 統計卡片組件
+├── BarChart.tsx                  (~105行) - 條形圖組件
+├── PieChart.tsx                  (~149行) - 圓餅圖組件
+├── DocumentList.tsx              (~150行) - 文檔列表組件
+└── index.ts                      (~18行) - 組件統一導出
+
+app/dashboard/knowledge/
+├── analytics/
+│   └── page.tsx                  (~305行) - 分析儀表板頁面
+└── page.tsx                      (修改) - 新增分析統計導航按鈕
+```
+
+#### **總代碼量**: ~1,788行
+- 服務層: ~717行
+- API層: ~244行
+- UI組件: ~508行
+- 頁面: ~305行
+- 配置: ~14行
+
+### 🔄 **Git提交記錄**
+
+**即將提交**:
+```bash
+git add .
+git commit -m "feat: Sprint 6 Week 12 - 知識庫分析統計儀表板完整實現
+
+✅ 實現完整的知識庫分析統計系統
+✅ 純CSS/SVG數據可視化（零第三方依賴）
+✅ 8種統計維度（概覽、排行、分布、用戶活動）
+✅ 基於AuditLog的高效數據聚合
+✅ 時間範圍篩選（今日/本週/本月/自定義）
+✅ 並行API請求優化
+
+📊 新增文件:
+  - lib/knowledge/analytics-service.ts (~717行)
+  - app/api/knowledge-base/analytics/route.ts (~244行)
+  - components/knowledge/analytics/* (4組件, ~508行)
+  - app/dashboard/knowledge/analytics/page.tsx (~305行)
+
+📈 進度更新:
+  - MVP Phase 2: 78% → 81% (44/54任務)
+  - Sprint 6: 53% → 73%
+  - 累計代碼: +1,788行
+
+🎯 優先級 #1 完成 - 數據可視化儀表板
+🎯 下一步: 優先級 #2 - 進階搜索功能
+
+🤖 Generated with Claude Code"
+```
+
+### 📝 **下一步計劃**
+
+#### **優先級 #2: 🔍 進階搜索功能** (下一個任務)
+- 多條件組合搜索
+- 搜索結果排序和過濾
+- 搜索歷史記錄
+- 搜索建議/自動完成
+- 全文檢索優化
+
+#### **優先級 #3: ✅ 完整測試套件**
+- Analytics服務單元測試
+- Analytics API集成測試
+- UI組件測試
+- E2E測試（Playwright/Cypress）
+
+#### **優先級 #4: 👥 知識庫審核工作流程**
+- 文檔審核狀態管理
+- 審核通知系統
+- 審核歷史記錄
+- 多級審核流程
+
+### 🎓 **經驗總結**
+
+#### **✅ 成功經驗**:
+1. **零依賴可視化**: 純CSS/SVG實現簡單圖表，減少bundle大小
+2. **Prisma groupBy**: 數據庫級聚合，性能優於應用層計算
+3. **並行請求**: Promise.all同時獲取多種統計，提升速度
+4. **複用AuditLog**: 避免新建tracking表，減少數據冗餘
+
+#### **⚠️ 注意事項**:
+1. **大數據量**: 未來需考慮分頁和快取（當文檔數>10萬時）
+2. **實時性**: 目前無快取，每次請求都查詢數據庫
+3. **權限控制**: user-activity統計需嚴格限制admin/manager訪問
+4. **自定義範圍**: 需驗證日期格式和範圍合理性
+
+#### **🔮 未來優化方向**:
+1. **Redis快取**: 快取統計數據（TTL 5-10分鐘）
+2. **WebSocket實時更新**: 實時推送統計變化
+3. **數據導出**: CSV/Excel導出統計報表
+4. **高級圖表**: 趨勢線圖、熱力圖、關聯分析
+5. **AI洞察**: 使用ML分析使用模式，提供優化建議
 
 ---
 
