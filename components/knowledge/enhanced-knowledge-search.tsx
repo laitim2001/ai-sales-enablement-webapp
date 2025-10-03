@@ -122,22 +122,34 @@ type EnhancedSearchResult = BaseSearchResult & {
     suggestedActions?: Array<{ label: string; description: string }>
     sentiment?: string
     readingLevel?: string
+    intelligentSummary?: string
+    actionRecommendations?: Array<{ label: string; description: string }>
   }
 }
 
 // Function stubs for disabled Week 6 features
 const getSearchSuggestionService = () => ({
-  getSuggestions: async () => [] as SuggestionItem[]
+  getSuggestions: async () => [] as SuggestionItem[],
+  getAutoComplete: async (query: string, options?: any) => [] as SuggestionItem[]
 })
 
-const recordSearchEvent = (eventType: SearchEventType, data: any) => {
+const recordSearchEvent = (eventType: SearchEventType, data: any, metadata?: any) => {
   // Stub implementation - do nothing
-  console.debug('Search event:', eventType, data)
+  console.debug('Search event:', eventType, data, metadata)
 }
 
 const processConversationalQuery = async (query: string, context: any) => {
-  // Stub implementation - return the query as-is
-  return { processedQuery: query, context: null }
+  // Stub implementation - return the query as-is with additional fields
+  return {
+    processedQuery: query,
+    context: null,
+    resolvedQuery: query,
+    analysis: {
+      intent: 'search',
+      entities: [],
+      confidence: 1.0
+    }
+  }
 }
 
 const analyzeSemanticQuery = async (query: string) => {
@@ -149,9 +161,30 @@ const analyzeSemanticQuery = async (query: string) => {
   }
 }
 
-const enhanceSearchResults = async (results: BaseSearchResult[]) => {
-  // Stub implementation - return results as EnhancedSearchResult
-  return results.map(r => ({ ...r, baseResult: r } as EnhancedSearchResult))
+const enhanceSearchResults = async (results: BaseSearchResult[], analysis?: any, context?: any) => {
+  // Stub implementation - return enhanced results with full structure
+  return {
+    enhancedResults: results.map(r => ({
+      ...r,
+      baseResult: r,
+      enhancement: {
+        summary: r.content?.substring(0, 200),
+        keyPoints: [],
+        relatedTopics: [],
+        suggestedActions: [],
+        intelligentSummary: r.content?.substring(0, 200),
+        actionRecommendations: []
+      }
+    } as EnhancedSearchResult)),
+    clusters: [],
+    insights: {
+      topTopics: [],
+      relatedQueries: [],
+      knowledgeGaps: [],
+      mainTheme: '',
+      keyPoints: []
+    }
+  }
 }
 
 // 增強版搜索狀態
@@ -173,7 +206,7 @@ interface EnhancedSearchState {
 
   // Week 6 增強功能
   sessionId: string
-  suggestions: string[]
+  suggestions: SuggestionItem[]
   suggestionsLoading: boolean
   enhancedResults: EnhancedSearchResult[]
   clusters: ResultCluster[]
@@ -392,7 +425,7 @@ export function EnhancedKnowledgeSearch() {
             }
           } else {
             // 單次查詢分析
-            semanticAnalysis = await analyzeSemanticQuery(search.query, conversationContext)
+            semanticAnalysis = await analyzeSemanticQuery(search.query)
           }
 
           setSearch(prev => ({
@@ -554,10 +587,11 @@ export function EnhancedKnowledgeSearch() {
   }
 
   // 處理建議點擊
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSuggestionClick = (suggestion: SuggestionItem | string) => {
+    const suggestionText = typeof suggestion === 'string' ? suggestion : suggestion.text
     setSearch(prev => ({
       ...prev,
-      query: suggestion,
+      query: suggestionText,
       suggestions: []
     }))
 
@@ -700,7 +734,7 @@ export function EnhancedKnowledgeSearch() {
                     >
                       <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />
                       <span dangerouslySetInnerHTML={{
-                        __html: highlightText(suggestion, search.query)
+                        __html: highlightText(suggestion.text, search.query)
                       }} />
                     </button>
                   ))}
@@ -1054,7 +1088,7 @@ function ResultsListView({
   return (
     <div className="divide-y divide-gray-200">
       {results.map((result, index) => {
-        const enhanced = enhancedResults.find(er => er.baseResult.id === result.id)
+        const enhanced = enhancedResults.find(er => er.baseResult?.id === result.id)
 
         return (
           <div key={result.id} className="p-6 hover:bg-gray-50 transition-colors">
@@ -1084,18 +1118,14 @@ function ResultsListView({
                 </div>
 
                 {/* 增強摘要 */}
-                {enhanced?.enhancement.intelligentSummary && (
+                {enhanced?.enhancement?.intelligentSummary && (
                   <div className="mb-3 p-3 bg-blue-50 rounded-md border-l-4 border-blue-500">
                     <div className="text-sm text-blue-900 font-medium mb-1">
                       AI 智能摘要：
                     </div>
-                    <p className="text-sm text-blue-800 mb-2">
-                      {enhanced.enhancement.intelligentSummary.mainTheme}
+                    <p className="text-sm text-blue-800">
+                      {enhanced.enhancement.intelligentSummary}
                     </p>
-                    <div className="text-xs text-blue-700">
-                      <strong>關鍵要點：</strong>
-                      {enhanced.enhancement.intelligentSummary.keyPoints.slice(0, 2).join('、')}
-                    </div>
                   </div>
                 )}
 
@@ -1120,7 +1150,7 @@ function ResultsListView({
                 )}
 
                 {/* 行動建議 */}
-                {enhanced?.enhancement.actionRecommendations && enhanced.enhancement.actionRecommendations.length > 0 && (
+                {enhanced?.enhancement?.actionRecommendations && enhanced.enhancement.actionRecommendations.length > 0 && (
                   <div className="mb-3 p-3 bg-green-50 rounded-md border-l-4 border-green-500">
                     <div className="text-sm text-green-900 font-medium mb-1">
                       建議行動：
@@ -1248,11 +1278,11 @@ function ClustersView({
                   className="text-left w-full"
                 >
                   <h4 className="font-medium text-gray-900 hover:text-blue-600 mb-1">
-                    {enhanced.baseResult.title}
+                    {enhanced.baseResult?.title}
                   </h4>
-                  {enhanced.enhancement.intelligentSummary && (
+                  {enhanced.enhancement?.intelligentSummary && (
                     <p className="text-sm text-gray-600">
-                      {enhanced.enhancement.intelligentSummary.mainTheme}
+                      {enhanced.enhancement.intelligentSummary}
                     </p>
                   )}
                 </button>
@@ -1378,7 +1408,7 @@ function InsightsView({
                   {insights.improvements.userExperience.slice(0, 3).map((imp: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-yellow-600">•</span>
-                      <span>{imp.improvement}</span>
+                      <span>{imp}</span>
                     </li>
                   ))}
                 </ul>
