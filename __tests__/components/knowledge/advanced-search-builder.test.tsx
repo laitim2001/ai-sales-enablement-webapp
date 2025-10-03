@@ -90,17 +90,25 @@ describe('AdvancedSearchBuilder', () => {
     const addConditionButton = addButtons.find(btn => btn.textContent === '添加條件');
     await user.click(addConditionButton!);
 
-    // 查找刪除按鈕
-    const deleteButtons = screen.getAllByRole('button', { name: /刪除|delete/i });
-    expect(deleteButtons.length).toBeGreaterThan(0);
+    // 查找刪除按鈕 (TrashIcon 按鈕,沒有文本)
+    const allButtons = screen.getAllByRole('button');
+    const initialButtonCount = allButtons.length;
 
-    // 刪除條件
-    await user.click(deleteButtons[0]);
+    // 找到所有按鈕,刪除按鈕通常在條件行的最後
+    const conditionDeleteButtons = allButtons.filter(btn =>
+      btn.className.includes('text-red-600') ||
+      btn.querySelector('svg') // 有圖標的按鈕
+    );
 
-    // 條件應該被刪除
+    expect(conditionDeleteButtons.length).toBeGreaterThan(0);
+
+    // 刪除條件 (點擊第一個刪除按鈕)
+    await user.click(conditionDeleteButtons[0]);
+
+    // 條件應該被刪除 (按鈕數量減少)
     await waitFor(() => {
-      const remainingDeleteButtons = screen.queryAllByRole('button', { name: /刪除|delete/i });
-      expect(remainingDeleteButtons.length).toBeLessThan(deleteButtons.length);
+      const remainingButtons = screen.getAllByRole('button');
+      expect(remainingButtons.length).toBeLessThan(initialButtonCount);
     });
   });
 
@@ -160,6 +168,18 @@ describe('AdvancedSearchBuilder', () => {
       />
     );
 
+    // 先添加一個條件 (清空按鈕在沒有條件時是 disabled 的)
+    const addButtons = screen.getAllByRole('button');
+    const addConditionButton = addButtons.find(btn => btn.textContent === '添加條件');
+    await user.click(addConditionButton!);
+
+    // 等待條件添加完成
+    await waitFor(() => {
+      const comboboxes = screen.getAllByRole('combobox');
+      expect(comboboxes.length).toBeGreaterThan(0);
+    });
+
+    // 現在點擊清空按鈕
     const clearButton = screen.getByText(/清空條件|清空|Clear/i);
     await user.click(clearButton);
 
@@ -177,17 +197,24 @@ describe('AdvancedSearchBuilder', () => {
       />
     );
 
-    // 查找運算符切換按鈕
-    const operatorButtons = screen.getAllByRole('button', { name: /AND|OR/i });
-    expect(operatorButtons.length).toBeGreaterThan(0);
+    // 查找運算符選擇器 (是 select 元素,不是 button)
+    const operatorSelects = screen.getAllByRole('combobox');
+    const operatorSelect = operatorSelects.find(select =>
+      select.querySelector('option[value="AND"]') &&
+      select.querySelector('option[value="OR"]')
+    );
 
-    // 切換運算符
-    await user.click(operatorButtons[0]);
+    expect(operatorSelect).toBeDefined();
 
-    // 驗證已切換（這裡依賴具體實現）
+    // 驗證初始值是 AND
+    expect(operatorSelect).toHaveValue('AND');
+
+    // 切換到 OR
+    await user.selectOptions(operatorSelect!, 'OR');
+
+    // 驗證已切換
     await waitFor(() => {
-      const updatedButtons = screen.getAllByRole('button', { name: /AND|OR/i });
-      expect(updatedButtons).toBeDefined();
+      expect(operatorSelect).toHaveValue('OR');
     });
   });
 
