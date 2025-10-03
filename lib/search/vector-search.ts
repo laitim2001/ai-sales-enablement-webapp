@@ -95,6 +95,11 @@ export interface VectorSearchResult {
       databaseQueryTime: number
       resultProcessingTime: number
     }
+    pgvectorMetadata?: {
+      indexUsed: string
+      distanceMetric: string
+      hasMore: boolean
+    }
   }
 }
 
@@ -165,7 +170,7 @@ export class VectorSearchEngine {
 
     } catch (error) {
       console.error('Vector search error:', error)
-      throw new AppError('Vector search failed', 500, { originalError: error })
+      throw AppError.internal('Vector search failed', { timestamp: new Date(), additional: { originalError: error } })
     }
   }
 
@@ -183,7 +188,7 @@ export class VectorSearchEngine {
       return embedding.embedding
     } catch (error) {
       console.error('Failed to generate query embedding:', error)
-      throw new AppError('Failed to generate query embedding', 500)
+      throw AppError.internal('Failed to generate query embedding')
     }
   }
 
@@ -569,15 +574,15 @@ export class VectorSearchEngine {
    */
   private validateSearchOptions(options: VectorSearchOptions): void {
     if (!options.query || options.query.trim().length === 0) {
-      throw new AppError('Search query cannot be empty', 400)
+      throw AppError.badRequest('Search query cannot be empty')
     }
 
     if (options.limit !== undefined && (options.limit < 1 || options.limit > 100)) {
-      throw new AppError('Limit must be between 1 and 100', 400)
+      throw AppError.badRequest('Limit must be between 1 and 100')
     }
 
     if (options.threshold !== undefined && (options.threshold < 0 || options.threshold > 1)) {
-      throw new AppError('Threshold must be between 0 and 1', 400)
+      throw AppError.badRequest('Threshold must be between 0 and 1')
     }
   }
 
