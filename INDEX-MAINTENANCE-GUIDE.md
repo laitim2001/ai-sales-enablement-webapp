@@ -31,19 +31,145 @@
 
 ## 🔄 維護工作流程
 
+### ⚡ 強制性 TODO 清單提醒機制
+
+**🎯 核心原則**: 每次開發任務必須包含索引更新檢查項
+
+#### 📋 標準開發任務 TODO 模板
+
+**每次創建新功能/文件時，必須使用以下 TODO 清單**:
+
+```markdown
+## 任務 TODO 清單
+
+### 實現階段
+- [ ] 實現功能代碼
+- [ ] 編寫單元測試
+- [ ] 本地測試通過
+
+### 📋 索引維護 (⚠️ 強制必做)
+- [ ] **檢查是否創建了新的重要文件** (lib/, components/, app/api/, app/dashboard/)
+- [ ] **更新 PROJECT-INDEX.md** - 添加新文件索引
+- [ ] **更新 AI-ASSISTANT-GUIDE.md** (如果是極高重要性文件)
+- [ ] **執行索引檢查**: `npm run check:index` (如果腳本已創建)
+
+### 提交階段
+- [ ] git add 所有文件 **包括索引文件**
+- [ ] 提交信息包含 "並更新索引"
+- [ ] 推送到 GitHub
+```
+
+#### 🔴 強制檢查點 (每個階段必須執行)
+
+**Phase 完成時立即執行**:
+
+```bash
+# === 階段性索引檢查流程 ===
+
+# 1. 列出本 Phase 新增的所有重要文件
+echo "📋 檢查本 Phase 新增的文件..."
+git diff --name-only <上一個提交> HEAD | \
+  grep -E '\.(ts|tsx|md)$' | \
+  grep -E 'lib/|components/|app/api/|app/dashboard/' | \
+  sort
+
+# 2. 檢查這些文件是否已在 PROJECT-INDEX.md 中
+echo "🔍 檢查索引狀態..."
+for file in $(上述文件列表); do
+  if grep -q "$file" PROJECT-INDEX.md; then
+    echo "✅ $file - 已索引"
+  else
+    echo "❌ $file - 未索引 ⚠️"
+  fi
+done
+
+# 3. 如有遺漏，立即補充
+echo "📝 更新 PROJECT-INDEX.md..."
+# 手動編輯添加遺漏文件
+
+# 4. 提交索引更新
+git add PROJECT-INDEX.md
+git commit -m "docs: 更新索引 - Phase X 新增文件"
+git push origin main
+```
+
+#### 📊 每日開發結束時檢查
+
+**下班前必做**:
+
+```bash
+# === 每日索引健康檢查 ===
+
+echo "📊 執行每日索引健康檢查..."
+
+# 1. 查看今天新增的文件
+git log --since="今天 00:00" --name-only --diff-filter=A | \
+  grep -E '\.(ts|tsx)$' | \
+  grep -E 'lib/|components/|app/' | \
+  sort -u
+
+# 2. 檢查是否都已索引
+echo "檢查索引完整性..."
+# (執行檢查邏輯)
+
+# 3. 如有遺漏，當天補上
+echo "⚠️ 發現未索引文件，立即更新..."
+```
+
 ### 1. 開發過程中的即時維護
 
 #### 當新增重要文件時
 ```bash
-# 1. 新增文件到項目
-# 2. 立即更新相關索引
-# 3. 提交時包含索引更新
+# === 正確的文件創建流程 ===
 
-git add new-important-file.md
-# 同時更新索引
-nano PROJECT-INDEX.md  # 或 AI-ASSISTANT-GUIDE.md
-git add PROJECT-INDEX.md
-git commit -m "feat: 新增功能文檔並更新索引"
+# 1. 創建新文件
+touch lib/knowledge/new-feature.ts
+
+# 2. 實現功能
+# ... 編寫代碼 ...
+
+# 3. ⚠️ 立即更新索引 (不要等！)
+nano PROJECT-INDEX.md
+# 添加新文件到對應章節
+
+# 4. 一起提交
+git add lib/knowledge/new-feature.ts PROJECT-INDEX.md
+git commit -m "feat: 新增功能並更新索引"
+git push origin main
+
+# ✅ 索引和代碼同步提交 - 這是正確做法！
+```
+
+#### ❌ 錯誤做法 vs ✅ 正確做法
+
+**❌ 錯誤 - 批次更新索引**:
+```bash
+# Day 1: 創建文件 A
+git commit -m "feat: 新增文件 A"
+
+# Day 2: 創建文件 B
+git commit -m "feat: 新增文件 B"
+
+# Day 3: 創建文件 C
+git commit -m "feat: 新增文件 C"
+
+# Day 7: 才想起來更新索引 ❌
+git commit -m "docs: 更新索引"
+# 結果: 可能遺漏某些文件！
+```
+
+**✅ 正確 - 即時更新索引**:
+```bash
+# Day 1: 創建文件 A + 立即更新索引
+git commit -m "feat: 新增文件 A 並更新索引"
+
+# Day 2: 創建文件 B + 立即更新索引
+git commit -m "feat: 新增文件 B 並更新索引"
+
+# Day 3: 創建文件 C + 立即更新索引
+git commit -m "feat: 新增文件 C 並更新索引"
+
+# 結果: 索引始終保持同步 ✅
 ```
 
 #### 當重構目錄結構時
