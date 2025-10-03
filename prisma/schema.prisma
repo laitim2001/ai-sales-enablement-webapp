@@ -39,6 +39,10 @@ model User {
   createdFolders       KnowledgeFolder[]  @relation("FolderCreator")
   updatedFolders       KnowledgeFolder[]  @relation("FolderUpdater")
 
+  // Sprint 6 Week 12: 知識庫版本控制關聯
+  knowledgeVersions         KnowledgeVersion[]        @relation("KnowledgeVersionCreator")
+  knowledgeVersionComments  KnowledgeVersionComment[] @relation("KnowledgeVersionCommentCreator")
+
   // Sprint 5: AI提案生成相關關聯
   createdTemplates    ProposalTemplate[]   @relation("TemplateCreator")
   updatedTemplates    ProposalTemplate[]   @relation("TemplateUpdater")
@@ -258,6 +262,7 @@ model KnowledgeBase {
   chunks           KnowledgeChunk[] // 內容分塊
   tags             KnowledgeTag[] // 標籤關聯
   processing_tasks ProcessingTask[] // 處理任務
+  versions         KnowledgeVersion[] // 版本歷史 (Sprint 6 Week 12)
 
   @@index([status, category], name: "IX_KB_Status_Category")
   @@index([processing_status], name: "IX_KB_Processing_Status")
@@ -339,6 +344,64 @@ model ProcessingTask {
   @@index([knowledge_base_id], name: "IX_Task_KB")
   @@index([created_at], name: "IX_Task_Created")
   @@map("processing_tasks")
+}
+
+// ============================================================
+// Sprint 6 Week 12: 知識庫版本控制系統
+// ============================================================
+
+// 知識庫版本快照模型
+model KnowledgeVersion {
+  id                String   @id @default(uuid()) // UUID 主鍵
+  knowledge_base_id Int // 關聯的知識庫文檔ID
+  version           Int // 版本號（遞增）
+
+  // 版本快照內容
+  title             String // 標題快照
+  content           String? // 內容快照
+  file_path         String? // 檔案路徑快照
+  file_size         Int? // 檔案大小快照
+  mime_type         String? // MIME類型快照
+  metadata          Json? // 元數據快照
+
+  // 版本控制信息
+  change_summary    String? // 變更摘要
+  changed_fields    Json? // 變更欄位詳情 { field: { old, new } }
+  parent_version    Int? // 父版本號
+  is_major          Boolean  @default(false) // 是否為主要版本
+  tags              String[] @default([]) // 版本標籤
+
+  // 元數據
+  created_at        DateTime @default(now())
+  created_by        Int // 創建者ID
+
+  // 關聯關係
+  knowledge_base KnowledgeBase @relation(fields: [knowledge_base_id], references: [id], onDelete: Cascade)
+  creator        User          @relation("KnowledgeVersionCreator", fields: [created_by], references: [id])
+  comments       KnowledgeVersionComment[] // 版本評論
+
+  @@unique([knowledge_base_id, version], name: "UK_KBVersion_KB_Version")
+  @@index([knowledge_base_id], name: "IX_KBVersion_KB")
+  @@index([created_at], name: "IX_KBVersion_Created")
+  @@index([is_major], name: "IX_KBVersion_Major")
+  @@map("knowledge_versions")
+}
+
+// 知識庫版本評論模型
+model KnowledgeVersionComment {
+  id         String   @id @default(uuid())
+  version_id String // 關聯的版本ID
+  content    String // 評論內容
+  created_at DateTime @default(now())
+  created_by Int // 評論者ID
+
+  // 關聯關係
+  version KnowledgeVersion @relation(fields: [version_id], references: [id], onDelete: Cascade)
+  creator User             @relation("KnowledgeVersionCommentCreator", fields: [created_by], references: [id])
+
+  @@index([version_id], name: "IX_KBVersionComment_Version")
+  @@index([created_at], name: "IX_KBVersionComment_Created")
+  @@map("knowledge_version_comments")
 }
 
 // 文檔模型（保留原有功能，但與KnowledgeBase分開）
