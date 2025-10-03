@@ -47,7 +47,7 @@ async function calculateFolderPath(parentId: number | null): Promise<string> {
     select: { path: true, name: true }
   })
 
-  if (!parent) throw new AppError('父資料夾不存在', 404)
+  if (!parent) throw AppError.notFound('父資料夾不存在')
 
   const parentPath = parent.path || '/'
   const newPath = parentPath === '/'
@@ -94,16 +94,21 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // 1. 驗證用戶身份
-    const authResult = await verifyToken(request)
-    if (!authResult.isValid || !authResult.user) {
-      throw new AppError('未授權訪問', 401)
+    // 1. 驗證 JWT Token
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      throw AppError.unauthorized('缺少認證令牌')
+    }
+
+    const decoded = verifyToken(token)
+    if (!decoded) {
+      throw AppError.unauthorized('無效的認證令牌')
     }
 
     // 2. 解析資料夾ID
     const folderId = parseInt(params.id, 10)
     if (isNaN(folderId)) {
-      throw new AppError('無效的資料夾ID', 400)
+      throw AppError.badRequest('無效的資料夾ID')
     }
 
     // 3. 查詢資料夾詳情
@@ -173,7 +178,7 @@ export async function GET(
     })
 
     if (!folder) {
-      throw new AppError('資料夾不存在', 404)
+      throw AppError.notFound('資料夾不存在')
     }
 
     return NextResponse.json({
@@ -217,18 +222,23 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // 1. 驗證用戶身份
-    const authResult = await verifyToken(request)
-    if (!authResult.isValid || !authResult.user) {
-      throw new AppError('未授權訪問', 401)
+    // 1. 驗證 JWT Token
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      throw AppError.unauthorized('缺少認證令牌')
     }
 
-    const userId = authResult.user.userId
+    const decoded = verifyToken(token)
+    if (!decoded) {
+      throw AppError.unauthorized('無效的認證令牌')
+    }
+
+    const userId = decoded.userId
 
     // 2. 解析資料夾ID
     const folderId = parseInt(params.id, 10)
     if (isNaN(folderId)) {
-      throw new AppError('無效的資料夾ID', 400)
+      throw AppError.badRequest('無效的資料夾ID')
     }
 
     // 3. 解析請求體
@@ -241,12 +251,12 @@ export async function PATCH(
     })
 
     if (!existingFolder) {
-      throw new AppError('資料夾不存在', 404)
+      throw AppError.notFound('資料夾不存在')
     }
 
     // 5. 檢查系統資料夾保護
     if (existingFolder.is_system) {
-      throw new AppError('系統資料夾不能修改', 403)
+      throw AppError.forbidden('系統資料夾不能修改')
     }
 
     // 6. 如果要移動資料夾(更改parent_id)
@@ -258,7 +268,7 @@ export async function PATCH(
     if (validatedData.parent_id !== undefined && validatedData.parent_id !== existingFolder.parent_id) {
       // 檢查不能將資料夾移動到自己的子資料夾
       if (validatedData.parent_id === folderId) {
-        throw new AppError('不能將資料夾移動到自己內部', 400)
+        throw AppError.badRequest('不能將資料夾移動到自己內部')
       }
 
       // 檢查父資料夾是否存在
@@ -268,14 +278,14 @@ export async function PATCH(
         })
 
         if (!parent) {
-          throw new AppError('目標父資料夾不存在', 404)
+          throw AppError.notFound('目標父資料夾不存在')
         }
 
         // 檢查是否會造成循環引用(移動到自己的子孫資料夾)
         let currentParent = parent
         while (currentParent.parent_id) {
           if (currentParent.parent_id === folderId) {
-            throw new AppError('不能將資料夾移動到自己的子資料夾', 400)
+            throw AppError.badRequest('不能將資料夾移動到自己的子資料夾')
           }
           const nextParent = await prisma.knowledgeFolder.findUnique({
             where: { id: currentParent.parent_id }
@@ -304,7 +314,10 @@ export async function PATCH(
       })
 
       if (duplicateName) {
-        throw new AppError('同級資料夾中已存在相同名稱', 409)
+        return NextResponse.json(
+          { success: false, message: '同級資料夾中已存在相同名稱' },
+          { status: 409 }
+        )
       }
 
       // 如果只是更名,也要更新路徑
@@ -396,16 +409,21 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // 1. 驗證用戶身份
-    const authResult = await verifyToken(request)
-    if (!authResult.isValid || !authResult.user) {
-      throw new AppError('未授權訪問', 401)
+    // 1. 驗證 JWT Token
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      throw AppError.unauthorized('缺少認證令牌')
+    }
+
+    const decoded = verifyToken(token)
+    if (!decoded) {
+      throw AppError.unauthorized('無效的認證令牌')
     }
 
     // 2. 解析資料夾ID
     const folderId = parseInt(params.id, 10)
     if (isNaN(folderId)) {
-      throw new AppError('無效的資料夾ID', 400)
+      throw AppError.badRequest('無效的資料夾ID')
     }
 
     // 3. 檢查資料夾是否存在
@@ -422,23 +440,23 @@ export async function DELETE(
     })
 
     if (!folder) {
-      throw new AppError('資料夾不存在', 404)
+      throw AppError.notFound('資料夾不存在')
     }
 
     // 4. 檢查系統資料夾保護
     if (folder.is_system) {
-      throw new AppError('系統資料夾不能刪除', 403)
+      throw AppError.forbidden('系統資料夾不能刪除')
     }
 
     // 5. 檢查是否有子資料夾
     if (folder._count.children > 0) {
-      throw new AppError('資料夾包含子資料夾，無法刪除', 400)
+      throw AppError.badRequest('資料夾包含子資料夾，無法刪除')
     }
 
     // 6. 檢查是否有文檔(可選: 根據業務邏輯決定是否允許刪除)
     if (folder._count.knowledge_base > 0) {
       // 選項1: 禁止刪除
-      throw new AppError('資料夾包含文檔，無法刪除。請先移動或刪除文檔', 400)
+      throw AppError.badRequest('資料夾包含文檔，無法刪除。請先移動或刪除文檔')
 
       // 選項2: 將文檔移到根目錄
       // await prisma.knowledgeBase.updateMany({

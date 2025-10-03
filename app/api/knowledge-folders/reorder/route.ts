@@ -43,13 +43,18 @@ const ReorderFoldersSchema = z.object({
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. 驗證用戶身份
-    const authResult = await verifyToken(request)
-    if (!authResult.isValid || !authResult.user) {
-      throw new AppError('未授權訪問', 401)
+    // 1. 驗證 JWT Token
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      throw AppError.unauthorized('缺少認證令牌')
     }
 
-    const userId = authResult.user.userId
+    const decoded = verifyToken(token)
+    if (!decoded) {
+      throw AppError.unauthorized('無效的認證令牌')
+    }
+
+    const userId = decoded.userId
 
     // 2. 解析請求體
     const body = await request.json()
@@ -70,19 +75,19 @@ export async function POST(request: NextRequest) {
     })
 
     if (folders.length !== folderIds.length) {
-      throw new AppError('部分資料夾不存在', 404)
+      throw AppError.notFound('部分資料夾不存在')
     }
 
     // 4. 檢查系統資料夾保護
     const systemFolders = folders.filter(f => f.is_system)
     if (systemFolders.length > 0) {
-      throw new AppError('系統資料夾不能重新排序', 403)
+      throw AppError.forbidden('系統資料夾不能重新排序')
     }
 
     // 5. 檢查所有資料夾是否在同一層級
     const parentIds = [...new Set(folders.map(f => f.parent_id))]
     if (parentIds.length > 1) {
-      throw new AppError('只能對同一層級的資料夾進行排序', 400)
+      throw AppError.badRequest('只能對同一層級的資料夾進行排序')
     }
 
     // 6. 使用事務批量更新

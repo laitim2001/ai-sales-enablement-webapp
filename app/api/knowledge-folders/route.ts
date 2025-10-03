@@ -74,7 +74,7 @@ async function calculateFolderPath(parentId: number | null): Promise<string> {
     select: { path: true, name: true }
   })
 
-  if (!parent) throw new AppError('父資料夾不存在', 404)
+  if (!parent) throw AppError.notFound('父資料夾不存在')
 
   const parentPath = parent.path || '/'
   const newPath = parentPath === '/'
@@ -159,13 +159,13 @@ export async function GET(request: NextRequest) {
     }
 
     if (!token) {
-      throw new AppError('未授權訪問', 401)
+      throw AppError.unauthorized('未授權訪問')
     }
 
     const payload = verifyToken(token)
 
     if (!payload || typeof payload !== 'object' || !payload.userId) {
-      throw new AppError('無效的token', 401)
+      throw AppError.unauthorized('無效的token')
     }
 
     // 2. 解析查詢參數
@@ -262,13 +262,13 @@ export async function POST(request: NextRequest) {
     }
 
     if (!token) {
-      throw new AppError('未授權訪問', 401)
+      throw AppError.unauthorized('未授權訪問')
     }
 
     const payload = verifyToken(token)
 
     if (!payload || typeof payload !== 'object' || !payload.userId) {
-      throw new AppError('無效的token', 401)
+      throw AppError.unauthorized('無效的token')
     }
 
     const userId = payload.userId
@@ -284,7 +284,7 @@ export async function POST(request: NextRequest) {
       })
 
       if (!parentExists) {
-        throw new AppError('父資料夾不存在', 404)
+        throw AppError.notFound('父資料夾不存在')
       }
     }
 
@@ -300,7 +300,10 @@ export async function POST(request: NextRequest) {
     })
 
     if (duplicateName) {
-      throw new AppError('同級資料夾中已存在相同名稱', 409)
+      return NextResponse.json(
+        { success: false, message: '同級資料夾中已存在相同名稱' },
+        { status: 409 }
+      )
     }
 
     // 6. 創建資料夾

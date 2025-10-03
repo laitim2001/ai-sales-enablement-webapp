@@ -46,7 +46,7 @@ async function calculateFolderPath(parentId: number | null): Promise<string> {
     select: { path: true, name: true }
   })
 
-  if (!parent) throw new AppError('父資料夾不存在', 404)
+  if (!parent) throw AppError.notFound('父資料夾不存在')
 
   const parentPath = parent.path || '/'
   return parentPath === '/' ? `/${parent.name}` : `${parentPath}/${parent.name}`
@@ -89,18 +89,23 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    // 1. 驗證用戶身份
-    const authResult = await verifyToken(request)
-    if (!authResult.isValid || !authResult.user) {
-      throw new AppError('未授權訪問', 401)
+    // 1. 驗證 JWT Token
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      throw AppError.unauthorized('缺少認證令牌')
     }
 
-    const userId = authResult.user.userId
+    const decoded = verifyToken(token)
+    if (!decoded) {
+      throw AppError.unauthorized('無效的認證令牌')
+    }
+
+    const userId = decoded.userId
 
     // 2. 解析資料夾ID
     const folderId = parseInt(params.id, 10)
     if (isNaN(folderId)) {
-      throw new AppError('無效的資料夾ID', 400)
+      throw AppError.badRequest('無效的資料夾ID')
     }
 
     // 3. 解析請求體
@@ -113,17 +118,17 @@ export async function POST(
     })
 
     if (!folder) {
-      throw new AppError('資料夾不存在', 404)
+      throw AppError.notFound('資料夾不存在')
     }
 
     // 5. 檢查系統資料夾保護
     if (folder.is_system) {
-      throw new AppError('系統資料夾不能移動', 403)
+      throw AppError.forbidden('系統資料夾不能移動')
     }
 
     // 6. 檢查是否移動到自己
     if (validatedData.target_parent_id === folderId) {
-      throw new AppError('不能將資料夾移動到自己內部', 400)
+      throw AppError.badRequest('不能將資料夾移動到自己內部')
     }
 
     // 7. 檢查目標父資料夾是否存在
@@ -133,14 +138,14 @@ export async function POST(
       })
 
       if (!targetParent) {
-        throw new AppError('目標資料夾不存在', 404)
+        throw AppError.notFound('目標資料夾不存在')
       }
 
       // 檢查是否會造成循環引用(移動到自己的子孫資料夾)
       let currentParent = targetParent
       while (currentParent.parent_id) {
         if (currentParent.parent_id === folderId) {
-          throw new AppError('不能將資料夾移動到自己的子資料夾', 400)
+          throw AppError.badRequest('不能將資料夾移動到自己的子資料夾')
         }
         const nextParent = await prisma.knowledgeFolder.findUnique({
           where: { id: currentParent.parent_id }
@@ -160,7 +165,10 @@ export async function POST(
     })
 
     if (duplicateName) {
-      throw new AppError('目標位置已存在同名資料夾', 409)
+      return NextResponse.json(
+        { success: false, message: '目標位置已存在同名資料夾' },
+        { status: 409 }
+      )
     }
 
     // 9. 計算新路徑

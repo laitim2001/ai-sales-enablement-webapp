@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { verifyAccessToken } from '@/lib/auth-server';
+import { verifyToken } from '@/lib/auth-server';
 import { createKnowledgeVersionControl } from '@/lib/knowledge';
 
 /**
@@ -32,7 +32,7 @@ export async function POST(
       );
     }
 
-    const decoded = verifyAccessToken(token);
+    const decoded = verifyToken(token);
     if (!decoded) {
       return NextResponse.json(
         { error: 'Unauthorized', message: '無效的認證令牌' },
