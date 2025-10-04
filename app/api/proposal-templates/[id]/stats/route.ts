@@ -95,8 +95,7 @@ export async function GET(
         },
         _avg: {
           quality_score: true,
-          response_time: true,
-          total_tokens: true
+          generation_time_ms: true
         }
       }),
 
@@ -105,7 +104,7 @@ export async function GET(
         where: { template_id: templateId },
         include: {
           generator: {
-            select: { username: true, email: true }
+            select: { first_name: true, last_name: true, email: true }
           },
           customer: {
             select: { company_name: true }
@@ -145,8 +144,7 @@ export async function GET(
 
         // 平均指標
         averageQualityScore: Math.round((averageStats._avg.quality_score || 0) * 100) / 100,
-        averageResponseTime: Math.round(averageStats._avg.response_time || 0),
-        averageTokens: Math.round(averageStats._avg.total_tokens || 0),
+        averageGenerationTime: Math.round(averageStats._avg.generation_time_ms || 0),
 
         // 變數統計
         mostUsedVariables,

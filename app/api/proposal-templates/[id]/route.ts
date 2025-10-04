@@ -39,10 +39,10 @@ export async function GET(
       where: { id: templateId },
       include: {
         creator: {
-          select: { id: true, username: true, email: true }
+          select: { id: true, first_name: true, last_name: true, email: true }
         },
         updater: {
-          select: { id: true, username: true, email: true }
+          select: { id: true, first_name: true, last_name: true, email: true }
         },
         _count: {
           select: { generations: true }
@@ -178,10 +178,10 @@ export async function PUT(
       },
       include: {
         creator: {
-          select: { id: true, username: true, email: true }
+          select: { id: true, first_name: true, last_name: true, email: true }
         },
         updater: {
-          select: { id: true, username: true, email: true }
+          select: { id: true, first_name: true, last_name: true, email: true }
         }
       }
     });

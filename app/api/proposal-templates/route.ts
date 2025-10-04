@@ -78,10 +78,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         where,
         include: {
           creator: {
-            select: { id: true, username: true, email: true }
+            select: { id: true, first_name: true, last_name: true, email: true }
           },
           updater: {
-            select: { id: true, username: true, email: true }
+            select: { id: true, first_name: true, last_name: true, email: true }
           },
           _count: {
             select: { generations: true }
@@ -231,7 +231,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
       include: {
         creator: {
-          select: { id: true, username: true, email: true }
+          select: { id: true, first_name: true, last_name: true, email: true }
         }
       }
     });
