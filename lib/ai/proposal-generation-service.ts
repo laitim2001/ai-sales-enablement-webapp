@@ -86,7 +86,7 @@ export class ProposalGenerationService {
         where: { id: request.templateId },
         include: {
           creator: {
-            select: { id: true, username: true, email: true }
+            select: { id: true, first_name: true, last_name: true, email: true }
           }
         }
       });
@@ -106,16 +106,25 @@ export class ProposalGenerationService {
           title: request.title,
           content: '', // 初始為空，生成後更新
           status: 'GENERATING',
+          parameters: {
+            templateId: request.templateId,
+            customerId: request.customerId,
+            opportunityId: request.opportunityId
+          },
           variables: request.variables,
           customer_id: request.customerId,
           proposal_id: request.opportunityId, // 先設為機會ID，後續創建提案後更新
           generated_by: request.generatedBy,
           ai_model: request.aiConfig?.model || 'gpt-4',
-          temperature: request.aiConfig?.temperature || 0.7,
-          max_tokens: request.aiConfig?.maxTokens || 2000,
-          prompt_tokens: 0,
-          completion_tokens: 0,
-          total_tokens: 0
+          ai_settings: {
+            temperature: request.aiConfig?.temperature || 0.7,
+            maxTokens: request.aiConfig?.maxTokens || 2000
+          },
+          token_usage: {
+            promptTokens: 0,
+            completionTokens: 0,
+            totalTokens: 0
+          }
         }
       });
 
@@ -153,10 +162,12 @@ export class ProposalGenerationService {
           content: aiResponse.content,
           status: aiResponse.status === 'success' ? 'COMPLETED' : 'FAILED',
           quality_score: aiResponse.metadata?.qualityScore,
-          prompt_tokens: aiResponse.usage?.promptTokens || 0,
-          completion_tokens: aiResponse.usage?.completionTokens || 0,
-          total_tokens: aiResponse.usage?.totalTokens || 0,
-          response_time: aiResponse.metadata?.responseTime || 0,
+          token_usage: {
+            promptTokens: aiResponse.usage?.promptTokens || 0,
+            completionTokens: aiResponse.usage?.completionTokens || 0,
+            totalTokens: aiResponse.usage?.totalTokens || 0
+          },
+          generation_time_ms: aiResponse.metadata?.responseTime || 0,
           error_message: aiResponse.error
         }
       });
@@ -192,6 +203,8 @@ export class ProposalGenerationService {
         }
       }
 
+      const tokenUsage = updatedRecord.token_usage as { promptTokens?: number; completionTokens?: number; totalTokens?: number } | null;
+
       return {
         id: updatedRecord.id,
         proposalId,
@@ -199,9 +212,9 @@ export class ProposalGenerationService {
         status: updatedRecord.status as any,
         qualityScore: updatedRecord.quality_score || undefined,
         usage: {
-          promptTokens: updatedRecord.prompt_tokens,
-          completionTokens: updatedRecord.completion_tokens,
-          totalTokens: updatedRecord.total_tokens
+          promptTokens: tokenUsage?.promptTokens || 0,
+          completionTokens: tokenUsage?.completionTokens || 0,
+          totalTokens: tokenUsage?.totalTokens || 0
         },
         error: updatedRecord.error_message || undefined,
         generatedAt: updatedRecord.created_at
@@ -252,7 +265,7 @@ export class ProposalGenerationService {
         include: {
           template: true,
           generator: {
-            select: { id: true, username: true }
+            select: { id: true, first_name: true, last_name: true }
           }
         }
       });
@@ -267,9 +280,10 @@ export class ProposalGenerationService {
         ...updates?.variables
       };
 
+      const aiSettings = originalGeneration.ai_settings as { temperature?: number; maxTokens?: number } | null;
       const mergedAiConfig = {
-        temperature: originalGeneration.temperature,
-        maxTokens: originalGeneration.max_tokens,
+        temperature: aiSettings?.temperature || 0.7,
+        maxTokens: aiSettings?.maxTokens || 2000,
         model: originalGeneration.ai_model,
         ...updates?.aiConfig
       };
@@ -344,7 +358,7 @@ export class ProposalGenerationService {
             select: { name: true, category: true }
           },
           generator: {
-            select: { username: true, email: true }
+            select: { first_name: true, last_name: true, email: true }
           },
           customer: {
             select: { company_name: true }
@@ -361,20 +375,23 @@ export class ProposalGenerationService {
     ]);
 
     return {
-      generations: generations.map(gen => ({
-        id: gen.id,
-        proposalId: gen.proposal_id || undefined,
-        content: gen.content,
-        status: gen.status as any,
-        qualityScore: gen.quality_score || undefined,
-        usage: {
-          promptTokens: gen.prompt_tokens,
-          completionTokens: gen.completion_tokens,
-          totalTokens: gen.total_tokens
-        },
-        error: gen.error_message || undefined,
-        generatedAt: gen.created_at
-      })),
+      generations: generations.map(gen => {
+        const tokenUsage = gen.token_usage as { promptTokens?: number; completionTokens?: number; totalTokens?: number } | null;
+        return {
+          id: gen.id,
+          proposalId: gen.proposal_id || undefined,
+          content: gen.content,
+          status: gen.status as any,
+          qualityScore: gen.quality_score || undefined,
+          usage: {
+            promptTokens: tokenUsage?.promptTokens || 0,
+            completionTokens: tokenUsage?.completionTokens || 0,
+            totalTokens: tokenUsage?.totalTokens || 0
+          },
+          error: gen.error_message || undefined,
+          generatedAt: gen.created_at
+        };
+      }),
       total
     };
   }
