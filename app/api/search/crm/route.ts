@@ -104,23 +104,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       // 混合搜索：知識庫 + CRM 數據
       const hybridResult = await crmSearchAdapter.performHybridSearch(query, {
         limit,
-        offset,
-        filters,
-        include_knowledge_base: true
+        offset
       });
 
       searchResults = hybridResult;
-      totalCount = hybridResult.total_results;
+      totalCount = hybridResult.totalResults;
 
     } else {
       // 純 CRM 數據搜索
       const crmResults = await crmSearchAdapter.searchCrmData(query, {
-        entity_types: type === 'all' ? ['customers', 'contacts', 'opportunities', 'interactions'] : [type],
+        entityTypes: type === 'all' ? ['customer', 'contact', 'opportunity', 'interaction'] : [type as 'customer' | 'contact' | 'opportunity' | 'interaction'],
         limit,
-        offset,
-        filters,
-        include_summary: true,
-        highlight_matches: true
+        offset
       });
 
       searchResults = crmResults;
