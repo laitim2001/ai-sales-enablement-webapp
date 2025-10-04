@@ -43,7 +43,7 @@
 import { prisma } from '@/lib/db'
 import { z } from 'zod'
 import { getVectorCache } from '@/lib/cache/vector-cache'
-import { openaiClient } from '@/lib/ai/openai'
+import { getOpenAIClient } from '@/lib/ai/openai'
 
 // 搜索事件類型定義
 export type SearchEventType =
@@ -657,30 +657,34 @@ export class SearchAnalyticsService {
    */
   private async batchInsertEvents(events: SearchEvent[]): Promise<void> {
     try {
+      // TODO: Week 6 - 實現searchEvent Prisma模型後啟用
       // 這裡應該實現高效的批量插入
       // 為了簡化，使用單次事務插入
-      await prisma.$transaction(async (tx) => {
-        for (const event of events) {
-          await tx.searchEvent.create({
-            data: {
-              id: event.id,
-              type: event.type,
-              timestamp: event.timestamp,
-              sessionId: event.sessionId,
-              userId: event.userId,
-              eventData: JSON.stringify({
-                queryData: event.queryData,
-                resultData: event.resultData,
-                performanceData: event.performanceData,
-                behaviorData: event.behaviorData,
-                contextData: event.contextData,
-                feedbackData: event.feedbackData,
-                metadata: event.metadata
-              })
-            }
-          })
-        }
-      })
+      // await prisma.$transaction(async (tx) => {
+      //   for (const event of events) {
+      //     await tx.searchEvent.create({
+      //       data: {
+      //         id: event.id,
+      //         type: event.type,
+      //         timestamp: event.timestamp,
+      //         sessionId: event.sessionId,
+      //         userId: event.userId,
+      //         eventData: JSON.stringify({
+      //           queryData: event.queryData,
+      //           resultData: event.resultData,
+      //           performanceData: event.performanceData,
+      //           behaviorData: event.behaviorData,
+      //           contextData: event.contextData,
+      //           feedbackData: event.feedbackData,
+      //           metadata: event.metadata
+      //         })
+      //       }
+      //     })
+      //   }
+      // })
+
+      // 臨時：記錄到console直到實現searchEvent模型
+      console.log(`📝 批量事件記錄 (${events.length}個事件)`);
 
     } catch (error) {
       console.error('❌ 批量插入事件失敗:', error)
@@ -693,49 +697,55 @@ export class SearchAnalyticsService {
    */
   private async updateRealTimeMetrics(event: SearchEvent): Promise<void> {
     try {
-      const metricsKey = 'realtime_metrics'
-      const currentMetrics = await this.cache.get(metricsKey)
+      // TODO: Week 6 - 實現通用key-value cache後啟用實時指標
+      // VectorCache不支持通用key-value操作,需要專用的metrics cache
 
-      let metrics = currentMetrics ? JSON.parse(currentMetrics) : {
-        activeUsers: new Set(),
-        currentSearches: 0,
-        totalResponseTime: 0,
-        responseTimeCount: 0,
-        errorCount: 0,
-        totalEvents: 0,
-        lastUpdate: Date.now()
-      }
+      // 臨時：記錄到console
+      console.log(`📊 實時指標更新: ${event.type}`);
 
-      // 更新指標
-      if (event.userId) {
-        metrics.activeUsers.add(event.userId)
-      }
+      // const metricsKey = 'realtime_metrics'
+      // const currentMetrics = await this.cache.get(metricsKey)
 
-      if (event.type === 'search_initiated') {
-        metrics.currentSearches++
-      } else if (event.type === 'search_completed') {
-        metrics.currentSearches = Math.max(0, metrics.currentSearches - 1)
-      }
+      // let metrics = currentMetrics ? JSON.parse(currentMetrics) : {
+      //   activeUsers: new Set(),
+      //   currentSearches: 0,
+      //   totalResponseTime: 0,
+      //   responseTimeCount: 0,
+      //   errorCount: 0,
+      //   totalEvents: 0,
+      //   lastUpdate: Date.now()
+      // }
 
-      if (event.performanceData?.processingTime) {
-        metrics.totalResponseTime += event.performanceData.processingTime
-        metrics.responseTimeCount++
-      }
+      // // 更新指標
+      // if (event.userId) {
+      //   metrics.activeUsers.add(event.userId)
+      // }
 
-      if (event.performanceData?.errorOccurred) {
-        metrics.errorCount++
-      }
+      // if (event.type === 'search_initiated') {
+      //   metrics.currentSearches++
+      // } else if (event.type === 'search_completed') {
+      //   metrics.currentSearches = Math.max(0, metrics.currentSearches - 1)
+      // }
 
-      metrics.totalEvents++
-      metrics.lastUpdate = Date.now()
+      // if (event.performanceData?.processingTime) {
+      //   metrics.totalResponseTime += event.performanceData.processingTime
+      //   metrics.responseTimeCount++
+      // }
 
-      // 轉換Set為數組以便序列化
-      const serializedMetrics = {
-        ...metrics,
-        activeUsers: Array.from(metrics.activeUsers)
-      }
+      // if (event.performanceData?.errorOccurred) {
+      //   metrics.errorCount++
+      // }
 
-      await this.cache.set(metricsKey, JSON.stringify(serializedMetrics), 300) // 5分鐘過期
+      // metrics.totalEvents++
+      // metrics.lastUpdate = Date.now()
+
+      // // 轉換Set為數組以便序列化
+      // const serializedMetrics = {
+      //   ...metrics,
+      //   activeUsers: Array.from(metrics.activeUsers)
+      // }
+
+      // await this.cache.set(metricsKey, JSON.stringify(serializedMetrics), 300) // 5分鐘過期
 
     } catch (error) {
       console.error('❌ 更新實時指標失敗:', error)
@@ -993,8 +1003,10 @@ export class SearchAnalyticsService {
 
   private async getCachedReport(cacheKey: string): Promise<SearchAnalyticsReport | null> {
     try {
-      const cached = await this.cache.get(cacheKey)
-      return cached ? JSON.parse(cached) : null
+      // TODO: Week 6 - 使用通用key-value cache
+      // const cached = await this.cache.get(cacheKey)
+      // return cached ? JSON.parse(cached) : null
+      return null; // 臨時禁用緩存
     } catch (error) {
       return null
     }
@@ -1002,7 +1014,9 @@ export class SearchAnalyticsService {
 
   private async cacheReport(cacheKey: string, report: SearchAnalyticsReport): Promise<void> {
     try {
-      await this.cache.set(cacheKey, JSON.stringify(report), 3600) // 1小時緩存
+      // TODO: Week 6 - 使用通用key-value cache
+      // await this.cache.set(cacheKey, JSON.stringify(report), 3600) // 1小時緩存
+      console.log(`📝 報告緩存已跳過: ${cacheKey}`);
     } catch (error) {
       console.warn('⚠️ 緩存報告失敗:', error)
     }
@@ -1016,19 +1030,20 @@ export class SearchAnalyticsService {
 
   // 其他輔助方法的簡化實現...
   private async getRealTimeMetrics(): Promise<RealTimeAnalyticsDashboard['realTimeMetrics']> {
-    const metricsKey = 'realtime_metrics'
-    const cached = await this.cache.get(metricsKey)
+    // TODO: Week 6 - 使用通用key-value cache
+    // const metricsKey = 'realtime_metrics'
+    // const cached = await this.cache.get(metricsKey)
 
-    if (cached) {
-      const metrics = JSON.parse(cached)
-      return {
-        activeUsers: metrics.activeUsers?.length || 0,
-        currentSearches: metrics.currentSearches || 0,
-        responseTime: metrics.responseTimeCount > 0 ? metrics.totalResponseTime / metrics.responseTimeCount : 0,
-        errorRate: metrics.totalEvents > 0 ? metrics.errorCount / metrics.totalEvents : 0,
-        searchesPerMinute: metrics.totalEvents || 0
-      }
-    }
+    // if (cached) {
+    //   const metrics = JSON.parse(cached)
+    //   return {
+    //     activeUsers: metrics.activeUsers?.length || 0,
+    //     currentSearches: metrics.currentSearches || 0,
+    //     responseTime: metrics.responseTimeCount > 0 ? metrics.totalResponseTime / metrics.responseTimeCount : 0,
+    //     errorRate: metrics.totalEvents > 0 ? metrics.errorCount / metrics.totalEvents : 0,
+    //     searchesPerMinute: metrics.totalEvents || 0
+    //   }
+    // }
 
     return {
       activeUsers: 0,
