@@ -437,7 +437,7 @@ export class Customer360Service {
     // 獲取互動記錄
     const interactions = await this.prisma.interaction.findMany({
       where: whereClause,
-      orderBy: { interaction_date: 'desc' },
+      orderBy: { created_at: 'desc' },
       take: 50 // 限制數量以避免過量資料
     });
 
@@ -460,11 +460,11 @@ export class Customer360Service {
     const interactionList: InteractionInfo[] = [
       ...interactions.map(interaction => ({
         id: interaction.id,
-        type: interaction.interaction_type,
-        date: interaction.interaction_date,
-        title: `${interaction.interaction_type} 互動`,
-        description: interaction.notes || undefined,
-        contactPerson: interaction.contact_person || undefined
+        type: interaction.type,
+        date: interaction.created_at,
+        title: `${interaction.type} 互動`,
+        description: interaction.description || undefined,
+        contactPerson: undefined // contact_person欄位不存在於Interaction模型
       })),
       ...callRecords.map(call => ({
         id: call.id,
@@ -511,8 +511,8 @@ export class Customer360Service {
     return documents.map(doc => ({
       id: doc.id,
       title: doc.title,
-      type: doc.type,
-      status: doc.status || undefined,
+      type: doc.category, // Document模型使用category欄位
+      status: undefined, // Document模型沒有status欄位
       createdAt: doc.created_at,
       lastModified: doc.updated_at,
       size: doc.file_size || undefined,
