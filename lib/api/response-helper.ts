@@ -127,7 +127,7 @@ export function createApiErrorResponse(
       type: error.type || 'APPLICATION_ERROR',
       message: error.message,
       statusCode: error.statusCode || defaultStatus,
-      details: error.details,
+      details: error.context, // AppError使用context而非details
       timestamp: new Date().toISOString()
     }
   } else {
@@ -192,12 +192,10 @@ export function createValidationErrorResponse(
   details?: any,
   metadata: Partial<ApiMetadata> = {}
 ): NextResponse {
-  const error = new AppError(
-    message,
-    'VALIDATION_ERROR',
-    400,
-    details
-  )
+  const error = AppError.badRequest(message, {
+    timestamp: new Date(),
+    additional: details ? { details } : undefined
+  });
 
   return createApiErrorResponse(error, metadata)
 }
@@ -215,11 +213,9 @@ export function createAuthErrorResponse(
   message: string = '認證失敗',
   metadata: Partial<ApiMetadata> = {}
 ): NextResponse {
-  const error = new AppError(
-    message,
-    'AUTHENTICATION_ERROR',
-    401
-  )
+  const error = AppError.unauthorized(message, {
+    timestamp: new Date()
+  });
 
   return createApiErrorResponse(error, metadata)
 }
@@ -237,11 +233,9 @@ export function createForbiddenErrorResponse(
   message: string = '權限不足',
   metadata: Partial<ApiMetadata> = {}
 ): NextResponse {
-  const error = new AppError(
-    message,
-    'AUTHORIZATION_ERROR',
-    403
-  )
+  const error = AppError.forbidden(message, {
+    timestamp: new Date()
+  });
 
   return createApiErrorResponse(error, metadata)
 }
@@ -259,11 +253,9 @@ export function createNotFoundErrorResponse(
   resource: string = '資源',
   metadata: Partial<ApiMetadata> = {}
 ): NextResponse {
-  const error = new AppError(
-    `${resource}未找到`,
-    'RESOURCE_NOT_FOUND',
-    404
-  )
+  const error = AppError.notFound(`${resource}未找到`, {
+    timestamp: new Date()
+  });
 
   return createApiErrorResponse(error, metadata)
 }
@@ -281,11 +273,9 @@ export function createRateLimitErrorResponse(
   message: string = '請求過於頻繁，請稍後再試',
   metadata: Partial<ApiMetadata> = {}
 ): NextResponse {
-  const error = new AppError(
-    message,
-    'RATE_LIMIT_EXCEEDED',
-    429
-  )
+  const error = AppError.rateLimited(message, {
+    timestamp: new Date()
+  });
 
   return createApiErrorResponse(error, metadata)
 }
@@ -303,11 +293,9 @@ export function createInternalErrorResponse(
   message: string = '內部服務器錯誤',
   metadata: Partial<ApiMetadata> = {}
 ): NextResponse {
-  const error = new AppError(
-    message,
-    'INTERNAL_SERVER_ERROR',
-    500
-  )
+  const error = AppError.internal(message, {
+    timestamp: new Date()
+  });
 
   return createApiErrorResponse(error, metadata)
 }
