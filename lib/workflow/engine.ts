@@ -141,8 +141,12 @@ export class WorkflowEngine {
       // 1. 獲取提案和工作流程信息
       const proposal = await this.prisma.proposal.findUnique({
         where: { id: proposalId },
-        include: { workflow: true },
       });
+
+      // 獲取關聯的工作流程(ProposalWorkflow → Proposal 的反向關係)
+      const workflow = proposal ? await this.prisma.proposalWorkflow.findUnique({
+        where: { proposal_id: proposalId }
+      }) : null;
 
       if (!proposal) {
         return {
@@ -183,10 +187,10 @@ export class WorkflowEngine {
         });
 
         // 3.2 更新工作流程狀態
-        let workflow = proposal.workflow;
-        if (!workflow) {
+        let workflowRecord = workflow;
+        if (!workflowRecord) {
           // 如果工作流程不存在，創建一個
-          workflow = await tx.proposalWorkflow.create({
+          workflowRecord = await tx.proposalWorkflow.create({
             data: {
               proposal_id: proposalId,
               current_state: targetState,
@@ -196,7 +200,7 @@ export class WorkflowEngine {
         } else {
           // 更新現有工作流程
           await tx.proposalWorkflow.update({
-            where: { id: workflow.id },
+            where: { id: workflowRecord.id },
             data: {
               previous_state: currentState,
               current_state: targetState,
@@ -207,7 +211,7 @@ export class WorkflowEngine {
         // 3.3 記錄狀態變更歷史
         const history = await tx.workflowStateHistory.create({
           data: {
-            workflow_id: workflow.id,
+            workflow_id: workflowRecord.id,
             from_state: currentState,
             to_state: targetState,
             transition_type: this.getTransitionType(currentState, targetState),
@@ -300,7 +304,6 @@ export class WorkflowEngine {
   ): Promise<AvailableTransition[]> {
     const proposal = await this.prisma.proposal.findUnique({
       where: { id: proposalId },
-      include: { workflow: true },
     });
 
     if (!proposal) {
@@ -587,7 +590,7 @@ export class WorkflowEngine {
     // 獲取提案信息
     const proposal = await this.prisma.proposal.findUnique({
       where: { id: proposalId },
-      include: { created_by_user: true }
+      include: { user: true }
     });
 
     if (!proposal) return;
@@ -611,12 +614,12 @@ export class WorkflowEngine {
     const message = `提案狀態從「${stateLabels[fromState]}」變更為「${stateLabels[toState]}」`;
 
     // 發送通知給提案創建者
-    if (proposal.created_by !== userId) {
+    if (proposal.user_id !== userId) {
       await notificationEngine.createNotification({
-        recipientId: proposal.created_by,
+        recipientId: proposal.user_id,
         type: NotificationType.WORKFLOW_STATE_CHANGED,
         category: NotificationCategory.WORKFLOW,
-        priority: [ProposalStatus.APPROVED, ProposalStatus.REJECTED].includes(toState)
+        priority: (toState === ProposalStatus.APPROVED || toState === ProposalStatus.REJECTED)
           ? NotificationPriority.HIGH
           : NotificationPriority.NORMAL,
         title,
@@ -646,29 +649,31 @@ export class WorkflowEngine {
 
     const notificationEngine = new NotificationEngine(this.prisma);
 
-    // 獲取提案和審批流程信息
+    // 獲取提案和工作流程信息
     const proposal = await this.prisma.proposal.findUnique({
-      where: { id: proposalId },
-      include: {
-        workflow: {
-          include: {
-            approval_flow: {
-              include: {
-                approvals: {
-                  where: { status: 'PENDING' },
-                  include: { approver: true }
-                }
-              }
-            }
-          }
-        }
-      }
+      where: { id: proposalId }
     });
 
-    if (!proposal?.workflow?.approval_flow) return;
+    if (!proposal) return;
+
+    // 獲取工作流程
+    const workflow = await this.prisma.proposalWorkflow.findUnique({
+      where: { proposal_id: proposalId }
+    });
+
+    if (!workflow) return;
+
+    // 獲取待審批任務(使用ApprovalTask模型)
+    const pendingApprovalTasks = await this.prisma.approvalTask.findMany({
+      where: {
+        proposal_id: proposalId,
+        status: 'PENDING'
+      },
+      include: { approver: true }
+    });
 
     // 通知所有待審批者
-    for (const approval of proposal.workflow.approval_flow.approvals) {
+    for (const approval of pendingApprovalTasks) {
       if (approval.approver_id !== userId) {
         await notificationEngine.createNotification({
           recipientId: approval.approver_id,
@@ -679,7 +684,7 @@ export class WorkflowEngine {
           message: `您有一個新的提案審批請求，請及時處理`,
           data: {
             proposalId,
-            approvalId: approval.id,
+            approvalTaskId: approval.id,
             requestedBy: userId
           },
           channels: [NotificationChannel.IN_APP, NotificationChannel.EMAIL],
@@ -710,10 +715,10 @@ export class WorkflowEngine {
     // 獲取提案信息
     const proposal = await this.prisma.proposal.findUnique({
       where: { id: proposalId },
-      include: { created_by_user: true }
+      include: { user: true }
     });
 
-    if (!proposal || proposal.created_by === userId) return;
+    if (!proposal || proposal.user_id === userId) return;
 
     // 根據動作類型構建通知
     const notificationConfig: Record<typeof action, {
@@ -745,7 +750,7 @@ export class WorkflowEngine {
     const config = notificationConfig[action];
 
     await notificationEngine.createNotification({
-      recipientId: proposal.created_by,
+      recipientId: proposal.user_id,
       type: config.type,
       category: NotificationCategory.APPROVAL,
       priority: config.priority,
