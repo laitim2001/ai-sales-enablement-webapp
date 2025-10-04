@@ -983,14 +983,16 @@ export class CrmSearchAdapter {
     const contacts = await this.prisma.customerContact.findMany({
       where: {
         OR: [
-          { name: { contains: query, mode: 'insensitive' } },
+          { full_name: { contains: query, mode: 'insensitive' } },
+          { first_name: { contains: query, mode: 'insensitive' } },
+          { last_name: { contains: query, mode: 'insensitive' } },
           { email: { contains: query, mode: 'insensitive' } },
           { job_title: { contains: query, mode: 'insensitive' } }
         ]
       },
       select: {
         id: true,
-        name: true,
+        full_name: true,
         job_title: true,
         customer: {
           select: {
@@ -1003,10 +1005,10 @@ export class CrmSearchAdapter {
 
     return contacts.map(contact => ({
       type: 'contact',
-      text: contact.name,
+      text: contact.full_name,
       description: `${contact.job_title} @ ${contact.customer.company_name}`,
       entity_id: contact.id.toString(),
-      relevance_score: this.calculateTextSimilarity(query, contact.name)
+      relevance_score: this.calculateTextSimilarity(query, contact.full_name)
     }));
   }
 
@@ -1017,13 +1019,13 @@ export class CrmSearchAdapter {
     const opportunities = await this.prisma.salesOpportunity.findMany({
       where: {
         OR: [
-          { title: { contains: query, mode: 'insensitive' } },
+          { name: { contains: query, mode: 'insensitive' } },
           { description: { contains: query, mode: 'insensitive' } }
         ]
       },
       select: {
         id: true,
-        title: true,
+        name: true,
         estimated_value: true,
         status: true,
         customer: {
@@ -1037,10 +1039,10 @@ export class CrmSearchAdapter {
 
     return opportunities.map(opportunity => ({
       type: 'opportunity',
-      text: opportunity.title,
+      text: opportunity.name,
       description: `$${opportunity.estimated_value?.toLocaleString()} • ${opportunity.customer.company_name}`,
       entity_id: opportunity.id.toString(),
-      relevance_score: this.calculateTextSimilarity(query, opportunity.title)
+      relevance_score: this.calculateTextSimilarity(query, opportunity.name)
     }));
   }
 
