@@ -177,7 +177,7 @@ export class EnhancedEmbeddingService {
       // 7. 緩存結果
       if (opts.useCache) {
         await this.cacheEmbedding(text, result, {
-          quality_score: result.quality,
+          quality_score: (result as any).quality,
           cost,
           ttl: opts.cacheMaxAge
         })
@@ -201,7 +201,7 @@ export class EnhancedEmbeddingService {
     } catch (error) {
       this.updateStats({ error: true })
       console.error('Enhanced embedding generation failed:', error)
-      throw new AppError('Enhanced embedding generation failed', 500, { originalError: error })
+      throw AppError.internal('Enhanced embedding generation failed', { timestamp: new Date(), additional: { originalError: error } })
     }
   }
 
@@ -225,7 +225,7 @@ export class EnhancedEmbeddingService {
     try {
       // 1. 輸入驗證
       if (!texts || texts.length === 0) {
-        throw new AppError('No texts provided for batch embedding', 400)
+        throw AppError.badRequest('No texts provided for batch embedding')
       }
 
       // 2. 初始化任務追蹤
@@ -240,19 +240,19 @@ export class EnhancedEmbeddingService {
       }
 
       if (task.texts.length === 0) {
-        throw new AppError('No valid texts provided for batch embedding', 400)
+        throw AppError.badRequest('No valid texts provided for batch embedding')
       }
 
       // 3. 智能批量處理
       if (opts.batchOptimization) {
-        return await this.optimizedBatchProcessing(task, opts)
+        return await this.optimizedBatchProcessing(task, opts as Required<EnhancedEmbeddingOptions>)
       } else {
-        return await this.standardBatchProcessing(task, opts)
+        return await this.standardBatchProcessing(task, opts as Required<EnhancedEmbeddingOptions>)
       }
 
     } catch (error) {
       console.error('Enhanced batch embedding failed:', error)
-      throw new AppError('Enhanced batch embedding failed', 500, { originalError: error })
+      throw AppError.internal('Enhanced batch embedding failed', { timestamp: new Date(), additional: { originalError: error } })
     }
   }
 
@@ -412,7 +412,7 @@ export class EnhancedEmbeddingService {
               text: result.text,
               vector: result.embedding,
               metadata: {
-                quality_score: result.quality,
+                quality_score: (result as any).quality,
                 cost: this.calculateCost(result.tokenCount),
               },
               ttl: options.cacheMaxAge,
@@ -712,15 +712,15 @@ export class EnhancedEmbeddingService {
    */
   private validateInput(text: string): void {
     if (!text || typeof text !== 'string') {
-      throw new AppError('Text must be a non-empty string', 400)
+      throw AppError.badRequest('Text must be a non-empty string')
     }
 
     if (text.trim().length === 0) {
-      throw new AppError('Text cannot be empty or only whitespace', 400)
+      throw AppError.badRequest('Text cannot be empty or only whitespace')
     }
 
     if (text.length > 8192) {
-      throw new AppError('Text exceeds maximum length of 8192 characters', 400)
+      throw AppError.badRequest('Text exceeds maximum length of 8192 characters')
     }
   }
 
