@@ -60,7 +60,7 @@ export interface AnalyticsOverview {
 export interface DocumentStats {
   documentId: number;
   title: string;
-  category: string;
+  category: string | null;
   mimeType: string | null;
   viewCount: number;
   editCount: number;
@@ -121,7 +121,7 @@ export class KnowledgeAnalyticsService {
    */
   private getDateRange(timeRange: TimeRange, customStart?: Date, customEnd?: Date): { startDate: Date; endDate: Date } {
     const now = new Date();
-    const endDate = new Date(now);
+    let endDate = new Date(now);
     let startDate: Date;
 
     switch (timeRange) {
@@ -288,11 +288,12 @@ export class KnowledgeAnalyticsService {
     const downloadStats = await this.getDocumentDownloadCounts(documentIds, startDate, endDate);
 
     // 組合結果
-    return viewStats.map(stat => {
+    const results: DocumentStats[] = [];
+    for (const stat of viewStats) {
       const doc = documents.find(d => d.id === stat.entity_id);
-      if (!doc) return null;
+      if (!doc) continue;
 
-      return {
+      results.push({
         documentId: doc.id,
         title: doc.title,
         category: doc.category,
@@ -303,8 +304,9 @@ export class KnowledgeAnalyticsService {
         fileSize: doc.file_size,
         createdAt: doc.created_at,
         updatedAt: doc.updated_at
-      };
-    }).filter((stat): stat is DocumentStats => stat !== null);
+      });
+    }
+    return results;
   }
 
   /**
@@ -343,11 +345,12 @@ export class KnowledgeAnalyticsService {
     const viewStats = await this.getDocumentViewCounts(documentIds, startDate, endDate);
     const downloadStats = await this.getDocumentDownloadCounts(documentIds, startDate, endDate);
 
-    return editStats.map(stat => {
+    const results: DocumentStats[] = [];
+    for (const stat of editStats) {
       const doc = documents.find(d => d.id === stat.entity_id);
-      if (!doc) return null;
+      if (!doc) continue;
 
-      return {
+      results.push({
         documentId: doc.id,
         title: doc.title,
         category: doc.category,
@@ -358,8 +361,9 @@ export class KnowledgeAnalyticsService {
         fileSize: doc.file_size,
         createdAt: doc.created_at,
         updatedAt: doc.updated_at
-      };
-    }).filter((stat): stat is DocumentStats => stat !== null);
+      });
+    }
+    return results;
   }
 
   /**
@@ -447,32 +451,40 @@ export class KnowledgeAnalyticsService {
    * 獲取資料夾使用情況
    */
   async getFolderUsage(limit: number = 10): Promise<FolderUsage[]> {
-    // 獲取所有資料夾及其文檔統計
+    // 獲取所有資料夾
     const folders = await prisma.knowledgeFolder.findMany({
-      include: {
-        _count: {
-          select: {
-            documents: true
-          }
-        },
-        documents: {
-          select: {
-            file_size: true,
-            updated_at: true
-          },
-          orderBy: {
-            updated_at: 'desc'
-          },
-          take: 1
-        }
-      },
-      orderBy: {
-        documents: {
-          _count: 'desc'
-        }
-      },
       take: limit
     });
+
+    // 為每個資料夾獲取文檔統計
+    const folderStatsPromises = folders.map(async folder => {
+      const documents = await prisma.knowledgeBase.findMany({
+        where: {
+          folder_id: folder.id,
+          status: 'ACTIVE'
+        },
+        select: {
+          file_size: true,
+          updated_at: true
+        }
+      });
+
+      const documentCount = documents.length;
+      const totalSize = documents.reduce((sum: number, doc) => sum + (doc.file_size || 0), 0);
+      const lastUpdated = documents.length > 0
+        ? new Date(Math.max(...documents.map(d => d.updated_at.getTime())))
+        : folder.updated_at;
+
+      return {
+        folderId: folder.id as number | null,
+        folderName: folder.name,
+        documentCount,
+        totalSize,
+        lastUpdated
+      } as FolderUsage;
+    });
+
+    const folderUsage: FolderUsage[] = await Promise.all(folderStatsPromises);
 
     // 包含根目錄（無資料夾）的文檔
     const rootDocuments = await prisma.knowledgeBase.findMany({
@@ -487,18 +499,10 @@ export class KnowledgeAnalyticsService {
     });
 
     const rootCount = rootDocuments.length;
-    const rootSize = rootDocuments.reduce((sum, doc) => sum + (doc.file_size || 0), 0);
+    const rootSize = rootDocuments.reduce((sum: number, doc) => sum + (doc.file_size || 0), 0);
     const rootLastUpdated = rootDocuments.length > 0
       ? new Date(Math.max(...rootDocuments.map(d => d.updated_at.getTime())))
       : new Date();
-
-    const folderUsage: FolderUsage[] = folders.map(folder => ({
-      folderId: folder.id,
-      folderName: folder.name,
-      documentCount: folder._count.documents,
-      totalSize: folder.documents.reduce((sum, doc) => sum + (doc.file_size || 0), 0),
-      lastUpdated: folder.documents[0]?.updated_at || folder.updated_at
-    }));
 
     // 添加根目錄統計
     if (rootCount > 0) {
@@ -573,7 +577,8 @@ export class KnowledgeAnalyticsService {
       },
       select: {
         id: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         last_login_at: true
       }
     });
@@ -588,7 +593,7 @@ export class KnowledgeAnalyticsService {
 
       activityMap.set(stat.created_by, {
         userId: stat.created_by,
-        userName: user.name || 'Unknown',
+        userName: `${user.first_name} ${user.last_name}`,
         documentsCreated: stat._count.id,
         documentsEdited: 0,
         totalViews: 0,
@@ -607,7 +612,7 @@ export class KnowledgeAnalyticsService {
 
         activityMap.set(stat.user_id, {
           userId: stat.user_id,
-          userName: user.name || 'Unknown',
+          userName: `${user.first_name} ${user.last_name}`,
           documentsCreated: 0,
           documentsEdited: stat._count.id,
           totalViews: 0,
