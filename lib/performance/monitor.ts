@@ -377,7 +377,7 @@ export class PerformanceMonitor {
         WHERE timestamp >= NOW() - INTERVAL '5 minutes'
       `
 
-      return result[0] || {}
+      return (result as any[])[0] || {}
     } catch (error) {
       console.error('Failed to get real-time metrics:', error)
       return {}
@@ -552,8 +552,8 @@ export class CoreWebVitalsTracker {
    */
   static trackMetric(name: string, value: number, id: string) {
     // 發送到Google Analytics - Send to Google Analytics
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', name, {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', name, {
         event_category: 'Web Vitals',
         value: Math.round(name === 'CLS' ? value * 1000 : value),
         event_label: id,
