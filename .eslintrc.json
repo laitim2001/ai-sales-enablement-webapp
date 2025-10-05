@@ -34,8 +34,8 @@
 
   // 繼承的配置集 - 提供基礎的檢查規則
   "extends": [
-    "next/core-web-vitals",          // Next.js官方規則集，包含React和Web Vitals最佳實踐
-    "@typescript-eslint/recommended" // TypeScript官方推薦規則，檢查TS特有問題
+    "next/core-web-vitals",                    // Next.js官方規則集，包含React和Web Vitals最佳實踐
+    "plugin:@typescript-eslint/recommended"    // TypeScript官方推薦規則，檢查TS特有問題
   ],
 
   // TypeScript解析器 - 讓ESLint能夠理解TypeScript語法
