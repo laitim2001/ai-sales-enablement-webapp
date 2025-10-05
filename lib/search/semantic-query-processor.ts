@@ -876,8 +876,10 @@ ${contextQueries}
    */
   private async getCachedAnalysis(cacheKey: string): Promise<SemanticAnalysis | null> {
     try {
-      const cached = await this.cache.get(cacheKey)
-      return cached ? JSON.parse(cached) : null
+      // TODO: VectorCache不支持通用key-value操作，需要使用專用語義分析緩存
+      // const cached = await this.cache.get(cacheKey)
+      // return cached ? JSON.parse(cached) : null
+      return null
     } catch (error) {
       console.warn('⚠️ 獲取語義分析緩存失敗:', error)
       return null
@@ -889,7 +891,9 @@ ${contextQueries}
    */
   private async cacheAnalysis(cacheKey: string, analysis: SemanticAnalysis): Promise<void> {
     try {
-      await this.cache.set(cacheKey, JSON.stringify(analysis), 3600) // 1小時緩存
+      // TODO: VectorCache不支持通用key-value操作，需要使用專用語義分析緩存
+      // await this.cache.set(cacheKey, JSON.stringify(analysis), 3600) // 1小時緩存
+      console.log('📦 暫時跳過緩存語義分析結果（待實現專用緩存）')
     } catch (error) {
       console.warn('⚠️ 緩存語義分析結果失敗:', error)
     }
