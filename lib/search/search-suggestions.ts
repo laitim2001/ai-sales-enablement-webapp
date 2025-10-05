@@ -255,7 +255,7 @@ export class SearchSuggestionService {
           cacheHit,
           personalized: this.config.enablePersonalization && !!request.userId,
           language: processedQuery.language,
-          categories: [...new Set(suggestions.map(s => s.metadata?.category).filter(Boolean))],
+          categories: [...new Set(suggestions.map(s => s.metadata?.category).filter((c): c is string => Boolean(c)))],
         }
       }
 
