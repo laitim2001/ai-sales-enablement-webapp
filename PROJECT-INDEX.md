@@ -87,6 +87,7 @@
 | **Dynamics 365設置指南** | `docs/dynamics365-setup-guide.md` | Dynamics 365完整配置指南 | 🟡 高    |
 | **新開發者設置指南** | `docs/NEW-DEVELOPER-SETUP-GUIDE.md` | 新開發者環境自動化設置完整指南 | 🔴 極高  |
 | **Sprint 3安全設置指南** | `docs/sprint3-security-setup-guide.md` | Sprint 3安全加固完整設置和配置指南（加密/Key Vault/HTTPS/RBAC/審計） | 🔴 極高  |
+| **Sprint 7 UAT測試計劃** | `docs/sprint7-uat-test-plan.md` | Sprint 7用戶驗收測試完整計劃（提醒/準備包/AI分析/推薦/日曆/助手） | 🔴 極高  |
 | **監控遷移策略** | `docs/monitoring-migration-strategy.md` | OpenTelemetry零成本遷移架構設計（Prometheus→Azure） | 🔴 極高  |
 | **監控使用範例** | `docs/monitoring-usage-examples.md` | 完整監控集成範例（API/AI/DB/緩存追蹤） | 🔴 極高  |
 | **監控運維手冊** | `docs/monitoring-operations-manual.md` | 監控系統運維完整指南（日常檢查/告警處理/故障排查） | 🔴 極高  |
@@ -829,6 +830,14 @@ const users = await prisma.user.findMany();
 | **會議智能分析**       | `app/api/meeting-intelligence/analyze/route.ts` | GPT-4會議信息分析（POST），5類洞察生成，30分鐘緩存 | 🔴 極高  |
 | **智能推薦**           | `app/api/meeting-intelligence/recommendations/route.ts` | 基於AI分析的推薦生成（POST），上下文感知  | 🔴 極高  |
 
+### 🤖 app/api/assistant/ - 智能助手API (Sprint 7 Week 14完成) ⭐️
+
+**用途**: AI助手對話API端點（Azure OpenAI GPT-4集成）
+
+| 功能模組               | 文件路徑                                      | 用途說明                                     | 重要程度 |
+| ---------------------- | --------------------------------------------- | -------------------------------------------- | -------- |
+| **對話處理**           | `app/api/assistant/chat/route.ts`           | GPT-4對話處理（POST），上下文管理，快捷建議（GET） | 🔴 極高  |
+
 ### 📅 app/api/calendar/ - Microsoft Graph日曆API (Sprint 7 Phase 3完成) ⭐️
 
 **用途**: Microsoft Graph日曆整合REST API端點（OAuth 2.0認證 + Delta Query同步）
@@ -967,6 +976,7 @@ const users = await prisma.user.findMany();
 | **智能搜索**   | `app/dashboard/knowledge/search/page.tsx`    | AI智能搜索功能頁面       | 🟡 高    |
 | **進階搜索**   | `app/dashboard/knowledge/advanced-search/page.tsx` | 多條件組合搜索頁面 | 🟡 高    |
 | **資料夾管理** | `app/dashboard/knowledge/folders/page.tsx`   | 資料夾樹狀管理頁面       | 🟡 高    |
+| **AI智能助手** | `app/dashboard/assistant/page.tsx`           | AI對話助手頁面（Sprint 7 Week 14） | 🔴 極高  |
 | **分析統計**   | `app/dashboard/knowledge/analytics/page.tsx` | 知識庫分析儀表板頁面     | 🟡 高    |
 | **文檔詳情**   | `app/dashboard/knowledge/[id]/page.tsx`      | 文檔詳情查看頁面         | 🟡 高    |
 | **文檔編輯**   | `app/dashboard/knowledge/[id]/edit/page.tsx` | 文檔內容編輯頁面         | 🟢 中    |
@@ -1295,6 +1305,29 @@ const users = await prisma.user.findMany();
 - **總代碼行數**: ~1,515 lines
 - **完成狀態**: Sprint 7 Phase 3 完成 (2025-10-05)
 - **技術棧**: Next.js 14, React, TypeScript, Shadcn/ui, Lucide React, React DnD
+
+#### 🤖 智能助手組件 (components/assistant/) - Sprint 7 Week 14 完成
+
+**用途**: AI助手對話介面UI組件
+
+**🎯 核心特點**:
+- **完整對話介面**: 訊息展示、輸入、歷史管理
+- **智能交互**: Azure OpenAI GPT-4集成、上下文管理
+- **快捷操作**: 預設問題、對話導出、清空功能
+- **響應式設計**: 桌面端和移動端適配
+
+| 組件名稱             | 文件路徑                                   | 用途說明                         | 代碼行數 | 重要程度 |
+| -------------------- | ------------------------------------------ | -------------------------------- | -------- | -------- |
+| **聊天訊息組件**     | `components/assistant/ChatMessage.tsx`   | 單條訊息展示,角色標識,時間戳,載入動畫 | ~150行   | 🔴 極高  |
+| **聊天輸入組件**     | `components/assistant/ChatInput.tsx`     | 文本輸入,Enter發送,字符計數,載入狀態 | ~160行   | 🔴 極高  |
+| **聊天視窗組件**     | `components/assistant/ChatWindow.tsx`    | 完整對話介面,快捷操作,導出清空功能 | ~240行   | 🔴 極高  |
+| **統一導出**         | `components/assistant/index.ts`          | 所有助手組件的統一導出入口      | ~15行    | 🟢 中    |
+
+**📊 統計**:
+- **組件數**: 3 個主組件
+- **總代碼行數**: ~565 lines
+- **完成狀態**: Sprint 7 Week 14 完成 (2025-10-05)
+- **技術棧**: Next.js 14, React, TypeScript, Shadcn/ui, Azure OpenAI
 
 #### 🎯 推薦系統組件 (components/recommendation/) - Sprint 7 Phase 3 完成
 
