@@ -40,7 +40,7 @@
  * Week 6 開發階段 - Task 6.2: 搜索結果增強和上下文感知
  */
 
-import { openaiClient } from '@/lib/ai/openai'
+import { getOpenAIClient } from '@/lib/ai/openai'
 import { generateEmbedding } from '@/lib/ai/embeddings'
 import { SearchResult, VectorSearchResult } from './vector-search'
 import { SemanticAnalysis, ConversationContext } from './semantic-query-processor'
@@ -373,6 +373,7 @@ export class ContextualResultEnhancer {
     try {
       const prompt = this.buildSummaryPrompt(result, semanticAnalysis, context)
 
+      const openaiClient = getOpenAIClient()
       const response = await openaiClient.chat.completions.create({
         model: 'gpt-4',
         messages: [
@@ -1163,7 +1164,9 @@ export class ContextualResultEnhancer {
   }
 
   private inferExpertiseLevel(context?: ConversationContext): 'beginner' | 'intermediate' | 'advanced' {
-    return context?.userProfile?.experienceLevel || 'intermediate'
+    const level = context?.userProfile?.experienceLevel || 'intermediate'
+    // Map "expert" to "advanced" for type compatibility
+    return level === 'expert' ? 'advanced' : level as 'beginner' | 'intermediate' | 'advanced'
   }
 
   private recommendFocusAreas(enhancedResults: EnhancedSearchResult[], semanticAnalysis: SemanticAnalysis): string[] {
@@ -1266,8 +1269,10 @@ export class ContextualResultEnhancer {
 
   private async getCachedEnhancement(cacheKey: string): Promise<EnhancedSearchResult | null> {
     try {
-      const cached = await this.cache.get(cacheKey)
-      return cached ? JSON.parse(cached) : null
+      // TODO: VectorCache不支持通用key-value操作，需要使用專用增強結果緩存
+      // const cached = await this.cache.get(cacheKey)
+      // return cached ? JSON.parse(cached) : null
+      return null
     } catch (error) {
       return null
     }
@@ -1275,7 +1280,9 @@ export class ContextualResultEnhancer {
 
   private async cacheEnhancement(cacheKey: string, result: EnhancedSearchResult): Promise<void> {
     try {
-      await this.cache.set(cacheKey, JSON.stringify(result), 1800) // 30分鐘緩存
+      // TODO: VectorCache不支持通用key-value操作，需要使用專用增強結果緩存
+      // await this.cache.set(cacheKey, JSON.stringify(result), 1800) // 30分鐘緩存
+      console.log('📦 暫時跳過緩存增強結果（待實現專用緩存）')
     } catch (error) {
       console.warn('⚠️ 緩存增強結果失敗:', error)
     }
