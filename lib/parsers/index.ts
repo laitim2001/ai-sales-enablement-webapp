@@ -24,12 +24,12 @@
  */
 
 // 導出所有解析器
-export * from './pdf-parser'
+// export * from './pdf-parser' // Temporarily disabled due to pdf-parse build issue
 export * from './word-parser'
 export * from './excel-parser'
 export * from './image-ocr-parser'
 
-import { PDFParser } from './pdf-parser'
+// import { PDFParser } from './pdf-parser' // Temporarily disabled
 import { WordParser } from './word-parser'
 import { ExcelParser } from './excel-parser'
 import { ImageOCRParser } from './image-ocr-parser'
@@ -125,13 +125,14 @@ export function detectFileType(
   filename?: string
 ): FileTypeResult {
   // 優先通過文件頭檢測
-  if (PDFParser.isPDF(buffer)) {
-    return {
-      type: FileType.PDF,
-      mimeType: 'application/pdf',
-      extension: 'pdf',
-    }
-  }
+  // Temporarily disabled due to pdf-parse build issue
+  // if (PDFParser.isPDF(buffer)) {
+  //   return {
+  //     type: FileType.PDF,
+  //     mimeType: 'application/pdf',
+  //     extension: 'pdf',
+  //   }
+  // }
 
   if (WordParser.isWord(buffer)) {
     // 區分 .doc 和 .docx
@@ -208,14 +209,16 @@ export async function parseFile(
   // 根據文件類型選擇解析器
   switch (detectedType) {
     case FileType.PDF: {
-      const result = await new PDFParser().parseFromBuffer(buffer, filename)
-      return {
-        text: result.text,
-        fileType: FileType.PDF,
-        fileSize: result.fileSize,
-        parseTime: result.parseTime,
-        metadata: result.metadata,
-      }
+      // Temporarily disabled due to pdf-parse build issue
+      throw new Error('PDF parsing temporarily unavailable')
+      // const result = await new PDFParser().parseFromBuffer(buffer, filename)
+      // return {
+      //   text: result.text,
+      //   fileType: FileType.PDF,
+      //   fileSize: result.fileSize,
+      //   parseTime: result.parseTime,
+      //   metadata: result.metadata,
+      // }
     }
 
     case FileType.WORD: {

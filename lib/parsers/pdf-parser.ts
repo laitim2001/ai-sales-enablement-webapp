@@ -28,7 +28,7 @@
  * • lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
  */
 
-import { pdf } from 'pdf-parse'
+import pdf from 'pdf-parse'
 
 /**
  * PDF 解析結果介面

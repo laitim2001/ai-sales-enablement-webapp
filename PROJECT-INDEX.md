@@ -788,7 +788,7 @@ const users = await prisma.user.findMany();
 | 功能模組               | 文件路徑                                      | 用途說明                                     | 重要程度 |
 | ---------------------- | --------------------------------------------- | -------------------------------------------- | -------- |
 | **鎖定管理**           | `app/api/collaboration/locks/route.ts`       | 創建編輯鎖定（POST）                         | 🔴 極高  |
-| **鎖定操作**           | `app/api/collaboration/locks/[lockId]/route.ts` | 釋放/刷新鎖定（DELETE/PATCH）                | 🔴 極高  |
+| **鎖定操作**           | `app/api/collaboration/locks/lock/[lockId]/route.ts` | 釋放/刷新鎖定（DELETE/PATCH）                | 🔴 極高  |
 | **鎖定狀態查詢**       | `app/api/collaboration/locks/[resourceType]/[resourceId]/status/route.ts` | 查詢資源鎖定狀態（GET）                      | 🟡 高    |
 
 ### ⏰ app/api/reminders/ - 智能提醒API (Sprint 7 Phase 1)
