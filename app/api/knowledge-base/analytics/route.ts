@@ -45,7 +45,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { verifyAccessToken } from '@/lib/auth/token-service';
 import { knowledgeAnalyticsService, TimeRange } from '@/lib/knowledge/analytics-service';
 
 /**
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
     }
 
     const token = authHeader.substring(7);
-    const payload = await verifyToken(token);
+    const payload = await verifyAccessToken(token);
 
     if (!payload) {
       return NextResponse.json(
