@@ -119,14 +119,12 @@ export class PDFParser {
 
     try {
       // 解析 PDF
-      const data = await pdf(buffer, {
-        max: this.options.maxPages, // 最大頁數限制
-      })
+      const data = await pdf(buffer)
 
       // 驗證頁數
-      if (data.numpages > this.options.maxPages) {
+      if (data.total > this.options.maxPages) {
         throw new Error(
-          `PDF頁數過多: ${data.numpages}頁 ` +
+          `PDF頁數過多: ${data.total}頁 ` +
           `(最大允許: ${this.options.maxPages}頁)`
         )
       }
@@ -134,17 +132,18 @@ export class PDFParser {
       // 提取元數據
       const metadata: PDFParseResult['metadata'] = {}
       if (this.options.extractMetadata && data.info) {
-        metadata.title = data.info.Title || undefined
-        metadata.author = data.info.Author || undefined
-        metadata.subject = data.info.Subject || undefined
-        metadata.pdfVersion = data.info.PDFFormatVersion || undefined
+        const info = data.info as any
+        metadata.title = info.Title || undefined
+        metadata.author = info.Author || undefined
+        metadata.subject = info.Subject || undefined
+        metadata.pdfVersion = info.PDFFormatVersion || undefined
 
         // 解析日期
-        if (data.info.CreationDate) {
-          metadata.creationDate = this.parsePDFDate(data.info.CreationDate)
+        if (info.CreationDate) {
+          metadata.creationDate = this.parsePDFDate(info.CreationDate)
         }
-        if (data.info.ModDate) {
-          metadata.modificationDate = this.parsePDFDate(data.info.ModDate)
+        if (info.ModDate) {
+          metadata.modificationDate = this.parsePDFDate(info.ModDate)
         }
       }
 
@@ -155,7 +154,7 @@ export class PDFParser {
 
       return {
         text: cleanedText,
-        pages: data.numpages,
+        pages: data.total,
         metadata,
         fileSize: buffer.length,
         parseTime,
