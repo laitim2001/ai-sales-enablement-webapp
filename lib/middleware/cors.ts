@@ -479,4 +479,4 @@ export const CorsPresets = {
 /**
  * 類型導出
  */
-export type { CorsOptions }
+// 類型已在文件開頭導出，無需重複export

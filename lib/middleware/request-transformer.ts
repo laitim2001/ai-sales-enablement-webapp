@@ -218,9 +218,9 @@ export class RequestTransformer {
    */
   constructor(options: TransformOptions = {}) {
     this.options = {
-      fieldNaming: options.fieldNaming,
+      fieldNaming: options.fieldNaming || 'snake_case',
       dateFormat: options.dateFormat || 'iso',
-      customDateFormat: options.customDateFormat,
+      customDateFormat: options.customDateFormat || '',
       removeEmpty: options.removeEmpty ?? false,
       trimStrings: options.trimStrings ?? false,
       removeDuplicates: options.removeDuplicates ?? false,
@@ -815,10 +815,8 @@ export function withRequestTransformer(options?: TransformOptions) {
 /**
  * 類型導出
  */
+// 類型已在文件開頭導出，無需重複export
 export type {
   TransformOptions as RequestTransformOptions,
-  BatchRequest,
-  BatchRequestItem,
-  BatchResponseItem,
   TransformerFunction
 }
