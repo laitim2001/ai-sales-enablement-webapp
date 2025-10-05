@@ -27,15 +27,19 @@ describe('EditLockManager', () => {
       (global as any).editLocks = new Map();
     }
 
+    const mockUserFindUnique = jest.fn();
+    const mockKnowledgeBaseFindUnique = jest.fn();
+    const mockProposalFindUnique = jest.fn();
+
     mockPrisma = {
       user: {
-        findUnique: jest.fn(),
+        findUnique: mockUserFindUnique,
       },
       knowledgeBase: {
-        findUnique: jest.fn(),
+        findUnique: mockKnowledgeBaseFindUnique,
       },
       proposal: {
-        findUnique: jest.fn(),
+        findUnique: mockProposalFindUnique,
       },
     } as any;
 

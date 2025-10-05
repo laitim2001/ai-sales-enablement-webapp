@@ -31,9 +31,11 @@ export async function POST(request: NextRequest) {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const decoded = verifyAccessToken(token);
 
-    if (!decoded) {
+    let decoded;
+    try {
+      decoded = await verifyAccessToken(token);
+    } catch (error) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },
         { status: 401 }
@@ -94,9 +96,11 @@ export async function GET(request: NextRequest) {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const decoded = verifyAccessToken(token);
 
-    if (!decoded) {
+    let decoded;
+    try {
+      decoded = await verifyAccessToken(token);
+    } catch (error) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },
         { status: 401 }

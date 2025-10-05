@@ -494,18 +494,21 @@ export class MeetingPrepPackageManager {
           {
             type: PrepItemType.CUSTOMER_INFO,
             title: '客戶資料',
+            order: 1,
             isRequired: true,
             metadata: { estimatedReadTime: 10 },
           },
           {
             type: PrepItemType.PRICING_INFO,
             title: '產品定價',
+            order: 2,
             isRequired: true,
             metadata: { estimatedReadTime: 5 },
           },
           {
             type: PrepItemType.CASE_STUDY,
             title: '成功案例',
+            order: 3,
             isRequired: false,
             metadata: { estimatedReadTime: 10 },
           },
@@ -521,12 +524,14 @@ export class MeetingPrepPackageManager {
           {
             type: PrepItemType.DEMO_SCRIPT,
             title: '演示腳本',
+            order: 1,
             isRequired: true,
             metadata: { estimatedReadTime: 15 },
           },
           {
             type: PrepItemType.FAQ,
             title: '常見問題',
+            order: 2,
             isRequired: true,
             metadata: { estimatedReadTime: 10 },
           },

@@ -395,7 +395,7 @@ export class ReminderRuleEngine {
 
       await notificationEngine.createNotification({
         recipientId: reminder.userId,
-        type: NotificationType.REMINDER,
+        type: NotificationType.APPROVAL_REMINDER,
         category: NotificationCategory.SYSTEM,
         priority: priorityMap[reminder.priority],
         title: reminder.title,

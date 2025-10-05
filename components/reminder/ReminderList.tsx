@@ -52,7 +52,7 @@ export const ReminderList: React.FC<ReminderListProps> = ({
       }
 
       const url =
-        status && status !== 'ALL'
+        status && status !== ('ALL' as ReminderStatus)
           ? `/api/reminders?status=${status}`
           : '/api/reminders';
 

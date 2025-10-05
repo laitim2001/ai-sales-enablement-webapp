@@ -165,7 +165,7 @@ export class EditLockManager {
         where: { id: userId },
       });
 
-      if (user?.role !== 'ADMIN' && user?.role !== 'MANAGER') {
+      if (user?.role !== 'ADMIN' && user?.role !== 'SALES_MANAGER') {
         throw new Error('Unauthorized: Cannot release lock owned by another user');
       }
     }
@@ -405,7 +405,7 @@ export class EditLockManager {
       // 發送通知給鎖定擁有者
       await notificationEngine.createNotification({
         recipientId: lock.userId,
-        type: NotificationType.SYSTEM,
+        type: NotificationType.SYSTEM_ANNOUNCEMENT,
         category: NotificationCategory.SYSTEM,
         priority: action === 'EXPIRED' ? NotificationPriority.HIGH : NotificationPriority.LOW,
         title,

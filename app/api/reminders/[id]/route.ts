@@ -33,9 +33,11 @@ export async function GET(
     }
 
     const token = authHeader.substring(7);
-    const payload = verifyAccessToken(token);
 
-    if (!payload) {
+    let payload;
+    try {
+      payload = await verifyAccessToken(token);
+    } catch (error) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
@@ -82,9 +84,11 @@ export async function DELETE(
     }
 
     const token = authHeader.substring(7);
-    const payload = verifyAccessToken(token);
 
-    if (!payload) {
+    let payload;
+    try {
+      payload = await verifyAccessToken(token);
+    } catch (error) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
