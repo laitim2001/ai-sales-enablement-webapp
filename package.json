@@ -83,6 +83,8 @@
     "deploy:production": "echo 'Deploying to production..' && npm run db:deploy && npm run docker:prod:build && npm run docker:prod:up"
   },
   "dependencies": {
+    "@azure/identity": "^4.12.0",
+    "@azure/keyvault-secrets": "^4.10.0",
     "@azure/msal-node": "^3.8.0",
     "@azure/openai": "^1.0.0-beta.12",
     "@clerk/nextjs": "^6.33.0",
