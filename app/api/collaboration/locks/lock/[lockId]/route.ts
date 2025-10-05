@@ -38,9 +38,10 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     const token = authHeader.replace('Bearer ', '');
 
-    let decoded;
+    let userId: number;
     try {
-      decoded = await verifyAccessToken(token);
+      const decoded = await verifyAccessToken(token);
+      userId = decoded.userId;
     } catch (error) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },
@@ -50,7 +51,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     // 2. 釋放鎖定
     const lockManager = createEditLockManager(prisma);
-    const success = await lockManager.releaseLock(params.lockId, decoded.userId);
+    const success = await lockManager.releaseLock(params.lockId, userId);
 
     return NextResponse.json({
       success,
@@ -86,9 +87,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     const token = authHeader.replace('Bearer ', '');
 
-    let decoded;
     try {
-      decoded = await verifyAccessToken(token);
+      await verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },

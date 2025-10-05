@@ -12,7 +12,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { Dynamics365SyncService } from '@/lib/integrations/dynamics365/sync';
 
 /**
  * 獲取客戶列表
@@ -32,9 +31,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const sortOrder = searchParams.get('sortOrder') || 'asc';
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
-
-    // 初始化同步服務
-    const syncService = new Dynamics365SyncService();
 
     // 構建查詢條件
     const filters = {
@@ -260,9 +256,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     }
 
-    // 初始化同步服務
-    const syncService = new Dynamics365SyncService();
-
     // TODO: 實現客戶創建邏輯
     // 這裡需要：
     // 1. 驗證客戶數據
@@ -317,9 +310,6 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
         message: '無效的批量操作參數'
       }, { status: 400 });
     }
-
-    // 初始化同步服務
-    const syncService = new Dynamics365SyncService();
 
     // TODO: 實現批量操作邏輯
     // 支援的操作類型：

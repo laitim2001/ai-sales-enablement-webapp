@@ -49,6 +49,7 @@
 import { NextRequest, NextResponse } from 'next/server'              // Next.js請求和回應處理
 import { z } from 'zod'                                             // 資料驗證架構
 import { prisma } from '@/lib/db'                                   // 數據庫連接實例
+import crypto from 'crypto'                                         // 加密和雜湊功能
 import { AppError } from '@/lib/errors'                             // 應用錯誤處理
 import { verifyToken } from '@/lib/auth-server'                     // JWT令牌驗證
 import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'  // 文檔相關枚舉
@@ -74,7 +75,7 @@ const CreateKnowledgeBaseSchema = z.object({
  * 知識庫項目更新驗證架構
  * 所有欄位皆為可選，用於部分更新操作
  */
-const UpdateKnowledgeBaseSchema = CreateKnowledgeBaseSchema.partial()
+// const UpdateKnowledgeBaseSchema = CreateKnowledgeBaseSchema.partial()
 
 /**
  * 知識庫查詢參數驗證架構
@@ -306,7 +307,7 @@ async function createKnowledgeBase(request: NextRequest) {
 
     // 生成內容哈希（用於重複檢測）
     const contentHash = knowledgeBaseData.content ?
-      require('crypto').createHash('sha256').update(knowledgeBaseData.content).digest('hex') :
+      crypto.createHash('sha256').update(knowledgeBaseData.content).digest('hex') :
       null
 
     // 檢查重複內容（使用緩存優化）

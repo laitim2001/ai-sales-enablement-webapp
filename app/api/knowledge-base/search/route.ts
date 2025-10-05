@@ -500,7 +500,8 @@ async function performTextSearch(
     .slice(0, limit)
 }
 
-// 執行語義搜索
+// 執行語義搜索 (fallback function - currently unused)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function performSemanticSearch(
   query: string,
   category?: DocumentCategory,
@@ -574,7 +575,7 @@ async function performSemanticSearch(
 
   // 優化相似度計算 - 批量處理和早期終止
   const scoredChunks: any[] = []
-  const processedKnowledgeBaseIds = new Set()
+  // const processedKnowledgeBaseIds = new Set()
 
   for (const chunk of chunks) {
     if (!chunk.vector_embedding) continue

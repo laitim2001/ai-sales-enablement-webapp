@@ -61,7 +61,7 @@ import { DocumentCategory, ProcessingStatus } from '@prisma/client'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
-import { detectFileType, parseFile, FileType } from '@/lib/parsers'
+import { parseFile, FileType } from '@/lib/parsers'
 import crypto from 'crypto'
 
 /**
@@ -234,7 +234,6 @@ async function processSingleFile(
 
     // 生成安全文件名並保存文件
     const timestamp = Date.now()
-    const fileConfig = SUPPORTED_FILE_TYPES[file.type as keyof typeof SUPPORTED_FILE_TYPES]
     const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-_\u4e00-\u9fa5]/g, '_')
     const fileName = `${timestamp}_${sanitizedName}`
     const filePath = join(UPLOAD_DIR, fileName)

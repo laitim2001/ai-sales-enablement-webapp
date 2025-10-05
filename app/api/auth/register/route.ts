@@ -118,7 +118,8 @@ async function registerHandler(request: NextRequest): Promise<NextResponse> {
     })
 
     // 第七步：過濾敏感資訊，返回安全的用戶資料
-    const { password_hash: _, ...userWithoutPassword } = user
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password_hash: _passwordHash, ...userWithoutPassword } = user
 
     // 第八步：創建成功響應
     return ApiErrorHandler.createSuccessResponse(

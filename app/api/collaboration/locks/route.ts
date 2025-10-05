@@ -32,9 +32,10 @@ export async function POST(request: NextRequest) {
 
     const token = authHeader.replace('Bearer ', '');
 
-    let decoded;
+    let userId: number;
     try {
-      decoded = await verifyAccessToken(token);
+      const decoded = await verifyAccessToken(token);
+      userId = decoded.userId;
     } catch (error) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },
@@ -59,7 +60,7 @@ export async function POST(request: NextRequest) {
     const lock = await lockManager.acquireLock(
       resourceType,
       resourceId,
-      decoded.userId,
+      userId,
       { expiresInMinutes, force }
     );
 
@@ -97,9 +98,8 @@ export async function GET(request: NextRequest) {
 
     const token = authHeader.replace('Bearer ', '');
 
-    let decoded;
     try {
-      decoded = await verifyAccessToken(token);
+      await verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },

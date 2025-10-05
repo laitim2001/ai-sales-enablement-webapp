@@ -260,7 +260,7 @@ export async function PATCH(
     }
 
     // 6. 如果要移動資料夾(更改parent_id)
-    let updateData: any = {
+    const updateData: any = {
       ...validatedData,
       updated_by: userId
     }

@@ -461,10 +461,10 @@ export class WorkflowEngine {
    * @returns 是否通過驗證
    */
   private async validateBusinessRules(
-    currentState: ProposalStatus,
-    targetState: ProposalStatus,
-    userId: number,
-    proposalId?: number
+    _currentState: ProposalStatus,
+    _targetState: ProposalStatus,
+    _userId: number,
+    _proposalId?: number
   ): Promise<boolean> {
     // 可根據業務需求添加額外的驗證規則
     // 例如：檢查提案內容完整性、審批者數量等

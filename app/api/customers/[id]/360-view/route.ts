@@ -42,7 +42,6 @@ export async function GET(
     // 獲取查詢參數
     const { searchParams } = new URL(request.url);
     const includeInactive = searchParams.get('include_inactive') === 'true';
-    const knowledgeLimit = parseInt(searchParams.get('knowledge_limit') || '10');
 
     // 獲取客戶360度視圖數據
     const customer360Data = await customer360Service.getCustomer360View(customerId, {
@@ -97,7 +96,7 @@ export async function PATCH(
       }, { status: 400 });
     }
 
-    const updateData = await request.json();
+    await request.json();
 
     // TODO: 實現客戶資料更新邏輯
     // 這裡需要驗證輸入數據並更新資料庫

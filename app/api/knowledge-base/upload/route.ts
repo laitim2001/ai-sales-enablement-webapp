@@ -65,6 +65,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
+import crypto from 'crypto'
+import fs from 'fs'
 import { AppError } from '@/lib/errors'
 import { verifyToken } from '@/lib/auth-server'
 import { DocumentCategory, ProcessingStatus } from '@prisma/client'
@@ -222,7 +224,7 @@ export async function POST(request: NextRequest) {
       }
 
       // 生成文件哈希
-      const crypto = require('crypto')
+      // crypto imported at top of file
       const hash = crypto.createHash('sha256').update(buffer).digest('hex')
 
       // 檢查重複文件
@@ -232,7 +234,7 @@ export async function POST(request: NextRequest) {
 
       if (existingFile) {
         // 刪除剛上傳的重複文件
-        const fs = require('fs')
+        // fs imported at top of file
         fs.unlinkSync(filePath)
 
         throw AppError.validation('Duplicate file detected. A file with the same content already exists.')
@@ -367,7 +369,7 @@ export async function POST(request: NextRequest) {
     } catch (fileError) {
       // 如果數據庫操作失敗，清理已上傳的文件
       try {
-        const fs = require('fs')
+        // fs imported at top of file
         if (existsSync(filePath)) {
           fs.unlinkSync(filePath)
         }

@@ -402,7 +402,7 @@ async function handleRelatedSearches(body: any) {
  * DELETE /api/knowledge-base/suggestions
  * 清理過期數據 - Clean expired data
  */
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     // 檢查管理員權限 - Check admin permissions
     // Note: Authentication should be implemented here
@@ -441,7 +441,7 @@ export async function DELETE(request: NextRequest) {
  * PATCH /api/knowledge-base/suggestions
  * 獲取統計信息 - Get statistics
  */
-export async function PATCH(request: NextRequest) {
+export async function PATCH() {
   try {
     // 檢查認證 - Check authentication
     // Note: Authentication should be implemented here

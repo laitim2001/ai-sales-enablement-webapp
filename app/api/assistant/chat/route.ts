@@ -55,9 +55,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    let user;
     try {
-      user = await verifyAccessToken(token);
+      await verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
@@ -85,6 +84,7 @@ export async function POST(request: NextRequest) {
 
     // 調用Azure OpenAI
     const completion = await azureOpenAI.chat.completions.create({
+      model: process.env.AZURE_OPENAI_DEPLOYMENT_NAME || 'gpt-4',
       messages,
       temperature: 0.7,
       max_tokens: 1000,

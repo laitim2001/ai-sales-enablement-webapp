@@ -231,7 +231,7 @@ export async function GET(request: NextRequest) {
  * OPTIONS /api/knowledge-base/analytics
  * CORS 預檢請求處理
  */
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {

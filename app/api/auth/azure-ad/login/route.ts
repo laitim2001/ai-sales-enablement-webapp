@@ -29,7 +29,7 @@
  * ================================================================
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getAzureADLoginUrl, isAzureADConfigured } from '@/lib/auth/azure-ad-service'
 import crypto from 'crypto'
 
@@ -42,7 +42,7 @@ import crypto from 'crypto'
  * @param request - Next.js請求物件
  * @returns 重定向響應到Azure AD登入頁面
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // 第一步：檢查Azure AD配置
     if (!isAzureADConfigured()) {

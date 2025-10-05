@@ -83,8 +83,8 @@ export async function POST(request: NextRequest) {
         // 解析refresh token獲取tokenId（如果有）
         let refreshTokenId: string | undefined
         if (refreshToken) {
-          const jwt = require('jsonwebtoken')
-          const decoded = jwt.decode(refreshToken) as any
+          const jwt = await import('jsonwebtoken')
+          const decoded = jwt.decode(refreshToken) as { tokenId?: string }
           refreshTokenId = decoded?.tokenId
         }
 

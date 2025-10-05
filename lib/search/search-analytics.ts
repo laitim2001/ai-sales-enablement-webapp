@@ -40,10 +40,10 @@
  * Week 6 開發階段 - Task 6.3: 搜索分析和日誌記錄系統
  */
 
-import { prisma } from '@/lib/db'
+// import { prisma } from '@/lib/db'
 import { z } from 'zod'
 import { getVectorCache } from '@/lib/cache/vector-cache'
-import { getOpenAIClient } from '@/lib/ai/openai'
+// import { getOpenAIClient } from '@/lib/ai/openai'
 
 // 搜索事件類型定義
 export type SearchEventType =
@@ -491,7 +491,7 @@ export class SearchAnalyticsService {
    */
   async analyzeSearchTrends(
     period: 'hour' | 'day' | 'week' | 'month',
-    limit: number = 50
+    _limit: number = 50
   ): Promise<{
     trendingQueries: Array<{ query: string; growth: number; volume: number }>
     emergingTopics: Array<{ topic: string; emergence: number; description: string }>
@@ -805,7 +805,7 @@ export class SearchAnalyticsService {
   /**
    * 構建概覽統計
    */
-  private async buildOverviewStats(startDate: Date, endDate: Date, filters: any): Promise<SearchAnalyticsReport['overview']> {
+  private async buildOverviewStats(_startDate: Date, _endDate: Date, _filters: any): Promise<SearchAnalyticsReport['overview']> {
     // 簡化實現
     return {
       totalSearches: 1250,
@@ -821,7 +821,7 @@ export class SearchAnalyticsService {
   /**
    * 構建查詢分析
    */
-  private async buildQueryAnalysis(startDate: Date, endDate: Date, filters: any): Promise<SearchAnalyticsReport['queryAnalysis']> {
+  private async buildQueryAnalysis(_startDate: Date, _endDate: Date, _filters: any): Promise<SearchAnalyticsReport['queryAnalysis']> {
     // 簡化實現
     return {
       topQueries: [
@@ -848,7 +848,7 @@ export class SearchAnalyticsService {
   }
 
   // 其他構建方法的簡化實現...
-  private async buildUserBehaviorAnalysis(startDate: Date, endDate: Date, filters: any): Promise<SearchAnalyticsReport['userBehavior']> {
+  private async buildUserBehaviorAnalysis(_startDate: Date, _endDate: Date, _filters: any): Promise<SearchAnalyticsReport['userBehavior']> {
     return {
       userEngagement: {
         averageClickThroughRate: 0.68,
@@ -875,7 +875,7 @@ export class SearchAnalyticsService {
     }
   }
 
-  private async buildContentPerformanceAnalysis(startDate: Date, endDate: Date, filters: any): Promise<SearchAnalyticsReport['contentPerformance']> {
+  private async buildContentPerformanceAnalysis(_startDate: Date, _endDate: Date, _filters: any): Promise<SearchAnalyticsReport['contentPerformance']> {
     return {
       topDocuments: [
         {
@@ -905,7 +905,7 @@ export class SearchAnalyticsService {
     }
   }
 
-  private async buildPerformanceMetrics(startDate: Date, endDate: Date, filters: any): Promise<SearchAnalyticsReport['performanceMetrics']> {
+  private async buildPerformanceMetrics(_startDate: Date, _endDate: Date, _filters: any): Promise<SearchAnalyticsReport['performanceMetrics']> {
     return {
       averageResponseTime: 450,
       p95ResponseTime: 890,
@@ -920,7 +920,7 @@ export class SearchAnalyticsService {
     }
   }
 
-  private async buildBusinessInsights(startDate: Date, endDate: Date, filters: any): Promise<SearchAnalyticsReport['businessInsights']> {
+  private async buildBusinessInsights(_startDate: Date, _endDate: Date, _filters: any): Promise<SearchAnalyticsReport['businessInsights']> {
     return {
       departmentUsage: [
         {
@@ -996,7 +996,7 @@ export class SearchAnalyticsService {
     return `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
 
-  private generateReportCacheKey(startDate: Date, endDate: Date, filters: any): string {
+  private generateReportCacheKey(_startDate: Date, _endDate: Date, _filters: any): string {
     const filterKey = JSON.stringify(filters)
     return `analytics_report:${startDate.getTime()}:${endDate.getTime()}:${Buffer.from(filterKey).toString('base64')}`
   }

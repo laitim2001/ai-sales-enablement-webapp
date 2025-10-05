@@ -12,7 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { ProposalGenerationService, getProposalGenerationService } from '@/lib/ai/proposal-generation-service';
+import { getProposalGenerationService } from '@/lib/ai/proposal-generation-service';
 
 const proposalService = getProposalGenerationService();
 

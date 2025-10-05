@@ -50,6 +50,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
+import crypto from 'crypto'
 import { AppError } from '@/lib/errors'
 import { verifyToken } from '@/lib/auth-server'
 import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'
@@ -73,7 +74,7 @@ const CreateKnowledgeBaseSchema = z.object({
 })
 
 // 更新知識庫項目的請求驗證架構（所有欄位都是可選的）
-const UpdateKnowledgeBaseSchema = CreateKnowledgeBaseSchema.partial()
+// const UpdateKnowledgeBaseSchema = CreateKnowledgeBaseSchema.partial()
 
 // 查詢知識庫列表的請求驗證架構
 const QueryKnowledgeBaseSchema = z.object({
@@ -375,7 +376,7 @@ export async function POST(request: NextRequest) {
 
     // 為文檔內容生成SHA-256哈希值（如果有內容）
     const contentHash = knowledgeBaseData.content ?
-      require('crypto').createHash('sha256').update(knowledgeBaseData.content).digest('hex') :
+      crypto.createHash('sha256').update(knowledgeBaseData.content).digest('hex') :
       null
 
     // 檢查是否已存在相同內容的文檔

@@ -79,14 +79,14 @@ export class MicrosoftGraphOAuth {
    * @param state - 狀態參數（用於防止CSRF攻擊）
    * @returns 授權URL
    */
-  getAuthorizationUrl(state?: string): string {
+  async getAuthorizationUrl(state?: string): Promise<string> {
     const authCodeUrlParameters = {
       scopes: this.config.scopes,
       redirectUri: this.config.redirectUri,
       state: state || this.generateState()
     };
 
-    return this.msalClient.getAuthCodeUrl(authCodeUrlParameters);
+    return await this.msalClient.getAuthCodeUrl(authCodeUrlParameters);
   }
 
   /**
@@ -112,7 +112,7 @@ export class MicrosoftGraphOAuth {
 
     return {
       accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
+      // MSAL internally manages refresh tokens
       expiresOn: response.expiresOn!,
       scopes: response.scopes || this.config.scopes
     };
