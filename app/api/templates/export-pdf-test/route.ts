@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
     const fileName = `${safeFileName}_test_${Date.now()}.pdf`;
 
     // 9. 返回 PDF 文件
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

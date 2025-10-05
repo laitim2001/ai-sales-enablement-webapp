@@ -53,7 +53,7 @@ export async function POST(
         content: true,
         variables: true,
         category: true,
-        createdBy: {
+        created_by: {
           select: {
             firstName: true,
             lastName: true,
@@ -95,8 +95,8 @@ export async function POST(
       content: renderedContent,
       companyName: variables.companyName || variables.company_name || 'AI 銷售賦能平台',
       proposalNumber: `PROP-${template.id.slice(0, 8).toUpperCase()}`,
-      author: template.createdBy
-        ? `${template.createdBy.firstName} ${template.createdBy.lastName}`.trim()
+      author: template.created_by
+        ? `${template.created_by.firstName} ${template.created_by.lastName}`.trim()
         : '系統管理員',
     };
 
@@ -127,7 +127,7 @@ export async function POST(
     const fileName = `${safeFileName}_${Date.now()}.pdf`;
 
     // 9. 返回 PDF 文件
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
