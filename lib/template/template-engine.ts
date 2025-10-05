@@ -230,10 +230,8 @@ export class TemplateEngine {
   render(template: string, data: Record<string, any>, options?: RenderOptions): string {
     try {
       const compiledTemplate = this.compile(template, options);
-      return compiledTemplate(data, {
-        allowProtoProperties: options?.allowProtoProperties || false,
-        allowProtoMethods: options?.allowProtoMethods || false,
-      });
+      // allowProtoProperties 和 allowProtoMethods 在 compile 時設置
+      return compiledTemplate(data);
     } catch (error) {
       throw new Error(`範本渲染失敗: ${error instanceof Error ? error.message : '未知錯誤'}`);
     }
