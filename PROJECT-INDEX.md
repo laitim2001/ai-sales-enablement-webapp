@@ -88,6 +88,8 @@
 | **新開發者設置指南** | `docs/NEW-DEVELOPER-SETUP-GUIDE.md` | 新開發者環境自動化設置完整指南 | 🔴 極高  |
 | **Sprint 3安全設置指南** | `docs/sprint3-security-setup-guide.md` | Sprint 3安全加固完整設置和配置指南（加密/Key Vault/HTTPS/RBAC/審計） | 🔴 極高  |
 | **Sprint 7 UAT測試計劃** | `docs/sprint7-uat-test-plan.md` | Sprint 7用戶驗收測試完整計劃（提醒/準備包/AI分析/推薦/日曆/助手） | 🔴 極高  |
+| **Sprint 7 UAT執行報告** | `docs/sprint7-uat-execution-report.md` | Sprint 7用戶驗收測試詳細執行報告（38個測試用例,問題分析,修復建議） | 🔴 極高  |
+| **Sprint 7 UAT摘要文檔** | `docs/sprint7-uat-summary.md` | Sprint 7 UAT測試執行摘要（關鍵指標,問題匯總,下一步行動） | 🟡 重要  |
 | **監控遷移策略** | `docs/monitoring-migration-strategy.md` | OpenTelemetry零成本遷移架構設計（Prometheus→Azure） | 🔴 極高  |
 | **監控使用範例** | `docs/monitoring-usage-examples.md` | 完整監控集成範例（API/AI/DB/緩存追蹤） | 🔴 極高  |
 | **監控運維手冊** | `docs/monitoring-operations-manual.md` | 監控系統運維完整指南（日常檢查/告警處理/故障排查） | 🔴 極高  |
@@ -954,6 +956,7 @@ const users = await prisma.user.findMany();
 | **Docker測試DB** | `scripts/setup-test-db-docker.js` | Docker測試環境設置         | 🟡 高    |
 | **工作流程調試** | `scripts/debug-workflow.ts`     | 工作流程系統調試工具         | 🟡 高    |
 | **登入API調試**  | `scripts/debug-login-api.ts`    | 登入API調試工具              | 🟡 高    |
+| **UAT測試運行器** | `scripts/uat-test-runner.js`   | Sprint 7 UAT自動化測試執行腳本 | 🟡 高    |
 | **服務重啟**     | `scripts/restart-services.bat`  | Windows服務重啟批處理        | 🟢 中    |
 
 ### 🎨 app/ - Next.js 14 應用程式結構
