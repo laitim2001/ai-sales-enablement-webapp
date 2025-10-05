@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-03T16:08:15.528Z",
+  "timestamp": "2025-10-05T16:13:38.394Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -7,11 +7,11 @@
     "workingDirectory": "C:\\ai-sales-enablement-webapp"
   },
   "summary": {
-    "totalIssues": 17,
+    "totalIssues": 5,
     "highSeverity": 0,
-    "mediumSeverity": 17,
+    "mediumSeverity": 5,
     "lowSeverity": 0,
-    "suggestions": 1,
+    "suggestions": 3,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -53,90 +53,6 @@
       "reference": "reorder/route.ts",
       "severity": "medium",
       "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: reorder/route.ts"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "knowledge-folder-tree.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: knowledge-folder-tree.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "knowledge-search.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: knowledge-search.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "folder-selector.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: folder-selector.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "breadcrumb-navigation.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: breadcrumb-navigation.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "quick-jump-search.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: quick-jump-search.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "bulk-upload.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: bulk-upload.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "folders/page.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: folders/page.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "seed-folders.ts",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: seed-folders.ts"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "components/knowledge/version/VersionHistoryList.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: components/knowledge/version/VersionHistoryList.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "components/knowledge/version/VersionDiffViewer.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: components/knowledge/version/VersionDiffViewer.tsx"
-    },
-    {
-      "type": "broken_reference",
-      "file": "PROJECT-INDEX.md",
-      "reference": "components/knowledge/version/VersionRestoreDialog.tsx",
-      "severity": "medium",
-      "message": "索引文件 PROJECT-INDEX.md 中的路徑引用失效: components/knowledge/version/VersionRestoreDialog.tsx"
     }
   ],
   "suggestions": [
@@ -147,7 +63,23 @@
       "severity": "low",
       "message": "建議將重要文件加入索引: docs\\index-maintenance-root-cause-analysis.md",
       "modifiedTime": "2025-10-03T15:14:43.979Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "docs\\sprint7-uat-execution-report.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\sprint7-uat-execution-report.md",
+      "modifiedTime": "2025-10-05T16:06:55.811Z"
+    },
+    {
+      "type": "add_to_index",
+      "file": "docs\\sprint7-uat-summary.md",
+      "importance": "medium",
+      "severity": "low",
+      "message": "建議將重要文件加入索引: docs\\sprint7-uat-summary.md",
+      "modifiedTime": "2025-10-05T16:13:25.220Z"
     }
   ],
-  "lastUpdated": "2025-10-03T16:08:15.528Z"
+  "lastUpdated": "2025-10-05T16:13:38.394Z"
 }
