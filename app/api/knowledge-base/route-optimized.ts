@@ -326,7 +326,8 @@ async function createKnowledgeBase(request: NextRequest) {
       }
 
       if (existing) {
-        throw AppError.validation(`Duplicate content detected. A document "${existing.title}" with the same content already exists.`)
+        const existingDoc = existing as { id: number; title: string }
+        throw AppError.validation(`Duplicate content detected. A document "${existingDoc.title}" with the same content already exists.`)
       }
     }
 

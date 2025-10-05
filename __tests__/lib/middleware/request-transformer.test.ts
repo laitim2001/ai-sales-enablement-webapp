@@ -10,7 +10,7 @@
  * 6. Custom transformers
  */
 
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import {
   RequestTransformer,
   createRequestTransformer,
@@ -32,19 +32,24 @@ function createMockNextRequest(
 ): NextRequest {
   const { method = 'POST', body = {}, headers = {} } = options
 
-  const requestInit: RequestInit = {
+  const requestInit: {
+    method?: string
+    headers?: HeadersInit
+    body?: BodyInit
+    signal?: AbortSignal
+  } = {
     method,
     headers: {
       'content-type': 'application/json',
-      ...headers
-    }
+      ...headers,
+    },
   }
 
   if (method !== 'GET' && method !== 'HEAD') {
     requestInit.body = JSON.stringify(body)
   }
 
-  return new NextRequest(url, requestInit)
+  return new NextRequest(url, requestInit as any)
 }
 
 describe('RequestTransformer - Field Naming Conversion', () => {
@@ -926,11 +931,11 @@ describe('RequestTransformer - Convenience Functions', () => {
   test('withRequestTransformer should wrap handler', async () => {
     const handler = jest.fn(async (req: NextRequest) => {
       const body = await req.json()
-      return new Response(JSON.stringify(body))
+      return NextResponse.json(body)
     })
 
     const wrappedHandler = withRequestTransformer({
-      fieldNaming: 'camelCase'
+      fieldNaming: 'camelCase',
     })(handler)
 
     const request = createMockNextRequest('http://localhost/api/test', {

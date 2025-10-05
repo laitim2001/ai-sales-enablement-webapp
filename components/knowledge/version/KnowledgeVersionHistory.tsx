@@ -330,7 +330,7 @@ export function KnowledgeVersionHistory({
       {/* 刪除確認對話框 */}
       <AlertDialog
         open={deleteVersionId !== null}
-        onOpenChange={(open) => !open && setDeleteVersionId(null)}
+        onOpenChange={(open: boolean) => !open && setDeleteVersionId(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>

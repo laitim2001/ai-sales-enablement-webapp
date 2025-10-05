@@ -20,8 +20,32 @@ import fetch from 'node-fetch';
 const prisma = new PrismaClient();
 const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3002';
 
+// 測試錯誤介面
+interface TestError {
+  test: string;
+  error: string;
+}
+
+// 測試套件結果介面
+interface TestSuiteResult {
+  total: number;
+  passed: number;
+  failed: number;
+  errors: TestError[];
+}
+
+// 測試套件集合介面
+interface TestSuites {
+  database: TestSuiteResult;
+  api: TestSuiteResult;
+  ai: TestSuiteResult;
+  monitoring: TestSuiteResult;
+  crm: TestSuiteResult;
+  [key: string]: TestSuiteResult;
+}
+
 // 測試結果統計
-const testSuites = {
+const testSuites: TestSuites = {
   database: { total: 0, passed: 0, failed: 0, errors: [] },
   api: { total: 0, passed: 0, failed: 0, errors: [] },
   ai: { total: 0, passed: 0, failed: 0, errors: [] },
@@ -32,7 +56,7 @@ const testSuites = {
 /**
  * 執行測試並記錄結果
  */
-async function runTest(suite, testName, testFunction, timeout = 30000) {
+async function runTest(suite: string, testName: string, testFunction: () => Promise<void>, timeout: number = 30000): Promise<void> {
   testSuites[suite].total++;
   console.log(`\n🔍 [${suite.toUpperCase()}] ${testName}`);
 
@@ -50,12 +74,13 @@ async function runTest(suite, testName, testFunction, timeout = 30000) {
     console.log(`✅ 通過 (${duration}ms)`);
     testSuites[suite].passed++;
 
-  } catch (error) {
-    console.error(`❌ 失敗: ${error.message}`);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`❌ 失敗: ${errorMessage}`);
     testSuites[suite].failed++;
     testSuites[suite].errors.push({
       test: testName,
-      error: error.message
+      error: errorMessage
     });
   }
 }
@@ -370,13 +395,14 @@ async function testCrmIntegration() {
       console.log(`⚠️ CRM 整合測試部分失敗 (成功率: ${result.successRate}%)`);
     }
 
-  } catch (error) {
-    console.error('❌ CRM 整合測試執行失敗:', error.message);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('❌ CRM 整合測試執行失敗:', errorMessage);
     testSuites.crm.total = 1;
     testSuites.crm.failed = 1;
     testSuites.crm.errors.push({
       test: 'CRM 整合測試執行',
-      error: error.message
+      error: errorMessage
     });
   }
 }
@@ -450,7 +476,12 @@ async function runSystemIntegrationTests() {
   }
 
   // 計算總體統計
-  const totalStats = {
+  const totalStats: {
+    total: number;
+    passed: number;
+    failed: number;
+    errors: TestError[];
+  } = {
     total: 0,
     passed: 0,
     failed: 0,
@@ -490,8 +521,8 @@ async function runSystemIntegrationTests() {
   // 失敗詳情
   if (totalStats.failed > 0) {
     console.log('\n❌ 失敗的測試:');
-    totalStats.errors.forEach((error, index) => {
-      console.log(`${index + 1}. ${error.test}: ${error.error}`);
+    totalStats.errors.forEach((testError, index) => {
+      console.log(`${index + 1}. ${testError.test}: ${testError.error}`);
     });
   }
 

@@ -87,12 +87,18 @@ test.describe('Knowledge Base Performance Tests', () => {
     // Wait for page to be fully loaded
     await page.waitForLoadState('networkidle')
 
+    // Define Core Web Vitals type
+    interface CoreWebVitals {
+      FCP?: number
+      LCP?: number
+    }
+
     // Measure Core Web Vitals
     const vitals = await page.evaluate(() => {
-      return new Promise((resolve) => {
+      return new Promise<CoreWebVitals>((resolve) => {
         new PerformanceObserver((list) => {
           const entries = list.getEntries()
-          const vitals: any = {}
+          const vitals: CoreWebVitals = {}
 
           entries.forEach((entry: any) => {
             if (entry.name === 'first-contentful-paint') {
@@ -237,14 +243,24 @@ test.describe('Knowledge Base Performance Tests', () => {
   test('should measure API response times', async ({ page }) => {
     // Intercept API calls and measure response times
     const apiTimes: { [key: string]: number } = {}
+    const requestStartTimes: { [key: string]: number } = {}
 
+    // Track request start times
+    page.on('request', request => {
+      if (request.url().includes('/api/knowledge-base')) {
+        requestStartTimes[request.url()] = Date.now()
+      }
+    })
+
+    // Track response end times and calculate duration
     page.on('response', response => {
       if (response.url().includes('/api/knowledge-base')) {
-        const timing = response.timing()
-        const totalTime = timing.responseEnd - timing.requestStart
-        apiTimes[response.url()] = totalTime
-
-        console.log(`API Response time for ${response.url()}: ${totalTime}ms`)
+        const startTime = requestStartTimes[response.url()]
+        if (startTime) {
+          const totalTime = Date.now() - startTime
+          apiTimes[response.url()] = totalTime
+          console.log(`API Response time for ${response.url()}: ${totalTime}ms`)
+        }
       }
     })
 

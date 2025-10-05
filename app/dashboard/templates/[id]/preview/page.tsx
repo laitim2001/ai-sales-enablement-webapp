@@ -116,13 +116,13 @@ export default function TemplatePreviewPage() {
 
   // 生成預覽
   const generatePreview = async (
-    templateData?: Template,
+    templateData?: Template | null,
     values?: Record<string, any>,
     useTest?: boolean
   ) => {
     try {
       setIsPreviewLoading(true);
-      const currentTemplate = templateData || template;
+      const currentTemplate = templateData ?? template;
       const currentValues = values || variableValues;
       const shouldUseTest = useTest !== undefined ? useTest : useTestData;
 

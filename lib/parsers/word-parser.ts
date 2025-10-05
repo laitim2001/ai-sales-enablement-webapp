@@ -126,9 +126,9 @@ export class WordParser {
 
       // 並行提取文本和 HTML（如需要）
       const [textResult, htmlResult] = await Promise.all([
-        mammoth.extractRawText({ buffer }, mammothOptions),
+        mammoth.extractRawText({ buffer, ...mammothOptions }),
         this.options.extractHTML
-          ? mammoth.convertToHtml({ buffer }, mammothOptions)
+          ? mammoth.convertToHtml({ buffer, ...mammothOptions })
           : Promise.resolve(null),
       ])
 
@@ -197,10 +197,12 @@ export class WordParser {
 
       case 'base64':
         // 將圖片轉為 Base64（適合小圖片）
-        return mammoth.images.inline((element) => {
-          return element.read('base64').then((imageBuffer: string) => {
+        return mammoth.images.inline((element: mammoth.ImageElement) => {
+          return element.read('base64').then((imageBuffer) => {
+            const base64String =
+              typeof imageBuffer === 'string' ? imageBuffer : imageBuffer.toString('base64')
             return {
-              src: `data:${element.contentType};base64,${imageBuffer}`,
+              src: `data:${element.contentType};base64,${base64String}`,
             }
           })
         })

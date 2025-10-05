@@ -387,9 +387,9 @@ export function KnowledgeBaseListOptimized({ filters }: KnowledgeBaseListProps) 
   const queryClient = useQueryClient()
 
   // 使用 React Query 進行數據管理和緩存
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['knowledge-base', filters],
-    queryFn: async (): Promise<KnowledgeBaseListResponse> => {
+  const { data, isLoading, error, refetch } = useQuery(
+    ['knowledge-base', filters],
+    async (): Promise<KnowledgeBaseListResponse> => {
       const params = new URLSearchParams()
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== '') {
@@ -407,15 +407,18 @@ export function KnowledgeBaseListOptimized({ filters }: KnowledgeBaseListProps) 
         throw new Error('Failed to fetch knowledge base items')
       }
 
-      return response.json()
+      const result: KnowledgeBaseListResponse = await response.json()
+      return result
     },
-    staleTime: 5 * 60 * 1000, // 5分鐘內數據被認為是新鮮的
-    gcTime: 10 * 60 * 1000, // 10分鐘後垃圾回收
-    refetchOnWindowFocus: false, // 避免不必要的重新請求
-  })
+    {
+      staleTime: 5 * 60 * 1000, // 5分鐘內數據被認為是新鮮的
+      cacheTime: 10 * 60 * 1000, // 10分鐘後垃圾回收
+      refetchOnWindowFocus: false, // 避免不必要的重新請求
+    }
+  )
 
   // 虛擬化設置（用於大量數據）
-  const parentRef = useState<HTMLDivElement | null>(null)[0]
+  const [parentRef, setParentRef] = useState<HTMLDivElement | null>(null)
   const virtualizer = useVirtualizer({
     count: data?.data.length || 0,
     getScrollElement: () => parentRef,
@@ -462,7 +465,7 @@ export function KnowledgeBaseListOptimized({ filters }: KnowledgeBaseListProps) 
     return (
       <div className="text-center py-12">
         <div className="text-red-600 mb-2">載入失敗</div>
-        <div className="text-sm text-gray-500">{error.message}</div>
+        <div className="text-sm text-gray-500">{error instanceof Error ? error.message : '未知錯誤'}</div>
         <Button onClick={() => refetch()} className="mt-4">
           重試
         </Button>
@@ -506,7 +509,7 @@ export function KnowledgeBaseListOptimized({ filters }: KnowledgeBaseListProps) 
         {useVirtualization ? (
           // 虛擬化渲染（大量數據）
           <div
-            ref={parentRef}
+            ref={setParentRef}
             className="h-[600px] overflow-auto"
           >
             <div
@@ -535,7 +538,7 @@ export function KnowledgeBaseListOptimized({ filters }: KnowledgeBaseListProps) 
           </div>
         ) : (
           // 普通渲染（少量數據）
-          data.data.map((item) => (
+          data.data.map((item: KnowledgeBaseItem) => (
             <KnowledgeBaseItem
               key={item.id}
               item={item}

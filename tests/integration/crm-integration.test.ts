@@ -15,13 +15,27 @@
 import { getDynamics365AuthManager } from '../../lib/integrations/dynamics365/auth';
 import { getDynamics365Client } from '../../lib/integrations/dynamics365/client';
 import { getDynamics365SyncService } from '../../lib/integrations/dynamics365/sync';
-import { getConnectionMonitor } from '../../lib/monitoring/connection-monitor';
+import { getConnectionMonitor, ServiceType } from '../../lib/monitoring/connection-monitor';
 
 // 測試超時設定
 const TEST_TIMEOUT = 30000; // 30秒
 
 // 測試結果統計
-let testResults = {
+interface TestError {
+  test: string;
+  error: string;
+  stack?: string;
+}
+
+interface TestResults {
+  total: number;
+  passed: number;
+  failed: number;
+  skipped: number;
+  errors: TestError[];
+}
+
+let testResults: TestResults = {
   total: 0,
   passed: 0,
   failed: 0,
@@ -35,7 +49,7 @@ let testResults = {
  * @param {Function} testFunction 測試函數
  * @param {number} timeout 超時時間
  */
-async function runTest(testName, testFunction, timeout = TEST_TIMEOUT) {
+async function runTest(testName: string, testFunction: () => Promise<void>, timeout: number = TEST_TIMEOUT): Promise<void> {
   testResults.total++;
   console.log(`\n🔍 執行測試: ${testName}`);
 
@@ -54,13 +68,15 @@ async function runTest(testName, testFunction, timeout = TEST_TIMEOUT) {
     console.log(`✅ ${testName} - 通過 (${duration}ms)`);
     testResults.passed++;
 
-  } catch (error) {
-    console.error(`❌ ${testName} - 失敗: ${error.message}`);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    console.error(`❌ ${testName} - 失敗: ${errorMessage}`);
     testResults.failed++;
     testResults.errors.push({
       test: testName,
-      error: error.message,
-      stack: error.stack
+      error: errorMessage,
+      stack: errorStack
     });
   }
 }
@@ -70,7 +86,7 @@ async function runTest(testName, testFunction, timeout = TEST_TIMEOUT) {
  * @param {string} testName 測試名稱
  * @param {string} reason 跳過原因
  */
-function skipTest(testName, reason) {
+function skipTest(testName: string, reason: string): void {
   testResults.total++;
   testResults.skipped++;
   console.log(`⏭️ 跳過測試: ${testName} - ${reason}`);
@@ -304,9 +320,10 @@ async function testErrorHandling() {
       // 如果沒有拋出錯誤，這個測試應該會傳回 null
       console.log('  ✓ 無效 ID 查詢正確返回 null');
 
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       // 預期的錯誤處理
-      if (error.name === 'Dynamics365ApiError') {
+      if (error instanceof Error && error.name === 'Dynamics365ApiError') {
         console.log('  ✓ API 錯誤正確處理');
       } else {
         throw error;
@@ -403,7 +420,7 @@ async function testConnectionMonitoring() {
     const monitor = getConnectionMonitor();
 
     // 測試 Dynamics 365 服務健康檢查
-    const healthCheck = await monitor.checkServiceHealth('DYNAMICS_365');
+    const healthCheck = await monitor.checkServiceHealth(ServiceType.DYNAMICS_365);
 
     if (!healthCheck) {
       throw new Error('健康檢查未返回結果');
@@ -490,17 +507,18 @@ async function runIntegrationTests() {
 
   if (testResults.failed > 0) {
     console.log('\n❌ 失敗的測試:');
-    testResults.errors.forEach((error, index) => {
-      console.log(`${index + 1}. ${error.test}: ${error.error}`);
+    testResults.errors.forEach((testError, index) => {
+      console.log(`${index + 1}. ${testError.test}: ${testError.error}`);
     });
   }
 
   const successRate = ((testResults.passed / (testResults.total - testResults.skipped)) * 100).toFixed(1);
+  const successRateNum = parseFloat(successRate);
   console.log(`\n🎯 成功率: ${successRate}%`);
 
   if (testResults.failed === 0) {
     console.log('\n🎉 所有測試通過！CRM 整合系統運行穩定。');
-  } else if (successRate >= 80) {
+  } else if (successRateNum >= 80) {
     console.log('\n⚠️ 大部分測試通過，但存在一些問題需要關注。');
   } else {
     console.log('\n🚨 測試失敗率較高，需要立即檢查和修復問題。');
@@ -510,7 +528,7 @@ async function runIntegrationTests() {
     success: testResults.failed === 0,
     results: testResults,
     duration,
-    successRate: parseFloat(successRate)
+    successRate: successRateNum
   };
 }
 
@@ -518,7 +536,7 @@ async function runIntegrationTests() {
 if (require.main === module) {
   runIntegrationTests()
     .then(result => {
-      process.exit(result.success ? 0 : 1);
+      process.exit(result?.success ? 0 : 1);
     })
     .catch(error => {
       console.error('測試執行失敗:', error);

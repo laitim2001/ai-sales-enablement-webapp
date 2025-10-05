@@ -261,6 +261,11 @@ export default function CustomersPage() {
       const aValue = a[filters.sortBy as keyof Customer]
       const bValue = b[filters.sortBy as keyof Customer]
 
+      // 處理可能為 undefined 的值
+      if (aValue === undefined || bValue === undefined) {
+        return 0
+      }
+
       if (filters.sortOrder === 'asc') {
         return aValue > bValue ? 1 : -1
       } else {

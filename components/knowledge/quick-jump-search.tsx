@@ -253,7 +253,7 @@ export function QuickJumpSearch({ isOpen, onClose }: QuickJumpSearchProps) {
             leaveTo="opacity-0 scale-95"
           >
             <Dialog.Panel className="mx-auto max-w-2xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
-              <Combobox onChange={handleSelect}>
+              <Combobox onChange={(value: SearchResultItem | null) => value && handleSelect(value)}>
                 {/* 搜索輸入框 */}
                 <div className="relative">
                   <MagnifyingGlassIcon

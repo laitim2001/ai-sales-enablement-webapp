@@ -35,12 +35,17 @@ export function createMockNextRequest(
     body?: BodyInit | null
   }
 ): NextRequest {
-  const requestOptions: RequestInit = {
+  const requestOptions: {
+    method?: string
+    body?: BodyInit | null
+    headers?: HeadersInit
+    signal?: AbortSignal
+  } = {
     method: options?.method || 'GET',
-    ...(options?.body && { body: options.body })
+    ...(options?.body && { body: options.body }),
   }
 
-  const request = new NextRequest(url, requestOptions)
+  const request = new NextRequest(url, requestOptions as any)
 
   // Mock the json() method for body parsing in Jest node environment
   if (options?.body && typeof options.body === 'string') {

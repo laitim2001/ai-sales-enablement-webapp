@@ -355,7 +355,7 @@ export class SemanticQueryProcessor {
       const gptResult = JSON.parse(response.choices[0].message.content || '{}')
 
       // 驗證和標準化GPT-4輸出
-      return this.validateAndNormalizeGPTResult(gptResult, query, baseAnalysis)
+      return await this.validateAndNormalizeGPTResult(gptResult, query, baseAnalysis)
 
     } catch (error) {
       console.error('❌ GPT-4語義分析失敗:', error)
@@ -458,18 +458,18 @@ export class SemanticQueryProcessor {
   /**
    * 驗證和標準化GPT-4結果
    */
-  private validateAndNormalizeGPTResult(
+  private async validateAndNormalizeGPTResult(
     gptResult: any,
     query: string,
     baseAnalysis: ParsedQuery
-  ): SemanticAnalysis {
+  ): Promise<SemanticAnalysis> {
     try {
       // 使用zod驗證結構
       return SemanticAnalysisSchema.parse(gptResult)
     } catch (error) {
       console.warn('⚠️ GPT-4結果格式不正確，使用回退分析:', error)
       // 回退到快速分析
-      return this.fastTrackAnalysis(query, baseAnalysis, undefined)
+      return await this.fastTrackAnalysis(query, baseAnalysis, undefined)
     }
   }
 

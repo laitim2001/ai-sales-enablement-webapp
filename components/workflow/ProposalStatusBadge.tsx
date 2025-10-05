@@ -31,6 +31,7 @@ interface ProposalStatusBadgeProps {
   status: ProposalStatus;
   size?: 'sm' | 'md' | 'lg';
   showIcon?: boolean;
+  className?: string;
 }
 
 /**
@@ -132,6 +133,7 @@ export function ProposalStatusBadge({
   status,
   size = 'md',
   showIcon = true,
+  className = '',
 }: ProposalStatusBadgeProps) {
   const config = STATUS_CONFIG[status];
   const sizeConfig = SIZE_CONFIG[size];
@@ -140,7 +142,7 @@ export function ProposalStatusBadge({
   return (
     <Badge
       variant={config.variant}
-      className={`${sizeConfig.badge} ${config.color} flex items-center gap-1.5`}
+      className={`${sizeConfig.badge} ${config.color} flex items-center gap-1.5 ${className}`}
     >
       {showIcon && <Icon className={sizeConfig.icon} />}
       <span>{config.label}</span>

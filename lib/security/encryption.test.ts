@@ -319,14 +319,32 @@ describe('EncryptionService', () => {
     });
 
     it('生產環境缺少 ENCRYPTION_KEY 應該拋出錯誤', () => {
-      process.env.NODE_ENV = 'production';
-      delete process.env.ENCRYPTION_KEY;
-      (EncryptionService as any).instance = undefined;
+      const originalNodeEnv = process.env.NODE_ENV
+      const originalEncryptionKey = process.env.ENCRYPTION_KEY
+
+      // 使用 Object.defineProperty 修改 readonly 屬性
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: 'production',
+        writable: true,
+        configurable: true,
+      })
+      delete process.env.ENCRYPTION_KEY
+      ;(EncryptionService as any).instance = undefined
 
       expect(() => {
-        EncryptionService.getInstance();
-      }).toThrow(/ENCRYPTION_KEY must be set in production/);
-    });
+        EncryptionService.getInstance()
+      }).toThrow(/ENCRYPTION_KEY must be set in production/)
+
+      // 恢復原始環境變數
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: originalNodeEnv,
+        writable: true,
+        configurable: true,
+      })
+      if (originalEncryptionKey) {
+        process.env.ENCRYPTION_KEY = originalEncryptionKey
+      }
+    })
   });
 
   describe('便利函數', () => {

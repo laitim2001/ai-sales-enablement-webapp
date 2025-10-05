@@ -426,7 +426,11 @@ export default function TemplateEditPage() {
               </div>
 
               <div className="flex items-center space-x-2">
-                <Checkbox id="isDefault" checked={isDefault} onCheckedChange={setIsDefault} />
+                <Checkbox
+                  id="isDefault"
+                  checked={isDefault}
+                  onCheckedChange={(checked) => setIsDefault(checked as boolean)}
+                />
                 <label htmlFor="isDefault" className="text-sm font-medium cursor-pointer">
                   設為預設範本
                 </label>

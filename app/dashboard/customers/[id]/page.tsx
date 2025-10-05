@@ -694,7 +694,7 @@ export default function CustomerDetailPage() {
 
         {/* 360度視圖 */}
         <TabsContent value="360view">
-          <Customer360View customerId={customerId} />
+          <Customer360View customerId={parseInt(customerId)} />
         </TabsContent>
       </Tabs>
     </div>

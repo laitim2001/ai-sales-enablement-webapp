@@ -12,17 +12,92 @@
  */
 
 // 載入環境變數
-require('dotenv').config({ path: '.env.local' });
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
 
-const { spawn } = require('child_process');
-const fs = require('fs').promises;
-const path = require('path');
-const { runSystemIntegrationTests } = require('../tests/integration/system-integration.test.ts');
+import { spawn } from 'child_process';
+import { promises as fs } from 'fs';
+import * as path from 'path';
+
+// Dynamic import for test function (will be loaded at runtime)
+let runSystemIntegrationTests: () => Promise<any>;
+
+// Type definitions
+type LogLevel = 'error' | 'warn' | 'info' | 'debug';
+
+interface Config {
+  reportDir: string;
+  logLevel: LogLevel;
+  timeout: number;
+  retryCount: number;
+}
+
+interface EnvironmentCheck {
+  hasRequired: boolean;
+  hasAzureOpenAI: boolean;
+  hasDynamics365: boolean;
+}
+
+interface TestStats {
+  total: number;
+  passed: number;
+  failed: number;
+}
+
+interface TestError {
+  test: string;
+  error: string;
+}
+
+interface TestResult {
+  success: boolean;
+  results: {
+    total: number;
+    passed: number;
+    failed: number;
+    errors: TestError[];
+  };
+  successRate: number;
+  duration: number;
+  suites: Record<string, TestStats>;
+}
+
+interface Recommendation {
+  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  category: string;
+  message: string;
+}
+
+interface ReportData {
+  timestamp: string;
+  environment: {
+    nodeVersion: string;
+    platform: string;
+    hasRequired: boolean;
+    hasAzureOpenAI: boolean;
+    hasDynamics365: boolean;
+  };
+  summary: {
+    total: number;
+    passed: number;
+    failed: number;
+    successRate: number;
+    duration: number;
+  };
+  suites: Record<string, TestStats>;
+  errors: TestError[];
+  recommendations: Recommendation[];
+}
+
+interface ReportPaths {
+  jsonReportPath: string;
+  mdReportPath: string;
+}
 
 // 配置
-const CONFIG = {
+const CONFIG: Config = {
   reportDir: './test-reports',
-  logLevel: process.env.LOG_LEVEL || 'info',
+  logLevel: (process.env.LOG_LEVEL as LogLevel) || 'info',
   timeout: 300000, // 5分鐘總超時
   retryCount: 2
 };
@@ -30,9 +105,9 @@ const CONFIG = {
 /**
  * 日誌輸出函數
  */
-function log(level, message) {
+function log(level: LogLevel, message: string): void {
   const timestamp = new Date().toISOString();
-  const levels = { error: 0, warn: 1, info: 2, debug: 3 };
+  const levels: Record<LogLevel, number> = { error: 0, warn: 1, info: 2, debug: 3 };
   const currentLevel = levels[CONFIG.logLevel] || 2;
 
   if (levels[level] <= currentLevel) {
@@ -43,7 +118,7 @@ function log(level, message) {
 /**
  * 檢查環境配置
  */
-async function checkEnvironment() {
+async function checkEnvironment(): Promise<EnvironmentCheck> {
   log('info', '🔧 檢查環境配置...');
 
   const requiredEnvVars = [
@@ -76,46 +151,48 @@ async function checkEnvironment() {
   log('info', '✅ 環境配置檢查完成');
   return {
     hasRequired: missingRequired.length === 0,
-    hasAzureOpenAI: process.env.AZURE_OPENAI_ENDPOINT && process.env.AZURE_OPENAI_API_KEY,
-    hasDynamics365: process.env.DYNAMICS_365_TENANT_ID &&
+    hasAzureOpenAI: !!(process.env.AZURE_OPENAI_ENDPOINT && process.env.AZURE_OPENAI_API_KEY),
+    hasDynamics365: !!(process.env.DYNAMICS_365_TENANT_ID &&
                    process.env.DYNAMICS_365_CLIENT_ID &&
                    process.env.DYNAMICS_365_CLIENT_SECRET &&
-                   process.env.DYNAMICS_365_RESOURCE
+                   process.env.DYNAMICS_365_RESOURCE)
   };
 }
 
 /**
  * 檢查服務狀態
  */
-async function checkServices() {
+async function checkServices(): Promise<void> {
   log('info', '🔍 檢查服務狀態...');
 
   // 檢查開發服務器
   try {
-    const fetch = require('node-fetch');
+    const fetch = (await import('node-fetch')).default;
     const response = await fetch('http://localhost:3001/api/health', {
       timeout: 5000
-    });
+    } as any);
 
     if (response.ok) {
       log('info', '✅ 開發服務器運行正常');
     } else {
       log('warn', `⚠️ 開發服務器狀態異常: ${response.status}`);
     }
-  } catch (error) {
-    log('error', `❌ 無法連接開發服務器: ${error.message}`);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    log('error', `❌ 無法連接開發服務器: ${errorMessage}`);
     throw new Error('開發服務器未啟動，請先運行 npm run dev');
   }
 
   // 檢查資料庫連接
   try {
-    const { PrismaClient } = require('@prisma/client');
+    const { PrismaClient } = await import('@prisma/client');
     const prisma = new PrismaClient();
     await prisma.$queryRaw`SELECT 1`;
     await prisma.$disconnect();
     log('info', '✅ 資料庫連接正常');
-  } catch (error) {
-    log('error', `❌ 資料庫連接失敗: ${error.message}`);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    log('error', `❌ 資料庫連接失敗: ${errorMessage}`);
     throw new Error('資料庫連接失敗，請檢查 DATABASE_URL 配置');
   }
 }
@@ -123,22 +200,27 @@ async function checkServices() {
 /**
  * 準備測試環境
  */
-async function prepareTestEnvironment() {
+async function prepareTestEnvironment(): Promise<void> {
   log('info', '🛠️ 準備測試環境...');
 
   // 創建測試報告目錄
   try {
     await fs.mkdir(CONFIG.reportDir, { recursive: true });
     log('debug', `創建測試報告目錄: ${CONFIG.reportDir}`);
-  } catch (error) {
-    if (error.code !== 'EEXIST') {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'code' in error && error.code !== 'EEXIST') {
       throw error;
     }
   }
 
-  // 設置測試環境變數
-  process.env.NODE_ENV = 'test';
-  process.env.TEST_BASE_URL = 'http://localhost:3002';
+  // 設置測試環境變數 (使用臨時變數避免只讀屬性問題)
+  const testEnv = {
+    ...process.env,
+    NODE_ENV: 'test',
+    TEST_BASE_URL: 'http://localhost:3002'
+  };
+
+  Object.assign(process.env, testEnv);
 
   log('info', '✅ 測試環境準備完成');
 }
@@ -146,12 +228,24 @@ async function prepareTestEnvironment() {
 /**
  * 執行整合測試
  */
-async function executeIntegrationTests() {
+async function executeIntegrationTests(): Promise<TestResult> {
   log('info', '🚀 開始執行整合測試...');
+
+  // Load test function dynamically
+  if (!runSystemIntegrationTests) {
+    try {
+      const testModule = await import('../tests/integration/system-integration.test') as any;
+      runSystemIntegrationTests = testModule.runSystemIntegrationTests || testModule.default;
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      log('error', `無法載入測試模組: ${errorMessage}`);
+      throw new Error('測試模組載入失敗');
+    }
+  }
 
   const startTime = Date.now();
   let attempt = 1;
-  let lastError = null;
+  let lastError: Error | null = null;
 
   while (attempt <= CONFIG.retryCount) {
     try {
@@ -160,7 +254,7 @@ async function executeIntegrationTests() {
       // 執行測試
       const result = await Promise.race([
         runSystemIntegrationTests(),
-        new Promise((_, reject) => {
+        new Promise<never>((_, reject) => {
           setTimeout(() => reject(new Error('測試總體超時')), CONFIG.timeout);
         })
       ]);
@@ -170,9 +264,9 @@ async function executeIntegrationTests() {
 
       return result;
 
-    } catch (error) {
-      lastError = error;
-      log('error', `❌ 第 ${attempt} 次測試失敗: ${error.message}`);
+    } catch (error: unknown) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      log('error', `❌ 第 ${attempt} 次測試失敗: ${lastError.message}`);
 
       if (attempt < CONFIG.retryCount) {
         log('info', `等待 5 秒後重試...`);
@@ -189,10 +283,10 @@ async function executeIntegrationTests() {
 /**
  * 生成測試報告
  */
-async function generateTestReport(testResult, environment) {
+async function generateTestReport(testResult: TestResult, environment: EnvironmentCheck): Promise<ReportPaths> {
   log('info', '📊 生成測試報告...');
 
-  const reportData = {
+  const reportData: ReportData = {
     timestamp: new Date().toISOString(),
     environment: {
       nodeVersion: process.version,
@@ -230,8 +324,8 @@ async function generateTestReport(testResult, environment) {
 /**
  * 生成建議
  */
-function generateRecommendations(testResult) {
-  const recommendations = [];
+function generateRecommendations(testResult: TestResult): Recommendation[] {
+  const recommendations: Recommendation[] = [];
 
   // 基於成功率的建議
   if (testResult.successRate < 80) {
@@ -243,8 +337,8 @@ function generateRecommendations(testResult) {
   }
 
   // 基於失敗類型的建議
-  const errorCategories = {};
-  testResult.results.errors.forEach(error => {
+  const errorCategories: Record<string, number> = {};
+  testResult.results.errors.forEach((error: TestError) => {
     const category = error.test.split(' ')[0];
     errorCategories[category] = (errorCategories[category] || 0) + 1;
   });
@@ -274,7 +368,7 @@ function generateRecommendations(testResult) {
 /**
  * 生成 Markdown 報告
  */
-function generateMarkdownReport(reportData) {
+function generateMarkdownReport(reportData: ReportData): string {
   return `# 系統整合測試報告
 
 ## 測試摘要
@@ -328,7 +422,7 @@ ${reportData.recommendations.length > 0 ?
 /**
  * 主執行函數
  */
-async function main() {
+async function main(): Promise<void> {
   const startTime = Date.now();
 
   try {
@@ -367,9 +461,11 @@ async function main() {
       process.exit(1);
     }
 
-  } catch (error) {
-    log('error', `❌ 測試流程失敗: ${error.message}`);
-    console.error(error.stack);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    log('error', `❌ 測試流程失敗: ${errorMessage}`);
+    console.error(errorStack);
     process.exit(1);
   }
 }
@@ -379,7 +475,8 @@ if (require.main === module) {
   main();
 }
 
-module.exports = {
+// Export using ES modules syntax
+export {
   main,
   checkEnvironment,
   checkServices,

@@ -392,7 +392,13 @@ export default function ProposalVersionsPage({
         <VersionRestore
           open={restoreDialogOpen}
           onOpenChange={setRestoreDialogOpen}
-          targetVersion={restoreTarget}
+          targetVersion={{
+            id: restoreTarget.id,
+            version: restoreTarget.version,
+            label: restoreTarget.label ?? undefined,
+            created_at: restoreTarget.created_at,
+            snapshot_data: restoreTarget.snapshot_data,
+          }}
           currentVersion={{
             version: currentVersion,
             snapshot_data: versions.find((v) => v.version === currentVersion)

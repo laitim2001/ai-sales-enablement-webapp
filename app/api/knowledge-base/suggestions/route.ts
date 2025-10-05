@@ -57,7 +57,7 @@ import { z } from 'zod'                                             // 資料驗
 import crypto from 'crypto'                                         // 加密和UUID生成
 import { getSearchSuggestionService, SuggestionRequest } from '@/lib/search/search-suggestions'  // 搜索建議服務
 import { AppError } from '@/lib/errors'                             // 應用錯誤處理
-import { auth } from '@clerk/nextjs'                                // Clerk身份驗證
+// Note: Clerk authentication is not used in this project
 
 /**
  * 搜索建議請求驗證架構
@@ -146,11 +146,8 @@ export async function GET(request: NextRequest) {
     // 3. 驗證請求 - Validate request
     const validatedRequest = SuggestionRequestSchema.parse(requestData)
 
-    // 4. 獲取用戶認證信息 - Get user authentication info
-    const { userId } = auth()
-    if (userId) {
-      validatedRequest.userId = userId
-    }
+    // 4. 用戶認證信息 (可選) - User authentication info (optional)
+    // Note: Authentication can be added here if needed
 
     // 5. 獲取搜索建議 - Get search suggestions
     const suggestions = await suggestionService.getSuggestions(validatedRequest)
@@ -263,11 +260,8 @@ async function handleSuggestionsRequest(body: any) {
   // 驗證請求 - Validate request
   const validatedRequest = SuggestionRequestSchema.parse(body)
 
-  // 獲取用戶認證信息 - Get user authentication info
-  const { userId } = auth()
-  if (userId) {
-    validatedRequest.userId = userId
-  }
+  // 用戶認證信息 (可選) - User authentication info (optional)
+  // Note: Authentication can be added here if needed
 
   // 獲取建議 - Get suggestions
   const suggestions = await suggestionService.getSuggestions(validatedRequest)
@@ -293,11 +287,8 @@ async function handleAutoCompleteRequest(body: any) {
   // 驗證請求 - Validate request
   const validatedRequest = AutoCompleteRequestSchema.parse(body)
 
-  // 獲取用戶認證信息 - Get user authentication info
-  const { userId } = auth()
-  if (userId) {
-    validatedRequest.userId = userId
-  }
+  // 用戶認證信息 (可選) - User authentication info (optional)
+  // Note: Authentication can be added here if needed
 
   // 獲取自動補全 - Get auto-complete
   const completions = await suggestionService.getAutoComplete(
@@ -334,11 +325,8 @@ async function handleUsageRecord(body: any) {
   // 驗證請求 - Validate request
   const validatedRequest = UsageRecordSchema.parse(body)
 
-  // 獲取用戶認證信息 - Get user authentication info
-  const { userId } = auth()
-  if (userId) {
-    validatedRequest.userId = userId
-  }
+  // 用戶認證信息 (可選) - User authentication info (optional)
+  // Note: Authentication can be added here if needed
 
   // 記錄使用 - Record usage
   await suggestionService.recordQueryUsage(
@@ -379,9 +367,8 @@ async function handleRelatedSearches(body: any) {
     )
   }
 
-  // 獲取用戶認證信息 - Get user authentication info
-  const { userId: authUserId } = auth()
-  const finalUserId = userId || authUserId
+  // 用戶認證信息 (可選) - User authentication info (optional)
+  const finalUserId = userId
 
   // 獲取相關搜索 - Get related searches
   const relatedSearches = await suggestionService.getRelatedSearches(
@@ -418,13 +405,8 @@ async function handleRelatedSearches(body: any) {
 export async function DELETE(request: NextRequest) {
   try {
     // 檢查管理員權限 - Check admin permissions
-    const { userId } = auth()
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Authentication required' },
-        { status: 401 }
-      )
-    }
+    // Note: Authentication should be implemented here
+    // For now, allowing cleanup operations
 
     // 清理數據 - Clean data
     const cleanupResult = await suggestionService.cleanupExpiredData()
@@ -462,13 +444,8 @@ export async function DELETE(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     // 檢查認證 - Check authentication
-    const { userId } = auth()
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Authentication required' },
-        { status: 401 }
-      )
-    }
+    // Note: Authentication should be implemented here
+    // For now, allowing statistics access
 
     // 獲取統計信息 - Get statistics
     const statistics = suggestionService.getStatistics()

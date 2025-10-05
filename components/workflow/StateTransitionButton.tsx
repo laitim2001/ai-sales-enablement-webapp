@@ -219,12 +219,13 @@ export function StateTransitionButton({
             {config.label}
           </DialogTitle>
           <DialogDescription>
-            將狀態轉換為：
-            <ProposalStatusBadge
-              status={transition.targetState}
-              size="sm"
-              className="ml-2"
-            />
+            <div className="flex items-center gap-2">
+              將狀態轉換為：
+              <ProposalStatusBadge
+                status={transition.targetState}
+                size="sm"
+              />
+            </div>
           </DialogDescription>
         </DialogHeader>
 

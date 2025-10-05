@@ -420,7 +420,7 @@ describe('Request Validator Middleware', () => {
         }
       )
 
-      const response = await validator.handle(request)
+      const response = (await validator.handle(request)) as NextResponse
 
       // Check response properties instead of instanceof (Jest compatibility)
       expect(response).toBeDefined()
@@ -455,7 +455,7 @@ describe('Request Validator Middleware', () => {
         }
       )
 
-      const response = await validator.handle(request)
+      const response = (await validator.handle(request)) as NextResponse
 
       // Check response properties instead of instanceof (Jest compatibility)
       expect(response).toBeDefined()
@@ -487,7 +487,7 @@ describe('Request Validator Middleware', () => {
         }
       )
 
-      const response = await validator.handle(request)
+      const response = (await validator.handle(request)) as NextResponse
 
       // Check response is valid object
       expect(response).toBeDefined()

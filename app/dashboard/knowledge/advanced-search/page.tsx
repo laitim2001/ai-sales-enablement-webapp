@@ -48,10 +48,14 @@ interface SearchResult {
   title: string;
   content: string;
   category: string;
+  tags: string[];
   author: string;
+  status: string;
   created_at: string;
   updated_at: string;
   relevance_score?: number;
+  view_count?: number;
+  download_count?: number;
 }
 
 /**

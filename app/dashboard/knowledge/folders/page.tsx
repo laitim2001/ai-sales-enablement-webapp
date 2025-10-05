@@ -143,7 +143,6 @@ export default function FoldersPage() {
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <KnowledgeFolderTree
           key={refreshKey}
-          onFolderAction={handleFolderAction}
         />
       </div>
 

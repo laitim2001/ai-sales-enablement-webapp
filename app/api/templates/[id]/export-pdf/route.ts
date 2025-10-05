@@ -53,10 +53,10 @@ export async function POST(
         content: true,
         variables: true,
         category: true,
-        created_by: {
+        creator: {
           select: {
-            firstName: true,
-            lastName: true,
+            first_name: true,
+            last_name: true,
           },
         },
       },
@@ -95,8 +95,8 @@ export async function POST(
       content: renderedContent,
       companyName: variables.companyName || variables.company_name || 'AI 銷售賦能平台',
       proposalNumber: `PROP-${template.id.slice(0, 8).toUpperCase()}`,
-      author: template.created_by
-        ? `${template.created_by.firstName} ${template.created_by.lastName}`.trim()
+      author: template.creator
+        ? `${template.creator.first_name} ${template.creator.last_name}`.trim()
         : '系統管理員',
     };
 
