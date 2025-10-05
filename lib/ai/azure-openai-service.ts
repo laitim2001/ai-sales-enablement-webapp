@@ -145,8 +145,8 @@ export class AzureOpenAIService {
         top_p: mergedConfig.topP,
         presence_penalty: mergedConfig.presencePenalty,
         frequency_penalty: mergedConfig.frequencyPenalty,
-        stream: request.streamResponse || false
-      });
+        stream: false // 暫不支持 streaming
+      }) as any; // 類型斷言以處理 Azure SDK 的 union type
 
       const responseTime = Date.now() - startTime;
       const content = completion.choices[0]?.message?.content || '';

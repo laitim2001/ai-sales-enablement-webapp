@@ -373,8 +373,10 @@ export class ContextualResultEnhancer {
     try {
       const prompt = this.buildSummaryPrompt(result, semanticAnalysis, context)
 
+      // TODO: Week 6 - 實現正確的 Azure OpenAI SDK 調用
+      // Azure SDK 使用 getChatCompletions() 而非 .chat.completions.create()
       const openaiClient = getOpenAIClient()
-      const response = await openaiClient.chat.completions.create({
+      const response = await (openaiClient as any).chat.completions.create({
         model: 'gpt-4',
         messages: [
           { role: 'system', content: this.ENHANCEMENT_SYSTEM_PROMPT },

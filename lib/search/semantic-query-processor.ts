@@ -339,8 +339,9 @@ export class SemanticQueryProcessor {
     const prompt = this.buildAnalysisPrompt(query, baseAnalysis, context)
 
     try {
+      // TODO: Week 6 - 實現正確的 Azure OpenAI SDK 調用
       const openaiClient = getOpenAIClient()
-      const response = await openaiClient.chat.completions.create({
+      const response = await (openaiClient as any).chat.completions.create({
         model: 'gpt-4',
         messages: [
           { role: 'system', content: this.SYSTEM_PROMPT },
@@ -468,7 +469,7 @@ export class SemanticQueryProcessor {
     } catch (error) {
       console.warn('⚠️ GPT-4結果格式不正確，使用回退分析:', error)
       // 回退到快速分析
-      return this.fastTrackAnalysis(query, baseAnalysis)
+      return this.fastTrackAnalysis(query, baseAnalysis, undefined)
     }
   }
 
@@ -524,8 +525,9 @@ export class SemanticQueryProcessor {
     try {
       const contextQueries = context.previousQueries.slice(-3).map(pq => pq.query).join('\n')
 
+      // TODO: Week 6 - 實現正確的 Azure OpenAI SDK 調用
       const openaiClient = getOpenAIClient()
-      const response = await openaiClient.chat.completions.create({
+      const response = await (openaiClient as any).chat.completions.create({
         model: 'gpt-4',
         messages: [
           {

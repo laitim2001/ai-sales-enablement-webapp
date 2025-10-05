@@ -229,7 +229,7 @@ export async function testAIServices(): Promise<{
 
     testResults.chat.success = true
     testResults.chat.result = chatResult
-    console.log('✅ Chat test passed - Response:', chatResult.content)
+    console.log('✅ Chat test passed - Response:', chatResult.message)
   } catch (error) {
     console.error('❌ Chat test failed:', error)
     testResults.chat.error = error instanceof Error ? error.message : 'Unknown chat error'
