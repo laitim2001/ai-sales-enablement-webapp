@@ -78,9 +78,6 @@ const redisConfig = {
     const delay = Math.min(times * 50, 2000)
     return delay
   },
-
-  // 錯誤處理
-  maxRetriesPerRequest: 3,
 }
 
 // 創建 Redis 實例

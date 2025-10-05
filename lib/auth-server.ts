@@ -178,6 +178,11 @@ export async function authenticateUser(email: string, password: string): Promise
     return null
   }
 
+  // 檢查密碼哈希是否存在
+  if (!user.password_hash) {
+    return null
+  }
+
   const isValidPassword = await verifyPassword(password, user.password_hash)
   if (!isValidPassword) {
     return null

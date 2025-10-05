@@ -50,7 +50,7 @@
 import { ConfidentialClientApplication, Configuration, AuthorizationUrlRequest, AuthorizationCodeRequest } from '@azure/msal-node'
 import { prisma } from '@/lib/db'
 import { loginUser } from './token-service'
-import type { User } from '@prisma/client'
+import type { User, UserRole } from '@prisma/client'
 
 /**
  * Azure AD配置驗證
@@ -194,7 +194,7 @@ export async function handleAzureADCallback(
       preferred_username: tokenResponse.account.username,
       name: tokenResponse.account.name || tokenResponse.account.username,
       email: tokenResponse.account.username,
-      roles: tokenResponse.idTokenClaims?.roles as string[] || []
+      roles: (tokenResponse.idTokenClaims as any)?.roles as string[] || []
     }
 
     // 第三步：同步用戶到本地資料庫
@@ -289,21 +289,23 @@ async function syncAzureADUser(azureUser: AzureADUserInfo): Promise<User> {
  * 根據Azure AD角色確定本地角色
  *
  * 映射Azure AD角色到應用程式角色
- * 默認為'sales'角色
+ * 默認為 SALES_REP 角色
  *
  * @param azureUser - Azure AD用戶信息
  * @returns 本地角色
  */
-function determineUserRole(azureUser: AzureADUserInfo): string {
+function determineUserRole(azureUser: AzureADUserInfo): UserRole {
   if (!azureUser.roles || azureUser.roles.length === 0) {
-    return 'sales' // 默認角色
+    return 'SALES_REP' as UserRole // 默認角色
   }
 
   // Azure AD角色映射
-  const roleMapping: Record<string, string> = {
-    'Admin': 'admin',
-    'SalesManager': 'manager',
-    'Sales': 'sales'
+  const roleMapping: Record<string, UserRole> = {
+    'Admin': 'ADMIN' as UserRole,
+    'SalesManager': 'SALES_MANAGER' as UserRole,
+    'Sales': 'SALES_REP' as UserRole,
+    'Marketing': 'MARKETING' as UserRole,
+    'Viewer': 'VIEWER' as UserRole
   }
 
   // 找到第一個匹配的角色
@@ -313,7 +315,7 @@ function determineUserRole(azureUser: AzureADUserInfo): string {
     }
   }
 
-  return 'sales' // 默認角色
+  return 'SALES_REP' as UserRole // 默認角色
 }
 
 /**
