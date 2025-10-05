@@ -162,9 +162,10 @@ export class ImageOCRParser {
       const worker = await this.initWorker()
 
       // 執行 OCR 識別
-      const {
-        data: { text, confidence, lines, words },
-      } = await worker.recognize(buffer)
+      const result = await worker.recognize(buffer)
+      const { text, confidence } = result.data
+      const lines = (result.data as any).lines
+      const words = (result.data as any).words
 
       // 清理文本
       const cleanedText = this.cleanText(text)

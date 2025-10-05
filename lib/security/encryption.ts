@@ -170,7 +170,7 @@ export class EncryptionService {
       encrypted += cipher.final('base64');
 
       // 4. 提取認證標籤（GCM 模式提供）
-      const authTag = cipher.getAuthTag();
+      const authTag = (cipher as any).getAuthTag();
 
       // 5. 組合加密資料
       const encryptedData: EncryptedData = {
@@ -230,7 +230,7 @@ export class EncryptionService {
       );
 
       // 5. 設置認證標籤（必須在解密前設置）
-      decipher.setAuthTag(authTag);
+      (decipher as any).setAuthTag(authTag);
 
       // 6. 解密資料
       let decrypted = decipher.update(encryptedData.encrypted, 'base64', 'utf8');

@@ -195,7 +195,7 @@ export class ExcelParser {
         // 提取結構化數據（如需要）
         if (this.options.extractStructured) {
           const json = this.options.firstRowAsHeader && filteredData.length > 0
-            ? XLSX.utils.sheet_to_json(worksheet, { defval: this.getEmptyValue() })
+            ? XLSX.utils.sheet_to_json(worksheet, { defval: this.getEmptyValue() }) as Record<string, any>[]
             : undefined
 
           sheets.push({
