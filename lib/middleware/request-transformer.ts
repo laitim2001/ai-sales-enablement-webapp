@@ -817,6 +817,5 @@ export function withRequestTransformer(options?: TransformOptions) {
  */
 // 類型已在文件開頭導出，無需重複export
 export type {
-  TransformOptions as RequestTransformOptions,
-  TransformerFunction
+  TransformOptions as RequestTransformOptions
 }

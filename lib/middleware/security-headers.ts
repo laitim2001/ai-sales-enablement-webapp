@@ -318,6 +318,10 @@ export class SecurityHeadersMiddleware {
       return 'max-age=31536000; includeSubDomains'
     }
 
+    if (config === false || typeof config !== 'object') {
+      return ''
+    }
+
     const parts: string[] = [`max-age=${config.maxAge ?? 31536000}`]
 
     if (config.includeSubDomains) {
@@ -373,8 +377,8 @@ export class SecurityHeadersMiddleware {
       hsts:
         options.hsts === false
           ? false
-          : typeof options.hsts === 'object'
-            ? { ...DEFAULT_SECURITY_OPTIONS.hsts, ...options.hsts }
+          : typeof options.hsts === 'object' && options.hsts !== null
+            ? { ...(DEFAULT_SECURITY_OPTIONS.hsts as object), ...options.hsts }
             : DEFAULT_SECURITY_OPTIONS.hsts,
       frameOptions: options.frameOptions ?? DEFAULT_SECURITY_OPTIONS.frameOptions,
       noSniff: options.noSniff ?? DEFAULT_SECURITY_OPTIONS.noSniff,
@@ -543,4 +547,4 @@ export const SecurityPresets = {
 /**
  * 類型導出
  */
-export type { SecurityHeadersOptions, CspDirectives }
+// 類型已在文件開頭導出，無需重複export
