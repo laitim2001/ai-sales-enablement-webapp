@@ -474,20 +474,31 @@ model SystemConfig {
 
 // 審計日誌模型
 model AuditLog {
-  id          Int      @id @default(autoincrement())
-  user_id     Int?
-  entity_type String
-  entity_id   Int?
-  action      String
-  old_values  Json?
-  new_values  Json?
-  ip_address  String?
-  user_agent  String?
-  created_at  DateTime @default(now())
+  id            Int            @id @default(autoincrement())
+  user_id       Int?
+  user_name     String?
+  user_email    String?
+  user_role     UserRole?
+  entity_type   String
+  entity_id     Int?
+  action        String
+  severity      AuditSeverity  @default(INFO)
+  success       Boolean        @default(true)
+  old_values    Json?
+  new_values    Json?
+  ip_address    String?
+  user_agent    String?
+  error_message String?
+  request_id    String?
+  session_id    String?
+  details       Json?
+  created_at    DateTime       @default(now())
 
   @@index([user_id, created_at], name: "IX_Audit_User_Date")
   @@index([entity_type, entity_id], name: "IX_Audit_Entity")
   @@index([action, created_at], name: "IX_Audit_Action_Date")
+  @@index([severity, created_at], name: "IX_Audit_Severity_Date")
+  @@index([success, created_at], name: "IX_Audit_Success_Date")
   @@map("audit_logs")
 }
 
@@ -1473,4 +1484,12 @@ enum BatchStatus {
   COMPLETED // 已完成
   FAILED    // 失敗
   CANCELLED // 已取消
+}
+
+// 審計日誌嚴重級別 (Sprint 3 Week 8)
+enum AuditSeverity {
+  INFO     // 一般信息
+  WARNING  // 警告
+  ERROR    // 錯誤
+  CRITICAL // 關鍵
 }
