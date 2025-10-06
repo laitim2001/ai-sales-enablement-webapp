@@ -416,12 +416,14 @@ export function KnowledgeBaseList({ filters }: KnowledgeBaseListProps) {
                     查看
                   </Button>
                 </Link>
-                <Link href={`/dashboard/knowledge/${item.id}/edit`}>
-                  <Button variant="outline" size="sm">
-                    <PencilIcon className="h-4 w-4 mr-1" />
-                    編輯
-                  </Button>
-                </Link>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push(`/dashboard/knowledge/${item.id}/edit`)}
+                >
+                  <PencilIcon className="h-4 w-4 mr-1" />
+                  編輯
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
