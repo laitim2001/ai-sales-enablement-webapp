@@ -54,6 +54,8 @@ import crypto from 'crypto'
 import { AppError } from '@/lib/errors'
 import { verifyToken } from '@/lib/auth-server'
 import { DocumentCategory, DocumentStatus, ProcessingStatus } from '@prisma/client'
+import { requirePermission } from '@/lib/security/permission-middleware'
+import { Resource, Action } from '@/lib/security/rbac'
 
 /**
  * ================================================================
@@ -120,30 +122,19 @@ const QueryKnowledgeBaseSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     /**
-     * ===== 第一步：用戶身份驗證 =====
-     * 檢查並驗證JWT Token，支援Header和Cookie兩種方式
+     * ===== 第一步：RBAC權限檢查 =====
+     * 檢查用戶是否有LIST知識庫的權限
      */
+    const authResult = await requirePermission(request, {
+      resource: Resource.KNOWLEDGE_BASE,
+      action: Action.LIST,
+    });
 
-    // 從Authorization Header提取Bearer Token
-    let token = request.headers.get('authorization')?.replace('Bearer ', '')
-
-    // 如果Header中沒有token，嘗試從Cookie中獲取
-    if (!token) {
-      token = request.cookies.get('auth-token')?.value
+    if (!authResult.authorized) {
+      return authResult.response!;
     }
 
-    // 如果兩種方式都沒有token，返回未授權錯誤
-    if (!token) {
-      throw AppError.unauthorized('No authentication token provided')
-    }
-
-    // 驗證token的有效性和完整性
-    const payload = verifyToken(token)
-
-    // 檢查token payload的格式和必要欄位
-    if (!payload || typeof payload !== 'object' || !payload.userId) {
-      throw AppError.unauthorized('Invalid token payload')
-    }
+    const user = authResult.user!;
 
     /**
      * ===== 第二步：解析和驗證查詢參數 =====
@@ -334,27 +325,19 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     /**
-     * ===== 第一步：用戶身份驗證 =====
-     * 與GET方法相同的認證邏輯
+     * ===== 第一步：RBAC權限檢查 =====
+     * 檢查用戶是否有CREATE知識庫的權限
      */
+    const authResult = await requirePermission(request, {
+      resource: Resource.KNOWLEDGE_BASE,
+      action: Action.CREATE,
+    });
 
-    // 從Authorization Header或Cookie提取JWT Token
-    let token = request.headers.get('authorization')?.replace('Bearer ', '')
-
-    if (!token) {
-      token = request.cookies.get('auth-token')?.value
+    if (!authResult.authorized) {
+      return authResult.response!;
     }
 
-    if (!token) {
-      throw AppError.unauthorized('No authentication token provided')
-    }
-
-    // 驗證token並提取用戶信息
-    const payload = verifyToken(token)
-
-    if (!payload || typeof payload !== 'object' || !payload.userId) {
-      throw AppError.unauthorized('Invalid token payload')
-    }
+    const payload = authResult.user!;
 
     /**
      * ===== 第二步：解析和驗證請求數據 =====
