@@ -1,187 +1,533 @@
 /**
  * ================================================================
- * AI銷售賦能平台 - 知識庫文檔詳情頁面 (app/dashboard/knowledge/[id]/page.tsx)
+ * AI銷售賦能平台 - 知識庫詳情頁面 (app/dashboard/knowledge/[id]/page.tsx)
  * ================================================================
  *
  * 【檔案功能】
- * 提供單個知識庫文檔的詳細資訊展示和管理界面，支持內容預覽、元數據查看、
- * 編輯管理和相關操作，為用戶提供完整的文檔生命週期管理体驗。
+ * 提供知識庫文檔的詳細資訊查看界面，展示文檔完整內容、元數據、版本信息、
+ * 標籤分類等全方位資訊，支援快速編輯、刪除和內容管理功能。
  *
  * 【主要職責】
- * • 文檔詳情展示 - KnowledgeDocumentView組件深度整合
- * • 元數據管理 - 文檔標題、標籤、創建時間等信息
- * • 內容預覽 - 文檔內容的格式化顯示和渲染
- * • 管理操作 - 編輯、刪除、下載等文檔操作
- * • 權限控制 - 根據用戶權限顯示可用操作
+ * • 文檔詳情展示 - 顯示文檔標題、內容、分類、狀態等基本資訊
+ * • 元數據管理 - 展示創建者、創建時間、更新時間等元數據
+ * • 標籤系統 - 顯示文檔關聯的標籤和分類信息
+ * • 版本控制 - 展示文檔版本號和歷史記錄
+ * • 快速操作 - 提供編輯、刪除、返回等操作按鈕
+ * • 內容預覽 - 渲染文檔內容的完整預覽
  *
  * 【頁面結構】
- * • 標題和操作區 - 返回按鈕 + 標題 + 編輯/刪除按鈕
- * • 麵包屑導航區 - 完整的面包屑路徑显示
- * • 文檔內容區 - KnowledgeDocumentView組件渲染區域
+ * • 導航區域 - 返回按鈕和麵包屑導航
+ * • 標題區域 - 文檔標題、狀態標籤、操作按鈕
+ * • 元數據卡片 - 分類、創建者、時間、版本、片段數等信息
+ * • 標籤卡片 - 文檔關聯的所有標籤展示
+ * • 內容卡片 - 文檔完整內容的渲染展示
  *
  * 【功能特色】
- * • 動態路由 - 支持[id]參數的動態路由處理
- * • 元數據產生 - generateMetadata函數動態產生SEO元數據
- * • 參數驗證 - 文檔ID的數字驗證和錯誤處理
- * • 操作按鈕 - 編輯和刪除按鈕的條件式顯示
- * • 導航連結 - 與其他知識庫頁面的無縫連接
+ * • 響應式設計 - 適配不同屏幕尺寸的最優顯示效果
+ * • 即時載入 - 快速獲取並展示文檔詳細資訊
+ * • 狀態管理 - 優雅處理載入、錯誤和空狀態
+ * • 時間格式化 - 使用相對時間顯示更新信息
+ * • 權限控制 - 基於角色的文檔訪問和操作權限
  *
  * 【用戶流程】
- * 1. 從知識庫列表點擊文檔進入詳情頁面
- * 2. 查看文檔完整內容和元數據信息
- * 3. 使用預覽功能查看格式化內容
- * 4. 點擊編輯按鈕進入編輯模式
- * 5. 使用刪除功能移除不需要的文檔
- * 6. 透過麵包屑導航到其他相關頁面
+ * 1. 從知識庫列表點擊查看按鈕進入詳情頁
+ * 2. 檢視文檔完整內容和元數據信息
+ * 3. 瀏覽文檔關聯的標籤和分類
+ * 4. 執行編輯或刪除操作（需要權限）
+ * 5. 返回知識庫列表繼續瀏覽
  *
- * 【URL參數】
- * • 路徑：/dashboard/knowledge/[id]
- * • 動態參數：
- *   - id: 文檔ID（數字，必須 > 0）
- *
- * 【狀態管理】
- * • documentId: 由URL參數解析的文檔ID
- * • 文檔数據由KnowledgeDocumentView組件管理
+ * 【路由參數】
+ * • params.id: 知識庫文檔ID，用於載入特定文檔的詳細資料
  *
  * 【相關檔案】
- * • components/knowledge/knowledge-document-view.tsx - 核心詳情組件
- * • app/dashboard/knowledge/[id]/edit/page.tsx - 編輯頁面
- * • app/dashboard/knowledge/page.tsx - 知識庫主頁面
- * • app/api/knowledge-base/[id]/route.ts - 文檔数據API
- * • components/ui/button.tsx - 按鈕UI組件
+ * • components/knowledge/knowledge-base-list-optimized.tsx - 知識庫列表組件
+ * • app/api/knowledge-base/[id]/route.ts - 知識庫詳情API
+ * • app/dashboard/knowledge/[id]/edit/page.tsx - 知識庫編輯頁面
+ * • app/dashboard/knowledge/page.tsx - 知識庫列表頁面
  *
  * 【開發注意】
- * • 參數驗證：需對無效ID進行404處理
- * • 權限控制：不同用戶可編輯/刪除的文檔範圍不同
- * • SEO優化：generateMetadata函數需處理API錯誤
- * • 性能優化：大文檔的延遲載入和分段顯示
- * • 錯誤處理：文檔不存在、網路錯誤的友好提示
+ * • 數據載入：處理文檔不存在和權限不足的情況
+ * • 內容渲染：安全渲染用戶提交的文檔內容
+ * • 權限控制：基於角色的編輯和刪除權限檢查
+ * • 錯誤邊界：優雅處理API調用和組件載入錯誤
+ * • SEO優化：提供適當的頁面標題和元數據
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { ArrowLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { KnowledgeDocumentView } from '@/components/knowledge/knowledge-document-view'
-import { Button } from '@/components/ui/button'
+'use client'
 
-interface PageProps {
-  params: {
-    id: string
+import { useState, useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import {
+  ArrowLeft,
+  Edit,
+  Trash2,
+  Loader2,
+  AlertCircle,
+  FileText,
+  Calendar,
+  User,
+  Tag,
+  Hash,
+  Clock,
+  Folder
+} from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { formatDistanceToNow } from 'date-fns'
+import { zhTW } from 'date-fns/locale'
+
+// 知識庫文檔詳情介面
+interface KnowledgeBaseDetail {
+  id: number
+  title: string
+  content: string
+  category: string
+  status: string
+  version: number
+  created_at: string
+  updated_at: string
+  creator: {
+    id: number
+    first_name: string
+    last_name: string
+    email: string
+  }
+  tags: Array<{
+    id: number
+    name: string
+    color: string
+  }>
+  _count: {
+    chunks: number
   }
 }
 
-/**
- * 生成頁面元數據
- * 根據文檔ID獲取標題等信息
- */
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  try {
-    // 從API獲取文檔信息以生成元數據
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/knowledge-base/${params.id}`, {
-      cache: 'no-store'
-    })
+// API響應介面
+interface ApiResponse {
+  success: boolean
+  data: KnowledgeBaseDetail
+  message?: string
+}
 
-    if (!response.ok) {
-      return {
-        title: '文檔詳情',
-        description: '查看知識庫文檔的詳細信息'
+// 分類標籤映射
+const categoryLabels: Record<string, string> = {
+  GENERAL: '一般',
+  PRODUCT_SPEC: '產品規格',
+  SALES_MATERIAL: '銷售資料',
+  TECHNICAL_DOC: '技術文檔',
+  LEGAL_DOC: '法律文件',
+  TRAINING: '培訓資料',
+  FAQ: '常見問題',
+  CASE_STUDY: '案例研究',
+  WHITE_PAPER: '白皮書',
+  PRESENTATION: '簡報',
+  COMPETITOR: '競爭分析',
+  INDUSTRY_NEWS: '行業新聞',
+  INTERNAL: '內部文檔'
+}
+
+// 狀態標籤映射
+const statusLabels: Record<string, string> = {
+  ACTIVE: '啟用',
+  INACTIVE: '停用',
+  ARCHIVED: '封存',
+  DELETED: '已刪除',
+  DRAFT: '草稿'
+}
+
+// 狀態顏色映射
+const statusColors: Record<string, string> = {
+  ACTIVE: 'bg-green-100 text-green-700 ring-green-600/20',
+  INACTIVE: 'bg-gray-100 text-gray-600 ring-gray-500/10',
+  ARCHIVED: 'bg-yellow-100 text-yellow-700 ring-yellow-600/20',
+  DELETED: 'bg-red-100 text-red-700 ring-red-600/10',
+  DRAFT: 'bg-blue-100 text-blue-700 ring-blue-600/20'
+}
+
+export default function KnowledgeBaseDetailPage() {
+  const params = useParams()
+  const router = useRouter()
+  const documentId = params.id as string
+
+  // 狀態管理
+  const [document, setDocument] = useState<KnowledgeBaseDetail | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  // 載入文檔資料
+  useEffect(() => {
+    const loadDocument = async () => {
+      setIsLoading(true)
+      setError(null)
+
+      try {
+        const token = localStorage.getItem('auth-token')
+        if (!token) {
+          throw new Error('未找到授權令牌，請重新登入')
+        }
+
+        // 驗證文檔ID
+        if (!documentId || documentId === 'undefined') {
+          throw new Error('無效的文檔ID')
+        }
+
+        const response = await fetch(`/api/knowledge-base/${documentId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('找不到指定的文檔')
+          } else if (response.status === 401) {
+            throw new Error('未授權訪問，請重新登入')
+          } else {
+            throw new Error('載入文檔失敗')
+          }
+        }
+
+        const result: ApiResponse = await response.json()
+
+        if (!result.success || !result.data) {
+          throw new Error(result.message || '載入文檔失敗')
+        }
+
+        setDocument(result.data)
+
+      } catch (err) {
+        console.error('載入文檔資料失敗:', err)
+        setError(err instanceof Error ? err.message : '載入文檔時發生未知錯誤')
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    const data = await response.json()
+    loadDocument()
+  }, [documentId])
 
-    return {
-      title: data.data?.title || '文檔詳情',
-      description: `查看「${data.data?.title}」的詳細內容和相關信息`
-    }
-  } catch (error) {
-    return {
-      title: '文檔詳情',
-      description: '查看知識庫文檔的詳細信息'
+  // 刪除文檔處理
+  const handleDelete = async () => {
+    if (!document) return
+
+    const confirmed = window.confirm(
+      `確定要刪除文檔「${document.title}」嗎？此操作無法撤銷。`
+    )
+
+    if (!confirmed) return
+
+    setIsDeleting(true)
+
+    try {
+      const token = localStorage.getItem('auth-token')
+      if (!token) {
+        throw new Error('未找到授權令牌，請重新登入')
+      }
+
+      const response = await fetch(`/api/knowledge-base/${documentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('刪除文檔失敗')
+      }
+
+      // 刪除成功，返回列表頁
+      router.push('/dashboard/knowledge')
+
+    } catch (err) {
+      console.error('刪除文檔失敗:', err)
+      alert(err instanceof Error ? err.message : '刪除文檔時發生錯誤')
+    } finally {
+      setIsDeleting(false)
     }
   }
-}
 
-/**
- * 文檔詳情頁面組件
- *
- * 路由參數：
- * - id: 知識庫項目ID（數字）
- *
- * 頁面結構：
- * 1. 頁面標題和操作按鈕
- * 2. 麵包屑導航
- * 3. 文檔詳情展示組件
- */
-export default function KnowledgeDetailPage({ params }: PageProps) {
-  // 驗證ID參數是否為有效數字
-  const documentId = parseInt(params.id)
-  if (isNaN(documentId) || documentId <= 0) {
-    notFound()
+  // 格式化日期時間
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('zh-TW', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
   }
+
+  // 格式化相對時間
+  const formatRelativeTime = (dateString: string) => {
+    return formatDistanceToNow(new Date(dateString), {
+      addSuffix: true,
+      locale: zhTW
+    })
+  }
+
+  // 載入中狀態
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-6 max-w-5xl">
+        <Card>
+          <CardContent className="text-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-400" />
+            <p className="text-gray-600">載入文檔資料中...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // 錯誤狀態
+  if (error || !document) {
+    return (
+      <div className="container mx-auto py-6 max-w-5xl">
+        <Card>
+          <CardContent className="text-center py-12">
+            <AlertCircle className="h-16 w-16 text-red-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              載入文檔失敗
+            </h3>
+            <p className="text-gray-600 mb-4">
+              {error || '找不到指定的文檔'}
+            </p>
+            <div className="space-x-2">
+              <Button variant="outline" onClick={() => router.push('/dashboard/knowledge')}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                返回列表
+              </Button>
+              <Button onClick={() => window.location.reload()}>
+                重新載入
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  const statusColor = statusColors[document.status] || statusColors.ACTIVE
+  const statusLabel = statusLabels[document.status] || document.status
+  const categoryLabel = categoryLabels[document.category] || document.category
 
   return (
-    <div className="space-y-6">
-      {/* 頁面標題和操作 */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard/knowledge">
-            <Button variant="outline" size="sm">
-              <ArrowLeftIcon className="h-4 w-4 mr-2" />
-              返回列表
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">文檔詳情</h1>
-            <p className="mt-1 text-sm text-gray-600">
-              查看文檔內容、元數據和相關操作
-            </p>
-          </div>
-        </div>
+    <div className="container mx-auto py-6 max-w-5xl">
+      {/* 導航和標題 */}
+      <div className="mb-6">
+        <Button
+          variant="ghost"
+          className="mb-4"
+          onClick={() => router.push('/dashboard/knowledge')}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          返回知識庫列表
+        </Button>
 
-        {/* 操作按鈕 */}
-        <div className="flex items-center gap-3">
-          <Link href={`/dashboard/knowledge/${documentId}/edit`}>
-            <Button variant="outline">
-              <PencilIcon className="h-4 w-4 mr-2" />
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-3">
+              <FileText className="h-8 w-8 text-gray-400" />
+              <h1 className="text-3xl font-bold text-gray-900">
+                {document.title}
+              </h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge className={`${statusColor} ring-1 ring-inset`}>
+                {statusLabel}
+              </Badge>
+              <Badge variant="outline" className="bg-blue-50 text-blue-700">
+                <Hash className="h-3 w-3 mr-1" />
+                版本 {document.version}
+              </Badge>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 ml-4">
+            <Button
+              variant="outline"
+              onClick={() => router.push(`/dashboard/knowledge/${documentId}/edit`)}
+            >
+              <Edit className="h-4 w-4 mr-2" />
               編輯
             </Button>
-          </Link>
-          <Button variant="destructive">
-            <TrashIcon className="h-4 w-4 mr-2" />
-            刪除
-          </Button>
+            <Button
+              variant="outline"
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  刪除中...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  刪除
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* 麵包屑導航 */}
-      <nav className="flex" aria-label="Breadcrumb">
-        <ol className="flex items-center space-x-4">
-          <li>
-            <Link href="/dashboard" className="text-gray-400 hover:text-gray-500">
-              儀表板
-            </Link>
-          </li>
-          <li>
-            <span className="text-gray-400">/</span>
-          </li>
-          <li>
-            <Link href="/dashboard/knowledge" className="text-gray-400 hover:text-gray-500">
-              知識庫
-            </Link>
-          </li>
-          <li>
-            <span className="text-gray-400">/</span>
-          </li>
-          <li>
-            <span className="text-gray-900">文檔詳情</span>
-          </li>
-        </ol>
-      </nav>
+      {/* 元數據信息卡片 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {/* 分類 */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Folder className="h-4 w-4 text-gray-500" />
+              <span className="text-sm text-gray-600">分類</span>
+            </div>
+            <div className="text-lg font-medium text-gray-900">
+              {categoryLabel}
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* 文檔詳情展示 */}
-      <KnowledgeDocumentView documentId={documentId} />
+        {/* 創建者 */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <User className="h-4 w-4 text-gray-500" />
+              <span className="text-sm text-gray-600">創建者</span>
+            </div>
+            <div className="text-lg font-medium text-gray-900">
+              {document.creator.first_name} {document.creator.last_name}
+            </div>
+            <div className="text-xs text-gray-500 truncate">
+              {document.creator.email}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 創建時間 */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Calendar className="h-4 w-4 text-gray-500" />
+              <span className="text-sm text-gray-600">創建時間</span>
+            </div>
+            <div className="text-sm font-medium text-gray-900">
+              {formatDate(document.created_at)}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 更新時間 */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Clock className="h-4 w-4 text-gray-500" />
+              <span className="text-sm text-gray-600">最後更新</span>
+            </div>
+            <div className="text-sm font-medium text-gray-900">
+              {formatRelativeTime(document.updated_at)}
+            </div>
+            <div className="text-xs text-gray-500">
+              {formatDate(document.updated_at)}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 標籤卡片 */}
+      {document.tags && document.tags.length > 0 && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Tag className="h-5 w-5" />
+              標籤
+            </CardTitle>
+            <CardDescription>
+              此文檔關聯的標籤分類
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {document.tags.map((tag) => (
+                <Badge
+                  key={tag.id}
+                  variant="outline"
+                  className="px-3 py-1"
+                  style={{
+                    backgroundColor: `${tag.color}20`,
+                    borderColor: tag.color,
+                    color: tag.color
+                  }}
+                >
+                  {tag.name}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* 統計信息卡片 */}
+      {document._count && document._count.chunks > 0 && (
+        <Card className="mb-6">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FileText className="h-5 w-5 text-gray-500" />
+                <span className="text-sm text-gray-600">文檔片段數量</span>
+              </div>
+              <div className="text-2xl font-bold text-blue-600">
+                {document._count.chunks}
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              此文檔已被分割為 {document._count.chunks} 個片段用於向量搜索
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* 內容卡片 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            文檔內容
+          </CardTitle>
+          <CardDescription>
+            完整的文檔內容預覽
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="prose max-w-none">
+            <div className="whitespace-pre-wrap bg-gray-50 p-6 rounded-lg border border-gray-200">
+              {document.content}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 底部操作區 */}
+      <div className="mt-6 flex items-center justify-between pt-6 border-t">
+        <Button
+          variant="ghost"
+          onClick={() => router.push('/dashboard/knowledge')}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          返回列表
+        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/dashboard/knowledge/${documentId}/edit`)}
+          >
+            <Edit className="h-4 w-4 mr-2" />
+            編輯文檔
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

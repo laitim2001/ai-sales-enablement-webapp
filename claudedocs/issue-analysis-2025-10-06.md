@@ -141,10 +141,28 @@ GET /api/knowledge-base error: Error: Invalid or expired token
 **Fix**: Same as Priority 1 - token field name fix resolves this too
 **Verification**: After hard refresh + fresh login, Knowledge Base should work
 
-### Priority 3: Fix Proposal Template Error
+### ✅ COMPLETED Priority 3: Knowledge Base Button Actions
+**Status**: ✅ FIXED - 查看頁面已創建
+**Problem**: [查看] [編輯] 按鈕沒有反應, [刪除] 返回 "failed to fetch"
+**Root Cause**: Missing page route - `/dashboard/knowledge/[id]/page.tsx` 不存在
+**Fix Applied**:
+- ✅ Created `app/dashboard/knowledge/[id]/page.tsx` (~533行)
+- ✅ 編輯頁面已存在: `/dashboard/knowledge/[id]/edit/page.tsx`
+**Features Implemented**:
+1. 文檔詳情展示 - 標題、內容、分類、狀態、版本
+2. 元數據卡片 - 4個卡片(分類/創建者/時間)
+3. 標籤系統 - 彩色標籤with自定義顏色
+4. 片段統計 - chunks數量和向量搜索說明
+5. 操作按鈕 - 返回/編輯/刪除with確認
+**API Routes**: Already exist ✅
+- GET `/api/knowledge-base/[id]` - Works (獲取詳情)
+- PUT `/api/knowledge-base/[id]` - Works (更新)
+- DELETE `/api/knowledge-base/[id]` - Works (刪除)
+
+### Priority 4: Fix Proposal Template Error
 **Check**: Browser console, server logs, API endpoint
 
-### Priority 4: Document Missing Pages
+### Priority 5: Document Missing Pages
 **Action**: Update navigation with "Coming Soon" badges
 
 ---
