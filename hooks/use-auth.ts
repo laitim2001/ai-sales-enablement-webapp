@@ -283,9 +283,11 @@ export function useAuthState() {
       const result = await response.json()
 
       if (result.success && result.data) {
-        // 儲存 token 到 localStorage
-        if (result.data.token) {
-          localStorage.setItem('auth-token', result.data.token)
+        // 儲存 access token 到 localStorage
+        // API返回 accessToken (不是 token)
+        const token = result.data.accessToken || result.data.token
+        if (token) {
+          localStorage.setItem('auth-token', token)
         }
 
         // 設置用戶資料
@@ -344,8 +346,10 @@ export function useAuthState() {
 
       if (result.success && result.data) {
         // 註冊成功後自動登入
-        if (result.data.token) {
-          localStorage.setItem('auth-token', result.data.token)
+        // API返回 accessToken (不是 token)
+        const token = result.data.accessToken || result.data.token
+        if (token) {
+          localStorage.setItem('auth-token', token)
         }
 
         // 設置用戶資料
