@@ -24,6 +24,7 @@
 
 import { Client } from '@microsoft/microsoft-graph-client';
 import { TokenResponse, TokenStore } from './microsoft-graph-oauth';
+import { CalendarMockService, MockCalendarEvent } from './calendar-mock-service';
 
 /**
  * 日曆事件接口
@@ -110,12 +111,24 @@ export class CalendarSyncService {
   }
 
   /**
+   * 檢查是否為模擬模式
+   */
+  private isMockMode(): boolean {
+    return CalendarMockService.isMockMode();
+  }
+
+  /**
    * 初始化Graph客戶端
    *
    * @param userId - 用戶ID
    * @returns Graph客戶端實例
    */
-  private async initializeGraphClient(userId: number): Promise<Client> {
+  private async initializeGraphClient(userId: number): Promise<Client | null> {
+    // 模擬模式不需要初始化真實客戶端
+    if (this.isMockMode()) {
+      return null;
+    }
+
     const tokenResponse = await this.tokenStore.getToken(userId);
 
     if (!tokenResponse) {
@@ -147,7 +160,21 @@ export class CalendarSyncService {
     endDateTime?: Date,
     top: number = 50
   ): Promise<CalendarEvent[]> {
+    // 模擬模式
+    if (this.isMockMode()) {
+      const result = await CalendarMockService.getEvents('mock-token', {
+        startDateTime: startDateTime?.toISOString(),
+        endDateTime: endDateTime?.toISOString(),
+        top
+      });
+      return result.value as CalendarEvent[];
+    }
+
+    // 真實模式
     const client = await this.initializeGraphClient(userId);
+    if (!client) {
+      throw new Error('無法初始化Graph客戶端');
+    }
 
     let query = client
       .api('/me/calendar/events')
@@ -173,7 +200,17 @@ export class CalendarSyncService {
    * @returns 創建的事件
    */
   async createCalendarEvent(userId: number, event: Partial<CalendarEvent>): Promise<CalendarEvent> {
+    // 模擬模式
+    if (this.isMockMode()) {
+      const result = await CalendarMockService.createEvent('mock-token', event as any);
+      return result as CalendarEvent;
+    }
+
+    // 真實模式
     const client = await this.initializeGraphClient(userId);
+    if (!client) {
+      throw new Error('無法初始化Graph客戶端');
+    }
 
     const response = await client
       .api('/me/calendar/events')
@@ -195,7 +232,20 @@ export class CalendarSyncService {
     eventId: string,
     updates: Partial<CalendarEvent>
   ): Promise<CalendarEvent> {
+    // 模擬模式
+    if (this.isMockMode()) {
+      const result = await CalendarMockService.updateEvent('mock-token', eventId, updates as any);
+      if (!result) {
+        throw new Error(`事件 ${eventId} 不存在`);
+      }
+      return result as CalendarEvent;
+    }
+
+    // 真實模式
     const client = await this.initializeGraphClient(userId);
+    if (!client) {
+      throw new Error('無法初始化Graph客戶端');
+    }
 
     const response = await client
       .api(`/me/calendar/events/${eventId}`)
@@ -211,7 +261,20 @@ export class CalendarSyncService {
    * @param eventId - 事件ID
    */
   async deleteCalendarEvent(userId: number, eventId: string): Promise<void> {
+    // 模擬模式
+    if (this.isMockMode()) {
+      const result = await CalendarMockService.deleteEvent('mock-token', eventId);
+      if (!result) {
+        throw new Error(`事件 ${eventId} 不存在`);
+      }
+      return;
+    }
+
+    // 真實模式
     const client = await this.initializeGraphClient(userId);
+    if (!client) {
+      throw new Error('無法初始化Graph客戶端');
+    }
 
     await client
       .api(`/me/calendar/events/${eventId}`)
@@ -231,7 +294,6 @@ export class CalendarSyncService {
     userId: number,
     onEventChange?: (event: CalendarEvent, changeType: 'added' | 'updated' | 'deleted') => Promise<void>
   ): Promise<SyncResult> {
-    const client = await this.initializeGraphClient(userId);
     const status = this.getSyncStatus(userId);
 
     // 防止重複同步
@@ -251,53 +313,96 @@ export class CalendarSyncService {
     };
 
     try {
-      let deltaLink = status.deltaToken
-        ? `/me/calendar/events/delta?$deltatoken=${status.deltaToken}`
-        : '/me/calendar/events/delta';
+      // 模擬模式
+      if (this.isMockMode()) {
+        const syncResult = await CalendarMockService.deltaSync(
+          'mock-token',
+          `user-${userId}`,
+          status.deltaToken
+        );
 
-      let hasMore = true;
+        const events = syncResult.value as CalendarEvent[];
 
-      while (hasMore) {
-        const response = await client
-          .api(deltaLink)
-          .get();
-
-        const events: CalendarEvent[] = response.value || [];
-
-        // 處理每個事件變更
+        // 處理事件變更
         for (const event of events) {
-          try {
-            // 檢測變更類型
-            const changeType = this.detectChangeType(event);
+          const changeType = status.deltaToken ? 'updated' : 'added';
 
-            if (changeType === 'deleted') {
-              result.eventsDeleted++;
-            } else if (status.deltaToken) {
-              result.eventsUpdated++;
-            } else {
-              result.eventsAdded++;
-            }
+          if (changeType === 'added') {
+            result.eventsAdded++;
+          } else {
+            result.eventsUpdated++;
+          }
 
-            // 調用回調處理變更
-            if (onEventChange) {
-              await onEventChange(event, changeType);
-            }
-          } catch (error) {
-            result.errors?.push(`處理事件 ${event.id} 失敗: ${error}`);
+          // 調用回調
+          if (onEventChange) {
+            await onEventChange(event, changeType);
           }
         }
 
-        // 檢查是否有更多數據
-        if (response['@odata.nextLink']) {
-          deltaLink = response['@odata.nextLink'];
-        } else if (response['@odata.deltaLink']) {
-          // 保存新的delta token
-          const newDeltaToken = this.extractDeltaToken(response['@odata.deltaLink']);
-          result.deltaToken = newDeltaToken;
-          status.deltaToken = newDeltaToken;
-          hasMore = false;
-        } else {
-          hasMore = false;
+        // 處理刪除的事件
+        if (syncResult.changes?.deleted) {
+          result.eventsDeleted = syncResult.changes.deleted.length;
+        }
+
+        // 保存新的delta token
+        result.deltaToken = syncResult.deltaToken;
+        status.deltaToken = syncResult.deltaToken;
+
+      } else {
+        // 真實模式
+        const client = await this.initializeGraphClient(userId);
+        if (!client) {
+          throw new Error('無法初始化Graph客戶端');
+        }
+
+        let deltaLink = status.deltaToken
+          ? `/me/calendar/events/delta?$deltatoken=${status.deltaToken}`
+          : '/me/calendar/events/delta';
+
+        let hasMore = true;
+
+        while (hasMore) {
+          const response = await client
+            .api(deltaLink)
+            .get();
+
+          const events: CalendarEvent[] = response.value || [];
+
+          // 處理每個事件變更
+          for (const event of events) {
+            try {
+              // 檢測變更類型
+              const changeType = this.detectChangeType(event);
+
+              if (changeType === 'deleted') {
+                result.eventsDeleted++;
+              } else if (status.deltaToken) {
+                result.eventsUpdated++;
+              } else {
+                result.eventsAdded++;
+              }
+
+              // 調用回調處理變更
+              if (onEventChange) {
+                await onEventChange(event, changeType);
+              }
+            } catch (error) {
+              result.errors?.push(`處理事件 ${event.id} 失敗: ${error}`);
+            }
+          }
+
+          // 檢查是否有更多數據
+          if (response['@odata.nextLink']) {
+            deltaLink = response['@odata.nextLink'];
+          } else if (response['@odata.deltaLink']) {
+            // 保存新的delta token
+            const newDeltaToken = this.extractDeltaToken(response['@odata.deltaLink']);
+            result.deltaToken = newDeltaToken;
+            status.deltaToken = newDeltaToken;
+            hasMore = false;
+          } else {
+            hasMore = false;
+          }
         }
       }
 
@@ -335,6 +440,31 @@ export class CalendarSyncService {
     daysAhead: number = 30,
     daysBehind: number = 7
   ): Promise<SyncResult> {
+    // 模擬模式
+    if (this.isMockMode()) {
+      const syncResult = await CalendarMockService.fullSync('mock-token', `user-${userId}`, {
+        daysAhead,
+        daysBehind
+      });
+
+      const result: SyncResult = {
+        success: true,
+        eventsAdded: syncResult.value.length,
+        eventsUpdated: 0,
+        eventsDeleted: 0,
+        deltaToken: syncResult.deltaToken
+      };
+
+      // 更新同步狀態
+      const status = this.getSyncStatus(userId);
+      status.deltaToken = syncResult.deltaToken;
+      status.lastSyncAt = new Date();
+      this.syncStatus.set(userId, status);
+
+      return result;
+    }
+
+    // 真實模式
     const startDateTime = new Date();
     startDateTime.setDate(startDateTime.getDate() - daysBehind);
 
