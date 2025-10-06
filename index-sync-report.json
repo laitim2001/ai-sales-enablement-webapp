@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-05T16:13:38.394Z",
+  "timestamp": "2025-10-06T05:44:39.074Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -11,7 +11,7 @@
     "highSeverity": 0,
     "mediumSeverity": 5,
     "lowSeverity": 0,
-    "suggestions": 3,
+    "suggestions": 1,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -63,23 +63,7 @@
       "severity": "low",
       "message": "建議將重要文件加入索引: docs\\index-maintenance-root-cause-analysis.md",
       "modifiedTime": "2025-10-03T15:14:43.979Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "docs\\sprint7-uat-execution-report.md",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\sprint7-uat-execution-report.md",
-      "modifiedTime": "2025-10-05T16:06:55.811Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "docs\\sprint7-uat-summary.md",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\sprint7-uat-summary.md",
-      "modifiedTime": "2025-10-05T16:13:25.220Z"
     }
   ],
-  "lastUpdated": "2025-10-05T16:13:38.394Z"
+  "lastUpdated": "2025-10-06T05:44:39.075Z"
 }
