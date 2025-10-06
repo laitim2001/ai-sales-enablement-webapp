@@ -839,17 +839,17 @@ async function runAllTests() {
   });
 
   await runTest('TC-REC003', '獲取會議推薦', async () => {
-    const response = await makeRequest('GET', '/api/recommendations/meetings?limit=5');
+    const response = await makeRequest('GET', '/api/recommendations/meetings?meetingId=meeting-test-123&limit=5');
 
-    if (response.status === 200 && response.body.recommendations) {
+    if (response.status === 200 && response.body.success && response.body.data?.items) {
       return {
         status: 'PASS',
-        details: `Got ${response.body.recommendations.length} meeting recommendations`
+        details: `Got ${response.body.data.items.length} meeting recommendations`
       };
     } else {
       return {
         status: 'FAIL',
-        reason: `Status ${response.status}`
+        reason: `Status ${response.status}, Body: ${JSON.stringify(response.body)}`
       };
     }
   });
@@ -930,9 +930,10 @@ async function runAllTests() {
     const response = await makeRequest('GET', '/api/calendar/auth');
 
     if (response.status === 200 && response.body.authUrl) {
+      const authUrl = String(response.body.authUrl);
       return {
         status: 'PASS',
-        details: `Auth URL: ${response.body.authUrl.substring(0, 50)}...`
+        details: `Auth URL: ${authUrl.substring(0, 50)}...`
       };
     } else if (response.status === 500 || response.status === 503) {
       return {
