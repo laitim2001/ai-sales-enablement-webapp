@@ -92,6 +92,7 @@
 | **新開發者設置指南** | `docs/NEW-DEVELOPER-SETUP-GUIDE.md` | 新開發者環境自動化設置完整指南 | 🔴 極高  |
 | **Sprint 3安全設置指南** | `docs/sprint3-security-setup-guide.md` | Sprint 3安全加固完整設置和配置指南（加密/Key Vault/HTTPS/RBAC/審計） | 🔴 極高  |
 | **Sprint 3災難恢復指南** | `docs/sprint3-disaster-recovery-guide.md` | Sprint 3 Week 6災難恢復完整指南（RTO/RPO定義、備份策略、恢復流程、演練計劃） | 🔴 極高  |
+| **Sprint 3安全掃描報告** | `docs/sprint3-security-scan-report.md` | Sprint 3 Week 6安全掃描完整報告（npm audit + ESLint SAST,xlsx漏洞評估,OWASP合規,行動計劃） | 🔴 極高  |
 | **Sprint 7 UAT測試計劃** | `docs/sprint7-uat-test-plan.md` | Sprint 7用戶驗收測試完整計劃（提醒/準備包/AI分析/推薦/日曆/助手） | 🔴 極高  |
 | **Sprint 7 UAT執行報告** | `docs/sprint7-uat-execution-report.md` | Sprint 7用戶驗收測試詳細執行報告（38個測試用例,問題分析,修復建議） | 🔴 極高  |
 | **Sprint 7 UAT最終報告** | `docs/sprint7-uat-final-report.md` | Sprint 7 UAT測試最終報告（84.2%通過率,修復前後對比,剩餘問題清單） | 🔴 極高  |
