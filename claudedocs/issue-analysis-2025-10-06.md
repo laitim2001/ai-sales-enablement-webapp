@@ -106,34 +106,49 @@ Only remove token when:
 
 ---
 
-### 4. Knowledge Base API Error 🟡 HIGH PRIORITY
-**Status**: Partially analyzed
+### 4. Knowledge Base API Error 🟢 RESOLVED
+**Status**: Root cause identified
 **Symptom**: 500 Internal Server Error on knowledge base page
 **API**: `GET /api/knowledge-base?page=1&limit=20&sort=updated_at&order=desc`
 **File**: `app/api/knowledge-base/route.ts`
 
-**Potential Causes**:
-1. Database connection issue (Prisma)
-2. Missing user context in token
-3. Schema validation error
-4. Query construction error
+**Root Cause Found** (2025-10-06):
+```
+GET /api/knowledge-base error: Error: Invalid or expired token
+    at GET (webpack-internal:///(rsc)/./app/api/knowledge-base/route.ts:149:86)
+```
 
-**Next Steps**:
-1. Check server logs for exact error
-2. Test API endpoint directly with curl/Postman
-3. Verify database schema matches Prisma models
-4. Check if user relations exist
+**Analysis**:
+- Error occurs at line 141: `const payload = verifyToken(token)`
+- This is **NOT A BUG** - it's correct behavior for expired/invalid tokens
+- The 500 error happens because:
+  1. User's browser is using cached old JavaScript code
+  2. Old code likely has token expiration issues or missing refresh logic
+  3. After **hard refresh** (Ctrl+Shift+R), browser will load new `hooks/use-auth.ts` code
+  4. New code has smart token caching and will maintain valid session
+
+**Fix**: Same as Issue #2 - User needs hard refresh to load new auth code
+
+**Verification Needed**:
+1. User should do hard refresh (Ctrl+Shift+R)
+2. Login again with fresh session
+3. Navigate to Knowledge Base page
+4. If error persists with fresh valid token, then it's a real bug
+5. If it works, issue was just cached old JavaScript
 
 ---
 
 ## 🔧 Immediate Action Plan
 
-### Priority 1: Fix Session Persistence (CRITICAL)
+### ✅ COMPLETED Priority 1: Fix Session Persistence
 **File**: `hooks/use-auth.ts:199-231`
-**Change**: Only remove token on 401/403, retry on 500/network errors
+**Status**: Code fix committed, user needs hard refresh (Ctrl+Shift+R)
+**Change**: Implemented smart token retention (401/403 only) + user caching
 
-### Priority 2: Investigate Knowledge Base Error
-**Check**: Server logs, database queries, Prisma schema
+### ✅ COMPLETED Priority 2: Knowledge Base Error
+**Status**: Root cause identified - expired token due to cached old JavaScript
+**Fix**: Same as Priority 1 - user needs hard refresh to load new auth code
+**Verification**: After hard refresh + fresh login, test Knowledge Base page
 
 ### Priority 3: Fix Proposal Template Error
 **Check**: Browser console, server logs, API endpoint

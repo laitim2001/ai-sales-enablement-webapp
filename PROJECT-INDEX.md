@@ -85,6 +85,7 @@
 | **Week 5開發計劃** | `docs/week5-development-plan.md`        | AI搜索引擎開發規劃   | 🟡 高    |
 | **Azure OpenAI設置指南** | `docs/azure-openai-setup-guide.md` | Azure OpenAI完整配置指南 | 🟡 高    |
 | **Dynamics 365設置指南** | `docs/dynamics365-setup-guide.md` | Dynamics 365完整配置指南 | 🟡 高    |
+| **問題分析報告（2025-10-06）** | `claudedocs/issue-analysis-2025-10-06.md` | Dashboard頁面和Session Persistence完整問題分析（4個issue調查） | 🟡 高    |
 | **Microsoft Graph設置指南** | `docs/microsoft-graph-setup-guide.md` | Microsoft Graph日曆整合完整配置指南（Azure AD/OAuth/權限） | 🟡 高    |
 | **新開發者設置指南** | `docs/NEW-DEVELOPER-SETUP-GUIDE.md` | 新開發者環境自動化設置完整指南 | 🔴 極高  |
 | **Sprint 3安全設置指南** | `docs/sprint3-security-setup-guide.md` | Sprint 3安全加固完整設置和配置指南（加密/Key Vault/HTTPS/RBAC/審計） | 🔴 極高  |
