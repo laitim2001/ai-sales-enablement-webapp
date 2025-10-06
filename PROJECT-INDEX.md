@@ -1,10 +1,11 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月6日 - Sprint 7 UAT問題修復後索引更新（添加2個文件）
+> **📅 最後更新**: 2025年10月6日 - Sprint 3 Week 5 資料安全強化索引更新（添加1個文件）
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 >
 > **✨ 最新添加**:
+> - 🔐 資料安全強化 (Sprint 3 Week 5): 敏感欄位配置模塊（sensitive-fields-config.ts）
 > - 📅 Microsoft Graph日曆整合 (Sprint 7 Phase 3): Mock服務 + 設置指南
 > - 🤝 協作系統 (Sprint 6): 編輯鎖定管理器 + API + UI組件
 > - ⏰ 智能提醒系統 (Sprint 7 Phase 1): 規則引擎 + 調度器 + API + UI組件
@@ -1504,8 +1505,9 @@ const users = await prisma.user.findMany();
 
 | 模組名稱           | 文件路徑                     | 用途說明               | 代碼行數 | 測試數 | 重要程度 |
 | ------------------ | ---------------------------- | ---------------------- | -------- | ------ | -------- |
-| **加密服務** | `lib/security/encryption.ts` | AES-256-GCM企業級加密，欄位級別保護，哈希/令牌生成 | 442 | 40 | 🔴 極高 |
+| **加密服務** | `lib/security/encryption.ts` | AES-256-GCM企業級加密，欄位級別保護，哈希/令牌生成，異步Key Vault整合 | 442 | 40 | 🔴 極高 |
 | **Azure Key Vault** | `lib/security/azure-key-vault.ts` | 雲端金鑰管理，Secret安全存儲，金鑰輪換，審計整合（Sprint 3） | 550 | - | 🔴 極高 |
+| **敏感欄位配置** | `lib/security/sensitive-fields-config.ts` | 敏感欄位加密配置，三級安全等級，7模型12欄位，8個工具函數（Sprint 3 Week 5） | 280 | - | 🔴 極高 |
 | **RBAC權限系統** | `lib/security/rbac.ts` | 5角色×23資源權限映射，細粒度CRUD控制，擁有權驗證 | 596 | 37 | 🔴 極高 |
 | **權限中間件** | `lib/security/permission-middleware.ts` | Next.js API路由權限檢查，JWT驗證，HOF包裝器 | 504 | 32 | 🔴 極高 |
 | **審計日誌系統** | `lib/security/audit-log.ts` | 全面操作日誌記錄，不可篡改審計追蹤，合規報告生成 | 649 | 39 | 🔴 極高 |
