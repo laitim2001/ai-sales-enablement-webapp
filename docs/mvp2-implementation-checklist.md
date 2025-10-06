@@ -605,13 +605,13 @@
 
 **對應**: Epic 4, Story 4.4 - 安全加固與合規
 **目標**: 滿足企業客戶的安全和合規要求
-**狀態**: 🔄 **50%進行中** - Week 5+6+RBAC設計完成，Week 7-8待實施
-**進度**: 4/8 (50%) - 資料加密+備份+掃描+RBAC設計100%完成
+**狀態**: 🔄 **56.25%進行中** - Week 5+6+RBAC設計完成，Week 7 Day 1-2完成
+**進度**: 4.5/8 (56.25%) - 資料加密+備份+掃描+RBAC設計+API整合(Day 1-2)完成
 
 > **📝 備註 (2025-10-06)**:
 > - ✅ Week 5: 資料安全強化100%完成並整合 (Azure Key Vault + HTTPS + 敏感欄位配置 + 性能測試)
 > - ✅ Week 6: 核心安全基礎設施100%完成 (資料備份~1,300行 + 安全掃描~400行 + RBAC設計~750行)
-> - ⏳ Week 7: RBAC API整合和實施 (7天計劃,待開始)
+> - 🔄 Week 7: RBAC API整合和實施 (7天計劃,28.5%完成 - Day 1-2✅)
 > - ⏳ Week 8: 審計日誌系統 (待開始)
 
 ### Week 5: 資料安全強化 ✅ **100%完成 (2025-10-06)**
@@ -922,6 +922,94 @@
 - [x] ✅ 基礎SAST掃描已執行 (ESLint 439文件掃描 + OWASP Top 10檢查 70%通過)
 - [x] ✅ RBAC系統設計已完成 (~750行專業級設計 + 5角色×22資源×13操作 + 4種API模式)
 - [x] ✅ Week 7實施準備就緒 (7天完整實施路線圖 + API整合計劃 + 測試策略)
+
+---
+
+### Week 7: RBAC API整合和實施 🔄 **28.5%進行中 (Day 1-2完成, 2025-10-06)**
+
+#### ✅ Day 1-2: 客戶和提案管理API權限整合 (2025-10-06)
+
+**完成的API端點** (3個文件, 8個端點):
+
+- [x] **客戶管理API** (app/api/customers/route.ts)
+  - [x] GET /api/customers - LIST權限檢查 (所有角色可訪問)
+  - [x] POST /api/customers - CREATE權限檢查 (ADMIN, SALES_MANAGER, SALES_REP)
+  - [x] PATCH /api/customers - UPDATE權限檢查 (ADMIN, SALES_MANAGER, SALES_REP)
+  - [x] 自動關聯創建者 (user.userId)
+  - [x] 移除hardcoded userId
+
+- [x] **客戶360度視圖API** (app/api/customers/[id]/360-view/route.ts)
+  - [x] GET /api/customers/[id]/360-view - READ權限檢查 (所有角色可訪問)
+  - [x] 預留user變量供未來擁有權檢查
+
+- [x] **提案詳情API** (app/api/proposals/[id]/route.ts)
+  - [x] GET /api/proposals/[id] - READ權限檢查 (所有角色可訪問)
+  - [x] PATCH /api/proposals/[id] - UPDATE權限 + 擁有權檢查
+    * 先查詢proposal.user_id獲取擁有者
+    * 使用checkOwnership驗證只能更新自己的提案
+    * ADMIN, SALES_MANAGER, SALES_REP限制
+  - [x] DELETE /api/proposals/[id] - DELETE權限 + 擁有權檢查
+    * 先查詢proposal.user_id獲取擁有者
+    * 使用checkOwnership驗證只能刪除自己的提案
+    * ADMIN, SALES_MANAGER, SALES_REP限制
+  - [x] 移除所有TODO註釋
+
+**實施模式應用**:
+- [x] Pattern 1: requirePermission() 靈活權限檢查 (所有8個端點)
+- [x] Pattern 3: checkOwnership 資源擁有權驗證 (提案PATCH/DELETE)
+- [x] 完整JWT token身份驗證流程
+- [x] 統一的權限檢查模式
+
+**Git提交記錄**:
+- [x] Commit 780747e: Sprint 3 Week 7 Day 1 - 客戶管理API RBAC權限整合
+- [x] Commit 8348690: Sprint 3 Week 7 Day 1-2 - 提案管理API RBAC權限整合
+
+**Day 1-2統計**:
+- 修改文件: 3個
+- API端點: 8個 (客戶5個 + 提案3個)
+- 新增導入: 2個 (requirePermission, Resource/Action)
+- 移除TODO: 4處
+- 移除hardcoded: 2處
+- 代碼行數: ~150行權限檢查邏輯
+
+#### ⏳ Day 3-4: 用戶和系統管理API權限整合 (待開始)
+- [ ] **用戶管理API** (app/api/users/)
+  - [ ] LIST, CREATE, READ, UPDATE, DELETE權限整合
+  - [ ] MANAGE權限檢查 (ADMIN only)
+- [ ] **系統管理API**
+  - [ ] API Keys管理權限整合
+  - [ ] 系統配置權限整合
+  - [ ] 審計日誌訪問權限
+
+#### ⏳ Day 5: 前端權限整合 (待開始)
+- [ ] **usePermission Hook實現**
+  - [ ] 創建hooks/use-permission.ts
+  - [ ] hasPermission()函數
+  - [ ] isAdmin(), isSalesManager()輔助函數
+- [ ] **UI條件渲染**
+  - [ ] 按鈕/操作權限控制
+  - [ ] 路由保護整合
+  - [ ] 權限錯誤提示UI
+
+#### ⏳ Day 6-7: 測試和驗收 (待開始)
+- [ ] **單元測試**
+  - [ ] 權限檢查邏輯測試
+  - [ ] 擁有權驗證測試
+  - [ ] 角色權限矩陣測試
+- [ ] **集成測試**
+  - [ ] API端到端權限測試
+  - [ ] 錯誤處理測試
+- [ ] **E2E測試**
+  - [ ] 不同角色登入測試
+  - [ ] 權限拒絕場景測試
+
+**Week 7 驗收標準** (28.5%完成):
+- [x] ✅ Day 1-2: 客戶和提案API權限整合完成 (8個端點, 3個文件)
+- [ ] ⏳ Day 3-4: 用戶和系統管理API權限整合
+- [ ] ⏳ Day 5: 前端基礎整合 (usePermission Hook + UI權限控制)
+- [ ] ⏳ Day 6-7: 測試和驗收 (單元+集成+E2E測試)
+
+---
 
 **Sprint 3 整體驗收** (調整後):
 - [x] ✅ 敏感資料加密率: 100% (AES-256-GCM + Azure Key Vault + 7模型/12欄位配置)

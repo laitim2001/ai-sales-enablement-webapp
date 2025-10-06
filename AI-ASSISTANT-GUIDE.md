@@ -49,7 +49,28 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-06)**:
-- 🎉 Sprint 3 Week 6-7 RBAC權限系統設計100%完成！⭐️ 最新
+- 🎉 Sprint 3 Week 7 Day 1-2 RBAC API整合完成！⭐️ 最新
+  - 已完成API權限整合 (3個文件, 8個端點):
+    * ✅ 客戶管理API (2個文件, 5個端點)
+      - app/api/customers/route.ts: GET(LIST) + POST(CREATE) + PATCH(UPDATE)
+      - app/api/customers/[id]/360-view/route.ts: GET(READ)
+    * ✅ 提案管理API (1個文件, 3個端點)
+      - app/api/proposals/[id]/route.ts: GET(READ) + PATCH(UPDATE+擁有權) + DELETE(DELETE+擁有權)
+  - 實施模式應用:
+    * Pattern 1: requirePermission() 靈活權限檢查 (所有端點)
+    * Pattern 3: checkOwnership 資源擁有權驗證 (提案PATCH/DELETE)
+    * 移除所有hardcoded userId和TODO註釋
+    * 完整JWT token身份驗證流程
+  - Git提交:
+    * Commit 780747e: 客戶管理API RBAC整合
+    * Commit 8348690: 提案管理API RBAC整合
+  - Sprint 3 Week 7進度:
+    * ✅ Day 1-2: 客戶和提案API整合 (100%)
+    * ⏳ Day 3-4: 用戶和系統管理API整合 (待開始)
+    * ⏳ Day 5: 前端基礎整合 (待開始)
+    * ⏳ Day 6-7: 測試和驗證 (待開始)
+
+- 🎉 Sprint 3 Week 6-7 RBAC權限系統設計100%完成！
   - 核心成果:
     * ✅ 完整RBAC設計文檔 (~750行專業級設計文檔)
     * ✅ 5角色 × 22資源 × 13操作權限模型
@@ -94,7 +115,7 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
   - Sprint 3進度更新:
     * Week 5: 資料安全強化 100% ✅
     * Week 6: 備份+掃描+RBAC設計 100% ✅
-    * Week 7: RBAC實施 (待開始)
+    * Week 7: RBAC實施 Day 1-2完成 🔄
     * Week 8: 審計日誌系統 (待開始)
 
 - 🎉 Sprint 7 UAT測試TC-PREP005/008問題調查完成！(通過率從84.2%提升至89.5%, +5.3%)

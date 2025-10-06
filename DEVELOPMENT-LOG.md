@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [🎉 Sprint 3 Week 7 Day 1-2 RBAC API整合完成 (2025-10-06)](#🎉-2025-10-06-sprint-3-week-7-day-1-2-rbac-api整合完成-✅)
 - [🎉 Sprint 3 Week 6-7 RBAC權限系統設計完成 (2025-10-06)](#🎉-2025-10-06-sprint-3-week-6-7-rbac權限系統設計完成-✅)
 - [📋 Sprint 3範圍調整決策 (2025-10-06)](#📋-2025-10-06-sprint-3範圍調整決策-內部系統簡化合規要求-✅)
 - [🎉 Sprint 7 UAT TC-PREP005/008問題調查完成 (2025-10-06)](#🎉-2025-10-06-sprint-7-uat-tc-prep005008問題調查完成-通過率提升至895-✅)
@@ -17,6 +18,167 @@
 - [🎉 Sprint 7 完整完成 (2025-10-05)](#🎉-2025-10-05-sprint-7-完整完成-phase-1--phase-2-ai智能功能-✅)
 - [🎉 Sprint 7 Phase 1 完整實現 (2025-10-05)](#🎉-2025-10-05-sprint-7-phase-1-完整實現-智能提醒行為追蹤會議準備包-✅)
 - [🔧 TypeScript類型錯誤大規模修復 (2025-10-05)](#🔧-2025-10-05-typescript類型錯誤大規模修復-63個錯誤0個-100修復率-✅)
+
+---
+
+## 🎉 2025-10-06: Sprint 3 Week 7 Day 1-2 RBAC API整合完成 ✅
+
+### 📊 **會話概覽**
+**時間**: 2025-10-06 23:15-23:45
+**狀態**: ✅ Day 1-2完成，已提交Git
+**Sprint**: MVP Phase 2 - Sprint 3 Week 7
+**主題**: 客戶和提案管理API RBAC權限整合實施
+**核心成果**: 3個文件，8個API端點完成權限整合
+
+### 🎯 **完成內容**
+
+#### **1. 客戶管理API權限整合** (2個文件，5個端點)
+
+**File 1: `app/api/customers/route.ts`** (3個端點)
+- **GET /api/customers**: LIST權限檢查
+  - 權限: 所有角色 (ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER)
+  - 模式: Pattern 1 - requirePermission()
+
+- **POST /api/customers**: CREATE權限檢查
+  - 權限: ADMIN, SALES_MANAGER, SALES_REP
+  - 模式: Pattern 1 - requirePermission()
+  - 自動關聯創建者: user.userId
+
+- **PATCH /api/customers**: UPDATE權限檢查
+  - 權限: ADMIN, SALES_MANAGER, SALES_REP
+  - 模式: Pattern 1 - requirePermission()
+  - 批量操作權限控制
+
+**File 2: `app/api/customers/[id]/360-view/route.ts`** (2個端點)
+- **GET /api/customers/[id]/360-view**: READ權限檢查
+  - 權限: 所有角色都可訪問客戶360度視圖
+  - 模式: Pattern 1 - requirePermission()
+  - 保留user變量供未來擁有權檢查使用
+
+#### **2. 提案管理API權限整合** (1個文件，3個端點)
+
+**File: `app/api/proposals/[id]/route.ts`**
+- **GET /api/proposals/[id]**: READ權限檢查
+  - 權限: 所有角色都可訪問提案詳情
+  - 模式: Pattern 1 - requirePermission()
+
+- **PATCH /api/proposals/[id]**: UPDATE權限 + **擁有權檢查**
+  - 權限: ADMIN, SALES_MANAGER, SALES_REP
+  - 模式: Pattern 1 + Pattern 3 (requirePermission + checkOwnership)
+  - 擁有權驗證: user.userId === proposal.user_id
+  - 移除: hardcoded userId=1 和 TODO註釋
+
+- **DELETE /api/proposals/[id]**: DELETE權限 + **擁有權檢查**
+  - 權限: ADMIN, SALES_MANAGER, SALES_REP
+  - 模式: Pattern 1 + Pattern 3 (requirePermission + checkOwnership)
+  - 擁有權驗證: user.userId === proposal.user_id
+  - 移除: hardcoded userId=1 和 TODO註釋
+
+### 📋 **實施模式應用**
+
+1. **Pattern 1: requirePermission() 靈活權限檢查**
+   ```typescript
+   const authResult = await requirePermission(request, {
+     resource: Resource.CUSTOMERS,
+     action: Action.LIST,
+   });
+   if (!authResult.authorized) {
+     return authResult.response!;
+   }
+   const user = authResult.user!;
+   ```
+
+2. **Pattern 3: checkOwnership 資源擁有權驗證**
+   ```typescript
+   // 先獲取資源擁有者信息
+   const proposal = await prisma.proposal.findUnique({
+     where: { id: proposalId },
+     select: { user_id: true },
+   });
+
+   // 再進行權限檢查+擁有權驗證
+   const authResult = await requirePermission(request, {
+     resource: Resource.PROPOSALS,
+     action: Action.UPDATE,
+     checkOwnership: true,
+     resourceOwnerId: proposal.user_id,
+   });
+   ```
+
+3. **完整JWT token身份驗證流程**
+   - 從Authorization header或cookie提取token
+   - verifyAccessToken驗證token有效性
+   - 獲取用戶payload (userId, email, role)
+   - RBACService.hasPermission() 檢查角色權限
+   - 401: 缺少/無效token
+   - 403: 權限不足
+
+### 🔧 **技術細節**
+
+**移除的代碼模式**:
+```typescript
+// ❌ 舊代碼 (已移除)
+// TODO: 實現session認證 - 暫時跳過認證檢查
+const userId = 1; // 臨時使用固定用戶ID
+```
+
+**新代碼模式**:
+```typescript
+// ✅ 新代碼
+const authResult = await requirePermission(request, {...});
+const user = authResult.user!;
+// user.userId 來自JWT token驗證
+```
+
+### 📂 **Git提交記錄**
+
+```bash
+# Commit 1: 客戶管理API整合
+Commit 780747e: feat: Sprint 3 Week 7 Day 1 - 客戶管理API RBAC權限整合
+- app/api/customers/route.ts (3個端點)
+- app/api/customers/[id]/360-view/route.ts (2個端點)
+
+# Commit 2: 提案管理API整合
+Commit 8348690: feat: Sprint 3 Week 7 Day 1-2 - 提案管理API RBAC權限整合
+- app/api/proposals/[id]/route.ts (3個端點)
+- GET: READ權限
+- PATCH: UPDATE權限 + 擁有權檢查
+- DELETE: DELETE權限 + 擁有權檢查
+```
+
+### 📊 **統計數據**
+
+**代碼變更**:
+- 修改文件數: 3個
+- API端點數: 8個
+- 新增imports: 2個 (requirePermission, Resource/Action)
+- 移除TODO: 4個
+- 移除hardcoded userId: 2個
+
+**實施模式分佈**:
+- Pattern 1使用: 8次 (所有端點)
+- Pattern 3使用: 2次 (提案PATCH/DELETE)
+
+### 🎯 **Sprint 3 Week 7進度**
+
+**Day 1-2完成狀態**:
+- ✅ 客戶管理API (2個文件, 5個端點) - 100%
+- ✅ 提案管理API (1個文件, 3個端點) - 100%
+
+**剩餘任務**:
+- ⏳ Day 3-4: 用戶管理API權限整合
+- ⏳ Day 3-4: 系統管理API權限整合
+- ⏳ Day 5: 實現usePermission Hook
+- ⏳ Day 5: 前端UI權限整合
+- ⏳ Day 6-7: 單元和集成測試
+- ⏳ Day 6-7: E2E測試和驗收
+
+### 💡 **經驗總結**
+
+1. **擁有權檢查順序**: 先查詢資源獲取owner_id，再調用requirePermission with checkOwnership
+2. **用戶變量保留**: 即使當前不用ownership check，也保留user變量供未來擴展
+3. **一致性模式**: 所有API遵循相同的權限檢查模式，易於維護
+4. **清理舊代碼**: 移除所有TODO和hardcoded值，確保生產就緒
 
 ---
 
