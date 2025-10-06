@@ -1,12 +1,18 @@
 # MVP Phase 2 實施檢查清單
 
-> **最後更新**: 2025-10-05 (Sprint 7 Phase 3 完成 - 前端整合+日曆整合 🎉)
+> **最後更新**: 2025-10-06 (Sprint 6 維護 - Knowledge Base編輯按鈕修復 🛠️)
 > **目標**: 確保 14 週 MVP Phase 2 開發按計劃執行，所有關鍵里程碑按時達成
 > **團隊**: 5-7 人開發團隊
 > **架構**: Next.js 14 全棧開發 (基於MVP Phase 1)
 > **策略**: A+C 混合方案 - 企業就緒優先 + 用戶體驗提升
 > **最新動態**:
-> - 🎉 Sprint 7 Phase 3 完成 (前端整合+Microsoft Graph日曆整合, ~4,550行) ⭐️ 最新
+> - 🛠️ Sprint 6 維護: Knowledge Base編輯按鈕修復 (2025-10-06) ⭐️ 最新
+>   - 問題: 編輯按鈕點擊無反應(查看/刪除正常)
+>   - 根因: generateMetadata從錯誤端口fetch導致SSR阻塞
+>   - 修復: 簡化metadata為靜態值,移除阻塞性fetch
+>   - 文件: app/dashboard/knowledge/[id]/edit/page.tsx (lines 81-90)
+>   - 記錄: FIXLOG.md FIX-019
+> - 🎉 Sprint 7 Phase 3 完成 (前端整合+Microsoft Graph日曆整合, ~4,550行)
 >   - **會議準備包UI** (~1,500行):
 >     * PrepPackageCard (300行): 6種類型視覺化,5種狀態Badge,進度指示器
 >     * PrepPackageList (550行): 列表/網格視圖,狀態/類型篩選,搜索排序
