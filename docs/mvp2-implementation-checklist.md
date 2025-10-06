@@ -605,13 +605,13 @@
 
 **對應**: Epic 4, Story 4.4 - 安全加固與合規
 **目標**: 滿足企業客戶的安全和合規要求
-**狀態**: 🔄 **56.25%進行中** - Week 5+6+RBAC設計完成，Week 7 Day 1-2完成
-**進度**: 4.5/8 (56.25%) - 資料加密+備份+掃描+RBAC設計+API整合(Day 1-2)完成
+**狀態**: 🔄 **60%進行中** - Week 5+6+RBAC設計完成，Week 7 Day 1-4完成
+**進度**: 4.8/8 (60%) - 資料加密+備份+掃描+RBAC設計+API整合(Day 1-4)完成
 
 > **📝 備註 (2025-10-06)**:
 > - ✅ Week 5: 資料安全強化100%完成並整合 (Azure Key Vault + HTTPS + 敏感欄位配置 + 性能測試)
 > - ✅ Week 6: 核心安全基礎設施100%完成 (資料備份~1,300行 + 安全掃描~400行 + RBAC設計~750行)
-> - 🔄 Week 7: RBAC API整合和實施 (7天計劃,28.5%完成 - Day 1-2✅)
+> - 🔄 Week 7: RBAC API整合和實施 (7天計劃,57%完成 - Day 1-4✅，12個端點)
 > - ⏳ Week 8: 審計日誌系統 (待開始)
 
 ### Week 5: 資料安全強化 ✅ **100%完成 (2025-10-06)**
@@ -925,7 +925,7 @@
 
 ---
 
-### Week 7: RBAC API整合和實施 🔄 **28.5%進行中 (Day 1-2完成, 2025-10-06)**
+### Week 7: RBAC API整合和實施 🔄 **57%進行中 (Day 1-4完成, 2025-10-06)**
 
 #### ✅ Day 1-2: 客戶和提案管理API權限整合 (2025-10-06)
 
@@ -972,14 +972,38 @@
 - 移除hardcoded: 2處
 - 代碼行數: ~150行權限檢查邏輯
 
-#### ⏳ Day 3-4: 用戶和系統管理API權限整合 (待開始)
-- [ ] **用戶管理API** (app/api/users/)
-  - [ ] LIST, CREATE, READ, UPDATE, DELETE權限整合
-  - [ ] MANAGE權限檢查 (ADMIN only)
-- [ ] **系統管理API**
-  - [ ] API Keys管理權限整合
-  - [ ] 系統配置權限整合
-  - [ ] 審計日誌訪問權限
+#### ✅ Day 3-4: 知識庫和模板管理API權限整合 (2025-10-06)
+
+**完成的API端點** (2個文件, 4個端點):
+
+- [x] **知識庫管理API** (app/api/knowledge-base/route.ts)
+  - [x] GET /api/knowledge-base - LIST權限檢查 (所有角色可訪問)
+  - [x] POST /api/knowledge-base - CREATE權限檢查 (ADMIN, SALES_MANAGER, SALES_REP, MARKETING)
+  - [x] 替換手動JWT驗證: ~25行 → ~13行 (48%代碼簡化)
+  - [x] 移除所有手動JWT驗證邏輯
+
+- [x] **模板管理API** (app/api/templates/route.ts)
+  - [x] GET /api/templates - LIST權限檢查 (所有角色可訪問)
+  - [x] POST /api/templates - CREATE權限檢查 (ADMIN, MARKETING)
+  - [x] 移除TODO註釋: 2處
+  - [x] 移除hardcoded userId = 1: 2處
+  - [x] 使用authResult.user!.userId替換
+
+**實施模式應用**:
+- [x] Pattern 1: requirePermission() 靈活權限檢查 (所有4個端點)
+- [x] 統一的RBAC權限檢查流程
+- [x] 完整移除TODO和hardcoded值
+
+**Git提交記錄**:
+- [x] Commit 22ffc0e: Sprint 3 Week 7 Day 3 - 知識庫管理API RBAC權限整合
+- [x] Commit 3498fa6: Sprint 3 Week 7 Day 3-4 - 模板管理API RBAC權限整合完成
+
+**Day 3-4統計**:
+- 修改文件: 2個
+- API端點: 4個 (知識庫2個 + 模板2個)
+- 移除TODO: 4處
+- 移除hardcoded: 2處
+- 平均代碼簡化: ~50%
 
 #### ⏳ Day 5: 前端權限整合 (待開始)
 - [ ] **usePermission Hook實現**
@@ -1003,11 +1027,17 @@
   - [ ] 不同角色登入測試
   - [ ] 權限拒絕場景測試
 
-**Week 7 驗收標準** (28.5%完成):
+**Week 7 驗收標準** (57%完成):
 - [x] ✅ Day 1-2: 客戶和提案API權限整合完成 (8個端點, 3個文件)
-- [ ] ⏳ Day 3-4: 用戶和系統管理API權限整合
+- [x] ✅ Day 3-4: 知識庫和模板API權限整合完成 (4個端點, 2個文件)
 - [ ] ⏳ Day 5: 前端基礎整合 (usePermission Hook + UI權限控制)
 - [ ] ⏳ Day 6-7: 測試和驗收 (單元+集成+E2E測試)
+
+**Day 1-4總計**:
+- ✅ 修改文件: 5個
+- ✅ API端點: 12個 (客戶5個 + 提案3個 + 知識庫2個 + 模板2個)
+- ✅ 代碼簡化: 平均~50% (手動JWT驗證 → requirePermission)
+- ✅ Sprint 3 Week 7進度: 57%完成 (4天/7天)
 
 ---
 

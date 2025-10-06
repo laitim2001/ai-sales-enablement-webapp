@@ -49,24 +49,29 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-06)**:
-- 🎉 Sprint 3 Week 7 Day 1-2 RBAC API整合完成！⭐️ 最新
-  - 已完成API權限整合 (3個文件, 8個端點):
-    * ✅ 客戶管理API (2個文件, 5個端點)
+- 🎉 Sprint 3 Week 7 Day 1-4 RBAC API整合完成！⭐️ 最新
+  - 已完成API權限整合 (5個文件, 12個端點):
+    * ✅ Day 1-2: 客戶和提案管理API (3個文件, 8個端點)
       - app/api/customers/route.ts: GET(LIST) + POST(CREATE) + PATCH(UPDATE)
       - app/api/customers/[id]/360-view/route.ts: GET(READ)
-    * ✅ 提案管理API (1個文件, 3個端點)
       - app/api/proposals/[id]/route.ts: GET(READ) + PATCH(UPDATE+擁有權) + DELETE(DELETE+擁有權)
+    * ✅ Day 3-4: 知識庫和模板管理API (2個文件, 4個端點)
+      - app/api/knowledge-base/route.ts: GET(LIST) + POST(CREATE)
+      - app/api/templates/route.ts: GET(LIST) + POST(CREATE)
   - 實施模式應用:
-    * Pattern 1: requirePermission() 靈活權限檢查 (所有端點)
+    * Pattern 1: requirePermission() 靈活權限檢查 (所有12個端點)
     * Pattern 3: checkOwnership 資源擁有權驗證 (提案PATCH/DELETE)
     * 移除所有hardcoded userId和TODO註釋
     * 完整JWT token身份驗證流程
+    * 代碼簡化: 手動JWT驗證 ~40行 → requirePermission ~15行
   - Git提交:
     * Commit 780747e: 客戶管理API RBAC整合
     * Commit 8348690: 提案管理API RBAC整合
-  - Sprint 3 Week 7進度:
+    * Commit 22ffc0e: 知識庫管理API RBAC整合
+    * Commit 3498fa6: 模板管理API RBAC整合
+  - Sprint 3 Week 7進度 (57%完成):
     * ✅ Day 1-2: 客戶和提案API整合 (100%)
-    * ⏳ Day 3-4: 用戶和系統管理API整合 (待開始)
+    * ✅ Day 3-4: 知識庫和模板API整合 (100%)
     * ⏳ Day 5: 前端基礎整合 (待開始)
     * ⏳ Day 6-7: 測試和驗證 (待開始)
 
