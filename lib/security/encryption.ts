@@ -23,7 +23,8 @@
  * @epic Sprint 3 - 安全加固與合規
  */
 
-import crypto from 'crypto';
+import * as crypto from 'crypto';
+import { AzureKeyVaultService } from './azure-key-vault';
 
 /**
  * 加密配置接口
@@ -34,6 +35,8 @@ interface EncryptionConfig {
   ivLength: number;
   authTagLength: number;
   version: string;
+  useKeyVault?: boolean; // 是否使用 Azure Key Vault 管理金鑰
+  keyVaultSecretName?: string; // Key Vault 中的 Secret 名稱
 }
 
 /**
@@ -56,6 +59,8 @@ const DEFAULT_CONFIG: EncryptionConfig = {
   ivLength: 16,  // 128位 / 8 = 16字節
   authTagLength: 16, // 128位 / 8 = 16字節
   version: 'v1', // 加密版本標識，方便未來升級算法
+  useKeyVault: process.env.USE_AZURE_KEY_VAULT === 'true', // 是否使用 Azure Key Vault
+  keyVaultSecretName: 'encryption-master-key', // Key Vault Secret 名稱
 };
 
 /**
@@ -72,6 +77,9 @@ export class EncryptionService {
   private static instance: EncryptionService;
   private encryptionKey: Buffer;
   private config: EncryptionConfig;
+  private keyVaultService?: AzureKeyVaultService;
+  private keyLoadPromise?: Promise<void>;
+  private keyLoaded: boolean = false;
 
   /**
    * 私有構造函數，實現單例模式
@@ -79,6 +87,11 @@ export class EncryptionService {
   private constructor() {
     this.config = DEFAULT_CONFIG;
     this.encryptionKey = this.getOrCreateEncryptionKey();
+
+    // 如果啟用 Key Vault,初始化服務
+    if (this.config.useKeyVault) {
+      this.keyVaultService = AzureKeyVaultService.getInstance();
+    }
   }
 
   /**
@@ -95,19 +108,33 @@ export class EncryptionService {
    * 獲取或創建加密金鑰
    *
    * 優先級：
-   * 1. 環境變數 ENCRYPTION_KEY（生產環境）
-   * 2. 自動生成（開發環境，不安全）
+   * 1. Azure Key Vault (如果啟用且可用)
+   * 2. 環境變數 ENCRYPTION_KEY（生產環境）
+   * 3. 自動生成（開發環境，不安全）
    *
    * @returns 加密金鑰 Buffer
-   * @throws {Error} 生產環境未設置 ENCRYPTION_KEY
+   * @throws {Error} 生產環境未設置 ENCRYPTION_KEY 且 Key Vault 不可用
    */
   private getOrCreateEncryptionKey(): Buffer {
+    // 優先級1: 嘗試從 Azure Key Vault 獲取金鑰
+    if (this.config.useKeyVault) {
+      try {
+        // 注意: 這是同步構造,實際金鑰獲取會在首次加密/解密時進行
+        console.log('[EncryptionService] Azure Key Vault integration enabled');
+        console.log('[EncryptionService] Will fetch encryption key from Key Vault on first use');
+        // 返回臨時金鑰,將在首次使用時替換為真實金鑰
+        return Buffer.alloc(this.config.keyLength);
+      } catch (error) {
+        console.error('[EncryptionService] Failed to initialize Key Vault, falling back to environment variable');
+      }
+    }
+
     const envKey = process.env.ENCRYPTION_KEY;
 
-    // 生產環境必須設置加密金鑰
-    if (process.env.NODE_ENV === 'production' && !envKey) {
+    // 優先級2: 生產環境必須設置加密金鑰
+    if (process.env.NODE_ENV === 'production' && !envKey && !this.config.useKeyVault) {
       throw new Error(
-        'ENCRYPTION_KEY must be set in production environment. ' +
+        'ENCRYPTION_KEY must be set in production environment or USE_AZURE_KEY_VAULT must be enabled. ' +
         'Generate one using: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'base64\'))"'
       );
     }
@@ -131,7 +158,7 @@ export class EncryptionService {
       }
     }
 
-    // 開發環境：生成臨時金鑰（僅用於測試）
+    // 優先級3: 開發環境：生成臨時金鑰（僅用於測試）
     console.warn(
       '[EncryptionService] WARNING: Using auto-generated encryption key. ' +
       'This is only suitable for development. Set ENCRYPTION_KEY in production.'
@@ -140,20 +167,90 @@ export class EncryptionService {
   }
 
   /**
+   * 從 Azure Key Vault 加載加密金鑰
+   *
+   * @private
+   * @returns Promise<void>
+   */
+  private async loadKeyFromVault(): Promise<void> {
+    if (this.keyLoaded || !this.keyVaultService || !this.config.keyVaultSecretName) {
+      return;
+    }
+
+    // 確保只加載一次
+    if (this.keyLoadPromise) {
+      return this.keyLoadPromise;
+    }
+
+    this.keyLoadPromise = (async () => {
+      try {
+        console.log(`[EncryptionService] Loading encryption key from Azure Key Vault: ${this.config.keyVaultSecretName}`);
+
+        const keyBase64 = await this.keyVaultService.getSecret(this.config.keyVaultSecretName);
+        const keyBuffer = Buffer.from(keyBase64, 'base64');
+
+        // 驗證金鑰長度
+        if (keyBuffer.length !== this.config.keyLength) {
+          throw new Error(
+            `Invalid Key Vault encryption key length. Expected ${this.config.keyLength} bytes, got ${keyBuffer.length} bytes`
+          );
+        }
+
+        this.encryptionKey = keyBuffer;
+        this.keyLoaded = true;
+
+        console.log('[EncryptionService] Successfully loaded encryption key from Azure Key Vault');
+      } catch (error) {
+        console.error('[EncryptionService] Failed to load encryption key from Key Vault:', error);
+
+        // 回退到環境變數金鑰
+        const envKey = process.env.ENCRYPTION_KEY;
+        if (envKey) {
+          console.log('[EncryptionService] Falling back to ENCRYPTION_KEY environment variable');
+          this.encryptionKey = Buffer.from(envKey, 'base64');
+          this.keyLoaded = true;
+        } else {
+          throw new Error(
+            'Failed to load encryption key from Key Vault and ENCRYPTION_KEY is not set. ' +
+            `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+          );
+        }
+      }
+    })();
+
+    return this.keyLoadPromise;
+  }
+
+  /**
+   * 確保加密金鑰已加載
+   *
+   * @private
+   * @returns Promise<void>
+   */
+  private async ensureKeyLoaded(): Promise<void> {
+    if (this.config.useKeyVault && !this.keyLoaded) {
+      await this.loadKeyFromVault();
+    }
+  }
+
+  /**
    * 加密字符串資料
    *
    * 加密流程：
-   * 1. 生成隨機 IV（初始化向量）
-   * 2. 使用 AES-256-GCM 加密
-   * 3. 提取認證標籤
-   * 4. 組合版本、IV、標籤、密文
-   * 5. Base64 編碼返回
+   * 1. 確保加密金鑰已加載（從 Key Vault 或環境變數）
+   * 2. 生成隨機 IV（初始化向量）
+   * 3. 使用 AES-256-GCM 加密
+   * 4. 提取認證標籤
+   * 5. 組合版本、IV、標籤、密文
+   * 6. Base64 編碼返回
    *
    * @param plaintext - 待加密的明文
-   * @returns Base64 編碼的加密資料（包含版本、IV、標籤）
+   * @returns Promise<string> Base64 編碼的加密資料（包含版本、IV、標籤）
    * @throws {Error} 加密失敗
    */
-  public encrypt(plaintext: string): string {
+  public async encrypt(plaintext: string): Promise<string> {
+    // 確保金鑰已加載
+    await this.ensureKeyLoaded();
     try {
       // 1. 生成隨機 IV
       const iv = crypto.randomBytes(this.config.ivLength);
@@ -193,18 +290,21 @@ export class EncryptionService {
    * 解密字符串資料
    *
    * 解密流程：
-   * 1. Base64 解碼
-   * 2. 解析版本、IV、標籤、密文
-   * 3. 驗證版本兼容性
-   * 4. 使用 AES-256-GCM 解密
-   * 5. 驗證認證標籤（防篡改）
-   * 6. 返回明文
+   * 1. 確保加密金鑰已加載（從 Key Vault 或環境變數）
+   * 2. Base64 解碼
+   * 3. 解析版本、IV、標籤、密文
+   * 4. 驗證版本兼容性
+   * 5. 使用 AES-256-GCM 解密
+   * 6. 驗證認證標籤（防篡改）
+   * 7. 返回明文
    *
    * @param encryptedText - Base64 編碼的加密資料
-   * @returns 解密後的明文
+   * @returns Promise<string> 解密後的明文
    * @throws {Error} 解密失敗、版本不兼容、資料被篡改
    */
-  public decrypt(encryptedText: string): string {
+  public async decrypt(encryptedText: string): Promise<string> {
+    // 確保金鑰已加載
+    await this.ensureKeyLoaded();
     try {
       // 1. Base64 解碼並解析
       const encryptedData: EncryptedData = JSON.parse(
@@ -256,12 +356,12 @@ export class EncryptionService {
    *
    * @param data - 包含敏感資料的物件
    * @param fields - 需要加密的欄位名稱陣列
-   * @returns 加密後的物件（原物件不變）
+   * @returns Promise<T> 加密後的物件（原物件不變）
    */
-  public encryptFields<T extends Record<string, any>>(
+  public async encryptFields<T extends Record<string, any>>(
     data: T,
     fields: (keyof T)[]
-  ): T {
+  ): Promise<T> {
     const encrypted = { ...data };
 
     for (const field of fields) {
@@ -269,7 +369,7 @@ export class EncryptionService {
 
       // 只加密非空字符串
       if (typeof value === 'string' && value.length > 0) {
-        encrypted[field] = this.encrypt(value) as any;
+        encrypted[field] = await this.encrypt(value) as any;
       }
     }
 
@@ -283,12 +383,12 @@ export class EncryptionService {
    *
    * @param data - 包含加密資料的物件
    * @param fields - 需要解密的欄位名稱陣列
-   * @returns 解密後的物件（原物件不變）
+   * @returns Promise<T> 解密後的物件（原物件不變）
    */
-  public decryptFields<T extends Record<string, any>>(
+  public async decryptFields<T extends Record<string, any>>(
     data: T,
     fields: (keyof T)[]
-  ): T {
+  ): Promise<T> {
     const decrypted = { ...data };
 
     for (const field of fields) {
@@ -297,7 +397,7 @@ export class EncryptionService {
       // 只解密非空字符串
       if (typeof value === 'string' && value.length > 0) {
         try {
-          decrypted[field] = this.decrypt(value) as any;
+          decrypted[field] = await this.decrypt(value) as any;
         } catch (error) {
           // 解密失敗時保留原值，避免整個操作失敗
           console.error(`Failed to decrypt field "${String(field)}":`, error);
@@ -394,14 +494,14 @@ export class EncryptionService {
 /**
  * 便利函數：快速加密
  */
-export function encrypt(plaintext: string): string {
+export async function encrypt(plaintext: string): Promise<string> {
   return EncryptionService.getInstance().encrypt(plaintext);
 }
 
 /**
  * 便利函數：快速解密
  */
-export function decrypt(encryptedText: string): string {
+export async function decrypt(encryptedText: string): Promise<string> {
   return EncryptionService.getInstance().decrypt(encryptedText);
 }
 

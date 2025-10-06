@@ -22,6 +22,7 @@
  * • Security - OWASP推薦的安全實踐
  *
  * 【架構層次】
+ * Layer 0 (HTTPS): HTTPS強制和HSTS (Sprint 3安全加固)
  * Layer 1 (Edge): 請求ID、CORS、安全頭部
  * Layer 2 (Auth): JWT、Azure AD、API Key (在lib/middleware.ts)
  * Layer 3 (Rate Limit): 多層速率限制 (在lib/middleware.ts)
@@ -33,6 +34,7 @@
  * • lib/middleware/route-matcher.ts - 路由匹配器
  * • lib/middleware/cors.ts - CORS中間件
  * • lib/middleware/security-headers.ts - 安全頭部中間件
+ * • lib/middleware/https-enforcement.ts - HTTPS強制中間件 (Sprint 3)
  * • lib/middleware/routing-config.ts - 路由配置
  * • lib/middleware.ts - 認證和速率限制中間件
  * • docs/api-gateway-architecture.md - 架構設計文檔
@@ -44,6 +46,10 @@
  *   - 路由匹配器和配置
  *   - CORS中間件
  *   - 安全頭部中間件
+ * - MVP Phase 2 Sprint 3: 安全加固與合規
+ *   - HTTPS強制和重定向 (Layer 0)
+ *   - HSTS安全頭部設置
+ *   - 代理頭部信任配置
  * ================================================================
  */
 
@@ -54,6 +60,7 @@ import { createRouteMatcher } from '@/lib/middleware/route-matcher'
 import { createCorsMiddleware } from '@/lib/middleware/cors'
 import { createSecurityHeaders, SecurityPresets } from '@/lib/middleware/security-headers'
 import { getRouteConfigs } from '@/lib/middleware/routing-config'
+import { createHttpsEnforcementMiddleware } from '@/lib/middleware/https-enforcement'
 
 /**
  * 初始化中間件組件
@@ -79,6 +86,16 @@ const securityHeaders = createSecurityHeaders(
     : SecurityPresets.development
 )
 
+const httpsEnforcement = createHttpsEnforcementMiddleware({
+  enabled: process.env.ENABLE_HTTPS_ENFORCEMENT === 'true',
+  redirectHttp: true,
+  hstsMaxAge: parseInt(process.env.HSTS_MAX_AGE || '31536000'),
+  includeSubDomains: process.env.HSTS_INCLUDE_SUBDOMAINS !== 'false',
+  preload: process.env.HSTS_PRELOAD === 'true',
+  exemptPaths: ['/health', '/api/health'],
+  trustProxyHeaders: true
+})
+
 /**
  * Next.js 中間件主函數
  *
@@ -97,6 +114,15 @@ const securityHeaders = createSecurityHeaders(
  */
 export async function middleware(request: NextRequest) {
   try {
+    // ================================================================
+    // Layer 0: HTTPS強制 (最高優先級,在所有其他處理之前)
+    // ================================================================
+    const httpsResponse = httpsEnforcement.handle(request);
+    if (httpsResponse) {
+      // 如果需要重定向到HTTPS或添加HSTS頭部,立即返回
+      return httpsResponse;
+    }
+
     // ================================================================
     // Layer 1: 請求ID生成
     // ================================================================

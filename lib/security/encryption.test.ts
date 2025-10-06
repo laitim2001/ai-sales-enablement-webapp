@@ -55,55 +55,55 @@ describe('EncryptionService', () => {
   });
 
   describe('基本加密/解密', () => {
-    it('應該成功加密和解密簡單字符串', () => {
+    it('應該成功加密和解密簡單字符串', async () => {
       const plaintext = 'Hello, World!';
-      const encrypted = encryptionService.encrypt(plaintext);
-      const decrypted = encryptionService.decrypt(encrypted);
+      const encrypted = await encryptionService.encrypt(plaintext);
+      const decrypted = await encryptionService.decrypt(encrypted);
 
       expect(encrypted).not.toBe(plaintext);
       expect(decrypted).toBe(plaintext);
     });
 
-    it('應該成功加密和解密空字符串', () => {
+    it('應該成功加密和解密空字符串', async () => {
       const plaintext = '';
-      const encrypted = encryptionService.encrypt(plaintext);
-      const decrypted = encryptionService.decrypt(encrypted);
+      const encrypted = await encryptionService.encrypt(plaintext);
+      const decrypted = await encryptionService.decrypt(encrypted);
 
       expect(decrypted).toBe(plaintext);
     });
 
-    it('應該成功加密和解密長字符串', () => {
+    it('應該成功加密和解密長字符串', async () => {
       const plaintext = 'a'.repeat(10000);
-      const encrypted = encryptionService.encrypt(plaintext);
-      const decrypted = encryptionService.decrypt(encrypted);
+      const encrypted = await encryptionService.encrypt(plaintext);
+      const decrypted = await encryptionService.decrypt(encrypted);
 
       expect(decrypted).toBe(plaintext);
     });
 
-    it('應該成功加密和解密包含特殊字符的字符串', () => {
+    it('應該成功加密和解密包含特殊字符的字符串', async () => {
       const plaintext = '測試！@#$%^&*()_+-=[]{}|;:\'",.<>?/~`';
-      const encrypted = encryptionService.encrypt(plaintext);
-      const decrypted = encryptionService.decrypt(encrypted);
+      const encrypted = await encryptionService.encrypt(plaintext);
+      const decrypted = await encryptionService.decrypt(encrypted);
 
       expect(decrypted).toBe(plaintext);
     });
 
-    it('應該成功加密和解密 Unicode 字符', () => {
+    it('應該成功加密和解密 Unicode 字符', async () => {
       const plaintext = '你好世界 🌍 こんにちは العالم';
-      const encrypted = encryptionService.encrypt(plaintext);
-      const decrypted = encryptionService.decrypt(encrypted);
+      const encrypted = await encryptionService.encrypt(plaintext);
+      const decrypted = await encryptionService.decrypt(encrypted);
 
       expect(decrypted).toBe(plaintext);
     });
 
-    it('每次加密相同明文應該產生不同密文（因為隨機IV）', () => {
+    it('每次加密相同明文應該產生不同密文（因為隨機IV）', async () => {
       const plaintext = 'Same plaintext';
-      const encrypted1 = encryptionService.encrypt(plaintext);
-      const encrypted2 = encryptionService.encrypt(plaintext);
+      const encrypted1 = await encryptionService.encrypt(plaintext);
+      const encrypted2 = await encryptionService.encrypt(plaintext);
 
       expect(encrypted1).not.toBe(encrypted2);
-      expect(encryptionService.decrypt(encrypted1)).toBe(plaintext);
-      expect(encryptionService.decrypt(encrypted2)).toBe(plaintext);
+      expect(await encryptionService.decrypt(encrypted1)).toBe(plaintext);
+      expect(await encryptionService.decrypt(encrypted2)).toBe(plaintext);
     });
   });
 
