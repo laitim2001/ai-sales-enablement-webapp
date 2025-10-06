@@ -80,33 +80,12 @@ interface PageProps {
 
 /**
  * 生成頁面元數據
- * 根據文檔ID獲取標題等信息
+ * 使用靜態metadata避免SSR阻塞
  */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  try {
-    // 從API獲取文檔信息以生成元數據
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/knowledge-base/${params.id}`, {
-      cache: 'no-store'
-    })
-
-    if (!response.ok) {
-      return {
-        title: '編輯文檔',
-        description: '編輯知識庫文檔的內容和屬性'
-      }
-    }
-
-    const data = await response.json()
-
-    return {
-      title: `編輯：${data.data?.title || '文檔'}`,
-      description: `編輯「${data.data?.title}」的內容、標題、標籤等屬性`
-    }
-  } catch (error) {
-    return {
-      title: '編輯文檔',
-      description: '編輯知識庫文檔的內容和屬性'
-    }
+  return {
+    title: '編輯文檔',
+    description: '編輯知識庫文檔的內容和屬性'
   }
 }
 
