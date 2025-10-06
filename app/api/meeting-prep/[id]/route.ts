@@ -116,18 +116,32 @@ export async function PATCH(
 
     // 解析更新數據
     const updates = await req.json();
+    console.log('📝 PATCH準備包更新請求:', {
+      packageId: params.id,
+      userId: payload.userId,
+      updates
+    });
 
     // 更新準備包
     const updatedPackage = await manager.updatePrepPackage(params.id, updates);
+    console.log('✅ 準備包更新成功:', updatedPackage.id);
 
     return NextResponse.json({
       message: 'Prep package updated successfully',
       package: updatedPackage,
     });
   } catch (error) {
-    console.error('Error updating prep package:', error);
+    console.error('❌ Error updating prep package:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      packageId: params.id
+    });
     return NextResponse.json(
-      { error: 'Failed to update prep package' },
+      {
+        error: 'Failed to update prep package',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
@@ -178,17 +192,31 @@ export async function DELETE(
     }
 
     // 歸檔準備包（軟刪除）
+    console.log('🗑️ DELETE準備包請求:', {
+      packageId: params.id,
+      userId: payload.userId
+    });
+
     await manager.updatePrepPackage(params.id, {
       status: 'ARCHIVED' as any,
     });
+    console.log('✅ 準備包歸檔成功:', params.id);
 
     return NextResponse.json({
       message: 'Prep package archived successfully',
     });
   } catch (error) {
-    console.error('Error deleting prep package:', error);
+    console.error('❌ Error deleting prep package:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      packageId: params.id
+    });
     return NextResponse.json(
-      { error: 'Failed to delete prep package' },
+      {
+        error: 'Failed to delete prep package',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
