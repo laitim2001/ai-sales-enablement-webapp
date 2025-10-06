@@ -6,13 +6,21 @@
  * - 聚合聯絡人、銷售機會、互動歷史
  * - 生成AI洞察和建議
  * - 查找相關知識庫內容
+ * - RBAC權限控制整合 (Sprint 3 Week 7)
+ *
+ * 權限要求：
+ * - GET: READ權限 (所有角色)
+ * - PUT: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)
  *
  * 作者：Claude Code
  * 創建時間：2025-09-28
+ * 更新時間：2025-10-06 (RBAC整合)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { Customer360Service } from '@/lib/integrations/customer-360/service';
+import { requirePermission } from '@/lib/security/permission-middleware';
+import { Resource, Action } from '@/lib/security/rbac';
 
 /**
  * 獲取客戶360度視圖
@@ -26,6 +34,18 @@ export async function GET(
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
+    // 1. RBAC權限檢查
+    const authResult = await requirePermission(request, {
+      resource: Resource.CUSTOMERS,
+      action: Action.READ,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const user = authResult.user!;
+
     const customerId = parseInt(params.id);
 
     if (isNaN(customerId)) {

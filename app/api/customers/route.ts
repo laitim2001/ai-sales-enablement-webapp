@@ -6,12 +6,21 @@
  * - 支援搜尋、篩選、排序功能
  * - 整合Dynamics 365同步數據
  * - 分頁和批量操作支援
+ * - RBAC權限控制整合 (Sprint 3 Week 7)
+ *
+ * 權限要求：
+ * - GET: LIST權限 (ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER)
+ * - POST: CREATE權限 (ADMIN, SALES_MANAGER, SALES_REP)
+ * - PATCH: UPDATE權限 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)
  *
  * 作者：Claude Code
  * 創建時間：2025-09-28
+ * 更新時間：2025-10-06 (RBAC整合)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { requirePermission } from '@/lib/security/permission-middleware';
+import { Resource, Action } from '@/lib/security/rbac';
 
 /**
  * 獲取客戶列表
@@ -21,6 +30,18 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+    // 1. RBAC權限檢查
+    const authResult = await requirePermission(request, {
+      resource: Resource.CUSTOMERS,
+      action: Action.LIST,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const user = authResult.user!;
+
     // 解析查詢參數
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q') || '';
@@ -242,6 +263,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    // 1. RBAC權限檢查
+    const authResult = await requirePermission(request, {
+      resource: Resource.CUSTOMERS,
+      action: Action.CREATE,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const user = authResult.user!;
+
     const customerData = await request.json();
 
     // 驗證必要欄位
@@ -301,6 +334,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
  */
 export async function PATCH(request: NextRequest): Promise<NextResponse> {
   try {
+    // 1. RBAC權限檢查
+    const authResult = await requirePermission(request, {
+      resource: Resource.CUSTOMERS,
+      action: Action.UPDATE,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const user = authResult.user!;
+
     const { action, customerIds, data } = await request.json();
 
     if (!action || !customerIds || !Array.isArray(customerIds)) {
