@@ -11,6 +11,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { templateManager, CreateTemplateData, TemplateQueryOptions } from '@/lib/template/template-manager';
 import { TemplateCategory, TemplateAccess } from '@prisma/client';
+import { requirePermission } from '@/lib/security/permission-middleware';
+import { Resource, Action } from '@/lib/security/rbac';
 
 /**
  * GET /api/templates
@@ -18,9 +20,17 @@ import { TemplateCategory, TemplateAccess } from '@prisma/client';
  */
 export async function GET(request: NextRequest) {
   try {
-    // TODO: 從認證中間件獲取用戶 ID
-    // 暫時使用測試用戶 ID
-    const userId = 1;
+    // RBAC權限檢查
+    const authResult = await requirePermission(request, {
+      resource: Resource.PROPOSAL_TEMPLATES,
+      action: Action.LIST,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const userId = authResult.user!.userId;
 
     // 解析查詢參數
     const searchParams = request.nextUrl.searchParams;
@@ -62,8 +72,17 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    // TODO: 從認證中間件獲取用戶 ID
-    const userId = 1;
+    // RBAC權限檢查
+    const authResult = await requirePermission(request, {
+      resource: Resource.PROPOSAL_TEMPLATES,
+      action: Action.CREATE,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const userId = authResult.user!.userId;
 
     const body = await request.json();
 
