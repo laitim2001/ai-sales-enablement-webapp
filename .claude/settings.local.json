@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -c core.hooksPath=/dev/null commit -m \"chore: 更新Claude Code權限配置 - Sprint 3 Week 6-7 RBAC設計\n\n- 添加RBAC設計文檔提交權限\n- Sprint 3 Week 6-7 RBAC設計100%完成\n- 自動權限管理系統更新\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
+      "Bash(git -c core.hooksPath=/dev/null commit -m \"chore: 更新Claude Code權限配置 - Sprint 3 Week 6-7 RBAC設計\n\n- 添加RBAC設計文檔提交權限\n- Sprint 3 Week 6-7 RBAC設計100%完成\n- 自動權限管理系統更新\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []

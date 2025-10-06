@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [🎉 Sprint 3 Week 6-7 RBAC權限系統設計完成 (2025-10-06)](#🎉-2025-10-06-sprint-3-week-6-7-rbac權限系統設計完成-✅)
 - [📋 Sprint 3範圍調整決策 (2025-10-06)](#📋-2025-10-06-sprint-3範圍調整決策-內部系統簡化合規要求-✅)
 - [🎉 Sprint 7 UAT TC-PREP005/008問題調查完成 (2025-10-06)](#🎉-2025-10-06-sprint-7-uat-tc-prep005008問題調查完成-通過率提升至895-✅)
 - [🎉 Sprint 7 UAT測試修復完成 (2025-10-06)](#🎉-2025-10-06-sprint-7-uat測試修復完成-通過率提升至842-✅)
@@ -16,6 +17,238 @@
 - [🎉 Sprint 7 完整完成 (2025-10-05)](#🎉-2025-10-05-sprint-7-完整完成-phase-1--phase-2-ai智能功能-✅)
 - [🎉 Sprint 7 Phase 1 完整實現 (2025-10-05)](#🎉-2025-10-05-sprint-7-phase-1-完整實現-智能提醒行為追蹤會議準備包-✅)
 - [🔧 TypeScript類型錯誤大規模修復 (2025-10-05)](#🔧-2025-10-05-typescript類型錯誤大規模修復-63個錯誤0個-100修復率-✅)
+
+---
+
+## 🎉 2025-10-06: Sprint 3 Week 6-7 RBAC權限系統設計完成 ✅
+
+### 📊 **會話概覽**
+**時間**: 2025-10-06 21:30-22:45
+**狀態**: ✅ 設計完成，文檔已提交GitHub
+**Sprint**: MVP Phase 2 - Sprint 3 Week 6-7
+**主題**: 完成企業級RBAC權限系統完整設計，準備Week 7實施階段
+**核心成果**: ~750行專業級設計文檔，5角色×22資源×13操作權限模型
+
+### 🎯 **完成內容**
+
+#### **1. 完整RBAC設計文檔** (`docs/sprint3-rbac-design-document.md`, ~750行)
+
+**核心架構**:
+```
+Permission = Role × Resource × Action
+```
+
+**5個用戶角色**:
+1. **ADMIN** (系統管理員)
+   - 完全訪問權限
+   - 所有22個資源的MANAGE權限
+   - 無限制訪問
+
+2. **SALES_MANAGER** (銷售經理)
+   - 團隊管理 + 審批權限
+   - APPROVE proposals操作
+   - ASSIGN opportunities操作
+   - 訪問團隊資源 (同部門檢查)
+
+3. **SALES_REP** (銷售代表)
+   - 個人業務執行
+   - 僅訪問自己的資源 (userId === resourceOwnerId)
+   - Knowledge base READ權限
+
+4. **MARKETING** (行銷人員)
+   - 內容管理
+   - MANAGE knowledge_base
+   - PUBLISH templates
+
+5. **VIEWER** (訪客)
+   - 只讀訪問
+   - 所有資源READ權限
+   - 無修改權限
+
+**22個資源類型**:
+- 客戶管理: customers, customer_contacts, sales_opportunities
+- 提案系統: proposals, proposal_templates
+- 知識庫: knowledge_base
+- 系統管理: users, roles, api_keys, audit_logs, system_configs
+- ... (完整列表見設計文檔)
+
+**13個操作類型**:
+- 基本CRUD: CREATE, READ, UPDATE, DELETE
+- 特殊操作: LIST, SEARCH, EXPORT, IMPORT, APPROVE, PUBLISH, ARCHIVE, RESTORE, ASSIGN, MANAGE
+
+#### **2. 權限矩陣設計**
+
+為每個角色定義了完整的權限矩陣:
+- ADMIN: 所有資源 × MANAGE權限
+- SALES_MANAGER: 16個資源 × 混合權限 (CRUD + APPROVE/ASSIGN)
+- SALES_REP: 8個資源 × 限制權限 (Own resources only)
+- MARKETING: 4個資源 × 內容管理權限
+- VIEWER: 所有資源 × READ only
+
+#### **3. API實施模式** (4種模式)
+
+**Pattern 1 - requirePermission()**: 靈活權限檢查
+```typescript
+const authResult = await requirePermission(request, {
+  resource: Resource.CUSTOMERS,
+  action: Action.LIST,
+});
+```
+
+**Pattern 2 - withPermission() HOC**: 聲明式權限
+```typescript
+export const GET = withPermission(
+  async (request, { user }) => { /* handler */ },
+  { resource: Resource.CUSTOMERS, action: Action.LIST }
+);
+```
+
+**Pattern 3 - checkOwnership**: 資源擁有權驗證
+```typescript
+await requirePermission(request, {
+  resource: Resource.CUSTOMERS,
+  action: Action.UPDATE,
+  checkOwnership: true,
+  resourceOwnerId: customer.assigned_user_id,
+});
+```
+
+**Pattern 4 - withAdmin()**: 管理員專用端點
+```typescript
+export const GET = withAdmin(async (request, { user }) => {
+  // Admin only operations
+});
+```
+
+#### **4. 前端權限控制設計**
+
+**usePermission Hook**:
+```typescript
+const { hasPermission, isAdmin, isSalesManager } = usePermission();
+
+{hasPermission(Resource.CUSTOMERS, Action.UPDATE) && (
+  <button onClick={() => handleEdit(customerId)}>編輯</button>
+)}
+```
+
+**UI條件渲染模式**:
+- 權限檢查
+- 錯誤處理
+- 路由保護
+
+#### **5. Sprint 3 Week 7 實施路線圖**
+
+**Day 1-2: 客戶和提案模塊API整合**
+- 整合客戶管理API (customers, customer_contacts)
+- 整合提案管理API (proposals, proposal_templates)
+- 測試和驗證
+
+**Day 3-4: 系統管理模塊API整合**
+- 整合系統管理API (users, roles, api_keys)
+- 整合配置管理API (system_configs, ai_configs)
+- 測試和驗證
+
+**Day 5: 前端基礎整合**
+- usePermission Hook實現
+- 基礎UI組件權限整合
+- 路由保護實現
+
+**Day 6-7: 測試和驗證**
+- 單元測試 (權限檢查邏輯)
+- 集成測試 (API權限控制)
+- E2E測試 (完整權限流程)
+
+#### **6. 技術亮點**
+
+**設計原則**:
+- ✅ 企業級RBAC模型 (NIST標準)
+- ✅ 最小權限原則 (Principle of Least Privilege)
+- ✅ 職責分離 (Separation of Duties)
+- ✅ 100%可審計性 (所有操作可追蹤)
+- ✅ 易於擴展 (新角色/資源易添加)
+
+**資源敏感級別分類**:
+- 🔴 極高: api_keys, users, audit_logs
+- 🔴 高: customers, customer_contacts
+- 🟡 中: proposals, sales_opportunities
+- 🟢 低: knowledge_base, templates
+
+### 📝 **文檔更新**
+
+1. **新增文檔**:
+   - `docs/sprint3-rbac-design-document.md` (~750行)
+   - 完整RBAC設計規格
+   - API實施指南
+   - 前端整合方案
+
+2. **索引更新**:
+   - `PROJECT-INDEX.md` - 添加RBAC設計文檔索引
+   - 標記為🔴極高重要程度
+
+### 🔧 **Git提交記錄**
+
+```bash
+# Commit 1: RBAC設計文檔
+Commit fea1b08: feat: Sprint 3 Week 6-7 - RBAC權限系統設計完成
+- docs/sprint3-rbac-design-document.md (~750行)
+
+# Commit 2: 權限配置更新
+Commit 2a5b1b9: chore: 更新Claude Code權限配置
+
+# Commit 3: 索引更新
+Commit 0386e3c: docs: 更新PROJECT-INDEX.md - 添加RBAC設計文檔索引
+
+# 全部已同步到GitHub
+```
+
+### 📊 **Sprint 3 進度更新**
+
+**Week 5**: 資料安全強化 - ✅ 100%完成
+- Azure Key Vault整合
+- HTTPS強制中間件
+- 敏感欄位配置
+- 加密性能測試
+
+**Week 6**: 核心安全基礎設施 - ✅ 100%完成
+- 資料備份系統 (~1,300行)
+- 安全掃描報告 (~400行)
+- RBAC權限設計 (~750行)
+
+**Week 7**: RBAC實施 - ⏳ 待開始
+- API整合 (7天計劃)
+- 前端整合
+- 測試驗證
+
+**Week 8**: 審計日誌系統 - ⏳ 待開始
+
+**整體進度**: 4/8任務完成 (50%)
+
+### 🎯 **驗收標準**
+
+- [x] ✅ 完整權限模型設計 (5角色×22資源×13操作)
+- [x] ✅ 所有角色權限矩陣定義
+- [x] ✅ 資源擁有權規則設計
+- [x] ✅ 4種API實施模式和代碼範例
+- [x] ✅ 前端權限控制設計
+- [x] ✅ Week 7實施路線圖
+- [x] ✅ 文檔提交到GitHub
+
+### 💡 **下一步行動**
+
+1. **立即行動** (Week 7 Day 1):
+   - 開始客戶模塊API權限整合
+   - 實施requirePermission和withPermission中間件
+   - 測試權限檢查邏輯
+
+2. **本週目標** (Week 7):
+   - 完成所有API模塊權限整合
+   - 實現前端usePermission Hook
+   - 完成基礎測試套件
+
+3. **驗證要求**:
+   - 所有API端點權限保護
+   - 前端UI條件渲染正確
+   - 測試覆蓋率 ≥ 80%
 
 ---
 
