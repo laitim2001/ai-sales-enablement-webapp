@@ -33,6 +33,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken, type JWTPayload } from '@/lib/auth-server';
 import { RBACService, Resource, Action, UserRole } from './rbac';
+import { AuditLoggerPrisma } from './audit-log-prisma';
+import { AuditAction, AuditResource } from './audit-log';
+import { AuditSeverity } from '@prisma/client';
 
 /**
  * 權限檢查結果接口
@@ -157,6 +160,15 @@ export async function requirePermission(
       : RBACService.hasAnyPermission(userRole, requirement.resource, actions);
 
     if (!hasPermission) {
+      // 記錄權限拒絕審計日誌
+      await logPermissionAudit({
+        request,
+        user: payload,
+        requirement,
+        authorized: false,
+        reason: `User does not have required permission: ${actions.join(', ')} on ${requirement.resource}`,
+      });
+
       return {
         authorized: false,
         user: payload,
@@ -186,6 +198,15 @@ export async function requirePermission(
       );
 
       if (!ownsResource) {
+        // 記錄資源擁有權拒絕審計日誌
+        await logPermissionAudit({
+          request,
+          user: payload,
+          requirement,
+          authorized: false,
+          reason: 'User does not own the resource',
+        });
+
         return {
           authorized: false,
           user: payload,
@@ -202,7 +223,15 @@ export async function requirePermission(
       }
     }
 
-    // 6. 權限檢查通過
+    // 6. 權限檢查通過 - 記錄審計日誌
+    await logPermissionAudit({
+      request,
+      user: payload,
+      requirement,
+      authorized: true,
+      reason: 'Permission granted',
+    });
+
     return {
       authorized: true,
       user: payload,
@@ -486,6 +515,75 @@ export function withManagement<T = any>(
       params: context?.params,
     });
   };
+}
+
+/**
+ * 記錄權限檢查審計日誌
+ *
+ * @param params - 審計日誌參數
+ */
+async function logPermissionAudit(params: {
+  request: NextRequest;
+  user: JWTPayload;
+  requirement: PermissionRequirement;
+  authorized: boolean;
+  reason: string;
+}): Promise<void> {
+  try {
+    const { request, user, requirement, authorized, reason } = params;
+
+    // 提取請求上下文
+    const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+    const requestId = request.headers.get('x-request-id') || undefined;
+
+    // 轉換Resource到AuditResource（大部分可以直接映射）
+    const resourceMapping: Record<Resource, AuditResource> = {
+      [Resource.CUSTOMERS]: AuditResource.CUSTOMER,
+      [Resource.CONTACTS]: AuditResource.CONTACT,
+      [Resource.SALES_OPPORTUNITIES]: AuditResource.SALES_OPPORTUNITY,
+      [Resource.PROPOSALS]: AuditResource.PROPOSAL,
+      [Resource.KNOWLEDGE_BASE]: AuditResource.KNOWLEDGE_BASE,
+      [Resource.TEMPLATES]: AuditResource.TEMPLATE,
+      [Resource.WORKFLOWS]: AuditResource.WORKFLOW,
+      [Resource.ANALYTICS]: AuditResource.ANALYTICS,
+      [Resource.USERS]: AuditResource.USER,
+      [Resource.AUDIT_LOGS]: AuditResource.AUDIT_LOG,
+      [Resource.API_KEYS]: AuditResource.API_KEY,
+      [Resource.SYSTEM_SETTINGS]: AuditResource.SYSTEM,
+    };
+
+    const auditResource = resourceMapping[requirement.resource] || AuditResource.SYSTEM;
+
+    // 確定審計操作類型
+    const auditAction = authorized ? AuditAction.PERMISSION_GRANT : AuditAction.PERMISSION_DENY;
+
+    // 記錄審計日誌
+    await AuditLoggerPrisma.log({
+      userId: user.userId,
+      userName: user.name,
+      userEmail: user.email,
+      userRole: user.role,
+      action: auditAction,
+      resource: auditResource,
+      severity: authorized ? AuditSeverity.INFO : AuditSeverity.WARNING,
+      success: authorized,
+      ipAddress,
+      userAgent,
+      requestId,
+      details: {
+        resource: requirement.resource,
+        actions: Array.isArray(requirement.action) ? requirement.action : [requirement.action],
+        requireAll: requirement.requireAll,
+        checkOwnership: requirement.checkOwnership,
+        resourceOwnerId: requirement.resourceOwnerId,
+        reason,
+      },
+    });
+  } catch (error) {
+    // 審計日誌記錄失敗不應影響業務邏輯
+    console.error('[PermissionMiddleware] Failed to log audit event:', error);
+  }
 }
 
 /**
