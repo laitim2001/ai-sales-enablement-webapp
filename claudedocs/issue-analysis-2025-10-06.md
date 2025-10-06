@@ -33,63 +33,51 @@
 
 ---
 
-### 2. Session Persistence Issue 🔴 CRITICAL
-**Status**: Under investigation
+### 2. Session Persistence Issue ✅ FIXED
+**Status**: Root cause found and fixed
 **Symptom**: Page refresh redirects to `/login`
-**Root Cause**: Identified in `hooks/use-auth.ts`
+**Root Cause**: Token field name mismatch in `hooks/use-auth.ts`
 
-**Problem Analysis**:
+**Real Root Cause Found (2025-10-06 12:02 PM)**:
 ```typescript
-// hooks/use-auth.ts:189-231
-const checkAuthStatus = async () => {
-  try {
-    const token = localStorage.getItem('auth-token')
-    if (!token) {
-      setIsLoading(false)
-      return
-    }
+// ❌ PROBLEM: API returns accessToken, but code looks for token
+// API Response: result.data.accessToken
+// Frontend code: result.data.token
 
-    const response = await fetch('/api/auth/me', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+// hooks/use-auth.ts:287 (login function)
+if (result.data.token) {  // ❌ WRONG - accessToken field doesn't exist!
+  localStorage.setItem('auth-token', result.data.token)
+}
 
-    if (response.ok) {
-      const result = await response.json()
-      if (result.success && result.data) {
-        setUser(result.data)
-      } else {
-        // ⚠️ ISSUE: Removes token even if API structure just changed
-        localStorage.removeItem('auth-token')  // LINE 219
-      }
-    } else {
-      // ⚠️ ISSUE: Removes token on ANY non-200 response
-      localStorage.removeItem('auth-token')  // LINE 223
-    }
-  } catch (error) {
-    console.error('Auth status check failed:', error)
-    // ⚠️ ISSUE: Removes token on network errors
-    localStorage.removeItem('auth-token')  // LINE 227
-  } finally {
-    setIsLoading(false)
-  }
+// hooks/use-auth.ts:349 (register function)
+if (result.data.token) {  // ❌ WRONG - same issue
+  localStorage.setItem('auth-token', result.data.token)
 }
 ```
 
 **Why This Causes Session Loss**:
-1. On page refresh, React re-mounts and runs `useEffect(() => checkAuthStatus(), [])`
-2. If `/api/auth/me` has ANY issue (network blip, server restart, etc.), token gets deleted
-3. User gets immediately redirected to login even though their token was valid
-4. This is TOO aggressive - should only remove token if it's actually invalid/expired
+1. User logs in successfully
+2. API returns `{ user: {...}, accessToken: "...", refreshToken: "..." }`
+3. Frontend checks `if (result.data.token)` → **FALSE** (accessToken exists, not token)
+4. Token is **NEVER saved to localStorage**
+5. On page refresh, `checkAuthStatus()` finds no token
+6. User gets redirected to login
 
-**Fix Strategy**:
-Only remove token when:
-- ✅ 401 Unauthorized (token expired or invalid)
-- ✅ 403 Forbidden (user deactivated)
-- ❌ NOT on 500 errors (server issues)
-- ❌ NOT on network errors (temporary connectivity)
-- ❌ NOT on response format changes
+**Test Evidence** (test-session-debug.html):
+```
+✅ Response Status: 200
+✅ User cached to localStorage
+❌ Token: NONE  ← Token was never saved!
+```
+
+**Fix Applied (Commit 83373fc)**:
+```typescript
+// ✅ FIXED: Support both accessToken and token field names
+const token = result.data.accessToken || result.data.token
+if (token) {
+  localStorage.setItem('auth-token', token)
+}
+```
 
 ---
 
@@ -141,14 +129,17 @@ GET /api/knowledge-base error: Error: Invalid or expired token
 ## 🔧 Immediate Action Plan
 
 ### ✅ COMPLETED Priority 1: Fix Session Persistence
-**File**: `hooks/use-auth.ts:199-231`
-**Status**: Code fix committed, user needs hard refresh (Ctrl+Shift+R)
-**Change**: Implemented smart token retention (401/403 only) + user caching
+**File**: `hooks/use-auth.ts:288, 350`
+**Status**: ✅ FIXED - Token field name mismatch resolved (Commit 83373fc)
+**Root Cause**: API returns `accessToken` but code looked for `token`
+**Change**: Support both `accessToken` and `token` field names
+**User Action**: Hard refresh (Ctrl+Shift+R) to load fixed JavaScript
 
 ### ✅ COMPLETED Priority 2: Knowledge Base Error
-**Status**: Root cause identified - expired token due to cached old JavaScript
-**Fix**: Same as Priority 1 - user needs hard refresh to load new auth code
-**Verification**: After hard refresh + fresh login, test Knowledge Base page
+**Status**: ✅ RESOLVED - Same root cause as Priority 1
+**Root Cause**: No token saved → checkAuthStatus finds no token → 401 error
+**Fix**: Same as Priority 1 - token field name fix resolves this too
+**Verification**: After hard refresh + fresh login, Knowledge Base should work
 
 ### Priority 3: Fix Proposal Template Error
 **Check**: Browser console, server logs, API endpoint
