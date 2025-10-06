@@ -380,7 +380,7 @@ async function runAllTests() {
       };
     }
 
-    const response = await makeRequest('POST', `//api/reminders/${createdReminderId}/snooze`, {
+    const response = await makeRequest('PATCH', `/api/reminders/${createdReminderId}/snooze`, {
       snoozeMinutes: 15
     });
 
@@ -451,9 +451,9 @@ async function runAllTests() {
 
   await runTest('TC-PREP001', '創建準備包（空白）', async () => {
     const response = await makeRequest('POST', '/api/meeting-prep', {
-      meetingId: 'meeting-123',
-      meetingTitle: 'UAT測試會議',
-      meetingType: 'SALES',
+      type: 'SALES_MEETING',
+      title: 'UAT測試會議',
+      description: 'UAT測試用空白準備包',
       items: []
     });
 
@@ -476,9 +476,9 @@ async function runAllTests() {
 
   await runTest('TC-PREP002', '創建準備包（帶項目）', async () => {
     const response = await makeRequest('POST', '/api/meeting-prep', {
-      meetingId: 'meeting-456',
-      meetingTitle: '客戶拜訪會議',
-      meetingType: 'SALES',
+      type: 'SALES_MEETING',
+      title: '客戶拜訪會議',
+      description: 'UAT測試用準備包（帶項目）',
       items: [
         {
           title: '客戶背景調查',
@@ -558,7 +558,8 @@ async function runAllTests() {
     }
 
     const response = await makeRequest('PATCH', `/api/meeting-prep/${createdPrepPackageId}`, {
-      meetingTitle: 'Updated Meeting Title'
+      title: 'Updated Meeting Title',
+      description: 'Updated description for UAT testing'
     });
 
     if (response.status === 200 || response.status === 404) {
@@ -603,10 +604,9 @@ async function runAllTests() {
 
     const templateId = templatesResponse.body.templates[0].id;
     const response = await makeRequest('POST', '/api/meeting-prep', {
-      meetingId: 'meeting-789',
-      meetingTitle: '基於模板的會議',
-      meetingType: 'SALES',
-      templateId: templateId
+      templateId: templateId,
+      title: '基於模板的會議',
+      description: 'UAT測試用模板創建的準備包'
     });
 
     if (response.status === 201 || response.status === 200) {
@@ -653,9 +653,13 @@ async function runAllTests() {
 
   await runTest('TC-AI001', 'AI分析會議信息', async () => {
     const response = await makeRequest('POST', '/api/meeting-intelligence/analyze', {
-      title: '產品演示會議',
-      description: '與ABC公司的技術團隊進行新產品功能演示，討論集成方案',
-      participants: ['張經理', '李工程師', '王總監']
+      meetingInfo: {
+        title: '產品演示會議',
+        description: '與ABC公司的技術團隊進行新產品功能演示，討論集成方案',
+        startTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 明天
+        endTime: new Date(Date.now() + 25 * 60 * 60 * 1000).toISOString(), // 明天+1小時
+        participants: ['張經理', '李工程師', '王總監']
+      }
     });
 
     if (response.status === 200 && response.body.insights) {
@@ -679,8 +683,12 @@ async function runAllTests() {
 
   await runTest('TC-AI002', 'AI生成討論重點', async () => {
     const response = await makeRequest('POST', '/api/meeting-intelligence/analyze', {
-      title: '季度業績檢討',
-      description: '回顧Q3業績，討論Q4目標'
+      meetingInfo: {
+        title: '季度業績檢討',
+        description: '回顧Q3業績，討論Q4目標',
+        startTime: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // 後天
+        endTime: new Date(Date.now() + 50 * 60 * 60 * 1000).toISOString() // 後天+2小時
+      }
     });
 
     if (response.status === 200 && response.body.insights?.keyTopics) {
@@ -703,8 +711,12 @@ async function runAllTests() {
 
   await runTest('TC-AI003', 'AI生成潛在問題', async () => {
     const response = await makeRequest('POST', '/api/meeting-intelligence/analyze', {
-      title: '客戶需求討論',
-      description: '與客戶討論定制化需求，技術可行性評估'
+      meetingInfo: {
+        title: '客戶需求討論',
+        description: '與客戶討論定制化需求，技術可行性評估',
+        startTime: new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString(), // 3天後
+        endTime: new Date(Date.now() + 73 * 60 * 60 * 1000).toISOString() // 3天後+1小時
+      }
     });
 
     if (response.status === 200 && response.body.insights?.potentialQuestions) {
@@ -726,26 +738,46 @@ async function runAllTests() {
   });
 
   await runTest('TC-AI004', 'AI生成智能推薦', async () => {
-    const response = await makeRequest('POST', '/api/meeting-intelligence/recommendations', {
-      meetingType: 'SALES',
-      participants: ['客戶決策者', '技術負責人'],
-      duration: 60
+    // Step 1: 先調用analyze獲取insights
+    const meetingInfo = {
+      title: '銷售會議',
+      description: '與客戶討論產品方案和定價',
+      startTime: new Date(Date.now() + 96 * 60 * 60 * 1000).toISOString(), // 4天後
+      endTime: new Date(Date.now() + 97 * 60 * 60 * 1000).toISOString(), // 4天後+1小時
+      participants: ['客戶決策者', '技術負責人']
+    };
+
+    const analyzeResponse = await makeRequest('POST', '/api/meeting-intelligence/analyze', {
+      meetingInfo
     });
 
-    if (response.status === 200 && response.body.recommendations) {
-      return {
-        status: 'PASS',
-        details: `Generated ${response.body.recommendations.length} recommendations`
-      };
-    } else if (response.status === 500 || response.status === 503 || response.status === 404) {
+    if (analyzeResponse.status !== 200 || !analyzeResponse.body.data?.insights) {
       return {
         status: 'BLOCKED',
-        reason: 'Azure OpenAI configuration or endpoint not implemented'
+        reason: 'Failed to get insights for recommendations test'
+      };
+    }
+
+    // Step 2: 使用insights生成recommendations
+    const response = await makeRequest('POST', '/api/meeting-intelligence/recommendations', {
+      meetingInfo,
+      insights: analyzeResponse.body.data.insights
+    });
+
+    if (response.status === 200 && response.body.data?.recommendations) {
+      return {
+        status: 'PASS',
+        details: 'Generated meeting recommendations successfully'
+      };
+    } else if (response.status === 500 || response.status === 503) {
+      return {
+        status: 'BLOCKED',
+        reason: 'Azure OpenAI configuration required'
       };
     } else {
       return {
         status: 'FAIL',
-        reason: `Status ${response.status}`
+        reason: `Status ${response.status}, Body: ${JSON.stringify(response.body)}`
       };
     }
   });
@@ -777,15 +809,15 @@ async function runAllTests() {
   await runTest('TC-REC001', '獲取內容推薦（混合策略）', async () => {
     const response = await makeRequest('GET', '/api/recommendations/content?strategy=hybrid&limit=5');
 
-    if (response.status === 200 && response.body.recommendations) {
+    if (response.status === 200 && response.body.success && response.body.data?.items) {
       return {
         status: 'PASS',
-        details: `Got ${response.body.recommendations.length} recommendations`
+        details: `Got ${response.body.data.items.length} recommendations using ${response.body.data.strategy} strategy`
       };
     } else {
       return {
         status: 'FAIL',
-        reason: `Status ${response.status}`
+        reason: `Status ${response.status}, Body: ${JSON.stringify(response.body)}`
       };
     }
   });
@@ -793,15 +825,15 @@ async function runAllTests() {
   await runTest('TC-REC002', '獲取內容推薦（協同過濾）', async () => {
     const response = await makeRequest('GET', '/api/recommendations/content?strategy=collaborative&limit=5');
 
-    if (response.status === 200 && response.body.recommendations) {
+    if (response.status === 200 && response.body.success && response.body.data?.items) {
       return {
         status: 'PASS',
-        details: `Got ${response.body.recommendations.length} recommendations`
+        details: `Got ${response.body.data.items.length} recommendations using ${response.body.data.strategy} strategy`
       };
     } else {
       return {
         status: 'FAIL',
-        reason: `Status ${response.status}`
+        reason: `Status ${response.status}, Body: ${JSON.stringify(response.body)}`
       };
     }
   });
@@ -826,10 +858,9 @@ async function runAllTests() {
     const response = await makeRequest('POST', '/api/recommendations/feedback', {
       recommendationId: 'rec-test-123',
       itemId: 'item-456',
-      feedbackType: 'LIKE',
-      context: {
-        source: 'content_recommendations'
-      }
+      action: 'like',
+      rating: 5,
+      comment: 'UAT測試反饋'
     });
 
     if (response.status === 200 || response.status === 201) {
@@ -849,10 +880,9 @@ async function runAllTests() {
     const response = await makeRequest('POST', '/api/recommendations/feedback', {
       recommendationId: 'rec-test-789',
       itemId: 'item-999',
-      feedbackType: 'DISLIKE',
-      context: {
-        source: 'content_recommendations'
-      }
+      action: 'dislike',
+      rating: 1,
+      comment: 'UAT測試負面反饋'
     });
 
     if (response.status === 200 || response.status === 201) {
