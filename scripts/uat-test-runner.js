@@ -407,7 +407,7 @@ async function runAllTests() {
       };
     }
 
-    const response = await makeRequest('POST', `/api/reminders/${createdReminderId}/dismiss`);
+    const response = await makeRequest('DELETE', `/api/reminders/${createdReminderId}`);
 
     if (response.status === 200 || response.status === 404) {
       return {
