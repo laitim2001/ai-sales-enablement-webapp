@@ -194,7 +194,7 @@ export function useAuthState() {
    * 檢查認證狀態
    *
    * 向後端驗證當前 token 的有效性並獲取用戶資訊。
-   * 如果 token 無效或過期，會自動清理本地存儲。
+   * 只在確認 token 無效時清理本地存儲（避免因網路問題導致登出）。
    */
   const checkAuthStatus = async () => {
     try {
@@ -214,17 +214,45 @@ export function useAuthState() {
         const result = await response.json()
         if (result.success && result.data) {
           setUser(result.data)
+          // 快取用戶資料以備離線或伺服器錯誤時使用
+          localStorage.setItem('cached-user', JSON.stringify(result.data))
         } else {
           // Token 無效，清除本地儲存
           localStorage.removeItem('auth-token')
+          localStorage.removeItem('cached-user')
         }
-      } else {
-        // Token 無效或過期，清除本地儲存
+      } else if (response.status === 401 || response.status === 403) {
+        // 只在 401 (Unauthorized) 或 403 (Forbidden) 時清除 token
+        // 這表示 token 確實無效或用戶被禁用
+        console.warn('Authentication failed: token invalid or user unauthorized')
         localStorage.removeItem('auth-token')
+        localStorage.removeItem('cached-user')
+      } else {
+        // 對於其他錯誤（如 500 伺服器錯誤），保留 token
+        // 這可能只是暫時性的伺服器問題
+        console.warn(`Auth check failed with status ${response.status}, keeping token for retry`)
+        // 從 localStorage 恢復之前的用戶狀態（如果有）
+        const cachedUser = localStorage.getItem('cached-user')
+        if (cachedUser) {
+          try {
+            setUser(JSON.parse(cachedUser))
+          } catch (e) {
+            console.error('Failed to parse cached user:', e)
+          }
+        }
       }
     } catch (error) {
-      console.error('Auth status check failed:', error)
-      localStorage.removeItem('auth-token')
+      // 網路錯誤或其他異常：保留 token，可能只是暫時性問題
+      console.warn('Auth status check failed (network error), keeping token:', error)
+      // 嘗試從快取恢復用戶狀態
+      const cachedUser = localStorage.getItem('cached-user')
+      if (cachedUser) {
+        try {
+          setUser(JSON.parse(cachedUser))
+        } catch (e) {
+          console.error('Failed to parse cached user:', e)
+        }
+      }
     } finally {
       setIsLoading(false)
     }
@@ -262,6 +290,8 @@ export function useAuthState() {
 
         // 設置用戶資料
         setUser(result.data.user)
+        // 快取用戶資料
+        localStorage.setItem('cached-user', JSON.stringify(result.data.user))
 
         return {
           success: true,
@@ -320,6 +350,8 @@ export function useAuthState() {
 
         // 設置用戶資料
         setUser(result.data.user)
+        // 快取用戶資料
+        localStorage.setItem('cached-user', JSON.stringify(result.data.user))
 
         return {
           success: true,
@@ -356,6 +388,7 @@ export function useAuthState() {
   const logout = () => {
     // 清除本地儲存
     localStorage.removeItem('auth-token')
+    localStorage.removeItem('cached-user')
 
     // 清除用戶狀態
     setUser(null)
@@ -385,6 +418,8 @@ export function useAuthState() {
         const result = await response.json()
         if (result.success && result.data) {
           setUser(result.data)
+          // 更新快取的用戶資料
+          localStorage.setItem('cached-user', JSON.stringify(result.data))
         }
       }
     } catch (error) {
