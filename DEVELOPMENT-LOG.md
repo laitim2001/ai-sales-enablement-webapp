@@ -6,6 +6,7 @@
 > **格式**: `## 🔧 YYYY-MM-DD (HH:MM): 會話標題 ✅/🔄/❌`
 
 ## 📋 快速導航
+- [🎉 Sprint 3 Week 7 Day 5 前端RBAC權限控制完成 (2025-10-06)](#🎉-2025-10-06-sprint-3-week-7-day-5-前端rbac權限控制完成-✅)
 - [🎉 Sprint 3 Week 7 Day 3-4 RBAC API整合完成 (2025-10-06)](#🎉-2025-10-06-sprint-3-week-7-day-3-4-rbac-api整合完成-✅)
 - [🎉 Sprint 3 Week 7 Day 1-2 RBAC API整合完成 (2025-10-06)](#🎉-2025-10-06-sprint-3-week-7-day-1-2-rbac-api整合完成-✅)
 - [🎉 Sprint 3 Week 6-7 RBAC權限系統設計完成 (2025-10-06)](#🎉-2025-10-06-sprint-3-week-6-7-rbac權限系統設計完成-✅)
@@ -19,6 +20,214 @@
 - [🎉 Sprint 7 完整完成 (2025-10-05)](#🎉-2025-10-05-sprint-7-完整完成-phase-1--phase-2-ai智能功能-✅)
 - [🎉 Sprint 7 Phase 1 完整實現 (2025-10-05)](#🎉-2025-10-05-sprint-7-phase-1-完整實現-智能提醒行為追蹤會議準備包-✅)
 - [🔧 TypeScript類型錯誤大規模修復 (2025-10-05)](#🔧-2025-10-05-typescript類型錯誤大規模修復-63個錯誤0個-100修復率-✅)
+
+---
+
+## 🎉 2025-10-06: Sprint 3 Week 7 Day 5 前端RBAC權限控制完成 ✅
+
+### 📊 **會話概覽**
+**時間**: 2025-10-06 00:15-01:00
+**狀態**: ✅ Day 5完成，已提交Git
+**Sprint**: MVP Phase 2 - Sprint 3 Week 7
+**主題**: 前端RBAC權限控制完整實施
+**核心成果**: 5個新文件，~1,005行前端權限代碼
+
+### 🎯 **完成內容**
+
+#### **1. usePermission Hook** (hooks/use-permission.ts, ~190行)
+
+**核心功能**:
+- **hasPermission(resource, action)**: 細粒度權限檢查函數
+  - 檢查用戶是否有特定資源和操作的權限
+  - 與後端can()函數完全一致的邏輯
+  - 使用RBACService的權限矩陣
+
+- **角色檢查函數**:
+  - isAdmin(): 管理員權限檢查
+  - isSalesManager(): 銷售經理權限檢查
+  - isSalesRep(): 銷售代表權限檢查
+  - isMarketing(): 行銷人員權限檢查
+  - isViewer(): 訪客權限檢查
+
+- **技術特色**:
+  - 與use-auth Hook無縫整合
+  - 完整TypeScript類型定義
+  - 詳細JSDoc文檔註釋
+
+#### **2. CustomerActions組件** (components/permissions/CustomerActions.tsx, ~165行)
+
+**權限控制功能**:
+- 查看按鈕: Resource.CUSTOMERS + Action.READ (所有角色)
+- 編輯按鈕: Resource.CUSTOMERS + Action.UPDATE (ADMIN, SALES_MANAGER, SALES_REP)
+- 刪除按鈕: Resource.CUSTOMERS + Action.DELETE (ADMIN, SALES_MANAGER)
+- 分配按鈕: Resource.CUSTOMERS + Action.ASSIGN (ADMIN, SALES_MANAGER)
+
+**UI特色**:
+- shadcn/ui Button組件整合
+- lucide-react圖標系統 (Edit, Trash2, UserPlus, Eye)
+- 無權限時的友好提示
+- 管理員和銷售經理標識Badge
+
+#### **3. ProposalActions組件** (components/permissions/ProposalActions.tsx, ~220行)
+
+**權限控制功能**:
+- 查看按鈕: Resource.PROPOSALS + Action.READ (所有角色)
+- 編輯按鈕: Resource.PROPOSALS + Action.UPDATE + **擁有權檢查** + 狀態檢查
+- 刪除按鈕: Resource.PROPOSALS + Action.DELETE + **擁有權檢查**
+- 審批通過: Resource.PROPOSALS + Action.APPROVE + PENDING狀態
+- 審批拒絕: Resource.PROPOSALS + Action.APPROVE + PENDING狀態
+- 歸檔按鈕: Resource.PROPOSALS + Action.ARCHIVE + (APPROVED或REJECTED狀態)
+
+**擁有權檢查**:
+```typescript
+const isOwner = user?.id === proposalOwnerId;
+const canEditThisProposal = canUpdate && (isOwner || isAdmin());
+```
+
+**狀態流轉控制**:
+- isDraft/isPending/isApproved/isRejected狀態檢查
+- 只能編輯DRAFT或REJECTED狀態的提案
+- 只能審批PENDING狀態的提案
+- 只能歸檔APPROVED或REJECTED的提案
+
+#### **4. ProtectedRoute組件集** (components/permissions/ProtectedRoute.tsx, ~230行)
+
+**三個路由保護組件**:
+
+1. **ProtectedRoute**: 基於資源和操作的通用路由保護
+```typescript
+<ProtectedRoute
+  resource={Resource.CUSTOMERS}
+  action={Action.MANAGE}
+  fallbackPath="/dashboard"
+>
+  <CustomerManagement />
+</ProtectedRoute>
+```
+
+2. **AdminRoute**: 管理員專用路由保護
+```typescript
+<AdminRoute>
+  <AdminDashboard />
+</AdminRoute>
+```
+
+3. **ManagerRoute**: 銷售經理及以上路由保護
+```typescript
+<ManagerRoute>
+  <TeamManagement />
+</ManagerRoute>
+```
+
+**技術特色**:
+- useEffect處理重定向避免SSR問題
+- 載入狀態指示器 (權限檢查期間)
+- 自動重定向到fallback路徑或登入頁
+- 未登入用戶自動跳轉到/login
+
+#### **5. 組件導出入口** (components/permissions/index.ts, ~20行)
+
+```typescript
+export { CustomerActions } from './CustomerActions';
+export { ProposalActions } from './ProposalActions';
+export { ProtectedRoute, AdminRoute, ManagerRoute } from './ProtectedRoute';
+```
+
+### 📋 **實施模式**
+
+**完整遵循RBAC設計文檔**:
+- docs/sprint3-rbac-design-document.md §前端權限控制
+- 與後端權限矩陣完全同步
+- 前端UI控制 + 後端權限驗證雙重保護
+
+**前端權限檢查模式**:
+```typescript
+// 1. 細粒度權限檢查
+const { hasPermission } = usePermission();
+{hasPermission(Resource.CUSTOMERS, Action.UPDATE) && (
+  <button>編輯</button>
+)}
+
+// 2. 角色檢查
+const { isAdmin } = usePermission();
+{isAdmin() && <AdminPanel />}
+
+// 3. 擁有權檢查
+const isOwner = user?.id === resource.user_id;
+const canEdit = canUpdate && (isOwner || isAdmin());
+```
+
+### 📊 **統計數據**
+
+**新增文件**: 5個
+- hooks/use-permission.ts (~190行)
+- components/permissions/CustomerActions.tsx (~165行)
+- components/permissions/ProposalActions.tsx (~220行)
+- components/permissions/ProtectedRoute.tsx (~230行)
+- components/permissions/index.ts (~20行)
+
+**總代碼量**: ~1,005行
+- Hook: 1個 (~190行)
+- UI組件: 3個 (~615行)
+- 導出入口: 1個 (~20行)
+- 完整TypeScript類型定義
+- 完整JSDoc文檔註釋
+
+**Git提交**:
+- Commit 472459e: Sprint 3 Week 7 Day 5 - 前端RBAC權限控制完整實現
+
+### 💡 **技術特色**
+
+**1. 完整RBAC權限整合**:
+- 與後端權限矩陣完全一致
+- 5個用戶角色全面支持
+- 29個資源類型和13個操作類型
+
+**2. 擁有權檢查支持**:
+- Pattern 3擁有權驗證前端實現
+- 只能編輯/刪除自己創建的資源
+- 管理員可以覆蓋擁有權限制
+
+**3. 狀態流轉控制**:
+- 提案狀態機邏輯前端實現
+- 根據狀態動態調整操作按鈕
+- 詳細的狀態提示信息
+
+**4. 路由級別保護**:
+- 三種路由保護組件
+- 自動重定向機制
+- 載入狀態友好提示
+
+**5. React Hook無縫整合**:
+- usePermission與useAuth整合
+- 完整的React Hooks模式
+- 類型安全和IntelliSense支持
+
+**6. shadcn/ui組件庫整合**:
+- Button組件一致樣式
+- lucide-react圖標系統
+- 響應式設計支持
+
+**7. TypeScript類型安全**:
+- 完整的類型定義
+- Resource和Action枚舉類型
+- 組件Props接口定義
+
+### 📈 **Day 5總結**
+
+**完成度**: 100% ✅
+- ✅ usePermission Hook實現
+- ✅ CustomerActions組件實現
+- ✅ ProposalActions組件實現
+- ✅ ProtectedRoute組件集實現
+- ✅ 組件導出入口創建
+- ✅ Git提交完成
+
+**Sprint 3 Week 7進度**: 71%完成 (5天/7天)
+- ✅ Day 1-2: 客戶和提案API整合 (100%)
+- ✅ Day 3-4: 知識庫和模板API整合 (100%)
+- ✅ Day 5: 前端基礎整合 (100%)
+- ⏳ Day 6-7: 測試和驗證 (待開始)
 
 ---
 

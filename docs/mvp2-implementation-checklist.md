@@ -605,13 +605,13 @@
 
 **對應**: Epic 4, Story 4.4 - 安全加固與合規
 **目標**: 滿足企業客戶的安全和合規要求
-**狀態**: 🔄 **60%進行中** - Week 5+6+RBAC設計完成，Week 7 Day 1-4完成
-**進度**: 4.8/8 (60%) - 資料加密+備份+掃描+RBAC設計+API整合(Day 1-4)完成
+**狀態**: 🔄 **65%進行中** - Week 5+6+RBAC設計完成，Week 7 Day 1-5完成
+**進度**: 5.2/8 (65%) - 資料加密+備份+掃描+RBAC設計+API整合+前端整合完成
 
 > **📝 備註 (2025-10-06)**:
 > - ✅ Week 5: 資料安全強化100%完成並整合 (Azure Key Vault + HTTPS + 敏感欄位配置 + 性能測試)
 > - ✅ Week 6: 核心安全基礎設施100%完成 (資料備份~1,300行 + 安全掃描~400行 + RBAC設計~750行)
-> - 🔄 Week 7: RBAC API整合和實施 (7天計劃,57%完成 - Day 1-4✅，12個端點)
+> - 🔄 Week 7: RBAC API整合和實施 (7天計劃,71%完成 - Day 1-5✅，前端整合完成)
 > - ⏳ Week 8: 審計日誌系統 (待開始)
 
 ### Week 5: 資料安全強化 ✅ **100%完成 (2025-10-06)**
@@ -925,7 +925,7 @@
 
 ---
 
-### Week 7: RBAC API整合和實施 🔄 **57%進行中 (Day 1-4完成, 2025-10-06)**
+### Week 7: RBAC API整合和實施 🔄 **71%進行中 (Day 1-5完成, 2025-10-06)**
 
 #### ✅ Day 1-2: 客戶和提案管理API權限整合 (2025-10-06)
 
@@ -1005,15 +1005,65 @@
 - 移除hardcoded: 2處
 - 平均代碼簡化: ~50%
 
-#### ⏳ Day 5: 前端權限整合 (待開始)
-- [ ] **usePermission Hook實現**
-  - [ ] 創建hooks/use-permission.ts
-  - [ ] hasPermission()函數
-  - [ ] isAdmin(), isSalesManager()輔助函數
-- [ ] **UI條件渲染**
-  - [ ] 按鈕/操作權限控制
-  - [ ] 路由保護整合
-  - [ ] 權限錯誤提示UI
+#### ✅ Day 5: 前端權限整合 (2025-10-06)
+
+**完成的文件** (5個新文件, ~1,005行代碼):
+
+- [x] **usePermission Hook** (hooks/use-permission.ts, ~190行):
+  - [x] hasPermission(resource, action): 細粒度權限檢查函數
+  - [x] isAdmin(): 管理員權限檢查
+  - [x] isSalesManager(): 銷售經理權限檢查
+  - [x] isSalesRep(): 銷售代表權限檢查
+  - [x] isMarketing(): 行銷人員權限檢查
+  - [x] isViewer(): 訪客權限檢查
+  - [x] 與後端RBAC系統完全一致的權限邏輯
+  - [x] 與use-auth Hook無縫整合
+  - [x] 完整TypeScript類型定義和JSDoc註釋
+
+- [x] **CustomerActions組件** (components/permissions/CustomerActions.tsx, ~165行):
+  - [x] 查看按鈕: Resource.CUSTOMERS + Action.READ (所有角色)
+  - [x] 編輯按鈕: Resource.CUSTOMERS + Action.UPDATE (ADMIN, SALES_MANAGER, SALES_REP)
+  - [x] 刪除按鈕: Resource.CUSTOMERS + Action.DELETE (ADMIN, SALES_MANAGER)
+  - [x] 分配按鈕: Resource.CUSTOMERS + Action.ASSIGN (ADMIN, SALES_MANAGER)
+  - [x] shadcn/ui Button整合 + lucide-react圖標
+  - [x] 無權限時的友好提示
+  - [x] 管理員和銷售經理標識Badge
+
+- [x] **ProposalActions組件** (components/permissions/ProposalActions.tsx, ~220行):
+  - [x] 查看/編輯/刪除/審批/拒絕/歸檔按鈕權限控制
+  - [x] 擁有權檢查: user.id === proposal.user_id
+  - [x] 狀態流轉控制: 根據提案狀態調整操作
+  - [x] 審批權限: 只有SALES_MANAGER和ADMIN可審批
+  - [x] 詳細的權限和狀態提示
+  - [x] 審批者標識
+
+- [x] **ProtectedRoute組件集** (components/permissions/ProtectedRoute.tsx, ~230行):
+  - [x] ProtectedRoute: 基於resource和action的通用路由保護
+  - [x] AdminRoute: 管理員專用路由保護
+  - [x] ManagerRoute: 銷售經理及以上路由保護
+  - [x] 自動重定向機制
+  - [x] 載入狀態指示器
+  - [x] useEffect處理重定向避免SSR問題
+
+- [x] **組件導出入口** (components/permissions/index.ts, ~20行):
+  - [x] 集中導出所有權限組件
+  - [x] 支持具名導入和全部導入
+
+**技術特色**:
+- [x] 完整RBAC權限整合 + 擁有權檢查支持
+- [x] 狀態流轉控制 + 路由級別保護
+- [x] React Hook無縫整合 + shadcn/ui組件庫整合
+- [x] TypeScript類型安全 + 完整JSDoc文檔註釋
+
+**Git提交記錄**:
+- [x] Commit 472459e: Sprint 3 Week 7 Day 5 - 前端RBAC權限控制完整實現
+
+**Day 5統計**:
+- 新增文件: 5個
+- 新增代碼: ~1,005行
+- Hook: 1個 (~190行)
+- UI組件: 3個 (~615行)
+- 導出入口: 1個 (~20行)
 
 #### ⏳ Day 6-7: 測試和驗收 (待開始)
 - [ ] **單元測試**
@@ -1027,17 +1077,17 @@
   - [ ] 不同角色登入測試
   - [ ] 權限拒絕場景測試
 
-**Week 7 驗收標準** (57%完成):
+**Week 7 驗收標準** (71%完成):
 - [x] ✅ Day 1-2: 客戶和提案API權限整合完成 (8個端點, 3個文件)
 - [x] ✅ Day 3-4: 知識庫和模板API權限整合完成 (4個端點, 2個文件)
-- [ ] ⏳ Day 5: 前端基礎整合 (usePermission Hook + UI權限控制)
+- [x] ✅ Day 5: 前端基礎整合完成 (usePermission Hook + 3個UI組件 + 路由保護, 5個文件, ~1,005行)
 - [ ] ⏳ Day 6-7: 測試和驗收 (單元+集成+E2E測試)
 
-**Day 1-4總計**:
-- ✅ 修改文件: 5個
-- ✅ API端點: 12個 (客戶5個 + 提案3個 + 知識庫2個 + 模板2個)
-- ✅ 代碼簡化: 平均~50% (手動JWT驗證 → requirePermission)
-- ✅ Sprint 3 Week 7進度: 57%完成 (4天/7天)
+**Day 1-5總計**:
+- ✅ 後端API整合: 5個文件, 12個端點 (代碼簡化~50%)
+- ✅ 前端權限整合: 5個文件, ~1,005行 (Hook + UI組件 + 路由保護)
+- ✅ Git提交: 6個 (780747e, 8348690, 22ffc0e, 3498fa6, 472459e + 文檔更新)
+- ✅ Sprint 3 Week 7進度: 71%完成 (5天/7天)
 
 ---
 
