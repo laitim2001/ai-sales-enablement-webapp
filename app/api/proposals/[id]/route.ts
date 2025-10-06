@@ -5,13 +5,22 @@
  * - GET: 獲取提案詳細信息
  * - PATCH: 更新提案
  * - DELETE: 刪除提案
+ * - RBAC權限控制整合 (Sprint 3 Week 7)
+ *
+ * 權限要求：
+ * - GET: READ權限 (所有角色)
+ * - PATCH: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)
+ * - DELETE: DELETE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)
  *
  * @author Claude Code
  * @date 2025-10-02
+ * @updated 2025-10-06 (RBAC整合)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { requirePermission } from '@/lib/security/permission-middleware';
+import { Resource, Action } from '@/lib/security/rbac';
 
 /**
  * GET /api/proposals/[id]
@@ -22,8 +31,17 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // TODO: 實現session認證 - 暫時跳過認證檢查
-    const userId = 1; // 臨時使用固定用戶ID
+    // 1. RBAC權限檢查
+    const authResult = await requirePermission(request, {
+      resource: Resource.PROPOSALS,
+      action: Action.READ,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const user = authResult.user!;
 
     const proposalId = parseInt(params.id);
     if (isNaN(proposalId)) {
@@ -79,17 +97,12 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // TODO: 實現session認證 - 暫時跳過認證檢查
-    const userId = 1; // 臨時使用固定用戶ID
-
     const proposalId = parseInt(params.id);
     if (isNaN(proposalId)) {
       return NextResponse.json({ error: '無效的提案 ID' }, { status: 400 });
     }
 
-    const body = await request.json();
-
-    // 檢查提案權限（只有創建者可以更新）
+    // 檢查提案是否存在並獲取擁有者信息
     const proposal = await prisma.proposal.findUnique({
       where: { id: proposalId },
       select: {
@@ -100,6 +113,22 @@ export async function PATCH(
     if (!proposal) {
       return NextResponse.json({ error: '提案不存在' }, { status: 404 });
     }
+
+    // 1. RBAC權限檢查（包含資源擁有權驗證）
+    const authResult = await requirePermission(request, {
+      resource: Resource.PROPOSALS,
+      action: Action.UPDATE,
+      checkOwnership: true,
+      resourceOwnerId: proposal.user_id,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const user = authResult.user!;
+
+    const body = await request.json();
 
     // 更新提案
     const updatedProposal = await prisma.proposal.update({
@@ -130,15 +159,12 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // TODO: 實現session認證 - 暫時跳過認證檢查
-    const userId = 1; // 臨時使用固定用戶ID
-
     const proposalId = parseInt(params.id);
     if (isNaN(proposalId)) {
       return NextResponse.json({ error: '無效的提案 ID' }, { status: 400 });
     }
 
-    // 檢查提案權限（只有創建者可以刪除）
+    // 檢查提案是否存在並獲取擁有者信息
     const proposal = await prisma.proposal.findUnique({
       where: { id: proposalId },
       select: {
@@ -149,6 +175,20 @@ export async function DELETE(
     if (!proposal) {
       return NextResponse.json({ error: '提案不存在' }, { status: 404 });
     }
+
+    // 1. RBAC權限檢查（包含資源擁有權驗證）
+    const authResult = await requirePermission(request, {
+      resource: Resource.PROPOSALS,
+      action: Action.DELETE,
+      checkOwnership: true,
+      resourceOwnerId: proposal.user_id,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
+    const user = authResult.user!;
 
     // 刪除提案（級聯刪除相關數據）
     await prisma.proposal.delete({
