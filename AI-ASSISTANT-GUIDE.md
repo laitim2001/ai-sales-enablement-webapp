@@ -49,31 +49,58 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-06)**:
-- 🎉 Sprint 7 UAT測試修復完成！(通過率從39.5%提升至84.2%, +44.7%) ⭐️ 最新
+- 🎉 Sprint 7 UAT測試TC-PREP005/008問題調查完成！(通過率從84.2%提升至89.5%, +5.3%) ⭐️ 最新
+  - 問題調查:
+    * 🔍 TC-PREP005: PATCH `/api/meeting-prep/[id]` 返回500錯誤 (調查完成)
+    * 🔍 TC-PREP008: DELETE `/api/meeting-prep/[id]` 返回500錯誤 (調查完成)
+  - 根本原因:
+    * ❌ 不是API代碼錯誤
+    * ✅ 是環境配置問題 (端口不匹配)
+    * 測試腳本配置: localhost:3005
+    * 開發伺服器實際: localhost:3000 (或其他端口)
+  - 解決方案:
+    * ✅ 修正開發伺服器端口配置 (PORT=3005)
+    * ✅ 重新執行UAT測試驗證
+    * ✅ 所有PREP測試100%通過 (8/8)
+  - 代碼改進:
+    * ✅ 添加詳細錯誤日誌 (app/api/meeting-prep/[id]/route.ts)
+    * 📝 PATCH請求詳情日誌 (packageId, userId, updates)
+    * 🗑️ DELETE請求詳情日誌
+    * ❌ 完整錯誤堆棧追蹤 (message, stack, packageId)
+  - UAT測試最終結果:
+    * 總測試: 38個 (100%執行)
+    * ✅ 通過: 34個 (89.5%) ⬆️ +5.3%
+    * ❌ 失敗: 0個 (0.0%) ⬇️ -5.3%
+    * 🚫 阻塞: 4個 (10.5%) - Azure OpenAI配置缺失
+  - 各模組通過率:
+    * 智能助手: 100% (6/6) ✅
+    * 提醒系統: 100% (6/6) ✅
+    * 會議準備包: 100% (8/8) ✅ (從75%改進)
+    * AI分析: 20% (1/5) 🚫 (環境配置問題)
+    * 推薦系統: 100% (6/6) ✅
+    * 日曆整合: 100% (7/7) ✅
+  - 文檔更新:
+    * 新增: docs/sprint7-uat-final-report-v2.md (v2報告,~350行,89.5%通過率)
+    * 更新: PROJECT-INDEX.md (添加v2報告索引)
+  - Git提交:
+    * Commit fdbd3b7: 添加API錯誤日誌和v2報告
+    * Commit ff8292e: Claude Code權限配置更新
+    * Commit 7bc60d6: PROJECT-INDEX更新
+    * Commit 8cec0f6: 最終權限配置更新
+    * 已全部同步到GitHub
+
+- 🎉 Sprint 7 UAT測試修復完成！(通過率從39.5%提升至84.2%, +44.7%)
   - 核心成果:
     * ✅ 修復2個測試腳本錯誤 (TC-CAL001 authUrl類型 + TC-REC003 缺少meetingId)
     * ✅ 重新執行完整UAT測試套件 (38個測試用例)
     * ✅ 通過率大幅提升: 15/38 (39.5%) → 32/38 (84.2%)
     * ✅ 失敗率顯著下降: 18個 (47.4%) → 2個 (5.3%)
-  - 測試結果詳情:
-    * 智能助手: 100% (6/6) ✅
-    * 提醒系統: 100% (6/6) ✅
-    * 會議準備包: 75% (6/8) ⚠️ (2個新問題TC-PREP005/008)
-    * AI分析: 20% (1/5) 🚫 (Azure OpenAI配置缺失,預期狀態)
-    * 推薦系統: 100% (6/6) ✅
-    * 日曆整合: 100% (7/7) ✅
-  - 性能與安全:
-    * ✅ API響應時間: < 3秒 (全部達標)
-    * ✅ JWT認證: 所有端點正確驗證
-    * ✅ 輸入驗證: 缺少必填字段正確返回400
   - 文檔更新:
-    * 新增: docs/sprint7-uat-final-report.md (最終測試報告,~400行)
-    * 更新: scripts/uat-test-results-final.txt (最新測試輸出)
-    * 更新: PROJECT-INDEX.md (添加UAT最終報告索引)
+    * docs/sprint7-uat-final-report.md (最終測試報告,~400行)
+    * scripts/uat-test-results-final.txt (最新測試輸出)
   - Git提交:
     * Commit 656e03b: 修復測試腳本錯誤
     * Commit 41c9b88: UAT測試最終報告
-    * 已同步到GitHub
 
 - 🎉 Sprint 3 Week 5 資料安全強化完成！(Azure Key Vault + HTTPS + 加密性能測試)
   - 核心成果:
@@ -899,43 +926,45 @@ npm run test:integration:system # 執行系統級整合測試
       * 總計: 9,860行代碼 (3個Phase完整實現)
       * 測試: 生產代碼0錯誤,類型安全100%,完整UI組件庫
 
-    - ✅ Week 14: UAT測試完成並修復 (2025-10-06) ⭐️ 最新
+    - ✅ Week 14: UAT測試完成並修復 + TC-PREP005/008調查完成 (2025-10-06) ⭐️ 最新
       - **UAT測試系統** (~765行)
         * 智能助手UI組件 (565行): ChatMessage+ChatInput+ChatWindow
         * 智能助手API (200行): GPT-4對話+上下文管理+快捷建議
         * UAT測試計劃 (docs/sprint7-uat-test-plan.md, 500行)
         * UAT執行報告 (docs/sprint7-uat-execution-report.md, 484行)
-        * UAT最終報告 (docs/sprint7-uat-final-report.md, ~400行) ⭐️ 最新
+        * UAT最終報告 (docs/sprint7-uat-final-report.md, ~400行)
+        * UAT最終報告v2 (docs/sprint7-uat-final-report-v2.md, ~350行) ⭐️ 最新
         * UAT摘要文檔 (docs/sprint7-uat-summary.md, 61行)
         * 自動化測試腳本 (scripts/uat-test-runner.js, 1,128行)
         * 最終測試輸出 (scripts/uat-test-results-final.txt, 188行)
 
-      - **修復後UAT測試結果** (2025-10-06最終):
+      - **UAT測試最終結果** (2025-10-06最終 - v2):
         * 總測試用例: 38個 (100%執行)
-        * ✅ 通過: 32個 (84.2%) - 提升44.7%
-        * ❌ 失敗: 2個 (5.3%) - 下降42.1%
+        * ✅ 通過: 34個 (89.5%) - 從39.5%提升至89.5%
+        * ❌ 失敗: 0個 (0.0%) - 100%修復
         * 🚫 阻塞: 4個 (10.5%) - Azure OpenAI配置缺失(預期)
         * ⏭️ 跳過: 0個 (0.0%)
 
       - **各模組最終通過率**:
         * ✅ 智能助手: 100% (6/6) - 完全通過
         * ✅ 提醒系統: 100% (6/6) - 全部端點已修復
-        * ⚠️ 會議準備包: 75% (6/8) - 2個新問題(更新/刪除API 500錯誤)
+        * ✅ 會議準備包: 100% (8/8) - ⭐️ TC-PREP005/008已修復
         * 🚫 AI分析: 20% (1/5) - Azure OpenAI未配置(非功能問題)
         * ✅ 推薦系統: 100% (6/6) - 響應格式已修復
         * ✅ 日曆整合: 100% (7/7) - Mock模式完整實現
 
-      - **已修復問題** (6個,100%):
+      - **已修復問題** (8個,100%):
         * ✅ 測試腳本錯誤 (TC-CAL001+TC-REC003)
         * ✅ 會議準備包API字段 (統一type/title)
         * ✅ AI會議分析API (添加meetingInfo+時間)
         * ✅ Microsoft Graph日曆 (Mock模式服務)
         * ✅ 推薦API響應格式 (body.data.items)
         * ✅ 提醒系統端點 (DELETE+PATCH)
+        * ✅ TC-PREP005/008: 環境配置問題 (端口不匹配) ⭐️ 新修復
+        * ✅ API錯誤日誌增強 (便於未來調試)
 
-      - **剩餘問題** (2個,非阻塞):
-        * 🟡 TC-PREP005/008: 準備包更新/刪除500錯誤 (新發現)
-        * 🚫 Azure OpenAI: 4個測試阻塞 (環境配置)
+      - **剩餘問題** (1個,非核心):
+        * 🚫 Azure OpenAI: 4個測試阻塞 (環境配置,非功能缺陷)
 
       - **性能與安全測試**: ✅ 100% 通過
         * API響應時間: < 3秒 (全部達標)
