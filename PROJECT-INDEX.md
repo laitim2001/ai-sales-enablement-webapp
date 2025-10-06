@@ -5,7 +5,7 @@
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 >
 > **✨ 最新添加**:
-> - 🧪 Sprint 7 UAT測試報告: 最終測試報告（sprint7-uat-final-report.md, 通過率84.2%）
+> - 🧪 Sprint 7 UAT測試報告v2: 問題調查和修復驗證報告（sprint7-uat-final-report-v2.md, 通過率89.5%，TC-PREP005/008環境問題已解決）
 > - 🔐 資料安全強化 (Sprint 3 Week 5): 敏感欄位配置模塊（sensitive-fields-config.ts）
 > - 📅 Microsoft Graph日曆整合 (Sprint 7 Phase 3): Mock服務 + 設置指南
 > - 🤝 協作系統 (Sprint 6): 編輯鎖定管理器 + API + UI組件
@@ -94,6 +94,7 @@
 | **Sprint 7 UAT測試計劃** | `docs/sprint7-uat-test-plan.md` | Sprint 7用戶驗收測試完整計劃（提醒/準備包/AI分析/推薦/日曆/助手） | 🔴 極高  |
 | **Sprint 7 UAT執行報告** | `docs/sprint7-uat-execution-report.md` | Sprint 7用戶驗收測試詳細執行報告（38個測試用例,問題分析,修復建議） | 🔴 極高  |
 | **Sprint 7 UAT最終報告** | `docs/sprint7-uat-final-report.md` | Sprint 7 UAT測試最終報告（84.2%通過率,修復前後對比,剩餘問題清單） | 🔴 極高  |
+| **Sprint 7 UAT最終報告v2** | `docs/sprint7-uat-final-report-v2.md` | Sprint 7 UAT測試最終報告v2（89.5%通過率,TC-PREP005/008問題調查,環境修復驗證） | 🔴 極高  |
 | **Sprint 7 UAT摘要文檔** | `docs/sprint7-uat-summary.md` | Sprint 7 UAT測試執行摘要（關鍵指標,問題匯總,下一步行動） | 🟡 重要  |
 | **監控遷移策略** | `docs/monitoring-migration-strategy.md` | OpenTelemetry零成本遷移架構設計（Prometheus→Azure） | 🔴 極高  |
 | **監控使用範例** | `docs/monitoring-usage-examples.md` | 完整監控集成範例（API/AI/DB/緩存追蹤） | 🔴 極高  |
