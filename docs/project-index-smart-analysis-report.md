@@ -1,6 +1,6 @@
 # PROJECT-INDEX.md 智能分析報告
 
-> **生成時間**: 2025-10-07T16:01:39.160Z
+> **生成時間**: 2025-10-07T17:55:53.912Z
 > **分析工具**: analyze-project-index-smart.js (多視圖索引感知版本)
 > **分析範圍**: 全項目文件索引
 
@@ -14,16 +14,16 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 - ⚠️ 同一表格內重複或相同目錄被多次完整索引才是**真正的問題**
 
 ### 整體統計
-- **實際文件總數**: 864
-- **唯一索引文件**: 559
+- **實際文件總數**: 870
+- **唯一索引文件**: 565
 - **章節總數**: 118 (113 內容章節 + 5 多視圖章節)
-- **索引健康度**: 64.7%
+- **索引健康度**: 64.8%
 
 ### 真正的問題統計
 - ⚠️ **表格內重複**: 0 個
 - ⚠️ **目錄重複索引**: 8 個
-- ⚠️ **缺失索引**: 305 個文件
-- ⚠️ **幽靈條目**: 0 個條目
+- ⚠️ **缺失索引**: 306 個文件
+- ⚠️ **幽靈條目**: 1 個條目
 
 ---
 
@@ -39,10 +39,10 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 被索引 2 次:
 
 1. **章節**: 📚 docs/ - 項目文檔中心 (行 44)
-   - 包含 5 個文件
+   - 包含 11 個文件
 
 
-2. **章節**: 📋 項目核心文檔 (docs/) (行 96)
+2. **章節**: 📋 項目核心文檔 (docs/) (行 102)
    - 包含 50 個文件
 
 
@@ -50,11 +50,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 #### `lib/search/`
 被索引 2 次:
 
-1. **章節**: 🔍 lib/search/ - Week 5 智能搜索系統 (行 157)
+1. **章節**: 🔍 lib/search/ - Week 5 智能搜索系統 (行 163)
    - 包含 9 個文件
 
 
-2. **章節**: 🔍 搜索引擎模組 (lib/search/) - Week 5 新增 (行 1514)
+2. **章節**: 🔍 搜索引擎模組 (lib/search/) - Week 5 新增 (行 1520)
    - 包含 3 個文件
 
 
@@ -62,11 +62,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 #### `scripts/`
 被索引 2 次:
 
-1. **章節**: 🛠️ scripts/ - 部署和維護腳本 (行 995)
+1. **章節**: 🛠️ scripts/ - 部署和維護腳本 (行 1001)
    - 包含 17 個文件
 
 
-2. **章節**: 📦 項目配置 (根目錄) (行 1858)
+2. **章節**: 📦 項目配置 (根目錄) (行 1872)
    - 包含 3 個文件
 
 
@@ -74,11 +74,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 #### `components/knowledge/`
 被索引 2 次:
 
-1. **章節**: 📚 知識庫組件 (components/knowledge/) (行 1196)
+1. **章節**: 📚 知識庫組件 (components/knowledge/) (行 1202)
    - 包含 22 個文件
 
 
-2. **章節**: 📝 更新格式 (行 2084)
+2. **章節**: 📝 更新格式 (行 2098)
    - 包含 4 個文件
 
 
@@ -86,11 +86,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 #### `lib/security/`
 被索引 2 次:
 
-1. **章節**: 🔐 安全模組 (lib/security/) - MVP Phase 2 Sprint 3 Week 5 (行 1568)
+1. **章節**: 🔐 安全模組 (lib/security/) - MVP Phase 2 Sprint 3 Week 5 (行 1574)
    - 包含 14 個文件
 
 
-2. **章節**: 🔬 單元測試 (__tests__/) (行 1699)
+2. **章節**: 🔬 單元測試 (__tests__/) (行 1713)
    - 包含 5 個文件
 
 
@@ -98,11 +98,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 #### `lib/performance/`
 被索引 2 次:
 
-1. **章節**: ⚡ 性能模組 (lib/performance/) - MVP Phase 2 Sprint 4 Week 7 (行 1615)
+1. **章節**: ⚡ 性能模組 (lib/performance/) - MVP Phase 2 Sprint 4 Week 7 (行 1621)
    - 包含 3 個文件
 
 
-2. **章節**: 🔬 單元測試 (__tests__/) (行 1699)
+2. **章節**: 🔬 單元測試 (__tests__/) (行 1713)
    - 包含 3 個文件
 
 
@@ -110,11 +110,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 #### `lib/resilience/`
 被索引 2 次:
 
-1. **章節**: ⚡ 性能模組 (lib/performance/) - MVP Phase 2 Sprint 4 Week 7 (行 1615)
+1. **章節**: ⚡ 性能模組 (lib/performance/) - MVP Phase 2 Sprint 4 Week 7 (行 1621)
    - 包含 3 個文件
 
 
-2. **章節**: 🔬 單元測試 (__tests__/) (行 1699)
+2. **章節**: 🔬 單元測試 (__tests__/) (行 1713)
    - 包含 3 個文件
 
 
@@ -122,11 +122,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 #### `./`
 被索引 2 次:
 
-1. **章節**: 📋 根目錄重要文檔 (行 1665)
+1. **章節**: 📋 根目錄重要文檔 (行 1671)
    - 包含 11 個文件
 
 
-2. **章節**: 📦 項目配置 (根目錄) (行 1858)
+2. **章節**: 📦 項目配置 (根目錄) (行 1872)
    - 包含 12 個文件
 
 
@@ -143,10 +143,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 - `mvp-progress-report.json`
 - `test-results.json`
 - `scripts/add-missing-files-to-index.js`
+- `scripts/ai-generate-comments.js`
 - `scripts/analyze-project-index-smart.js`
-- `scripts/analyze-project-index.js`
+- `scripts/batch-generate-comments.js`
+- `scripts/check-code-comments.js`
 - `scripts/check-index-completeness.js`
-- `scripts/fix-project-index.js`
 - `scripts/quick-load-test.js`
 - `scripts/run-audit-log-migration.ts`
 - `scripts/seed-folders.ts`
@@ -445,7 +446,7 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 
 ## 👻 幽靈條目完整列表
 
-
+- `docs/project-index-analysis-report.md`
 
 ---
 
@@ -458,9 +459,9 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 | components | 114 | 115 | +1 | 100.9% | 16 |
 | app | 120 | 124 | +4 | 103.3% | 18 |
 | __tests__ | 35 | 35 | 0 | 100.0% | 1 |
-| docs | 82 | 83 | +1 | 101.2% | 4 |
+| docs | 87 | 89 | +2 | 102.3% | 4 |
 | claudedocs | 6 | 6 | 0 | 100.0% | 1 |
-| scripts | 29 | 23 | -6 | 79.3% | 3 |
+| scripts | 30 | 23 | -7 | 76.7% | 3 |
 | prisma | 1 | 0 | -1 | 0.0% | 0 |
 | e2e | 13 | 12 | -1 | 92.3% | 1 |
 | types | 5 | 5 | 0 | 100.0% | 2 |
@@ -475,11 +476,11 @@ PROJECT-INDEX.md 採用**多視圖索引設計**:
 - 目錄重複索引: 8 個 → 合併或移除冗餘章節
 
 ### 2. 補充缺失索引 (優先級: 🟡 中)
-- 總計: 305 個未索引文件
+- 總計: 306 個未索引文件
 - 方法: 為新增文件添加適當的索引條目
 
 ### 3. 清理幽靈條目 (優先級: 🟢 低)
-- 總計: 0 個過時條目
+- 總計: 1 個過時條目
 - 方法: 移除指向已刪除文件的索引
 
 ---
