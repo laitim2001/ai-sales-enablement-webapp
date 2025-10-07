@@ -1,17 +1,19 @@
+#!/usr/bin/env node
+
 /**
- * @fileoverview 模組 - 測試套件
+ * @fileoverview 索引同步檢查工具 - 確保項目索引與實際文件結構同步
  * @module scripts/check-index-sync
  * @description
- * 模組的單元測試
+ * 索引同步檢查工具
+ *
+ * 功能：
+ * - 檢查PROJECT-INDEX.md與實際文件結構的同步性
+ * - 識別缺失或多餘的索引條目
+ * - 生成同步報告
+ * - 適用於pre-push hook檢查
  *
  * @created 2025-10-08
  * @lastModified 2025-10-08
- */
-
-#!/usr/bin/env node
-/**
- * 索引同步檢查工具
- * 確保項目索引文件與實際文件結構保持同步
  */
 
 const fs = require('fs');
