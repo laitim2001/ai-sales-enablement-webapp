@@ -1,26 +1,11 @@
 /**
- * 資料加密工具模組
+ * @fileoverview 資料加密工具模組功能：- 提供欄位級別的資料加密/解密- 支援 AES-256-GCM 對稱加密- 自動金鑰管理（環境變數）- 加密資料版本控制使用場景：- 敏感客戶資料加密（電話、Email）- API Key 和 Token 加密儲存- 個人身份資訊（PII）保護安全等級：- 算法：AES-256-GCM（AEAD，提供機密性和完整性）- 金鑰長度：256位- IV：隨機生成，每次加密使用不同IV- 認證標籤：128位@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
+ * @module lib/security/encryption
+ * @description
+ * 資料加密工具模組功能：- 提供欄位級別的資料加密/解密- 支援 AES-256-GCM 對稱加密- 自動金鑰管理（環境變數）- 加密資料版本控制使用場景：- 敏感客戶資料加密（電話、Email）- API Key 和 Token 加密儲存- 個人身份資訊（PII）保護安全等級：- 算法：AES-256-GCM（AEAD，提供機密性和完整性）- 金鑰長度：256位- IV：隨機生成，每次加密使用不同IV- 認證標籤：128位@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
  *
- * 功能：
- * - 提供欄位級別的資料加密/解密
- * - 支援 AES-256-GCM 對稱加密
- * - 自動金鑰管理（環境變數）
- * - 加密資料版本控制
- *
- * 使用場景：
- * - 敏感客戶資料加密（電話、Email）
- * - API Key 和 Token 加密儲存
- * - 個人身份資訊（PII）保護
- *
- * 安全等級：
- * - 算法：AES-256-GCM（AEAD，提供機密性和完整性）
- * - 金鑰長度：256位
- * - IV：隨機生成，每次加密使用不同IV
- * - 認證標籤：128位
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 3 - 安全加固與合規
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import * as crypto from 'crypto';
