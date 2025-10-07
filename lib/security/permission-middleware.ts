@@ -36,6 +36,10 @@ import { RBACService, Resource, Action, UserRole } from './rbac';
 import { AuditLoggerPrisma } from './audit-log-prisma';
 import { AuditAction, AuditResource } from './audit-log';
 import { AuditSeverity } from '@prisma/client';
+import {
+  FineGrainedPermissionService,
+  FineGrainedPermissionResult,
+} from './fine-grained-permissions';
 
 /**
  * 權限檢查結果接口
@@ -45,6 +49,8 @@ export interface PermissionCheckResult {
   user?: JWTPayload;
   response?: NextResponse;
   reason?: string;
+  filteredData?: any; // 細粒度權限過濾後的數據
+  remaining?: number; // 剩餘配額/次數
 }
 
 /**
@@ -56,6 +62,10 @@ export interface PermissionRequirement {
   requireAll?: boolean; // 是否需要所有權限（默認 false，只需任一權限）
   checkOwnership?: boolean; // 是否檢查資源擁有權
   resourceOwnerId?: number; // 資源擁有者 ID（用於擁有權檢查）
+  // 細粒度權限選項
+  enableFineGrained?: boolean; // 是否啟用細粒度權限檢查（默認 true）
+  resourceData?: any; // 資源數據（用於條件檢查和欄位過濾）
+  updateData?: any; // 更新數據（用於欄位限制檢查）
 }
 
 /**
@@ -223,7 +233,71 @@ export async function requirePermission(
       }
     }
 
-    // 6. 權限檢查通過 - 記錄審計日誌
+    // 6. 細粒度權限檢查（如果啟用）
+    if (requirement.enableFineGrained !== false) {
+      // 只檢查第一個action（多action場景不適用細粒度權限）
+      const primaryAction = Array.isArray(requirement.action)
+        ? requirement.action[0]
+        : requirement.action;
+
+      const fineGrainedResult: FineGrainedPermissionResult =
+        await FineGrainedPermissionService.checkPermission(
+          userRole,
+          requirement.resource,
+          primaryAction,
+          payload.userId,
+          requirement.resourceData,
+          requirement.updateData
+        );
+
+      if (!fineGrainedResult.allowed) {
+        // 記錄細粒度權限拒絕審計日誌
+        await logPermissionAudit({
+          request,
+          user: payload,
+          requirement,
+          authorized: false,
+          reason: `Fine-grained permission denied: ${fineGrainedResult.reason}`,
+        });
+
+        return {
+          authorized: false,
+          user: payload,
+          response: NextResponse.json(
+            {
+              error: 'Forbidden',
+              message: fineGrainedResult.reason || '細粒度權限檢查失敗',
+              code: 'FINE_GRAINED_PERMISSION_DENIED',
+              details: {
+                resource: requirement.resource,
+                action: primaryAction,
+                userRole: userRole,
+              },
+            },
+            { status: 403 }
+          ),
+          reason: `Fine-grained permission denied: ${fineGrainedResult.reason}`,
+        };
+      }
+
+      // 細粒度權限檢查通過 - 記錄審計日誌
+      await logPermissionAudit({
+        request,
+        user: payload,
+        requirement,
+        authorized: true,
+        reason: 'Permission granted (including fine-grained checks)',
+      });
+
+      return {
+        authorized: true,
+        user: payload,
+        filteredData: fineGrainedResult.filteredData,
+        remaining: fineGrainedResult.remaining,
+      };
+    }
+
+    // 7. 權限檢查通過 - 記錄審計日誌（無細粒度檢查）
     await logPermissionAudit({
       request,
       user: payload,
