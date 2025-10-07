@@ -52,6 +52,36 @@
 | 文檔類型           | 文件路徑        | 用途說明                       | 重要程度 |
 | ------------------ | --------------- | ------------------------------ | -------- |
 | **需求文檔** | `docs/prd.md` | 產品需求文檔，項目核心業務需求 | 🔴 極高  |
+| **index-maintenance-root-cause-analysis.md** | `docs/index-maintenance-root-cause-analysis.md` | 項目文檔 | 🟡 高 |
+| **load-test-execution-report-2025-10-07.md** | `docs/load-test-execution-report-2025-10-07.md` | 項目文檔 | 🟡 高 |
+| **project-index-analysis-report.md** | `docs/project-index-analysis-report.md` | 項目文檔 | 🟡 高 |
+| **project-index-smart-analysis-report.md** | `docs/project-index-smart-analysis-report.md` | 項目文檔 | 🟡 高 |
+| **story-1.1-project-initialization.md** | `docs/user-stories/epic-1/story-1.1-project-initialization.md` | 項目文檔 | 🟡 高 |
+| **story-1.2-authentication-and-user-management.md** | `docs/user-stories/epic-1/story-1.2-authentication-and-user-management.md` | 項目文檔 | 🟡 高 |
+| **story-1.3-knowledge-base-data-model.md** | `docs/user-stories/epic-1/story-1.3-knowledge-base-data-model.md` | 項目文檔 | 🟡 高 |
+| **story-1.4-ai-search-engine.md** | `docs/user-stories/epic-1/story-1.4-ai-search-engine.md` | 項目文檔 | 🟡 高 |
+| **story-1.5-knowledge-base-management.md** | `docs/user-stories/epic-1/story-1.5-knowledge-base-management.md` | 項目文檔 | 🟡 高 |
+| **story-1.6-api-gateway-security.md** | `docs/user-stories/epic-1/story-1.6-api-gateway-security.md` | 項目文檔 | 🟡 高 |
+| **story-2.1-crm-integration.md** | `docs/user-stories/epic-2/story-2.1-crm-integration.md` | 項目文檔 | 🟡 高 |
+| **story-2.2-customer-360-view.md** | `docs/user-stories/epic-2/story-2.2-customer-360-view.md` | 項目文檔 | 🟡 高 |
+| **story-2.3-meeting-preparation.md** | `docs/user-stories/epic-2/story-2.3-meeting-preparation.md` | 項目文檔 | 🟡 高 |
+| **story-2.4-sales-dashboard.md** | `docs/user-stories/epic-2/story-2.4-sales-dashboard.md` | 項目文檔 | 🟡 高 |
+| **story-2.5-smart-reminders.md** | `docs/user-stories/epic-2/story-2.5-smart-reminders.md` | 項目文檔 | 🟡 高 |
+| **story-2.6-offline-mode.md** | `docs/user-stories/epic-2/story-2.6-offline-mode.md` | 項目文檔 | 🟡 高 |
+| **story-3.1-proposal-template-management.md** | `docs/user-stories/epic-3/story-3.1-proposal-template-management.md` | 項目文檔 | 🟡 高 |
+| **story-3.2-ai-content-generation.md** | `docs/user-stories/epic-3/story-3.2-ai-content-generation.md` | 項目文檔 | 🟡 高 |
+| **story-3.3-personalization-engine.md** | `docs/user-stories/epic-3/story-3.3-personalization-engine.md` | 項目文檔 | 🟡 高 |
+| **story-3.4-proposal-workflow.md** | `docs/user-stories/epic-3/story-3.4-proposal-workflow.md` | 項目文檔 | 🟡 高 |
+| **story-3.5-proposal-analytics.md** | `docs/user-stories/epic-3/story-3.5-proposal-analytics.md` | 項目文檔 | 🟡 高 |
+| **story-3.6-multi-channel-distribution.md** | `docs/user-stories/epic-3/story-3.6-multi-channel-distribution.md` | 項目文檔 | 🟡 高 |
+| **story-4.1-cloud-infrastructure.md** | `docs/user-stories/epic-4/story-4.1-cloud-infrastructure.md` | 項目文檔 | 🟡 高 |
+| **story-4.2-cicd-pipeline.md** | `docs/user-stories/epic-4/story-4.2-cicd-pipeline.md` | 項目文檔 | 🟡 高 |
+| **story-4.3-monitoring-alerting.md** | `docs/user-stories/epic-4/story-4.3-monitoring-alerting.md` | 項目文檔 | 🟡 高 |
+| **story-4.4-security-hardening.md** | `docs/user-stories/epic-4/story-4.4-security-hardening.md` | 項目文檔 | 🟡 高 |
+| **story-4.5-performance-high-availability.md** | `docs/user-stories/epic-4/story-4.5-performance-high-availability.md` | 項目文檔 | 🟡 高 |
+| **story-4.5-performance-optimization.md** | `docs/user-stories/epic-4/story-4.5-performance-optimization.md` | 項目文檔 | 🟡 高 |
+| **story-4.6-user-training.md** | `docs/user-stories/epic-4/story-4.6-user-training.md` | 項目文檔 | 🟡 高 |
+| **index.md** | `docs/user-stories/index.md` | 項目文檔 | 🟡 高 |
 
 ### 📖 docs/ - 項目文檔和規格
 
@@ -424,6 +454,7 @@
 | **AI智能分析器** ⭐️   | `lib/meeting/meeting-intelligence-analyzer.ts`  | GPT-4會議信息分析,5類洞察生成,30分鐘緩存     | 660      | 🔴 極高  |
 | **準備包管理器**       | `lib/meeting/meeting-prep-package.ts`           | 創建、生成、管理準備包，模板系統             | 600      | 🔴 極高  |
 | **統一導出**           | `lib/meeting/index.ts`                          | 所有會議模組的統一導出入口                   | 20       | 🟡 高    |
+| **meeting-intelligence-analyzer.ts** | `lib/meeting/meeting-intelligence-analyzer.ts` | 會議智能分析服務（Sprint 7完整實施） | 🔴 極高 |
 
 **🎯 準備包類型**:
 - **SALES_MEETING**: 銷售會議準備包
@@ -536,6 +567,7 @@
 | ---------------------- | ----------------------------------------- | -------------------------------------------- | -------- | -------- |
 | **推薦引擎** ⭐️       | `lib/recommendation/recommendation-engine.ts` | 4種策略,智能評分,緩存,反饋系統               | 550      | 🔴 極高  |
 | **統一導出**           | `lib/recommendation/index.ts`             | 所有推薦模組的統一導出入口                   | 15       | 🟡 高    |
+| **recommendation-engine.ts** | `lib/recommendation/recommendation-engine.ts` | 推薦引擎服務（協同過濾+內容推薦） | 🔴 極高 |
 
 **🔧 核心功能**:
 - `generateRecommendations()` - 生成個性化推薦(支持4種策略)
@@ -1551,6 +1583,8 @@ const users = await prisma.user.findMany();
 | **審計日誌系統** | `lib/security/audit-log.ts` | 全面操作日誌記錄，不可篡改審計追蹤，合規報告生成 | 649 | 39 | 🔴 極高 |
 | **備份恢復系統** | `lib/security/backup.ts` | 自動備份，備份驗證，資料恢復，保留策略 | 552 | 44 | 🔴 極高 |
 | **GDPR合規** | `lib/security/gdpr.ts` | 資料導出，資料刪除，同意管理，隱私保護 | 459 | - | 🔴 極高 |
+| **audit-log-prisma.ts** | `lib/security/audit-log-prisma.ts` | 審計日誌Prisma數據層服務 | 🔴 極高 |
+| **resource-conditions.ts** | `lib/security/resource-conditions.ts` | 資源條件匹配服務（細粒度權限） | 🔴 極高 |
 
 **🎯 核心功能**:
 - **資料加密**: 256位AES-GCM，隨機IV，認證標籤防篡改，支援批量欄位加密/解密
@@ -1638,6 +1672,15 @@ const users = await prisma.user.findMany();
 | **E2E測試執行摘要**  | `e2e-test-summary.md`       | 端到端測試執行結果和分析      | 🟢 中    |
 | **測試執行報告**     | `test-execution-report.md`  | 完整測試執行報告和覆蓋率      | 🟢 中    |
 | **Playwright配置**   | `playwright.config.ts`      | 瀏覽器自動化測試配置          | 🟡 高    |
+| **middleware.ts** | `middleware.ts` | Next.js中間件入口（API Gateway路由） | 🟡 高 |
+| **next-env.d.ts** | `next-env.d.ts` | Next.js TypeScript類型定義 | 🟡 高 |
+| **next.config.js** | `next.config.js` | Next.js配置文件 | 🟡 高 |
+| **postcss.config.js** | `postcss.config.js` | PostCSS配置 | 🟡 高 |
+| **tailwind.config.js** | `tailwind.config.js` | Tailwind CSS配置 | 🟡 高 |
+| **.eslintrc.json** | `.eslintrc.json` | JSON配置文件 | 🟢 中 |
+| **index-sync-report.json** | `index-sync-report.json` | JSON配置文件 | 🟢 中 |
+| **mvp-progress-report.json** | `mvp-progress-report.json` | JSON配置文件 | 🟢 中 |
+| **test-results.json** | `test-results.json` | JSON配置文件 | 🟢 中 |
 
 ### 🔧 types/ - TypeScript 類型定義
 
@@ -1661,7 +1704,6 @@ const users = await prisma.user.findMany();
 | **認證測試目錄**   | `__tests__/auth/`                                                 | 認證相關功能測試   | 🟡 高    |
 | **庫模組測試**     | `__tests__/lib/`                                                  | lib/ 模組功能測試  | 🟡 高    |
 | **工具測試目錄**   | `__tests__/utils/`                                                | 工具函數和測試輔助 | 🟢 中    |
-| **測試輔助**       | `__tests__/utils/test-helpers.ts`                                 | 測試工具和模擬數據 | 🟡 高    |
 | **嵌入測試**       | `__tests__/lib/ai/embeddings.test.ts`                             | 向量嵌入功能測試   | 🟡 高    |
 | **登入測試**       | `__tests__/api/auth/login.test.ts`                                | 用戶登入流程測試   | 🟡 高    |
 | **註冊測試**       | `__tests__/api/auth/register.test.ts`                             | 用戶註冊流程測試   | 🟡 高    |
@@ -1669,6 +1711,17 @@ const users = await prisma.user.findMany();
 | **知識庫列表測試** | `__tests__/components/knowledge/knowledge-base-list.test.tsx`     | 知識庫列表組件測試 | 🟡 高    |
 | **文檔預覽測試**   | `__tests__/components/knowledge/knowledge-document-view.test.tsx` | 文檔預覽組件測試   | 🟢 高    |
 | **文檔編輯測試**   | `__tests__/components/knowledge/knowledge-document-edit.test.tsx` | 文檔編輯組件測試   | 🟢 高    |
+| **rbac-integration.test.ts** | `__tests__/api/rbac-integration.test.ts` | RBAC整合測試 | 🟡 高 |
+| **use-permission.test.tsx** | `__tests__/hooks/use-permission.test.tsx` | 權限Hook測試 | 🟡 高 |
+| **rbac-ownership.test.ts** | `__tests__/lib/security/rbac-ownership.test.ts` | RBAC整合測試 | 🔴 極高 |
+| **rbac-permissions.test.ts** | `__tests__/lib/security/rbac-permissions.test.ts` | RBAC整合測試 | 🔴 極高 |
+| **resource-conditions.test.ts** | `__tests__/lib/security/resource-conditions.test.ts` | 安全模組測試 | 🔴 極高 |
+| **edit-lock-manager.test.ts** | `__tests__/lib/collaboration/edit-lock-manager.test.ts` | 單元測試文件 | 🟢 中 |
+| **pdf-generator.test.ts** | `__tests__/lib/pdf/pdf-generator.test.ts` | 單元測試文件 | 🟢 中 |
+| **proposal-pdf-template.test.ts** | `__tests__/lib/pdf/proposal-pdf-template.test.ts` | 單元測試文件 | 🟢 中 |
+| **template-engine.test.ts** | `__tests__/lib/template/template-engine.test.ts` | 單元測試文件 | 🟢 中 |
+| **template-manager.test.ts** | `__tests__/lib/template/template-manager.test.ts` | 單元測試文件 | 🟢 中 |
+| **login.test.tsx** | `__tests__/auth/login.test.tsx` | 單元測試文件 | 🟢 中 |
 
 ##### 🔍 進階搜索測試 (__tests__/) - Sprint 6 Week 12
 
@@ -1778,7 +1831,6 @@ const users = await prisma.user.findMany();
 
 | 測試類別                  | 文件路徑                         | 用途說明                                | 重要程度 |
 | ------------------------- | -------------------------------- | --------------------------------------- | -------- |
-| **知識庫 API 測試** | `tests/knowledge-base.test.ts` | 知識庫 API 完整整合測試（96個測試用例） | 🔴 極高  |
 
 #### 🎭 端到端測試 (e2e/)
 
@@ -1798,10 +1850,6 @@ const users = await prisma.user.findMany();
 | **性能測試**       | `e2e/knowledge-base/performance.spec.ts`  | 頁面載入性能和響應時間測試                       | 🟡 高    |
 | **整合測試**       | `e2e/knowledge-base/integration.spec.ts`  | 知識庫模組完整整合測試                           | 🔴 極高  |
 | **審計日誌E2E測試** | `e2e/audit-logs/admin-audit-logs.spec.ts` | 審計日誌管理頁面完整E2E測試（列表/篩選/統計/導出） | 🔴 極高  |
-| **知識庫測試運行** | `e2e/run-knowledge-tests.ts`              | 知識庫相關測試批量執行器                         | 🟢 中    |
-| **全局設置**       | `e2e/global-setup.ts`                     | E2E測試全局設置和環境準備                        | 🟡 高    |
-| **認證設置**       | `e2e/auth.setup.ts`                       | 測試認證狀態設置                                 | 🟡 高    |
-| **認證工具**       | `e2e/fixtures/auth.ts`                    | E2E測試認證相關工具函數                          | 🟢 中    |
 
 ---
 
@@ -2036,6 +2084,34 @@ AI 助手應該 **避免** 在以下目錄中查找項目業務相關信息：
 ### 📝 更新格式
 
 更新時請維持：
+| **AuditLogExport.tsx** | `components/audit/AuditLogExport.tsx` | 審計日誌導出組件 | 🔴 極高 |
+| **AuditLogFilters.tsx** | `components/audit/AuditLogFilters.tsx` | 審計日誌篩選組件 | 🔴 極高 |
+| **AuditLogList.tsx** | `components/audit/AuditLogList.tsx` | 審計日誌列表組件 | 🔴 極高 |
+| **AuditLogStats.tsx** | `components/audit/AuditLogStats.tsx` | 審計日誌統計組件 | 🔴 極高 |
+| **index.ts** | `components/audit/index.ts` | 審計組件統一導出 | 🔴 極高 |
+| **advanced-editor-toolbar.tsx** | `components/knowledge/advanced-editor-toolbar.tsx` | 高級編輯器工具欄（模板系統+協作+表格） | 🔴 極高 |
+| **enhanced-knowledge-editor.tsx** | `components/knowledge/enhanced-knowledge-editor.tsx` | 增強知識庫編輯器（自動保存+模板應用） | 🔴 極高 |
+| **knowledge-recommendation-widget.tsx** | `components/knowledge/knowledge-recommendation-widget.tsx` | 知識庫推薦小部件（5種推薦策略+反饋機制） | 🔴 極高 |
+| **knowledge-review-workflow.tsx** | `components/knowledge/knowledge-review-workflow.tsx` | 內容審核工作流UI（審核隊列+版本對比+歷史） | 🔴 極高 |
+| **CustomerActions.tsx** | `components/permissions/CustomerActions.tsx` | 客戶操作權限組件 | 🔴 極高 |
+| **index.ts** | `components/permissions/index.ts` | 權限組件統一導出 | 🔴 極高 |
+| **ProposalActions.tsx** | `components/permissions/ProposalActions.tsx` | 提案操作權限組件 | 🔴 極高 |
+| **ProtectedRoute.tsx** | `components/permissions/ProtectedRoute.tsx` | 受保護路由組件 | 🔴 極高 |
+| **sheet.tsx** | `components/ui/sheet.tsx` | Radix UI Sheet側邊抽屜組件 | 🔴 極高 |
+| **route.ts** | `app/api/audit-logs/export/route.ts` | 審計日誌導出API端點 | 🟡 高 |
+| **route.ts** | `app/api/audit-logs/route.ts` | 審計日誌查詢API端點 | 🟡 高 |
+| **route.ts** | `app/api/audit-logs/stats/route.ts` | 審計日誌統計API端點 | 🟡 高 |
+| **page.tsx** | `app/dashboard/admin/audit-logs/page.tsx` | TypeScript模組 | 🟡 高 |
+| **mammoth.d.ts** | `types/mammoth.d.ts` | TypeScript模組 | 🟢 中 |
+| **opentelemetry.d.ts** | `types/opentelemetry.d.ts` | TypeScript模組 | 🟢 中 |
+| **index.js** | `poc/node_modules/mime-types/index.js` | 項目文件 | 🟢 中 |
+| **index.js** | `poc/node_modules/pg-types/index.js` | 項目文件 | 🟢 中 |
+| **arrayParser.js** | `poc/node_modules/pg-types/lib/arrayParser.js` | 項目文件 | 🟢 中 |
+| **binaryParsers.js** | `poc/node_modules/pg-types/lib/binaryParsers.js` | 項目文件 | 🟢 中 |
+| **builtins.js** | `poc/node_modules/pg-types/lib/builtins.js` | 項目文件 | 🟢 中 |
+| **textParsers.js** | `poc/node_modules/pg-types/lib/textParsers.js` | 項目文件 | 🟢 中 |
+| **index.js** | `poc/node_modules/pg-types/test/index.js` | 項目文件 | 🟢 中 |
+| **types.js** | `poc/node_modules/pg-types/test/types.js` | 項目文件 | 🟢 中 |
 
 - 清晰的分類結構
 - 準確的文件路徑
