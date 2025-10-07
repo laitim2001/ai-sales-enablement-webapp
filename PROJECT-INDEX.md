@@ -93,6 +93,7 @@
 | **問題分析報告（2025-10-06）** | `claudedocs/issue-analysis-2025-10-06.md` | Dashboard頁面和Session Persistence完整問題分析（4個issue調查） | 🟡 高    |
 | **MVP2實施驗證報告** | `claudedocs/mvp2-implementation-verification-report.md` | MVP Phase 2完整實施驗證報告（1115行，7個Sprint驗證，88%完成度，4.5/5評級） | 🔴 極高  |
 | **MVP1+MVP2完整驗證報告** | `claudedocs/mvp1-mvp2-complete-verification-report.md` | MVP1+MVP2史詩級完整驗證報告（2400+行，13個Sprint驗證，91%完成度，4.8/5評級） | 🔴 極高  |
+| **MVP2清單同步報告** | `claudedocs/mvp2-checklist-sync-report.md` | MVP2實施清單同步完整報告（基於驗證報告更新，83%進度校準，7個Sprint詳細同步，質量保證） | 🔴 極高  |
 | **Microsoft Graph設置指南** | `docs/microsoft-graph-setup-guide.md` | Microsoft Graph日曆整合完整配置指南（Azure AD/OAuth/權限） | 🟡 高    |
 | **新開發者設置指南** | `docs/NEW-DEVELOPER-SETUP-GUIDE.md` | 新開發者環境自動化設置完整指南 | 🔴 極高  |
 | **Sprint 3安全設置指南** | `docs/sprint3-security-setup-guide.md` | Sprint 3安全加固完整設置和配置指南（加密/Key Vault/HTTPS/RBAC/審計） | 🔴 極高  |
