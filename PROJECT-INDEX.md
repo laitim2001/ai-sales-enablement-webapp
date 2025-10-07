@@ -1681,6 +1681,10 @@ const users = await prisma.user.findMany();
 | **index-sync-report.json** | `index-sync-report.json` | JSON配置文件 | 🟢 中 |
 | **mvp-progress-report.json** | `mvp-progress-report.json` | JSON配置文件 | 🟢 中 |
 | **test-results.json** | `test-results.json` | JSON配置文件 | 🟢 中 |
+| **.eslintrc.json** | `.eslintrc.json` | JSON配置文件 | 🟢 中 |
+| **index-sync-report.json** | `index-sync-report.json` | JSON配置文件 | 🟢 中 |
+| **mvp-progress-report.json** | `mvp-progress-report.json` | JSON配置文件 | 🟢 中 |
+| **test-results.json** | `test-results.json` | JSON配置文件 | 🟢 中 |
 
 ### 🔧 types/ - TypeScript 類型定義
 
