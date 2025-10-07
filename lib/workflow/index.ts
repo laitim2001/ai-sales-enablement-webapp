@@ -1,10 +1,11 @@
 /**
- * 工作流程系統統一導出
+ * @fileoverview 工作流程系統統一導出提供工作流程引擎的所有核心功能作者：Claude Code日期：2025-10-01
+ * @module lib/workflow/index
+ * @description
+ * 工作流程系統統一導出提供工作流程引擎的所有核心功能作者：Claude Code日期：2025-10-01
  *
- * 提供工作流程引擎的所有核心功能
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 export {

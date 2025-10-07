@@ -1,14 +1,11 @@
 /**
- * 通知偏好設置 API 路由 (Notification Preferences API Route)
- *
- * 處理用戶通知偏好的查詢和更新
- *
- * 端點：
- * - GET /api/notifications/preferences - 獲取用戶通知偏好
- * - PUT /api/notifications/preferences - 更新用戶通知偏好
- *
+ * @fileoverview 通知偏好設置 API 路由 (Notification Preferences API Route)處理用戶通知偏好的查詢和更新端點：- GET /api/notifications/preferences - 獲取用戶通知偏好- PUT /api/notifications/preferences - 更新用戶通知偏好@module app/api/notifications/preferences/route@since Sprint 5 Week 10 Day 2
  * @module app/api/notifications/preferences/route
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知偏好設置 API 路由 (Notification Preferences API Route)處理用戶通知偏好的查詢和更新端點：- GET /api/notifications/preferences - 獲取用戶通知偏好- PUT /api/notifications/preferences - 更新用戶通知偏好@module app/api/notifications/preferences/route@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

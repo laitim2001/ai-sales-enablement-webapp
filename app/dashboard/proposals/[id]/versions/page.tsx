@@ -1,14 +1,11 @@
 /**
- * 提案版本歷史頁面
+ * @fileoverview 提案版本歷史頁面功能：- 顯示提案的所有版本- 版本比較- 版本回滾- 創建新版本快照@author Claude Code@date 2025-10-02
+ * @module app/dashboard/proposals/[id]/versions/page
+ * @description
+ * 提案版本歷史頁面功能：- 顯示提案的所有版本- 版本比較- 版本回滾- 創建新版本快照@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - 顯示提案的所有版本
- * - 版本比較
- * - 版本回滾
- * - 創建新版本快照
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

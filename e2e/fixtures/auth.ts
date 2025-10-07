@@ -1,3 +1,13 @@
+/**
+ * @fileoverview auth - 工具模組
+ * @module e2e/fixtures/auth
+ * @description
+ * 提供輔助功能的工具函數
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 import { test as base, expect, Browser, Page } from '@playwright/test'
 
 // Define test user credentials

@@ -1,44 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: API錯誤處理器
- * 檔案用途: AI銷售賦能平台的統一API錯誤處理和回應管理
- * 開發階段: 生產就緒
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: API錯誤處理器檔案用途: AI銷售賦能平台的統一API錯誤處理和回應管理開發階段: 生產就緒================================================================功能索引:1. ApiResponse - 統一API回應格式接口2. ApiErrorHandler - API錯誤處理核心類別3. withErrorHandling - API路由錯誤處理包裝器4. tryAsync - 異步操作安全包裝器5. validateRequired - 必要欄位驗證函數6. validateRequestBody - 請求體驗證函數7. validatePaginationParams - 分頁參數驗證函數技術特色/核心特色:- 統一回應格式: 所有API都返回相同結構的回應- 自動錯誤處理: 結合ErrorClassifier自動識別和處理錯誤- 性能監控: 自動計算和記錄API處理時間- 安全回應: 自動過濾敏感資訊的錯誤回應- 請求追蹤: 每個請求自動生成唯一ID用於追蹤- 驗證整合: 內建多種驗證輔助函數依賴關係:- Next.js: NextRequest/NextResponse用於API路由處理- @/lib/errors: 依賴統一錯誤處理系統- 支援任意驗證庫（Zod, Joi等）注意事項:- 所有API路由建議使用withErrorHandling包裝- 自動記錄細節錯誤資訊供後續調試- 支援分頁參數自動驗證和安全範圍限制- 所有輸出都包含請求元數據用於監控更新記錄:- Week 1: 建立基礎錯誤處理和回應格式- Week 2: 新增withErrorHandling高階函數- Week 3: 新增驗證輔助函數和分頁支援- Week 4: 完善性能監控和記錄功能================================================================
+ * @module lib/api/error-handler
+ * @description
+ * ================================================================檔案名稱: API錯誤處理器檔案用途: AI銷售賦能平台的統一API錯誤處理和回應管理開發階段: 生產就緒================================================================功能索引:1. ApiResponse - 統一API回應格式接口2. ApiErrorHandler - API錯誤處理核心類別3. withErrorHandling - API路由錯誤處理包裝器4. tryAsync - 異步操作安全包裝器5. validateRequired - 必要欄位驗證函數6. validateRequestBody - 請求體驗證函數7. validatePaginationParams - 分頁參數驗證函數技術特色/核心特色:- 統一回應格式: 所有API都返回相同結構的回應- 自動錯誤處理: 結合ErrorClassifier自動識別和處理錯誤- 性能監控: 自動計算和記錄API處理時間- 安全回應: 自動過濾敏感資訊的錯誤回應- 請求追蹤: 每個請求自動生成唯一ID用於追蹤- 驗證整合: 內建多種驗證輔助函數依賴關係:- Next.js: NextRequest/NextResponse用於API路由處理- @/lib/errors: 依賴統一錯誤處理系統- 支援任意驗證庫（Zod, Joi等）注意事項:- 所有API路由建議使用withErrorHandling包裝- 自動記錄細節錯誤資訊供後續調試- 支援分頁參數自動驗證和安全範圍限制- 所有輸出都包含請求元數據用於監控更新記錄:- Week 1: 建立基礎錯誤處理和回應格式- Week 2: 新增withErrorHandling高階函數- Week 3: 新增驗證輔助函數和分頁支援- Week 4: 完善性能監控和記錄功能================================================================
  *
- * 功能索引:
- * 1. ApiResponse - 統一API回應格式接口
- * 2. ApiErrorHandler - API錯誤處理核心類別
- * 3. withErrorHandling - API路由錯誤處理包裝器
- * 4. tryAsync - 異步操作安全包裝器
- * 5. validateRequired - 必要欄位驗證函數
- * 6. validateRequestBody - 請求體驗證函數
- * 7. validatePaginationParams - 分頁參數驗證函數
- *
- * 技術特色/核心特色:
- * - 統一回應格式: 所有API都返回相同結構的回應
- * - 自動錯誤處理: 結合ErrorClassifier自動識別和處理錯誤
- * - 性能監控: 自動計算和記錄API處理時間
- * - 安全回應: 自動過濾敏感資訊的錯誤回應
- * - 請求追蹤: 每個請求自動生成唯一ID用於追蹤
- * - 驗證整合: 內建多種驗證輔助函數
- *
- * 依賴關係:
- * - Next.js: NextRequest/NextResponse用於API路由處理
- * - @/lib/errors: 依賴統一錯誤處理系統
- * - 支援任意驗證庫（Zod, Joi等）
- *
- * 注意事項:
- * - 所有API路由建議使用withErrorHandling包裝
- * - 自動記錄細節錯誤資訊供後續調試
- * - 支援分頁參數自動驗證和安全範圍限制
- * - 所有輸出都包含請求元數據用於監控
- *
- * 更新記錄:
- * - Week 1: 建立基礎錯誤處理和回應格式
- * - Week 2: 新增withErrorHandling高階函數
- * - Week 3: 新增驗證輔助函數和分頁支援
- * - Week 4: 完善性能監控和記錄功能
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

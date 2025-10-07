@@ -1,11 +1,11 @@
 /**
- * 版本比較 API 路由
+ * @fileoverview 版本比較 API 路由功能：- POST: 比較兩個版本的差異@author Claude Code@date 2025-10-02
+ * @module app/api/proposals/[id]/versions/compare/route
+ * @description
+ * 版本比較 API 路由功能：- POST: 比較兩個版本的差異@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - POST: 比較兩個版本的差異
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

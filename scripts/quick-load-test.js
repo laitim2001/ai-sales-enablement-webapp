@@ -1,6 +1,11 @@
 /**
- * 快速負載測試 - 用於驗證系統基本性能
- * 短時間測試: 30秒，模擬不同負載級別
+ * @fileoverview 快速負載測試 - 用於驗證系統基本性能短時間測試: 30秒，模擬不同負載級別
+ * @module scripts/quick-load-test
+ * @description
+ * 快速負載測試 - 用於驗證系統基本性能短時間測試: 30秒，模擬不同負載級別
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const autocannon = require('autocannon');

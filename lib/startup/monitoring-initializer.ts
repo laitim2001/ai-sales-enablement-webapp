@@ -1,14 +1,11 @@
 /**
- * 監控系統初始化器
+ * @fileoverview 監控系統初始化器功能：- 在應用程式啟動時自動初始化連接監控服務- 確保健康檢查系統正常工作- 提供監控狀態查詢接口作者：Claude Code創建時間：2025-09-29最後更新：2025-09-29
+ * @module lib/startup/monitoring-initializer
+ * @description
+ * 監控系統初始化器功能：- 在應用程式啟動時自動初始化連接監控服務- 確保健康檢查系統正常工作- 提供監控狀態查詢接口作者：Claude Code創建時間：2025-09-29最後更新：2025-09-29
  *
- * 功能：
- * - 在應用程式啟動時自動初始化連接監控服務
- * - 確保健康檢查系統正常工作
- * - 提供監控狀態查詢接口
- *
- * 作者：Claude Code
- * 創建時間：2025-09-29
- * 最後更新：2025-09-29
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { startGlobalMonitoring, stopGlobalMonitoring, getConnectionMonitor } from '@/lib/monitoring/connection-monitor';

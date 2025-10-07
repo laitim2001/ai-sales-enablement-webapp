@@ -1,9 +1,11 @@
 /**
- * Run AuditLog schema enhancement migration
- * Sprint 3 Week 8 - Audit Log System Implementation
+ * @fileoverview Run AuditLog schema enhancement migrationSprint 3 Week 8 - Audit Log System ImplementationThis script executes the SQL migration to enhance the audit_logs tablewith additional fields for comprehensive audit logging.
+ * @module scripts/run-audit-log-migration
+ * @description
+ * Run AuditLog schema enhancement migrationSprint 3 Week 8 - Audit Log System ImplementationThis script executes the SQL migration to enhance the audit_logs tablewith additional fields for comprehensive audit logging.
  *
- * This script executes the SQL migration to enhance the audit_logs table
- * with additional fields for comprehensive audit logging.
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { readFileSync } from 'fs';

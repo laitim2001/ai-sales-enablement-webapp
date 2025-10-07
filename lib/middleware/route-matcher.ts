@@ -1,37 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 路由匹配器 (lib/middleware/route-matcher.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 路由匹配器 (lib/middleware/route-matcher.ts)================================================================【檔案功能】提供靈活且高效的路由匹配系統，支援字符串、正則表達式和通配符模式。用於API網關的智能路由分發和配置管理。【主要職責】• 路由匹配 - 支援字符串、正則表達式、通配符等多種模式• 版本識別 - 從路徑中提取API版本信息 (v1/v2)• 配置管理 - 集中管理路由配置和規則• 優先級處理 - 按優先級順序匹配路由• 性能優化 - 使用緩存提高匹配效率【技術實現】• Pattern Matching - 支援多種匹配模式• Cache Strategy - LRU緩存優化性能• Priority Queue - 優先級排序確保正確匹配• Type Safety - TypeScript類型保護• Edge Compatible - 支援Edge Runtime【使用場景】• API Gateway - 路由請求到正確的處理器• 認證檢查 - 根據路由配置決定認證方式• 速率限制 - 應用端點特定的速率限制• CORS處理 - 應用路由特定的CORS規則• 版本控制 - 管理API版本路由【相關檔案】• middleware.ts - 使用路由匹配器進行請求分發• lib/middleware/routing-config.ts - 路由配置定義• docs/api-gateway-architecture.md - 架構設計文檔
+ * @module lib/middleware/route-matcher
+ * @description
+ * ================================================================AI銷售賦能平台 - 路由匹配器 (lib/middleware/route-matcher.ts)================================================================【檔案功能】提供靈活且高效的路由匹配系統，支援字符串、正則表達式和通配符模式。用於API網關的智能路由分發和配置管理。【主要職責】• 路由匹配 - 支援字符串、正則表達式、通配符等多種模式• 版本識別 - 從路徑中提取API版本信息 (v1/v2)• 配置管理 - 集中管理路由配置和規則• 優先級處理 - 按優先級順序匹配路由• 性能優化 - 使用緩存提高匹配效率【技術實現】• Pattern Matching - 支援多種匹配模式• Cache Strategy - LRU緩存優化性能• Priority Queue - 優先級排序確保正確匹配• Type Safety - TypeScript類型保護• Edge Compatible - 支援Edge Runtime【使用場景】• API Gateway - 路由請求到正確的處理器• 認證檢查 - 根據路由配置決定認證方式• 速率限制 - 應用端點特定的速率限制• CORS處理 - 應用路由特定的CORS規則• 版本控制 - 管理API版本路由【相關檔案】• middleware.ts - 使用路由匹配器進行請求分發• lib/middleware/routing-config.ts - 路由配置定義• docs/api-gateway-architecture.md - 架構設計文檔
  *
- * 【檔案功能】
- * 提供靈活且高效的路由匹配系統，支援字符串、正則表達式和通配符模式。
- * 用於API網關的智能路由分發和配置管理。
- *
- * 【主要職責】
- * • 路由匹配 - 支援字符串、正則表達式、通配符等多種模式
- * • 版本識別 - 從路徑中提取API版本信息 (v1/v2)
- * • 配置管理 - 集中管理路由配置和規則
- * • 優先級處理 - 按優先級順序匹配路由
- * • 性能優化 - 使用緩存提高匹配效率
- *
- * 【技術實現】
- * • Pattern Matching - 支援多種匹配模式
- * • Cache Strategy - LRU緩存優化性能
- * • Priority Queue - 優先級排序確保正確匹配
- * • Type Safety - TypeScript類型保護
- * • Edge Compatible - 支援Edge Runtime
- *
- * 【使用場景】
- * • API Gateway - 路由請求到正確的處理器
- * • 認證檢查 - 根據路由配置決定認證方式
- * • 速率限制 - 應用端點特定的速率限制
- * • CORS處理 - 應用路由特定的CORS規則
- * • 版本控制 - 管理API版本路由
- *
- * 【相關檔案】
- * • middleware.ts - 使用路由匹配器進行請求分發
- * • lib/middleware/routing-config.ts - 路由配置定義
- * • docs/api-gateway-architecture.md - 架構設計文檔
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest } from 'next/server'

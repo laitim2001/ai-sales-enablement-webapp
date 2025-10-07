@@ -1,14 +1,11 @@
 /**
- * 創建新範本頁面
+ * @fileoverview 創建新範本頁面功能：- 範本基本信息輸入- 範本內容編輯（Handlebars 語法）- 變數配置- 實時預覽@author Claude Code@date 2025-10-02
+ * @module app/dashboard/templates/new/page
+ * @description
+ * 創建新範本頁面功能：- 範本基本信息輸入- 範本內容編輯（Handlebars 語法）- 變數配置- 實時預覽@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - 範本基本信息輸入
- * - 範本內容編輯（Handlebars 語法）
- * - 變數配置
- * - 實時預覽
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

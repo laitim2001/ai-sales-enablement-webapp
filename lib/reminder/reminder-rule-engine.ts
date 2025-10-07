@@ -1,14 +1,11 @@
 /**
- * 智能提醒規則引擎
+ * @fileoverview 智能提醒規則引擎功能：- 基於時間的提醒規則- 基於事件的提醒規則- 優先級自動計算- 提醒觸發條件評估作者：Claude Code日期：2025-10-05
+ * @module lib/reminder/reminder-rule-engine
+ * @description
+ * 智能提醒規則引擎功能：- 基於時間的提醒規則- 基於事件的提醒規則- 優先級自動計算- 提醒觸發條件評估作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - 基於時間的提醒規則
- * - 基於事件的提醒規則
- * - 優先級自動計算
- * - 提醒觸發條件評估
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client';

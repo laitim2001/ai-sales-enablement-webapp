@@ -1,36 +1,11 @@
 /**
- * 審計日誌系統
+ * @fileoverview 審計日誌系統功能：- 全面的操作日誌記錄- 不可篡改的審計追蹤- 合規報告生成- 自動日誌清理（保留期限）使用方式：```typescript// 記錄審計日誌await AuditLogger.log({  userId: 1,  action: AuditAction.CREATE,  resource: AuditResource.CUSTOMER,  resourceId: '123',  details: { name: 'New Customer' },  ipAddress: '192.168.1.1',  userAgent: 'Mozilla/5.0...',});// 查詢審計日誌const logs = await AuditLogger.query({  userId: 1,  startDate: new Date('2025-01-01'),  endDate: new Date('2025-12-31'),});```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
+ * @module lib/security/audit-log
+ * @description
+ * 審計日誌系統功能：- 全面的操作日誌記錄- 不可篡改的審計追蹤- 合規報告生成- 自動日誌清理（保留期限）使用方式：```typescript// 記錄審計日誌await AuditLogger.log({  userId: 1,  action: AuditAction.CREATE,  resource: AuditResource.CUSTOMER,  resourceId: '123',  details: { name: 'New Customer' },  ipAddress: '192.168.1.1',  userAgent: 'Mozilla/5.0...',});// 查詢審計日誌const logs = await AuditLogger.query({  userId: 1,  startDate: new Date('2025-01-01'),  endDate: new Date('2025-12-31'),});```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
  *
- * 功能：
- * - 全面的操作日誌記錄
- * - 不可篡改的審計追蹤
- * - 合規報告生成
- * - 自動日誌清理（保留期限）
- *
- * 使用方式：
- * ```typescript
- * // 記錄審計日誌
- * await AuditLogger.log({
- *   userId: 1,
- *   action: AuditAction.CREATE,
- *   resource: AuditResource.CUSTOMER,
- *   resourceId: '123',
- *   details: { name: 'New Customer' },
- *   ipAddress: '192.168.1.1',
- *   userAgent: 'Mozilla/5.0...',
- * });
- *
- * // 查詢審計日誌
- * const logs = await AuditLogger.query({
- *   userId: 1,
- *   startDate: new Date('2025-01-01'),
- *   endDate: new Date('2025-12-31'),
- * });
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 3 - 安全加固與合規
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 /**

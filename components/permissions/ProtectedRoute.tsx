@@ -1,3 +1,19 @@
+/**
+ * @fileoverview ProtectedRoute - React組件
+ * @module components/permissions/ProtectedRoute
+ * @description
+ * ProtectedRoute組件的實現
+ *
+ * ### 主要功能:
+ * - ProtectedRoute(): 函數功能
+ * - AdminRoute(): 函數功能
+ * - ManagerRoute(): 函數功能
+ *
+ * @component
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 'use client'
 
 /**

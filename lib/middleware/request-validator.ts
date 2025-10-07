@@ -1,40 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 請求驗證中間件 (lib/middleware/request-validator.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 請求驗證中間件 (lib/middleware/request-validator.ts)================================================================【檔案功能】提供全面的請求驗證功能，使用 Zod schema 驗證請求數據。確保 API 輸入的正確性和安全性，防止無效數據進入系統。【主要職責】• Schema 驗證 - 使用 Zod 驗證請求數據結構• 多源驗證 - 支援 body/query/params/headers 驗證• 錯誤格式化 - 提供清晰的驗證錯誤消息• 類型安全 - TypeScript 類型推導和保護• 自定義規則 - 支援業務邏輯驗證規則【技術實現】• Zod Integration - 完整的 Zod schema 支援• Error Formatting - 友好的錯誤消息格式• Type Inference - 自動類型推導• Async Validation - 支援異步驗證規則• Edge Compatible - 支援 Edge Runtime【使用場景】• API Input 驗證 - 確保請求數據格式正確• 安全防護 - 防止惡意輸入和注入攻擊• 業務規則 - 驗證業務邏輯約束• 數據清理 - 自動轉換和淨化輸入數據• 文檔生成 - Schema 可用於 API 文檔生成【相關檔案】• middleware.ts - 使用驗證中間件處理請求• app/api/{route}/route.ts - API 路由中的驗證應用• docs/api-validation-guide.md - 驗證規則文檔作者：Claude Code創建時間：2025-09-30
+ * @module lib/middleware/request-validator
+ * @description
+ * ================================================================AI銷售賦能平台 - 請求驗證中間件 (lib/middleware/request-validator.ts)================================================================【檔案功能】提供全面的請求驗證功能，使用 Zod schema 驗證請求數據。確保 API 輸入的正確性和安全性，防止無效數據進入系統。【主要職責】• Schema 驗證 - 使用 Zod 驗證請求數據結構• 多源驗證 - 支援 body/query/params/headers 驗證• 錯誤格式化 - 提供清晰的驗證錯誤消息• 類型安全 - TypeScript 類型推導和保護• 自定義規則 - 支援業務邏輯驗證規則【技術實現】• Zod Integration - 完整的 Zod schema 支援• Error Formatting - 友好的錯誤消息格式• Type Inference - 自動類型推導• Async Validation - 支援異步驗證規則• Edge Compatible - 支援 Edge Runtime【使用場景】• API Input 驗證 - 確保請求數據格式正確• 安全防護 - 防止惡意輸入和注入攻擊• 業務規則 - 驗證業務邏輯約束• 數據清理 - 自動轉換和淨化輸入數據• 文檔生成 - Schema 可用於 API 文檔生成【相關檔案】• middleware.ts - 使用驗證中間件處理請求• app/api/{route}/route.ts - API 路由中的驗證應用• docs/api-validation-guide.md - 驗證規則文檔作者：Claude Code創建時間：2025-09-30
  *
- * 【檔案功能】
- * 提供全面的請求驗證功能，使用 Zod schema 驗證請求數據。
- * 確保 API 輸入的正確性和安全性，防止無效數據進入系統。
- *
- * 【主要職責】
- * • Schema 驗證 - 使用 Zod 驗證請求數據結構
- * • 多源驗證 - 支援 body/query/params/headers 驗證
- * • 錯誤格式化 - 提供清晰的驗證錯誤消息
- * • 類型安全 - TypeScript 類型推導和保護
- * • 自定義規則 - 支援業務邏輯驗證規則
- *
- * 【技術實現】
- * • Zod Integration - 完整的 Zod schema 支援
- * • Error Formatting - 友好的錯誤消息格式
- * • Type Inference - 自動類型推導
- * • Async Validation - 支援異步驗證規則
- * • Edge Compatible - 支援 Edge Runtime
- *
- * 【使用場景】
- * • API Input 驗證 - 確保請求數據格式正確
- * • 安全防護 - 防止惡意輸入和注入攻擊
- * • 業務規則 - 驗證業務邏輯約束
- * • 數據清理 - 自動轉換和淨化輸入數據
- * • 文檔生成 - Schema 可用於 API 文檔生成
- *
- * 【相關檔案】
- * • middleware.ts - 使用驗證中間件處理請求
- * • app/api/{route}/route.ts - API 路由中的驗證應用
- * • docs/api-validation-guide.md - 驗證規則文檔
- *
- * 作者：Claude Code
- * 創建時間：2025-09-30
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

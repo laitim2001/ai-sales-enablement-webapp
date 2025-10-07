@@ -1,14 +1,11 @@
 /**
- * AI提案重新生成 API 路由
+ * @fileoverview AI提案重新生成 API 路由功能：- 基於現有生成記錄重新生成提案內容- 支援變數和AI配置的調整- 建立生成版本關聯和歷史追蹤- 提供重新生成狀態管理作者：Claude Code創建時間：2025-09-28
+ * @module app/api/ai/regenerate-proposal/route
+ * @description
+ * AI提案重新生成 API 路由功能：- 基於現有生成記錄重新生成提案內容- 支援變數和AI配置的調整- 建立生成版本關聯和歷史追蹤- 提供重新生成狀態管理作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 基於現有生成記錄重新生成提案內容
- * - 支援變數和AI配置的調整
- * - 建立生成版本關聯和歷史追蹤
- * - 提供重新生成狀態管理
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

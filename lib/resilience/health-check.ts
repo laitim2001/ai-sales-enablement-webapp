@@ -1,29 +1,11 @@
 /**
- * 增強健康檢查系統
+ * @fileoverview 增強健康檢查系統功能：- 多服務健康檢查- 依賴關係管理- 健康度評分- 自動恢復檢測- 熔斷器整合- 健康指標追蹤使用方式：```typescriptconst healthCheck = new HealthCheckSystem();healthCheck.register('database', async () => {  await db.ping();  return { status: 'healthy' };});const status = await healthCheck.check();```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
+ * @module lib/resilience/health-check
+ * @description
+ * 增強健康檢查系統功能：- 多服務健康檢查- 依賴關係管理- 健康度評分- 自動恢復檢測- 熔斷器整合- 健康指標追蹤使用方式：```typescriptconst healthCheck = new HealthCheckSystem();healthCheck.register('database', async () => {  await db.ping();  return { status: 'healthy' };});const status = await healthCheck.check();```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
  *
- * 功能：
- * - 多服務健康檢查
- * - 依賴關係管理
- * - 健康度評分
- * - 自動恢復檢測
- * - 熔斷器整合
- * - 健康指標追蹤
- *
- * 使用方式：
- * ```typescript
- * const healthCheck = new HealthCheckSystem();
- *
- * healthCheck.register('database', async () => {
- *   await db.ping();
- *   return { status: 'healthy' };
- * });
- *
- * const status = await healthCheck.check();
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 4 - 性能優化與高可用性
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { CircuitBreaker, CircuitBreakerManager } from './circuit-breaker';

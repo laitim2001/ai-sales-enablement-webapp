@@ -1,12 +1,11 @@
 /**
- * 提案版本歷史 API 路由
+ * @fileoverview 提案版本歷史 API 路由功能：- GET: 獲取提案的所有版本- POST: 創建新版本快照@author Claude Code@date 2025-10-02
+ * @module app/api/proposals/[id]/versions/route
+ * @description
+ * 提案版本歷史 API 路由功能：- GET: 獲取提案的所有版本- POST: 創建新版本快照@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - GET: 獲取提案的所有版本
- * - POST: 創建新版本快照
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

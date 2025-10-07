@@ -1,16 +1,11 @@
 /**
- * 知識庫版本比較組件
+ * @fileoverview 知識庫版本比較組件功能：- 並排顯示兩個版本的差異- 高亮顯示變更內容- 支持文字和結構化數據比較- 統計變更摘要- 支持文件內容差異比較作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
+ * @module components/knowledge/version/KnowledgeVersionComparison
+ * @description
+ * 知識庫版本比較組件功能：- 並排顯示兩個版本的差異- 高亮顯示變更內容- 支持文字和結構化數據比較- 統計變更摘要- 支持文件內容差異比較作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
  *
- * 功能：
- * - 並排顯示兩個版本的差異
- * - 高亮顯示變更內容
- * - 支持文字和結構化數據比較
- * - 統計變更摘要
- * - 支持文件內容差異比較
- *
- * 作者：Claude Code
- * 日期：2025-10-03
- * Sprint: 6 Week 12
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

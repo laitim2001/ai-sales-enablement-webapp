@@ -1,28 +1,11 @@
 /**
- * 範本測試 PDF 導出 API
+ * @fileoverview 範本測試 PDF 導出 API端點: POST /api/templates/export-pdf-test功能：- 不需要保存範本即可生成 PDF（用於創建頁面的實時預覽）- 接收範本內容和變數值- 生成 PDF 供下載請求體：```json{  "name": "測試提案",  "content": "# {{title}}\n\n客戶：{{customerName}}",  "variables": {    "title": "產品提案",    "customerName": "ABC公司"  }}```響應：PDF 文件流（application/pdf）@module app/api/templates/export-pdf-test
+ * @module app/api/templates/export-pdf-test/route
+ * @description
+ * 範本測試 PDF 導出 API端點: POST /api/templates/export-pdf-test功能：- 不需要保存範本即可生成 PDF（用於創建頁面的實時預覽）- 接收範本內容和變數值- 生成 PDF 供下載請求體：```json{  "name": "測試提案",  "content": "# {{title}}\n\n客戶：{{customerName}}",  "variables": {    "title": "產品提案",    "customerName": "ABC公司"  }}```響應：PDF 文件流（application/pdf）@module app/api/templates/export-pdf-test
  *
- * 端點: POST /api/templates/export-pdf-test
- *
- * 功能：
- * - 不需要保存範本即可生成 PDF（用於創建頁面的實時預覽）
- * - 接收範本內容和變數值
- * - 生成 PDF 供下載
- *
- * 請求體：
- * ```json
- * {
- *   "name": "測試提案",
- *   "content": "# {{title}}\n\n客戶：{{customerName}}",
- *   "variables": {
- *     "title": "產品提案",
- *     "customerName": "ABC公司"
- *   }
- * }
- * ```
- *
- * 響應：PDF 文件流（application/pdf）
- *
- * @module app/api/templates/export-pdf-test
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

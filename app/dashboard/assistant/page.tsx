@@ -1,15 +1,11 @@
 /**
- * AI助手頁面
+ * @fileoverview AI助手頁面功能：- 智能對話介面- 對話歷史管理- 快捷操作- 本地存儲對話@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
+ * @module app/dashboard/assistant/page
+ * @description
+ * AI助手頁面功能：- 智能對話介面- 對話歷史管理- 快捷操作- 本地存儲對話@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
  *
- * 功能：
- * - 智能對話介面
- * - 對話歷史管理
- * - 快捷操作
- * - 本地存儲對話
- *
- * @author Claude Code
- * @date 2025-10-05
- * @epic Sprint 7 - 會議準備與智能助手
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

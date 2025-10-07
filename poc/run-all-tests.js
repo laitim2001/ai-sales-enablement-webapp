@@ -1,11 +1,11 @@
 /**
- * 統一執行所有 POC 測試
- * 包含：Dynamics 365 (實際/模擬), pgvector, Azure OpenAI
+ * @fileoverview 統一執行所有 POC 測試包含：Dynamics 365 (實際/模擬), pgvector, Azure OpenAI使用方法：node run-all-tests.js           # 自動檢測環境模式node run-all-tests.js --mock    # 強制使用模擬模式node run-all-tests.js --real    # 強制使用真實 API
+ * @module poc/run-all-tests
+ * @description
+ * 統一執行所有 POC 測試包含：Dynamics 365 (實際/模擬), pgvector, Azure OpenAI使用方法：node run-all-tests.js           # 自動檢測環境模式node run-all-tests.js --mock    # 強制使用模擬模式node run-all-tests.js --real    # 強制使用真實 API
  *
- * 使用方法：
- * node run-all-tests.js           # 自動檢測環境模式
- * node run-all-tests.js --mock    # 強制使用模擬模式
- * node run-all-tests.js --real    # 強制使用真實 API
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 require('dotenv').config({ path: '../.env.local' });

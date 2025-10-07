@@ -1,4 +1,12 @@
-/** @type {import('next').NextConfig} */
+/**
+ * @fileoverview @type {import('next').NextConfig}
+ * @module next.config.optimized
+ * @description
+ * @type {import('next').NextConfig}
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['pg', '@azure/openai'],

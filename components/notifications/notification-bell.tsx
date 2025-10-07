@@ -1,17 +1,11 @@
 /**
- * 通知鈴鐺組件 (Notification Bell Component)
- *
- * 顯示在導航欄的通知圖標，包含未讀計數徽章和下拉預覽
- *
- * 功能：
- * 1. 顯示未讀通知數量徽章
- * 2. 點擊展開通知預覽下拉框
- * 3. 顯示最近的通知（前5條）
- * 4. 支援快速標記已讀和跳轉
- * 5. 實時更新未讀數（可選）
- *
+ * @fileoverview 通知鈴鐺組件 (Notification Bell Component)顯示在導航欄的通知圖標，包含未讀計數徽章和下拉預覽功能：1. 顯示未讀通知數量徽章2. 點擊展開通知預覽下拉框3. 顯示最近的通知（前5條）4. 支援快速標記已讀和跳轉5. 實時更新未讀數（可選）@module components/notifications/notification-bell@since Sprint 5 Week 10 Day 2
  * @module components/notifications/notification-bell
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知鈴鐺組件 (Notification Bell Component)顯示在導航欄的通知圖標，包含未讀計數徽章和下拉預覽功能：1. 顯示未讀通知數量徽章2. 點擊展開通知預覽下拉框3. 顯示最近的通知（前5條）4. 支援快速標記已讀和跳轉5. 實時更新未讀數（可選）@module components/notifications/notification-bell@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

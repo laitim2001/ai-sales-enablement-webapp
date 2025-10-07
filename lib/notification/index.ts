@@ -1,15 +1,11 @@
 /**
- * 通知系統統一導出 (Notification System)
+ * @fileoverview 通知系統統一導出 (Notification System)Sprint 5 Week 10 - 通知系統基礎實現模組架構：- NotificationEngine: 核心通知引擎- InAppNotificationService: 站內通知服務- EmailNotificationService: 郵件通知服務@module lib/notification@since Sprint 5 Week 10
+ * @module lib/notification/index
+ * @description
+ * 通知系統統一導出 (Notification System)Sprint 5 Week 10 - 通知系統基礎實現模組架構：- NotificationEngine: 核心通知引擎- InAppNotificationService: 站內通知服務- EmailNotificationService: 郵件通知服務@module lib/notification@since Sprint 5 Week 10
  *
- * Sprint 5 Week 10 - 通知系統基礎實現
- *
- * 模組架構：
- * - NotificationEngine: 核心通知引擎
- * - InAppNotificationService: 站內通知服務
- * - EmailNotificationService: 郵件通知服務
- *
- * @module lib/notification
- * @since Sprint 5 Week 10
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 // 核心引擎

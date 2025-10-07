@@ -1,5 +1,7 @@
 /**
- * 備份調度器 - 統一管理資料庫和文件系統備份
+ * @fileoverview 備份調度器 - 統一管理資料庫和文件系統備份
+ * @module scripts/backup/backup-scheduler
+ * @description 備份調度器 - 統一管理資料庫和文件系統備份
  *
  * 功能：
  * - 統一執行資料庫和文件系統備份

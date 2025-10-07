@@ -1,33 +1,11 @@
 /**
- * 權限檢查中間件
+ * @fileoverview 權限檢查中間件功能：- API 端點權限驗證- 基於角色的訪問控制（RBAC）- 資源擁有權驗證- 自動權限拒絕響應使用方式：```typescript// API Route 中使用export async function GET(request: NextRequest) {  const authResult = await requirePermission(request, {    resource: Resource.CUSTOMERS,    action: Action.READ,  });  if (!authResult.authorized) {    return authResult.response;  }  // 繼續處理請求  const user = authResult.user;}```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
+ * @module lib/security/permission-middleware
+ * @description
+ * 權限檢查中間件功能：- API 端點權限驗證- 基於角色的訪問控制（RBAC）- 資源擁有權驗證- 自動權限拒絕響應使用方式：```typescript// API Route 中使用export async function GET(request: NextRequest) {  const authResult = await requirePermission(request, {    resource: Resource.CUSTOMERS,    action: Action.READ,  });  if (!authResult.authorized) {    return authResult.response;  }  // 繼續處理請求  const user = authResult.user;}```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
  *
- * 功能：
- * - API 端點權限驗證
- * - 基於角色的訪問控制（RBAC）
- * - 資源擁有權驗證
- * - 自動權限拒絕響應
- *
- * 使用方式：
- * ```typescript
- * // API Route 中使用
- * export async function GET(request: NextRequest) {
- *   const authResult = await requirePermission(request, {
- *     resource: Resource.CUSTOMERS,
- *     action: Action.READ,
- *   });
- *
- *   if (!authResult.authorized) {
- *     return authResult.response;
- *   }
- *
- *   // 繼續處理請求
- *   const user = authResult.user;
- * }
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 3 - 安全加固與合規
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

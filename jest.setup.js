@@ -1,3 +1,13 @@
+/**
+ * @fileoverview jest.setup - 工具模組
+ * @module jest.setup
+ * @description
+ * 提供輔助功能的工具函數
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 import '@testing-library/jest-dom'
 
 // Mock environment variables for testing

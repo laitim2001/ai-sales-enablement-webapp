@@ -1,40 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - API版本控制中間件 (lib/middleware/api-versioning.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - API版本控制中間件 (lib/middleware/api-versioning.ts)================================================================【檔案功能】實現API版本控制策略，支援多種版本識別方式和自動版本協商。確保API的向後兼容性和平滑版本過渡。【主要職責】• 版本識別 - 從URL、Header、Query參數中提取版本信息• 版本協商 - 根據客戶端請求選擇最合適的API版本• 版本路由 - 將請求路由到對應版本的處理器• 版本驗證 - 驗證請求的版本是否受支援• 版本淘汰 - 處理已廢棄版本的警告和限制【技術實現】• Multiple Strategies - 支援URL路徑、Header、Query參數三種策略• Content Negotiation - 基於Accept header的版本協商• Deprecation Warning - 自動添加棄用警告頭部• Version Fallback - 智能版本降級機制• Type Safety - TypeScript類型保護【使用場景】• API Gateway - 統一的版本控制入口• 版本遷移 - 平滑過渡到新版本API• 向後兼容 - 支援舊版本客戶端• 版本淘汰 - 逐步淘汰舊版本• API文檔 - 自動生成版本信息【相關檔案】• middleware.ts - 使用此中間件處理版本控制• lib/middleware/route-matcher.ts - 路由匹配時的版本識別• lib/middleware/routing-config.ts - 版本特定的路由配置作者：Claude Code創建時間：2025-09-30
+ * @module lib/middleware/api-versioning
+ * @description
+ * ================================================================AI銷售賦能平台 - API版本控制中間件 (lib/middleware/api-versioning.ts)================================================================【檔案功能】實現API版本控制策略，支援多種版本識別方式和自動版本協商。確保API的向後兼容性和平滑版本過渡。【主要職責】• 版本識別 - 從URL、Header、Query參數中提取版本信息• 版本協商 - 根據客戶端請求選擇最合適的API版本• 版本路由 - 將請求路由到對應版本的處理器• 版本驗證 - 驗證請求的版本是否受支援• 版本淘汰 - 處理已廢棄版本的警告和限制【技術實現】• Multiple Strategies - 支援URL路徑、Header、Query參數三種策略• Content Negotiation - 基於Accept header的版本協商• Deprecation Warning - 自動添加棄用警告頭部• Version Fallback - 智能版本降級機制• Type Safety - TypeScript類型保護【使用場景】• API Gateway - 統一的版本控制入口• 版本遷移 - 平滑過渡到新版本API• 向後兼容 - 支援舊版本客戶端• 版本淘汰 - 逐步淘汰舊版本• API文檔 - 自動生成版本信息【相關檔案】• middleware.ts - 使用此中間件處理版本控制• lib/middleware/route-matcher.ts - 路由匹配時的版本識別• lib/middleware/routing-config.ts - 版本特定的路由配置作者：Claude Code創建時間：2025-09-30
  *
- * 【檔案功能】
- * 實現API版本控制策略，支援多種版本識別方式和自動版本協商。
- * 確保API的向後兼容性和平滑版本過渡。
- *
- * 【主要職責】
- * • 版本識別 - 從URL、Header、Query參數中提取版本信息
- * • 版本協商 - 根據客戶端請求選擇最合適的API版本
- * • 版本路由 - 將請求路由到對應版本的處理器
- * • 版本驗證 - 驗證請求的版本是否受支援
- * • 版本淘汰 - 處理已廢棄版本的警告和限制
- *
- * 【技術實現】
- * • Multiple Strategies - 支援URL路徑、Header、Query參數三種策略
- * • Content Negotiation - 基於Accept header的版本協商
- * • Deprecation Warning - 自動添加棄用警告頭部
- * • Version Fallback - 智能版本降級機制
- * • Type Safety - TypeScript類型保護
- *
- * 【使用場景】
- * • API Gateway - 統一的版本控制入口
- * • 版本遷移 - 平滑過渡到新版本API
- * • 向後兼容 - 支援舊版本客戶端
- * • 版本淘汰 - 逐步淘汰舊版本
- * • API文檔 - 自動生成版本信息
- *
- * 【相關檔案】
- * • middleware.ts - 使用此中間件處理版本控制
- * • lib/middleware/route-matcher.ts - 路由匹配時的版本識別
- * • lib/middleware/routing-config.ts - 版本特定的路由配置
- *
- * 作者：Claude Code
- * 創建時間：2025-09-30
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

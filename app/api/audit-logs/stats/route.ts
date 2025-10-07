@@ -1,18 +1,11 @@
 /**
- * 審計日誌統計 API
+ * @fileoverview 審計日誌統計 APIGET /api/audit-logs/stats - 獲取審計日誌統計（需要ADMIN權限）Query Parameters:- startDate: 開始日期（ISO 8601格式）- endDate: 結束日期（ISO 8601格式）- userId: 用戶ID過濾- action: 操作類型過濾- resource: 資源類型過濾@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
+ * @module app/api/audit-logs/stats/route
+ * @description
+ * 審計日誌統計 APIGET /api/audit-logs/stats - 獲取審計日誌統計（需要ADMIN權限）Query Parameters:- startDate: 開始日期（ISO 8601格式）- endDate: 結束日期（ISO 8601格式）- userId: 用戶ID過濾- action: 操作類型過濾- resource: 資源類型過濾@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
  *
- * GET /api/audit-logs/stats - 獲取審計日誌統計（需要ADMIN權限）
- *
- * Query Parameters:
- * - startDate: 開始日期（ISO 8601格式）
- * - endDate: 結束日期（ISO 8601格式）
- * - userId: 用戶ID過濾
- * - action: 操作類型過濾
- * - resource: 資源類型過濾
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 8 - 審計日誌系統實施
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

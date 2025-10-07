@@ -1,15 +1,11 @@
 /**
- * Proposal PDF Template Renderer
- *
- * 功能：將提案數據渲染為專業的 HTML，用於 PDF 生成
- *
- * 核心功能：
- * - 提案 HTML 模板生成
- * - 專業樣式設計
- * - Handlebars 內容整合
- * - 多語言支持（中文/英文）
- *
+ * @fileoverview Proposal PDF Template Renderer功能：將提案數據渲染為專業的 HTML，用於 PDF 生成核心功能：- 提案 HTML 模板生成- 專業樣式設計- Handlebars 內容整合- 多語言支持（中文/英文）@module lib/pdf/proposal-pdf-template
  * @module lib/pdf/proposal-pdf-template
+ * @description
+ * Proposal PDF Template Renderer功能：將提案數據渲染為專業的 HTML，用於 PDF 生成核心功能：- 提案 HTML 模板生成- 專業樣式設計- Handlebars 內容整合- 多語言支持（中文/英文）@module lib/pdf/proposal-pdf-template
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 export interface ProposalPDFData {

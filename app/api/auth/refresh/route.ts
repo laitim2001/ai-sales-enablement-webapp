@@ -1,36 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: Token 刷新 API路由
- * 檔案用途: MVP Phase 2 Sprint 1 - Refresh Token端點
- * 開發階段: Sprint 1 Week 1
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: Token 刷新 API路由檔案用途: MVP Phase 2 Sprint 1 - Refresh Token端點開發階段: Sprint 1 Week 1================================================================功能索引:1. refreshHandler() - Refresh token處理函數2. POST方法 - 使用refresh token獲取新的access token安全特色:- 自動刷新access token- 可選的refresh token輪換- 設備指紋驗證- IP地址記錄- Token撤銷檢查API規格:- 方法: POST- 路徑: /api/auth/refresh- Cookie: refresh-token (必須)- 請求體: { rotateRefreshToken?: boolean, deviceId?: string }- 回應: { accessToken: string, refreshToken?: string, expiresIn: number }使用場景:- Access token過期前自動刷新- 無縫的用戶體驗- 減少重新登入頻率更新記錄:- 2025-09-30: 初始版本，實現refresh token機制================================================================
+ * @module app/api/auth/refresh/route
+ * @description
+ * ================================================================檔案名稱: Token 刷新 API路由檔案用途: MVP Phase 2 Sprint 1 - Refresh Token端點開發階段: Sprint 1 Week 1================================================================功能索引:1. refreshHandler() - Refresh token處理函數2. POST方法 - 使用refresh token獲取新的access token安全特色:- 自動刷新access token- 可選的refresh token輪換- 設備指紋驗證- IP地址記錄- Token撤銷檢查API規格:- 方法: POST- 路徑: /api/auth/refresh- Cookie: refresh-token (必須)- 請求體: { rotateRefreshToken?: boolean, deviceId?: string }- 回應: { accessToken: string, refreshToken?: string, expiresIn: number }使用場景:- Access token過期前自動刷新- 無縫的用戶體驗- 減少重新登入頻率更新記錄:- 2025-09-30: 初始版本，實現refresh token機制================================================================
  *
- * 功能索引:
- * 1. refreshHandler() - Refresh token處理函數
- * 2. POST方法 - 使用refresh token獲取新的access token
- *
- * 安全特色:
- * - 自動刷新access token
- * - 可選的refresh token輪換
- * - 設備指紋驗證
- * - IP地址記錄
- * - Token撤銷檢查
- *
- * API規格:
- * - 方法: POST
- * - 路徑: /api/auth/refresh
- * - Cookie: refresh-token (必須)
- * - 請求體: { rotateRefreshToken?: boolean, deviceId?: string }
- * - 回應: { accessToken: string, refreshToken?: string, expiresIn: number }
- *
- * 使用場景:
- * - Access token過期前自動刷新
- * - 無縫的用戶體驗
- * - 減少重新登入頻率
- *
- * 更新記錄:
- * - 2025-09-30: 初始版本，實現refresh token機制
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

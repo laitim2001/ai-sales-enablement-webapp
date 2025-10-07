@@ -1,9 +1,11 @@
 /**
- * Dynamics 365 API 模擬測試 POC - 本地開發版本
- * 測試目標：
- * 1. 驗證模擬服務功能
- * 2. 測試模擬數據 CRUD 操作
- * 3. 驗證與真實 API 的相容性
+ * @fileoverview Dynamics 365 API 模擬測試 POC - 本地開發版本測試目標：1. 驗證模擬服務功能2. 測試模擬數據 CRUD 操作3. 驗證與真實 API 的相容性
+ * @module poc/dynamics-365-test-mock
+ * @description
+ * Dynamics 365 API 模擬測試 POC - 本地開發版本測試目標：1. 驗證模擬服務功能2. 測試模擬數據 CRUD 操作3. 驗證與真實 API 的相容性
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 require('dotenv').config();

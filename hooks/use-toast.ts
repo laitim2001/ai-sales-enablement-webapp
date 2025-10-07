@@ -1,6 +1,11 @@
 /**
- * Toast Hook - 簡單的Toast通知系統
- * Sprint 6 Week 11 Day 2 快速修復
+ * @fileoverview Toast Hook - 簡單的Toast通知系統Sprint 6 Week 11 Day 2 快速修復
+ * @module hooks/use-toast
+ * @description
+ * Toast Hook - 簡單的Toast通知系統Sprint 6 Week 11 Day 2 快速修復
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { useState, useCallback } from 'react'

@@ -1,21 +1,11 @@
 /**
- * Calendar Sync API路由
+ * @fileoverview Calendar Sync API路由📋 功能說明：- 增量同步日曆事件（Delta Query）- 完整同步日曆事件- 獲取同步狀態- 重置同步狀態🔗 路由：- POST /api/calendar/sync - 增量同步- POST /api/calendar/sync/full - 完整同步- GET /api/calendar/sync/status - 獲取同步狀態- DELETE /api/calendar/sync - 重置同步狀態作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ * @module app/api/calendar/sync/route
+ * @description
+ * Calendar Sync API路由📋 功能說明：- 增量同步日曆事件（Delta Query）- 完整同步日曆事件- 獲取同步狀態- 重置同步狀態🔗 路由：- POST /api/calendar/sync - 增量同步- POST /api/calendar/sync/full - 完整同步- GET /api/calendar/sync/status - 獲取同步狀態- DELETE /api/calendar/sync - 重置同步狀態作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
  *
- * 📋 功能說明：
- * - 增量同步日曆事件（Delta Query）
- * - 完整同步日曆事件
- * - 獲取同步狀態
- * - 重置同步狀態
- *
- * 🔗 路由：
- * - POST /api/calendar/sync - 增量同步
- * - POST /api/calendar/sync/full - 完整同步
- * - GET /api/calendar/sync/status - 獲取同步狀態
- * - DELETE /api/calendar/sync - 重置同步狀態
- *
- * 作者：Claude Code
- * 日期：2025-10-05
- * Sprint：Sprint 7 Phase 3
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

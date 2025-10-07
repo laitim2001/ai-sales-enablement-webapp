@@ -1,43 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: Azure AD SSO回調API路由
- * 檔案用途: AI銷售賦能平台的Azure AD認證回調處理端點
- * 開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: Azure AD SSO回調API路由檔案用途: AI銷售賦能平台的Azure AD認證回調處理端點開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強================================================================功能索引:1. GET方法 - 處理Azure AD認證回調認證流程:1. 接收Azure AD的授權碼和state參數2. 驗證state參數防止CSRF3. 用授權碼交換access token4. 獲取用戶信息並同步到本地資料庫5. 生成JWT tokens6. 設置cookies7. 重定向用戶到應用首頁API規格:- 方法: GET- 路徑: /api/auth/azure-ad/callback- Query參數: code (授權碼), state (CSRF防護)- 回應: 302重定向到應用首頁安全特性:- State參數驗證- Authorization code驗證- Token安全存儲- HttpOnly cookies錯誤處理:- 缺少授權碼- State驗證失敗- Token交換失敗- 用戶同步失敗更新記錄:- 2025-09-30: 初始版本，實現Azure AD SSO回調處理================================================================
+ * @module app/api/auth/azure-ad/callback/route
+ * @description
+ * ================================================================檔案名稱: Azure AD SSO回調API路由檔案用途: AI銷售賦能平台的Azure AD認證回調處理端點開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強================================================================功能索引:1. GET方法 - 處理Azure AD認證回調認證流程:1. 接收Azure AD的授權碼和state參數2. 驗證state參數防止CSRF3. 用授權碼交換access token4. 獲取用戶信息並同步到本地資料庫5. 生成JWT tokens6. 設置cookies7. 重定向用戶到應用首頁API規格:- 方法: GET- 路徑: /api/auth/azure-ad/callback- Query參數: code (授權碼), state (CSRF防護)- 回應: 302重定向到應用首頁安全特性:- State參數驗證- Authorization code驗證- Token安全存儲- HttpOnly cookies錯誤處理:- 缺少授權碼- State驗證失敗- Token交換失敗- 用戶同步失敗更新記錄:- 2025-09-30: 初始版本，實現Azure AD SSO回調處理================================================================
  *
- * 功能索引:
- * 1. GET方法 - 處理Azure AD認證回調
- *
- * 認證流程:
- * 1. 接收Azure AD的授權碼和state參數
- * 2. 驗證state參數防止CSRF
- * 3. 用授權碼交換access token
- * 4. 獲取用戶信息並同步到本地資料庫
- * 5. 生成JWT tokens
- * 6. 設置cookies
- * 7. 重定向用戶到應用首頁
- *
- * API規格:
- * - 方法: GET
- * - 路徑: /api/auth/azure-ad/callback
- * - Query參數: code (授權碼), state (CSRF防護)
- * - 回應: 302重定向到應用首頁
- *
- * 安全特性:
- * - State參數驗證
- * - Authorization code驗證
- * - Token安全存儲
- * - HttpOnly cookies
- *
- * 錯誤處理:
- * - 缺少授權碼
- * - State驗證失敗
- * - Token交換失敗
- * - 用戶同步失敗
- *
- * 更新記錄:
- * - 2025-09-30: 初始版本，實現Azure AD SSO回調處理
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

@@ -1,43 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: 用戶登入API路由（增強版）
- * 檔案用途: AI銷售賦能平台的用戶登入認證端點
- * 開發階段: MVP Phase 2 Sprint 1 - JWT驗證增強
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: 用戶登入API路由（增強版）檔案用途: AI銷售賦能平台的用戶登入認證端點開發階段: MVP Phase 2 Sprint 1 - JWT驗證增強================================================================功能索引:1. loginHandler() - 用戶登入處理函數2. POST方法 - 處理用戶登入請求安全特色（MVP Phase 2增強）:- Access Token + Refresh Token雙令牌機制- Access Token短期有效（15分鐘）- Refresh Token長期有效（30天）- 設備指紋追蹤- IP地址記錄- HTTP-Only Cookie: 設置安全的cookie存儲- 輸入驗證: 完整的Email和密碼格式驗證- 錯誤處理: 統一的錯誤處理機制- 安全配置: Production環境啟用HTTPS和Secure設定API規格:- 方法: POST- 路徑: /api/auth/login- 請求體: { email: string, password: string, deviceId?: string }- 回應: { user: User, accessToken: string, refreshToken: string, expiresIn: number }- Cookie: auth-token (access token), refresh-token (refresh token)注意事項:- 所有輸入都會進行清理和驗證- 密碼錯誤不會暴露具體原因（防止帳號探測）- 登入成功後會設置安全的認證cookie- Refresh token用於無縫刷新access token更新記錄:- Week 1: 初始版本，基礎登入功能- Week 2: 增加完整錯誤處理和安全配置- 2025-09-30: Sprint 1升級 - 新增refresh token機制================================================================
+ * @module app/api/auth/login/route
+ * @description
+ * ================================================================檔案名稱: 用戶登入API路由（增強版）檔案用途: AI銷售賦能平台的用戶登入認證端點開發階段: MVP Phase 2 Sprint 1 - JWT驗證增強================================================================功能索引:1. loginHandler() - 用戶登入處理函數2. POST方法 - 處理用戶登入請求安全特色（MVP Phase 2增強）:- Access Token + Refresh Token雙令牌機制- Access Token短期有效（15分鐘）- Refresh Token長期有效（30天）- 設備指紋追蹤- IP地址記錄- HTTP-Only Cookie: 設置安全的cookie存儲- 輸入驗證: 完整的Email和密碼格式驗證- 錯誤處理: 統一的錯誤處理機制- 安全配置: Production環境啟用HTTPS和Secure設定API規格:- 方法: POST- 路徑: /api/auth/login- 請求體: { email: string, password: string, deviceId?: string }- 回應: { user: User, accessToken: string, refreshToken: string, expiresIn: number }- Cookie: auth-token (access token), refresh-token (refresh token)注意事項:- 所有輸入都會進行清理和驗證- 密碼錯誤不會暴露具體原因（防止帳號探測）- 登入成功後會設置安全的認證cookie- Refresh token用於無縫刷新access token更新記錄:- Week 1: 初始版本，基礎登入功能- Week 2: 增加完整錯誤處理和安全配置- 2025-09-30: Sprint 1升級 - 新增refresh token機制================================================================
  *
- * 功能索引:
- * 1. loginHandler() - 用戶登入處理函數
- * 2. POST方法 - 處理用戶登入請求
- *
- * 安全特色（MVP Phase 2增強）:
- * - Access Token + Refresh Token雙令牌機制
- * - Access Token短期有效（15分鐘）
- * - Refresh Token長期有效（30天）
- * - 設備指紋追蹤
- * - IP地址記錄
- * - HTTP-Only Cookie: 設置安全的cookie存儲
- * - 輸入驗證: 完整的Email和密碼格式驗證
- * - 錯誤處理: 統一的錯誤處理機制
- * - 安全配置: Production環境啟用HTTPS和Secure設定
- *
- * API規格:
- * - 方法: POST
- * - 路徑: /api/auth/login
- * - 請求體: { email: string, password: string, deviceId?: string }
- * - 回應: { user: User, accessToken: string, refreshToken: string, expiresIn: number }
- * - Cookie: auth-token (access token), refresh-token (refresh token)
- *
- * 注意事項:
- * - 所有輸入都會進行清理和驗證
- * - 密碼錯誤不會暴露具體原因（防止帳號探測）
- * - 登入成功後會設置安全的認證cookie
- * - Refresh token用於無縫刷新access token
- *
- * 更新記錄:
- * - Week 1: 初始版本，基礎登入功能
- * - Week 2: 增加完整錯誤處理和安全配置
- * - 2025-09-30: Sprint 1升級 - 新增refresh token機制
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

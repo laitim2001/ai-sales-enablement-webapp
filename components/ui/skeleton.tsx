@@ -1,6 +1,11 @@
 /**
- * Skeleton Loading Component
- * Sprint 6 Week 11 Day 2 快速修復
+ * @fileoverview Skeleton Loading ComponentSprint 6 Week 11 Day 2 快速修復
+ * @module components/ui/skeleton
+ * @description
+ * Skeleton Loading ComponentSprint 6 Week 11 Day 2 快速修復
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { cn } from '@/lib/utils'

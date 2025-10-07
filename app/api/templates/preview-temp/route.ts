@@ -1,12 +1,11 @@
 /**
- * 臨時範本預覽 API
+ * @fileoverview 臨時範本預覽 APIPOST /api/templates/preview-temp - 預覽未保存的範本用於範本創建頁面在保存前預覽範本效果@author Claude Code@date 2025-10-02
+ * @module app/api/templates/preview-temp/route
+ * @description
+ * 臨時範本預覽 APIPOST /api/templates/preview-temp - 預覽未保存的範本用於範本創建頁面在保存前預覽範本效果@author Claude Code@date 2025-10-02
  *
- * POST /api/templates/preview-temp - 預覽未保存的範本
- *
- * 用於範本創建頁面在保存前預覽範本效果
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

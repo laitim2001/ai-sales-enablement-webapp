@@ -1,11 +1,11 @@
 /**
- * 審計日誌篩選組件
+ * @fileoverview 審計日誌篩選組件提供高級篩選功能：用戶、操作、資源、嚴重級別、時間範圍等@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @module components/audit/AuditLogFilters
+ * @description
+ * 審計日誌篩選組件提供高級篩選功能：用戶、操作、資源、嚴重級別、時間範圍等@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
  *
- * 提供高級篩選功能：用戶、操作、資源、嚴重級別、時間範圍等
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

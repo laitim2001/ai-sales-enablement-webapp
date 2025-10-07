@@ -1,27 +1,11 @@
 /**
- * HTTPS/TLS 強制中間件
+ * @fileoverview HTTPS/TLS 強制中間件功能：- 強制HTTPS連接- HTTP到HTTPS重定向- HSTS (HTTP Strict Transport Security) 頭部- 安全Cookie設置檢查- TLS版本檢測使用場景：- 生產環境強制加密傳輸- 防止降級攻擊- 確保敏感資料加密傳輸安全特性：- 自動HTTP→HTTPS重定向- HSTS預加載支持- 子域名HSTS保護- 開發環境豁免@author Claude Code@date 2025-10-05@epic Sprint 3 - 安全加固與合規
+ * @module lib/middleware/https-enforcement
+ * @description
+ * HTTPS/TLS 強制中間件功能：- 強制HTTPS連接- HTTP到HTTPS重定向- HSTS (HTTP Strict Transport Security) 頭部- 安全Cookie設置檢查- TLS版本檢測使用場景：- 生產環境強制加密傳輸- 防止降級攻擊- 確保敏感資料加密傳輸安全特性：- 自動HTTP→HTTPS重定向- HSTS預加載支持- 子域名HSTS保護- 開發環境豁免@author Claude Code@date 2025-10-05@epic Sprint 3 - 安全加固與合規
  *
- * 功能：
- * - 強制HTTPS連接
- * - HTTP到HTTPS重定向
- * - HSTS (HTTP Strict Transport Security) 頭部
- * - 安全Cookie設置檢查
- * - TLS版本檢測
- *
- * 使用場景：
- * - 生產環境強制加密傳輸
- * - 防止降級攻擊
- * - 確保敏感資料加密傳輸
- *
- * 安全特性：
- * - 自動HTTP→HTTPS重定向
- * - HSTS預加載支持
- * - 子域名HSTS保護
- * - 開發環境豁免
- *
- * @author Claude Code
- * @date 2025-10-05
- * @epic Sprint 3 - 安全加固與合規
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

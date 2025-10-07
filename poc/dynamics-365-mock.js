@@ -1,12 +1,11 @@
 /**
- * Dynamics 365 模擬服務 - 本地開發環境使用
+ * @fileoverview Dynamics 365 模擬服務 - 本地開發環境使用功能：1. 模擬所有 D365 CRM API 端點2. 使用本地 JSON 檔案作為數據源3. 支援完整的 CRUD 操作4. 模擬認證流程（自動通過）5. 支援 OData 查詢語法
+ * @module poc/dynamics-365-mock
+ * @description
+ * Dynamics 365 模擬服務 - 本地開發環境使用功能：1. 模擬所有 D365 CRM API 端點2. 使用本地 JSON 檔案作為數據源3. 支援完整的 CRUD 操作4. 模擬認證流程（自動通過）5. 支援 OData 查詢語法
  *
- * 功能：
- * 1. 模擬所有 D365 CRM API 端點
- * 2. 使用本地 JSON 檔案作為數據源
- * 3. 支援完整的 CRUD 操作
- * 4. 模擬認證流程（自動通過）
- * 5. 支援 OData 查詢語法
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const fs = require('fs').promises;

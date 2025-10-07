@@ -1,37 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - CORS中間件 (lib/middleware/cors.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - CORS中間件 (lib/middleware/cors.ts)================================================================【檔案功能】實現跨域資源共享(CORS)策略，支援動態配置和預檢請求處理。提供靈活的CORS控制，適應不同環境和端點的需求。【主要職責】• CORS頭部設置 - 動態配置Access-Control-*頭部• 預檢請求處理 - OPTIONS請求的高效處理• 來源驗證 - 白名單機制確保安全性• 憑證支持 - Cookie和認證頭部的跨域傳輸• 方法控制 - 限制允許的HTTP方法【技術實現】• Dynamic Origin - 根據請求動態設置允許的來源• Preflight Cache - 預檢結果緩存減少請求• Wildcard Support - 支援萬用字符和正則匹配• Environment Aware - 根據環境自動調整策略• Edge Compatible - 支援Edge Runtime【使用場景】• API Gateway - 統一的CORS策略管理• 開發環境 - 寬鬆的CORS設置便於調試• 生產環境 - 嚴格的白名單控制• SPA應用 - 支援前後端分離架構• 微服務 - 多域名服務間的安全通信【相關檔案】• middleware.ts - 使用CORS中間件處理跨域請求• lib/middleware/route-matcher.ts - 路由特定CORS配置• docs/api-gateway-architecture.md - CORS安全策略文檔
+ * @module lib/middleware/cors
+ * @description
+ * ================================================================AI銷售賦能平台 - CORS中間件 (lib/middleware/cors.ts)================================================================【檔案功能】實現跨域資源共享(CORS)策略，支援動態配置和預檢請求處理。提供靈活的CORS控制，適應不同環境和端點的需求。【主要職責】• CORS頭部設置 - 動態配置Access-Control-*頭部• 預檢請求處理 - OPTIONS請求的高效處理• 來源驗證 - 白名單機制確保安全性• 憑證支持 - Cookie和認證頭部的跨域傳輸• 方法控制 - 限制允許的HTTP方法【技術實現】• Dynamic Origin - 根據請求動態設置允許的來源• Preflight Cache - 預檢結果緩存減少請求• Wildcard Support - 支援萬用字符和正則匹配• Environment Aware - 根據環境自動調整策略• Edge Compatible - 支援Edge Runtime【使用場景】• API Gateway - 統一的CORS策略管理• 開發環境 - 寬鬆的CORS設置便於調試• 生產環境 - 嚴格的白名單控制• SPA應用 - 支援前後端分離架構• 微服務 - 多域名服務間的安全通信【相關檔案】• middleware.ts - 使用CORS中間件處理跨域請求• lib/middleware/route-matcher.ts - 路由特定CORS配置• docs/api-gateway-architecture.md - CORS安全策略文檔
  *
- * 【檔案功能】
- * 實現跨域資源共享(CORS)策略，支援動態配置和預檢請求處理。
- * 提供靈活的CORS控制，適應不同環境和端點的需求。
- *
- * 【主要職責】
- * • CORS頭部設置 - 動態配置Access-Control-*頭部
- * • 預檢請求處理 - OPTIONS請求的高效處理
- * • 來源驗證 - 白名單機制確保安全性
- * • 憑證支持 - Cookie和認證頭部的跨域傳輸
- * • 方法控制 - 限制允許的HTTP方法
- *
- * 【技術實現】
- * • Dynamic Origin - 根據請求動態設置允許的來源
- * • Preflight Cache - 預檢結果緩存減少請求
- * • Wildcard Support - 支援萬用字符和正則匹配
- * • Environment Aware - 根據環境自動調整策略
- * • Edge Compatible - 支援Edge Runtime
- *
- * 【使用場景】
- * • API Gateway - 統一的CORS策略管理
- * • 開發環境 - 寬鬆的CORS設置便於調試
- * • 生產環境 - 嚴格的白名單控制
- * • SPA應用 - 支援前後端分離架構
- * • 微服務 - 多域名服務間的安全通信
- *
- * 【相關檔案】
- * • middleware.ts - 使用CORS中間件處理跨域請求
- * • lib/middleware/route-matcher.ts - 路由特定CORS配置
- * • docs/api-gateway-architecture.md - CORS安全策略文檔
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

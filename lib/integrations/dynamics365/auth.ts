@@ -1,14 +1,11 @@
 /**
- * Dynamics 365 OAuth 2.0 認證管理器
+ * @fileoverview Dynamics 365 OAuth 2.0 認證管理器功能：- Microsoft Graph API 認證流程- Dynamics 365 Web API 存取權限管理- Access Token 和 Refresh Token 自動管理- 多租戶支援和錯誤處理作者：Claude Code創建時間：2025-09-28
+ * @module lib/integrations/dynamics365/auth
+ * @description
+ * Dynamics 365 OAuth 2.0 認證管理器功能：- Microsoft Graph API 認證流程- Dynamics 365 Web API 存取權限管理- Access Token 和 Refresh Token 自動管理- 多租戶支援和錯誤處理作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - Microsoft Graph API 認證流程
- * - Dynamics 365 Web API 存取權限管理
- * - Access Token 和 Refresh Token 自動管理
- * - 多租戶支援和錯誤處理
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { ConfidentialClientApplication, AuthenticationResult } from '@azure/msal-node';

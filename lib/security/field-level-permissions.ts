@@ -1,20 +1,11 @@
 /**
- * 欄位級別權限控制服務 (Field-Level Permissions)
+ * @fileoverview 欄位級別權限控制服務 (Field-Level Permissions)功能：- 控制不同角色對資源敏感欄位的訪問- 自動過濾API響應中的敏感欄位- 支持單個對象和數組批量過濾- 提供欄位訪問查詢功能使用場景：- SALES_REP 不能查看客戶的 revenue (營收) 欄位- VIEWER 不能查看提案的 cost (成本) 和 margin (利潤率) 欄位- ADMIN 可以查看所有欄位@author Claude Code@date 2025-10-07@epic Sprint 3 Week 9 - 細粒度權限控制擴展
+ * @module lib/security/field-level-permissions
+ * @description
+ * 欄位級別權限控制服務 (Field-Level Permissions)功能：- 控制不同角色對資源敏感欄位的訪問- 自動過濾API響應中的敏感欄位- 支持單個對象和數組批量過濾- 提供欄位訪問查詢功能使用場景：- SALES_REP 不能查看客戶的 revenue (營收) 欄位- VIEWER 不能查看提案的 cost (成本) 和 margin (利潤率) 欄位- ADMIN 可以查看所有欄位@author Claude Code@date 2025-10-07@epic Sprint 3 Week 9 - 細粒度權限控制擴展
  *
- * 功能：
- * - 控制不同角色對資源敏感欄位的訪問
- * - 自動過濾API響應中的敏感欄位
- * - 支持單個對象和數組批量過濾
- * - 提供欄位訪問查詢功能
- *
- * 使用場景：
- * - SALES_REP 不能查看客戶的 revenue (營收) 欄位
- * - VIEWER 不能查看提案的 cost (成本) 和 margin (利潤率) 欄位
- * - ADMIN 可以查看所有欄位
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 9 - 細粒度權限控制擴展
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { Resource, UserRole } from './rbac';

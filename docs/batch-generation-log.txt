@@ -1,0 +1,2722 @@
+🚀 AI代碼註釋批量生成開始...
+
+📋 讀取文件清單...
+✅ 找到399個文件需要處理
+
+
+================================================================================
+🎯 處理critical優先級 - 43個文件，9個批次
+📦 批次大小: 5, 批次延遲: 5000ms
+================================================================================
+
+
+📦 批次 1/9 (5個文件):
+   lib\ai\azure-openai-service.ts
+   lib\ai\chat.ts
+   lib\ai\embeddings.ts
+   lib\ai\enhanced-embeddings.ts
+   lib\ai\index.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\azure-openai-service.ts
+🔍 分析文件: lib\ai\azure-openai-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\chat.ts
+🔍 分析文件: lib\ai\chat.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\embeddings.ts
+🔍 分析文件: lib\ai\embeddings.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\enhanced-embeddings.ts
+🔍 分析文件: lib\ai\enhanced-embeddings.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\index.ts
+🔍 分析文件: lib\ai\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次1完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 2/9 (5個文件):
+   lib\ai\openai.ts
+   lib\ai\proposal-generation-service.ts
+   lib\ai\types.ts
+   lib\middleware\api-versioning.ts
+   lib\middleware\cors.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\openai.ts
+🔍 分析文件: lib\ai\openai.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\proposal-generation-service.ts
+🔍 分析文件: lib\ai\proposal-generation-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\ai\types.ts
+🔍 分析文件: lib\ai\types.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\api-versioning.ts
+🔍 分析文件: lib\middleware\api-versioning.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\cors.ts
+🔍 分析文件: lib\middleware\cors.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次2完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 3/9 (5個文件):
+   lib\middleware\https-enforcement.ts
+   lib\middleware\rate-limiter.ts
+   lib\middleware\request-id.ts
+   lib\middleware\request-transformer.ts
+   lib\middleware\request-validator.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\https-enforcement.ts
+🔍 分析文件: lib\middleware\https-enforcement.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\rate-limiter.ts
+🔍 分析文件: lib\middleware\rate-limiter.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\request-id.ts
+🔍 分析文件: lib\middleware\request-id.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\request-transformer.ts
+🔍 分析文件: lib\middleware\request-transformer.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\request-validator.ts
+🔍 分析文件: lib\middleware\request-validator.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次3完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 4/9 (5個文件):
+   lib\middleware\response-cache.ts
+   lib\middleware\response-transformer.ts
+   lib\middleware\route-matcher.ts
+   lib\middleware\routing-config.ts
+   lib\middleware\security-headers.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\response-cache.ts
+🔍 分析文件: lib\middleware\response-cache.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\response-transformer.ts
+🔍 分析文件: lib\middleware\response-transformer.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\route-matcher.ts
+🔍 分析文件: lib\middleware\route-matcher.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\routing-config.ts
+🔍 分析文件: lib\middleware\routing-config.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware\security-headers.ts
+🔍 分析文件: lib\middleware\security-headers.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次4完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 5/9 (5個文件):
+   lib\middleware.ts
+   lib\notification\email-service.ts
+   lib\notification\engine.ts
+   lib\notification\in-app-service.ts
+   lib\notification\index.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\middleware.ts
+🔍 分析文件: lib\middleware.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\notification\email-service.ts
+🔍 分析文件: lib\notification\email-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\notification\engine.ts
+🔍 分析文件: lib\notification\engine.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\notification\in-app-service.ts
+🔍 分析文件: lib\notification\in-app-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\notification\index.ts
+🔍 分析文件: lib\notification\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次5完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 6/9 (5個文件):
+   lib\security\action-restrictions.ts
+   lib\security\audit-log-prisma.ts
+   lib\security\audit-log.ts
+   lib\security\azure-key-vault.ts
+   lib\security\backup.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\security\action-restrictions.ts
+🔍 分析文件: lib\security\action-restrictions.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\security\audit-log-prisma.ts
+🔍 分析文件: lib\security\audit-log-prisma.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\security\audit-log.ts
+🔍 分析文件: lib\security\audit-log.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\security\azure-key-vault.ts
+🔍 分析文件: lib\security\azure-key-vault.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\security\backup.ts
+🔍 分析文件: lib\security\backup.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次6完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 7/9 (5個文件):
+   lib\security\field-level-permissions.ts
+   lib\security\fine-grained-permissions.ts
+   lib\security\gdpr.ts
+   lib\security\index.ts
+   lib\security\permission-middleware.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\security\field-level-permissions.ts
+🔍 分析文件: lib\security\field-level-permissions.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\security\fine-grained-permissions.ts
+🔍 分析文件: lib\security\fine-grained-permissions.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\security\gdpr.ts
+🔍 分析文件: lib\security\gdpr.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\security\index.ts
+🔍 分析文件: lib\security\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\security\permission-middleware.ts
+🔍 分析文件: lib\security\permission-middleware.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次7完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 8/9 (5個文件):
+   lib\security\rbac.ts
+   lib\security\resource-conditions.ts
+   lib\security\sensitive-fields-config.ts
+   lib\workflow\approval-manager.ts
+   lib\workflow\comment-system.ts
+
+
+[1/5] 處理: C:\ai-sales-enablement-webapp\lib\security\rbac.ts
+🔍 分析文件: lib\security\rbac.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/5] 處理: C:\ai-sales-enablement-webapp\lib\security\resource-conditions.ts
+🔍 分析文件: lib\security\resource-conditions.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/5] 處理: C:\ai-sales-enablement-webapp\lib\security\sensitive-fields-config.ts
+🔍 分析文件: lib\security\sensitive-fields-config.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/5] 處理: C:\ai-sales-enablement-webapp\lib\workflow\approval-manager.ts
+🔍 分析文件: lib\workflow\approval-manager.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/5] 處理: C:\ai-sales-enablement-webapp\lib\workflow\comment-system.ts
+🔍 分析文件: lib\workflow\comment-system.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次8完成: 5成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待5000ms後處理下一批...
+
+📦 批次 9/9 (3個文件):
+   lib\workflow\engine.ts
+   lib\workflow\index.ts
+   lib\workflow\version-control.ts
+
+
+[1/3] 處理: C:\ai-sales-enablement-webapp\lib\workflow\engine.ts
+🔍 分析文件: lib\workflow\engine.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/3] 處理: C:\ai-sales-enablement-webapp\lib\workflow\index.ts
+🔍 分析文件: lib\workflow\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/3] 處理: C:\ai-sales-enablement-webapp\lib\workflow\version-control.ts
+🔍 分析文件: lib\workflow\version-control.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次9完成: 3成功, 0跳過, 0失敗
+   耗時: 0秒
+
+================================================================================
+🎯 處理high優先級 - 69個文件，7個批次
+📦 批次大小: 10, 批次延遲: 3000ms
+================================================================================
+
+
+📦 批次 1/7 (10個文件):
+   components\audit\AuditLogExport.tsx
+   components\audit\AuditLogFilters.tsx
+   components\audit\AuditLogList.tsx
+   components\audit\AuditLogStats.tsx
+   components\audit\index.ts
+   components\dashboard\ai-insights.tsx
+   components\dashboard\dashboard-stats.tsx
+   components\dashboard\quick-actions.tsx
+   components\dashboard\recent-activity.tsx
+   components\dashboard\sales-chart.tsx
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\components\audit\AuditLogExport.tsx
+🔍 分析文件: components\audit\AuditLogExport.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\components\audit\AuditLogFilters.tsx
+🔍 分析文件: components\audit\AuditLogFilters.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\components\audit\AuditLogList.tsx
+🔍 分析文件: components\audit\AuditLogList.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\components\audit\AuditLogStats.tsx
+🔍 分析文件: components\audit\AuditLogStats.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\components\audit\index.ts
+🔍 分析文件: components\audit\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\components\dashboard\ai-insights.tsx
+🔍 分析文件: components\dashboard\ai-insights.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\components\dashboard\dashboard-stats.tsx
+🔍 分析文件: components\dashboard\dashboard-stats.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\components\dashboard\quick-actions.tsx
+🔍 分析文件: components\dashboard\quick-actions.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\components\dashboard\recent-activity.tsx
+🔍 分析文件: components\dashboard\recent-activity.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\components\dashboard\sales-chart.tsx
+🔍 分析文件: components\dashboard\sales-chart.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次1完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待3000ms後處理下一批...
+
+📦 批次 2/7 (10個文件):
+   components\dashboard\top-customers.tsx
+   components\knowledge\advanced-editor-toolbar.tsx
+   components\knowledge\advanced-search-builder.tsx
+   components\knowledge\analytics\BarChart.tsx
+   components\knowledge\analytics\DocumentList.tsx
+   components\knowledge\analytics\index.ts
+   components\knowledge\analytics\PieChart.tsx
+   components\knowledge\analytics\StatsCard.tsx
+   components\knowledge\breadcrumb-navigation.tsx
+   components\knowledge\bulk-upload.tsx
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\components\dashboard\top-customers.tsx
+🔍 分析文件: components\dashboard\top-customers.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\advanced-editor-toolbar.tsx
+🔍 分析文件: components\knowledge\advanced-editor-toolbar.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\advanced-search-builder.tsx
+🔍 分析文件: components\knowledge\advanced-search-builder.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\analytics\BarChart.tsx
+🔍 分析文件: components\knowledge\analytics\BarChart.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\analytics\DocumentList.tsx
+🔍 分析文件: components\knowledge\analytics\DocumentList.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\analytics\index.ts
+🔍 分析文件: components\knowledge\analytics\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\analytics\PieChart.tsx
+🔍 分析文件: components\knowledge\analytics\PieChart.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\analytics\StatsCard.tsx
+🔍 分析文件: components\knowledge\analytics\StatsCard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\breadcrumb-navigation.tsx
+🔍 分析文件: components\knowledge\breadcrumb-navigation.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\bulk-upload.tsx
+🔍 分析文件: components\knowledge\bulk-upload.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次2完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待3000ms後處理下一批...
+
+📦 批次 3/7 (10個文件):
+   components\knowledge\document-preview.tsx
+   components\knowledge\enhanced-knowledge-editor.tsx
+   components\knowledge\enhanced-knowledge-search.tsx
+   components\knowledge\folder-selector.tsx
+   components\knowledge\knowledge-base-filters.tsx
+   components\knowledge\knowledge-base-list-optimized.tsx
+   components\knowledge\knowledge-base-list.tsx
+   components\knowledge\knowledge-base-upload.tsx
+   components\knowledge\knowledge-create-form.tsx
+   components\knowledge\knowledge-document-edit-with-version.tsx
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\document-preview.tsx
+🔍 分析文件: components\knowledge\document-preview.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\enhanced-knowledge-editor.tsx
+🔍 分析文件: components\knowledge\enhanced-knowledge-editor.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\enhanced-knowledge-search.tsx
+🔍 分析文件: components\knowledge\enhanced-knowledge-search.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\folder-selector.tsx
+🔍 分析文件: components\knowledge\folder-selector.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-base-filters.tsx
+🔍 分析文件: components\knowledge\knowledge-base-filters.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-base-list-optimized.tsx
+🔍 分析文件: components\knowledge\knowledge-base-list-optimized.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-base-list.tsx
+🔍 分析文件: components\knowledge\knowledge-base-list.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-base-upload.tsx
+🔍 分析文件: components\knowledge\knowledge-base-upload.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-create-form.tsx
+🔍 分析文件: components\knowledge\knowledge-create-form.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-document-edit-with-version.tsx
+🔍 分析文件: components\knowledge\knowledge-document-edit-with-version.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次3完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待3000ms後處理下一批...
+
+📦 批次 4/7 (10個文件):
+   components\knowledge\knowledge-document-edit.tsx
+   components\knowledge\knowledge-document-view.tsx
+   components\knowledge\knowledge-folder-tree.tsx
+   components\knowledge\knowledge-management-dashboard.tsx
+   components\knowledge\knowledge-recommendation-widget.tsx
+   components\knowledge\knowledge-review-workflow.tsx
+   components\knowledge\knowledge-search.tsx
+   components\knowledge\quick-jump-search.tsx
+   components\knowledge\rich-text-editor.tsx
+   components\knowledge\search-analytics-dashboard.tsx
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-document-edit.tsx
+🔍 分析文件: components\knowledge\knowledge-document-edit.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-document-view.tsx
+🔍 分析文件: components\knowledge\knowledge-document-view.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-folder-tree.tsx
+🔍 分析文件: components\knowledge\knowledge-folder-tree.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-management-dashboard.tsx
+🔍 分析文件: components\knowledge\knowledge-management-dashboard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-recommendation-widget.tsx
+🔍 分析文件: components\knowledge\knowledge-recommendation-widget.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-review-workflow.tsx
+🔍 分析文件: components\knowledge\knowledge-review-workflow.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\knowledge-search.tsx
+🔍 分析文件: components\knowledge\knowledge-search.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\quick-jump-search.tsx
+🔍 分析文件: components\knowledge\quick-jump-search.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\rich-text-editor.tsx
+🔍 分析文件: components\knowledge\rich-text-editor.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\search-analytics-dashboard.tsx
+🔍 分析文件: components\knowledge\search-analytics-dashboard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次4完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待3000ms後處理下一批...
+
+📦 批次 5/7 (10個文件):
+   components\knowledge\search-results-optimizer.tsx
+   components\knowledge\search-suggestions.tsx
+   components\knowledge\version\index.ts
+   components\knowledge\version\KnowledgeVersionComparison.tsx
+   components\knowledge\version\KnowledgeVersionHistory.tsx
+   components\knowledge\version\KnowledgeVersionRestore.tsx
+   components\ui\alert-dialog.tsx
+   components\ui\alert.tsx
+   components\ui\avatar.tsx
+   components\ui\badge.tsx
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\search-results-optimizer.tsx
+🔍 分析文件: components\knowledge\search-results-optimizer.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\search-suggestions.tsx
+🔍 分析文件: components\knowledge\search-suggestions.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\version\index.ts
+🔍 分析文件: components\knowledge\version\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\version\KnowledgeVersionComparison.tsx
+🔍 分析文件: components\knowledge\version\KnowledgeVersionComparison.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\version\KnowledgeVersionHistory.tsx
+🔍 分析文件: components\knowledge\version\KnowledgeVersionHistory.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\components\knowledge\version\KnowledgeVersionRestore.tsx
+🔍 分析文件: components\knowledge\version\KnowledgeVersionRestore.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\components\ui\alert-dialog.tsx
+🔍 分析文件: components\ui\alert-dialog.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\components\ui\alert.tsx
+🔍 分析文件: components\ui\alert.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\components\ui\avatar.tsx
+🔍 分析文件: components\ui\avatar.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\components\ui\badge.tsx
+🔍 分析文件: components\ui\badge.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次5完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待3000ms後處理下一批...
+
+📦 批次 6/7 (10個文件):
+   components\ui\card.tsx
+   components\ui\checkbox.tsx
+   components\ui\command.tsx
+   components\ui\dialog.tsx
+   components\ui\dropdown-menu.tsx
+   components\ui\error-display.tsx
+   components\ui\input.tsx
+   components\ui\label.tsx
+   components\ui\popover.tsx
+   components\ui\progress.tsx
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\components\ui\card.tsx
+🔍 分析文件: components\ui\card.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\components\ui\checkbox.tsx
+🔍 分析文件: components\ui\checkbox.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\components\ui\command.tsx
+🔍 分析文件: components\ui\command.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\components\ui\dialog.tsx
+🔍 分析文件: components\ui\dialog.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\components\ui\dropdown-menu.tsx
+🔍 分析文件: components\ui\dropdown-menu.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\components\ui\error-display.tsx
+🔍 分析文件: components\ui\error-display.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\components\ui\input.tsx
+🔍 分析文件: components\ui\input.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\components\ui\label.tsx
+🔍 分析文件: components\ui\label.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\components\ui\popover.tsx
+🔍 分析文件: components\ui\popover.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\components\ui\progress.tsx
+🔍 分析文件: components\ui\progress.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次6完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待3000ms後處理下一批...
+
+📦 批次 7/7 (9個文件):
+   components\ui\select.tsx
+   components\ui\separator.tsx
+   components\ui\sheet.tsx
+   components\ui\skeleton.tsx
+   components\ui\slider.tsx
+   components\ui\switch.tsx
+   components\ui\tabs.tsx
+   components\ui\textarea.tsx
+   components\ui\use-toast.ts
+
+
+[1/9] 處理: C:\ai-sales-enablement-webapp\components\ui\select.tsx
+🔍 分析文件: components\ui\select.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/9] 處理: C:\ai-sales-enablement-webapp\components\ui\separator.tsx
+🔍 分析文件: components\ui\separator.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/9] 處理: C:\ai-sales-enablement-webapp\components\ui\sheet.tsx
+🔍 分析文件: components\ui\sheet.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/9] 處理: C:\ai-sales-enablement-webapp\components\ui\skeleton.tsx
+🔍 分析文件: components\ui\skeleton.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/9] 處理: C:\ai-sales-enablement-webapp\components\ui\slider.tsx
+🔍 分析文件: components\ui\slider.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/9] 處理: C:\ai-sales-enablement-webapp\components\ui\switch.tsx
+🔍 分析文件: components\ui\switch.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/9] 處理: C:\ai-sales-enablement-webapp\components\ui\tabs.tsx
+🔍 分析文件: components\ui\tabs.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/9] 處理: C:\ai-sales-enablement-webapp\components\ui\textarea.tsx
+🔍 分析文件: components\ui\textarea.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/9] 處理: C:\ai-sales-enablement-webapp\components\ui\use-toast.ts
+🔍 分析文件: components\ui\use-toast.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次7完成: 9成功, 0跳過, 0失敗
+   耗時: 0秒
+
+================================================================================
+🎯 處理medium優先級 - 32個文件，4個批次
+📦 批次大小: 10, 批次延遲: 2000ms
+================================================================================
+
+
+📦 批次 1/4 (10個文件):
+   lib\knowledge\analytics-service.ts
+   lib\knowledge\full-text-search.ts
+   lib\knowledge\index.ts
+   lib\knowledge\search-history-manager.ts
+   lib\knowledge\version-control.ts
+   lib\monitoring\backend-factory.ts
+   lib\monitoring\config.ts
+   lib\monitoring\connection-monitor.ts
+   lib\monitoring\middleware.ts
+   lib\monitoring\monitor-init.ts
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\lib\knowledge\analytics-service.ts
+🔍 分析文件: lib\knowledge\analytics-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\lib\knowledge\full-text-search.ts
+🔍 分析文件: lib\knowledge\full-text-search.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\lib\knowledge\index.ts
+🔍 分析文件: lib\knowledge\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\lib\knowledge\search-history-manager.ts
+🔍 分析文件: lib\knowledge\search-history-manager.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\lib\knowledge\version-control.ts
+🔍 分析文件: lib\knowledge\version-control.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\lib\monitoring\backend-factory.ts
+🔍 分析文件: lib\monitoring\backend-factory.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\lib\monitoring\config.ts
+🔍 分析文件: lib\monitoring\config.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\lib\monitoring\connection-monitor.ts
+🔍 分析文件: lib\monitoring\connection-monitor.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\lib\monitoring\middleware.ts
+🔍 分析文件: lib\monitoring\middleware.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\lib\monitoring\monitor-init.ts
+🔍 分析文件: lib\monitoring\monitor-init.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次1完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待2000ms後處理下一批...
+
+📦 批次 2/4 (10個文件):
+   lib\monitoring\performance-monitor.ts
+   lib\monitoring\telemetry.ts
+   lib\parsers\excel-parser.ts
+   lib\parsers\image-ocr-parser.ts
+   lib\parsers\index.ts
+   lib\parsers\pdf-parser.ts
+   lib\parsers\word-parser.ts
+   lib\performance\monitor.ts
+   lib\performance\query-optimizer.ts
+   lib\performance\response-cache.ts
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\lib\monitoring\performance-monitor.ts
+🔍 分析文件: lib\monitoring\performance-monitor.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\lib\monitoring\telemetry.ts
+🔍 分析文件: lib\monitoring\telemetry.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\lib\parsers\excel-parser.ts
+🔍 分析文件: lib\parsers\excel-parser.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\lib\parsers\image-ocr-parser.ts
+🔍 分析文件: lib\parsers\image-ocr-parser.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\lib\parsers\index.ts
+🔍 分析文件: lib\parsers\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\lib\parsers\pdf-parser.ts
+🔍 分析文件: lib\parsers\pdf-parser.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\lib\parsers\word-parser.ts
+🔍 分析文件: lib\parsers\word-parser.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\lib\performance\monitor.ts
+🔍 分析文件: lib\performance\monitor.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\lib\performance\query-optimizer.ts
+🔍 分析文件: lib\performance\query-optimizer.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\lib\performance\response-cache.ts
+🔍 分析文件: lib\performance\response-cache.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次2完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待2000ms後處理下一批...
+
+📦 批次 3/4 (10個文件):
+   lib\resilience\circuit-breaker.ts
+   lib\resilience\health-check.ts
+   lib\resilience\retry.ts
+   lib\search\contextual-result-enhancer.ts
+   lib\search\crm-search-adapter.ts
+   lib\search\pgvector-search.ts
+   lib\search\query-processor.ts
+   lib\search\result-ranker.ts
+   lib\search\search-analytics.ts
+   lib\search\search-suggestions.ts
+
+
+[1/10] 處理: C:\ai-sales-enablement-webapp\lib\resilience\circuit-breaker.ts
+🔍 分析文件: lib\resilience\circuit-breaker.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/10] 處理: C:\ai-sales-enablement-webapp\lib\resilience\health-check.ts
+🔍 分析文件: lib\resilience\health-check.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/10] 處理: C:\ai-sales-enablement-webapp\lib\resilience\retry.ts
+🔍 分析文件: lib\resilience\retry.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/10] 處理: C:\ai-sales-enablement-webapp\lib\search\contextual-result-enhancer.ts
+🔍 分析文件: lib\search\contextual-result-enhancer.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/10] 處理: C:\ai-sales-enablement-webapp\lib\search\crm-search-adapter.ts
+🔍 分析文件: lib\search\crm-search-adapter.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/10] 處理: C:\ai-sales-enablement-webapp\lib\search\pgvector-search.ts
+🔍 分析文件: lib\search\pgvector-search.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/10] 處理: C:\ai-sales-enablement-webapp\lib\search\query-processor.ts
+🔍 分析文件: lib\search\query-processor.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/10] 處理: C:\ai-sales-enablement-webapp\lib\search\result-ranker.ts
+🔍 分析文件: lib\search\result-ranker.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/10] 處理: C:\ai-sales-enablement-webapp\lib\search\search-analytics.ts
+🔍 分析文件: lib\search\search-analytics.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/10] 處理: C:\ai-sales-enablement-webapp\lib\search\search-suggestions.ts
+🔍 分析文件: lib\search\search-suggestions.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次3完成: 10成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待2000ms後處理下一批...
+
+📦 批次 4/4 (2個文件):
+   lib\search\semantic-query-processor.ts
+   lib\search\vector-search.ts
+
+
+[1/2] 處理: C:\ai-sales-enablement-webapp\lib\search\semantic-query-processor.ts
+🔍 分析文件: lib\search\semantic-query-processor.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/2] 處理: C:\ai-sales-enablement-webapp\lib\search\vector-search.ts
+🔍 分析文件: lib\search\vector-search.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次4完成: 2成功, 0跳過, 0失敗
+   耗時: 0秒
+
+================================================================================
+🎯 處理normal優先級 - 33個文件，3個批次
+📦 批次大小: 15, 批次延遲: 1000ms
+================================================================================
+
+
+📦 批次 1/3 (15個文件):
+   e2e\auth.setup.ts
+   e2e\fixtures\auth.ts
+   e2e\global-setup.ts
+   e2e\run-knowledge-tests.ts
+   scripts\add-missing-files-to-index.js
+   scripts\analyze-project-index-smart.js
+   scripts\backup\backup-scheduler.ts
+   scripts\backup\database-backup.ts
+   scripts\backup\file-system-backup.ts
+   scripts\check-comments.js
+   scripts\check-index-completeness.js
+   scripts\check-index-sync.js
+   scripts\debug-login-api.ts
+   scripts\debug-workflow.ts
+   scripts\dev-reminder.js
+
+
+[1/15] 處理: C:\ai-sales-enablement-webapp\e2e\auth.setup.ts
+🔍 分析文件: e2e\auth.setup.ts
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[2/15] 處理: C:\ai-sales-enablement-webapp\e2e\fixtures\auth.ts
+🔍 分析文件: e2e\fixtures\auth.ts
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[3/15] 處理: C:\ai-sales-enablement-webapp\e2e\global-setup.ts
+🔍 分析文件: e2e\global-setup.ts
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[4/15] 處理: C:\ai-sales-enablement-webapp\e2e\run-knowledge-tests.ts
+🔍 分析文件: e2e\run-knowledge-tests.ts
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[5/15] 處理: C:\ai-sales-enablement-webapp\scripts\add-missing-files-to-index.js
+🔍 分析文件: scripts\add-missing-files-to-index.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/15] 處理: C:\ai-sales-enablement-webapp\scripts\analyze-project-index-smart.js
+🔍 分析文件: scripts\analyze-project-index-smart.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/15] 處理: C:\ai-sales-enablement-webapp\scripts\backup\backup-scheduler.ts
+🔍 分析文件: scripts\backup\backup-scheduler.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/15] 處理: C:\ai-sales-enablement-webapp\scripts\backup\database-backup.ts
+🔍 分析文件: scripts\backup\database-backup.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/15] 處理: C:\ai-sales-enablement-webapp\scripts\backup\file-system-backup.ts
+🔍 分析文件: scripts\backup\file-system-backup.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/15] 處理: C:\ai-sales-enablement-webapp\scripts\check-comments.js
+🔍 分析文件: scripts\check-comments.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[11/15] 處理: C:\ai-sales-enablement-webapp\scripts\check-index-completeness.js
+🔍 分析文件: scripts\check-index-completeness.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[12/15] 處理: C:\ai-sales-enablement-webapp\scripts\check-index-sync.js
+🔍 分析文件: scripts\check-index-sync.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[13/15] 處理: C:\ai-sales-enablement-webapp\scripts\debug-login-api.ts
+🔍 分析文件: scripts\debug-login-api.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/15] 處理: C:\ai-sales-enablement-webapp\scripts\debug-workflow.ts
+🔍 分析文件: scripts\debug-workflow.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/15] 處理: C:\ai-sales-enablement-webapp\scripts\dev-reminder.js
+🔍 分析文件: scripts\dev-reminder.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+✅ 批次1完成: 15成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待1000ms後處理下一批...
+
+📦 批次 2/3 (15個文件):
+   scripts\environment-setup.js
+   scripts\health-check.js
+   scripts\load-test-runner.js
+   scripts\performance-setup.js
+   scripts\quick-fix.js
+   scripts\quick-load-test.js
+   scripts\run-audit-log-migration.ts
+   scripts\run-integration-tests.ts
+   scripts\run-tests.js
+   scripts\seed-folders.ts
+   scripts\setup-local-env.js
+   scripts\setup-test-db-docker.js
+   scripts\setup-test-db.js
+   scripts\sync-mvp-checklist.js
+   scripts\test-encryption-performance.ts
+
+
+[1/15] 處理: C:\ai-sales-enablement-webapp\scripts\environment-setup.js
+🔍 分析文件: scripts\environment-setup.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/15] 處理: C:\ai-sales-enablement-webapp\scripts\health-check.js
+🔍 分析文件: scripts\health-check.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[3/15] 處理: C:\ai-sales-enablement-webapp\scripts\load-test-runner.js
+🔍 分析文件: scripts\load-test-runner.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/15] 處理: C:\ai-sales-enablement-webapp\scripts\performance-setup.js
+🔍 分析文件: scripts\performance-setup.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[5/15] 處理: C:\ai-sales-enablement-webapp\scripts\quick-fix.js
+🔍 分析文件: scripts\quick-fix.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/15] 處理: C:\ai-sales-enablement-webapp\scripts\quick-load-test.js
+🔍 分析文件: scripts\quick-load-test.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/15] 處理: C:\ai-sales-enablement-webapp\scripts\run-audit-log-migration.ts
+🔍 分析文件: scripts\run-audit-log-migration.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/15] 處理: C:\ai-sales-enablement-webapp\scripts\run-integration-tests.ts
+🔍 分析文件: scripts\run-integration-tests.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/15] 處理: C:\ai-sales-enablement-webapp\scripts\run-tests.js
+🔍 分析文件: scripts\run-tests.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[10/15] 處理: C:\ai-sales-enablement-webapp\scripts\seed-folders.ts
+🔍 分析文件: scripts\seed-folders.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/15] 處理: C:\ai-sales-enablement-webapp\scripts\setup-local-env.js
+🔍 分析文件: scripts\setup-local-env.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/15] 處理: C:\ai-sales-enablement-webapp\scripts\setup-test-db-docker.js
+🔍 分析文件: scripts\setup-test-db-docker.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/15] 處理: C:\ai-sales-enablement-webapp\scripts\setup-test-db.js
+🔍 分析文件: scripts\setup-test-db.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/15] 處理: C:\ai-sales-enablement-webapp\scripts\sync-mvp-checklist.js
+🔍 分析文件: scripts\sync-mvp-checklist.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[15/15] 處理: C:\ai-sales-enablement-webapp\scripts\test-encryption-performance.ts
+🔍 分析文件: scripts\test-encryption-performance.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次2完成: 15成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待1000ms後處理下一批...
+
+📦 批次 3/3 (3個文件):
+   scripts\uat-test-runner.js
+   __tests__\utils\mock-next-request.ts
+   __tests__\utils\test-helpers.ts
+
+
+[1/3] 處理: C:\ai-sales-enablement-webapp\scripts\uat-test-runner.js
+🔍 分析文件: scripts\uat-test-runner.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/3] 處理: C:\ai-sales-enablement-webapp\__tests__\utils\mock-next-request.ts
+🔍 分析文件: __tests__\utils\mock-next-request.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/3] 處理: C:\ai-sales-enablement-webapp\__tests__\utils\test-helpers.ts
+🔍 分析文件: __tests__\utils\test-helpers.ts
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+✅ 批次3完成: 3成功, 0跳過, 0失敗
+   耗時: 0秒
+
+================================================================================
+🎯 處理low優先級 - 222個文件，12個批次
+📦 批次大小: 20, 批次延遲: 500ms
+================================================================================
+
+
+📦 批次 1/12 (20個文件):
+   app\(auth)\layout.tsx
+   app\(auth)\login\page.tsx
+   app\(auth)\register\page.tsx
+   app\api\ai\generate-proposal\route.ts
+   app\api\ai\regenerate-proposal\route.ts
+   app\api\analytics\behaviors\route.ts
+   app\api\analytics\profile\route.ts
+   app\api\analytics\track\route.ts
+   app\api\assistant\chat\route.ts
+   app\api\audit-logs\export\route.ts
+   app\api\audit-logs\route.ts
+   app\api\audit-logs\stats\route.ts
+   app\api\auth\azure-ad\callback\route.ts
+   app\api\auth\azure-ad\login\route.ts
+   app\api\auth\login\route.ts
+   app\api\auth\logout\route.ts
+   app\api\auth\me\route.ts
+   app\api\auth\refresh\route.ts
+   app\api\auth\register\route.ts
+   app\api\calendar\auth\route.ts
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\app\(auth)\layout.tsx
+🔍 分析文件: app\(auth)\layout.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\app\(auth)\login\page.tsx
+🔍 分析文件: app\(auth)\login\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\app\(auth)\register\page.tsx
+🔍 分析文件: app\(auth)\register\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\app\api\ai\generate-proposal\route.ts
+🔍 分析文件: app\api\ai\generate-proposal\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\app\api\ai\regenerate-proposal\route.ts
+🔍 分析文件: app\api\ai\regenerate-proposal\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\app\api\analytics\behaviors\route.ts
+🔍 分析文件: app\api\analytics\behaviors\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\app\api\analytics\profile\route.ts
+🔍 分析文件: app\api\analytics\profile\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\app\api\analytics\track\route.ts
+🔍 分析文件: app\api\analytics\track\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\app\api\assistant\chat\route.ts
+🔍 分析文件: app\api\assistant\chat\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\app\api\audit-logs\export\route.ts
+🔍 分析文件: app\api\audit-logs\export\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\app\api\audit-logs\route.ts
+🔍 分析文件: app\api\audit-logs\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\app\api\audit-logs\stats\route.ts
+🔍 分析文件: app\api\audit-logs\stats\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\app\api\auth\azure-ad\callback\route.ts
+🔍 分析文件: app\api\auth\azure-ad\callback\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\app\api\auth\azure-ad\login\route.ts
+🔍 分析文件: app\api\auth\azure-ad\login\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\app\api\auth\login\route.ts
+🔍 分析文件: app\api\auth\login\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\app\api\auth\logout\route.ts
+🔍 分析文件: app\api\auth\logout\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\app\api\auth\me\route.ts
+🔍 分析文件: app\api\auth\me\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\app\api\auth\refresh\route.ts
+🔍 分析文件: app\api\auth\refresh\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\app\api\auth\register\route.ts
+🔍 分析文件: app\api\auth\register\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\app\api\calendar\auth\route.ts
+🔍 分析文件: app\api\calendar\auth\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次1完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 2/12 (20個文件):
+   app\api\calendar\events\route.ts
+   app\api\calendar\sync\route.ts
+   app\api\collaboration\locks\lock\[lockId]\route.ts
+   app\api\collaboration\locks\route.ts
+   app\api\collaboration\locks\[resourceType]\[resourceId]\status\route.ts
+   app\api\customers\route.ts
+   app\api\customers\[id]\360-view\route.ts
+   app\api\health\route.ts
+   app\api\knowledge-base\advanced-search\route.ts
+   app\api\knowledge-base\analytics\route.ts
+   app\api\knowledge-base\bulk-upload\route.ts
+   app\api\knowledge-base\processing\route.ts
+   app\api\knowledge-base\route-optimized.ts
+   app\api\knowledge-base\route.ts
+   app\api\knowledge-base\search\route.ts
+   app\api\knowledge-base\suggestions\route.ts
+   app\api\knowledge-base\tags\route.ts
+   app\api\knowledge-base\upload\route.ts
+   app\api\knowledge-base\[id]\content\route.ts
+   app\api\knowledge-base\[id]\download\route.ts
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\app\api\calendar\events\route.ts
+🔍 分析文件: app\api\calendar\events\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\app\api\calendar\sync\route.ts
+🔍 分析文件: app\api\calendar\sync\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\app\api\collaboration\locks\lock\[lockId]\route.ts
+🔍 分析文件: app\api\collaboration\locks\lock\[lockId]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\app\api\collaboration\locks\route.ts
+🔍 分析文件: app\api\collaboration\locks\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\app\api\collaboration\locks\[resourceType]\[resourceId]\status\route.ts
+🔍 分析文件: app\api\collaboration\locks\[resourceType]\[resourceId]\status\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\app\api\customers\route.ts
+🔍 分析文件: app\api\customers\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\app\api\customers\[id]\360-view\route.ts
+🔍 分析文件: app\api\customers\[id]\360-view\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\app\api\health\route.ts
+🔍 分析文件: app\api\health\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\advanced-search\route.ts
+🔍 分析文件: app\api\knowledge-base\advanced-search\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\analytics\route.ts
+🔍 分析文件: app\api\knowledge-base\analytics\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\bulk-upload\route.ts
+🔍 分析文件: app\api\knowledge-base\bulk-upload\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\processing\route.ts
+🔍 分析文件: app\api\knowledge-base\processing\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\route-optimized.ts
+🔍 分析文件: app\api\knowledge-base\route-optimized.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\route.ts
+🔍 分析文件: app\api\knowledge-base\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\search\route.ts
+🔍 分析文件: app\api\knowledge-base\search\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\suggestions\route.ts
+🔍 分析文件: app\api\knowledge-base\suggestions\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\tags\route.ts
+🔍 分析文件: app\api\knowledge-base\tags\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\upload\route.ts
+🔍 分析文件: app\api\knowledge-base\upload\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\[id]\content\route.ts
+🔍 分析文件: app\api\knowledge-base\[id]\content\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\[id]\download\route.ts
+🔍 分析文件: app\api\knowledge-base\[id]\download\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次2完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 3/12 (20個文件):
+   app\api\knowledge-base\[id]\route.ts
+   app\api\knowledge-base\[id]\versions\compare\route.ts
+   app\api\knowledge-base\[id]\versions\revert\route.ts
+   app\api\knowledge-base\[id]\versions\route.ts
+   app\api\knowledge-base\[id]\versions\[versionId]\route.ts
+   app\api\knowledge-folders\reorder\route.ts
+   app\api\knowledge-folders\route.ts
+   app\api\knowledge-folders\[id]\move\route.ts
+   app\api\knowledge-folders\[id]\route.ts
+   app\api\meeting-intelligence\analyze\route.ts
+   app\api\meeting-intelligence\recommendations\route.ts
+   app\api\meeting-prep\route.ts
+   app\api\meeting-prep\templates\route.ts
+   app\api\meeting-prep\[id]\route.ts
+   app\api\mock\dynamics365\[...path]\route.ts
+   app\api\monitoring\init\route.ts
+   app\api\notifications\preferences\route.ts
+   app\api\notifications\read\route.ts
+   app\api\notifications\route.ts
+   app\api\notifications\stats\route.ts
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\[id]\route.ts
+🔍 分析文件: app\api\knowledge-base\[id]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\[id]\versions\compare\route.ts
+🔍 分析文件: app\api\knowledge-base\[id]\versions\compare\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\[id]\versions\revert\route.ts
+🔍 分析文件: app\api\knowledge-base\[id]\versions\revert\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\[id]\versions\route.ts
+🔍 分析文件: app\api\knowledge-base\[id]\versions\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-base\[id]\versions\[versionId]\route.ts
+🔍 分析文件: app\api\knowledge-base\[id]\versions\[versionId]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-folders\reorder\route.ts
+🔍 分析文件: app\api\knowledge-folders\reorder\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-folders\route.ts
+🔍 分析文件: app\api\knowledge-folders\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-folders\[id]\move\route.ts
+🔍 分析文件: app\api\knowledge-folders\[id]\move\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\app\api\knowledge-folders\[id]\route.ts
+🔍 分析文件: app\api\knowledge-folders\[id]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\app\api\meeting-intelligence\analyze\route.ts
+🔍 分析文件: app\api\meeting-intelligence\analyze\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\app\api\meeting-intelligence\recommendations\route.ts
+🔍 分析文件: app\api\meeting-intelligence\recommendations\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\app\api\meeting-prep\route.ts
+🔍 分析文件: app\api\meeting-prep\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\app\api\meeting-prep\templates\route.ts
+🔍 分析文件: app\api\meeting-prep\templates\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\app\api\meeting-prep\[id]\route.ts
+🔍 分析文件: app\api\meeting-prep\[id]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\app\api\mock\dynamics365\[...path]\route.ts
+🔍 分析文件: app\api\mock\dynamics365\[...path]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\app\api\monitoring\init\route.ts
+🔍 分析文件: app\api\monitoring\init\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\app\api\notifications\preferences\route.ts
+🔍 分析文件: app\api\notifications\preferences\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\app\api\notifications\read\route.ts
+🔍 分析文件: app\api\notifications\read\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\app\api\notifications\route.ts
+🔍 分析文件: app\api\notifications\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\app\api\notifications\stats\route.ts
+🔍 分析文件: app\api\notifications\stats\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次3完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 4/12 (20個文件):
+   app\api\proposal-templates\route.ts
+   app\api\proposal-templates\[id]\route.ts
+   app\api\proposal-templates\[id]\stats\route.ts
+   app\api\proposal-templates\[id]\test\route.ts
+   app\api\proposals\[id]\route.ts
+   app\api\proposals\[id]\versions\compare\route.ts
+   app\api\proposals\[id]\versions\restore\route.ts
+   app\api\proposals\[id]\versions\route.ts
+   app\api\proposals\[id]\versions\[versionId]\route.ts
+   app\api\recommendations\content\route.ts
+   app\api\recommendations\feedback\route.ts
+   app\api\recommendations\meetings\route.ts
+   app\api\reminders\route.ts
+   app\api\reminders\[id]\route.ts
+   app\api\reminders\[id]\snooze\route.ts
+   app\api\search\crm\route.ts
+   app\api\templates\export-pdf-test\route.ts
+   app\api\templates\preview-temp\route.ts
+   app\api\templates\route.ts
+   app\api\templates\stats\route.ts
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposal-templates\route.ts
+🔍 分析文件: app\api\proposal-templates\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposal-templates\[id]\route.ts
+🔍 分析文件: app\api\proposal-templates\[id]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposal-templates\[id]\stats\route.ts
+🔍 分析文件: app\api\proposal-templates\[id]\stats\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposal-templates\[id]\test\route.ts
+🔍 分析文件: app\api\proposal-templates\[id]\test\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposals\[id]\route.ts
+🔍 分析文件: app\api\proposals\[id]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposals\[id]\versions\compare\route.ts
+🔍 分析文件: app\api\proposals\[id]\versions\compare\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposals\[id]\versions\restore\route.ts
+🔍 分析文件: app\api\proposals\[id]\versions\restore\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposals\[id]\versions\route.ts
+🔍 分析文件: app\api\proposals\[id]\versions\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\app\api\proposals\[id]\versions\[versionId]\route.ts
+🔍 分析文件: app\api\proposals\[id]\versions\[versionId]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\app\api\recommendations\content\route.ts
+🔍 分析文件: app\api\recommendations\content\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\app\api\recommendations\feedback\route.ts
+🔍 分析文件: app\api\recommendations\feedback\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\app\api\recommendations\meetings\route.ts
+🔍 分析文件: app\api\recommendations\meetings\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\app\api\reminders\route.ts
+🔍 分析文件: app\api\reminders\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\app\api\reminders\[id]\route.ts
+🔍 分析文件: app\api\reminders\[id]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\app\api\reminders\[id]\snooze\route.ts
+🔍 分析文件: app\api\reminders\[id]\snooze\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\app\api\search\crm\route.ts
+🔍 分析文件: app\api\search\crm\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\export-pdf-test\route.ts
+🔍 分析文件: app\api\templates\export-pdf-test\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\preview-temp\route.ts
+🔍 分析文件: app\api\templates\preview-temp\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\route.ts
+🔍 分析文件: app\api\templates\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\stats\route.ts
+🔍 分析文件: app\api\templates\stats\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次4完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 5/12 (20個文件):
+   app\api\templates\[id]\duplicate\route.ts
+   app\api\templates\[id]\export-pdf\route.ts
+   app\api\templates\[id]\preview\route.ts
+   app\api\templates\[id]\route.ts
+   app\api\[...slug]\route.ts
+   app\dashboard\admin\audit-logs\page.tsx
+   app\dashboard\assistant\page.tsx
+   app\dashboard\customers\page.tsx
+   app\dashboard\customers\[id]\page.tsx
+   app\dashboard\knowledge\advanced-search\page.tsx
+   app\dashboard\knowledge\analytics\page.tsx
+   app\dashboard\knowledge\create\page.tsx
+   app\dashboard\knowledge\folders\page.tsx
+   app\dashboard\knowledge\page.tsx
+   app\dashboard\knowledge\search\page.tsx
+   app\dashboard\knowledge\upload\page.tsx
+   app\dashboard\knowledge\[id]\edit\page.tsx
+   app\dashboard\knowledge\[id]\page.tsx
+   app\dashboard\layout.tsx
+   app\dashboard\notifications\page.tsx
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\[id]\duplicate\route.ts
+🔍 分析文件: app\api\templates\[id]\duplicate\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\[id]\export-pdf\route.ts
+🔍 分析文件: app\api\templates\[id]\export-pdf\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\[id]\preview\route.ts
+🔍 分析文件: app\api\templates\[id]\preview\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\app\api\templates\[id]\route.ts
+🔍 分析文件: app\api\templates\[id]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\app\api\[...slug]\route.ts
+🔍 分析文件: app\api\[...slug]\route.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\admin\audit-logs\page.tsx
+🔍 分析文件: app\dashboard\admin\audit-logs\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\assistant\page.tsx
+🔍 分析文件: app\dashboard\assistant\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\customers\page.tsx
+🔍 分析文件: app\dashboard\customers\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\customers\[id]\page.tsx
+🔍 分析文件: app\dashboard\customers\[id]\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\advanced-search\page.tsx
+🔍 分析文件: app\dashboard\knowledge\advanced-search\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\analytics\page.tsx
+🔍 分析文件: app\dashboard\knowledge\analytics\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\create\page.tsx
+🔍 分析文件: app\dashboard\knowledge\create\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\folders\page.tsx
+🔍 分析文件: app\dashboard\knowledge\folders\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\page.tsx
+🔍 分析文件: app\dashboard\knowledge\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\search\page.tsx
+🔍 分析文件: app\dashboard\knowledge\search\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\upload\page.tsx
+🔍 分析文件: app\dashboard\knowledge\upload\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\[id]\edit\page.tsx
+🔍 分析文件: app\dashboard\knowledge\[id]\edit\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\knowledge\[id]\page.tsx
+🔍 分析文件: app\dashboard\knowledge\[id]\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\layout.tsx
+🔍 分析文件: app\dashboard\layout.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\notifications\page.tsx
+🔍 分析文件: app\dashboard\notifications\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次5完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 6/12 (20個文件):
+   app\dashboard\notifications\preferences\page.tsx
+   app\dashboard\page.tsx
+   app\dashboard\proposals\generate\page.tsx
+   app\dashboard\proposals\page.tsx
+   app\dashboard\proposals\templates\new\page.tsx
+   app\dashboard\proposals\templates\[id]\page.tsx
+   app\dashboard\proposals\[id]\versions\page.tsx
+   app\dashboard\search\page.tsx
+   app\dashboard\settings\page.tsx
+   app\dashboard\tasks\page.tsx
+   app\dashboard\templates\new\page.tsx
+   app\dashboard\templates\page.tsx
+   app\dashboard\templates\[id]\page.tsx
+   app\dashboard\templates\[id]\preview\page.tsx
+   app\error.tsx
+   app\global-error.tsx
+   app\layout.tsx
+   app\loading.tsx
+   app\not-found.tsx
+   app\page.tsx
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\notifications\preferences\page.tsx
+🔍 分析文件: app\dashboard\notifications\preferences\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\page.tsx
+🔍 分析文件: app\dashboard\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\proposals\generate\page.tsx
+🔍 分析文件: app\dashboard\proposals\generate\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\proposals\page.tsx
+🔍 分析文件: app\dashboard\proposals\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\proposals\templates\new\page.tsx
+🔍 分析文件: app\dashboard\proposals\templates\new\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\proposals\templates\[id]\page.tsx
+🔍 分析文件: app\dashboard\proposals\templates\[id]\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\proposals\[id]\versions\page.tsx
+🔍 分析文件: app\dashboard\proposals\[id]\versions\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\search\page.tsx
+🔍 分析文件: app\dashboard\search\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\settings\page.tsx
+🔍 分析文件: app\dashboard\settings\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\tasks\page.tsx
+🔍 分析文件: app\dashboard\tasks\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\templates\new\page.tsx
+🔍 分析文件: app\dashboard\templates\new\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\templates\page.tsx
+🔍 分析文件: app\dashboard\templates\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\templates\[id]\page.tsx
+🔍 分析文件: app\dashboard\templates\[id]\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\app\dashboard\templates\[id]\preview\page.tsx
+🔍 分析文件: app\dashboard\templates\[id]\preview\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\app\error.tsx
+🔍 分析文件: app\error.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\app\global-error.tsx
+🔍 分析文件: app\global-error.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\app\layout.tsx
+🔍 分析文件: app\layout.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\app\loading.tsx
+🔍 分析文件: app\loading.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\app\not-found.tsx
+🔍 分析文件: app\not-found.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\app\page.tsx
+🔍 分析文件: app\page.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次6完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 7/12 (20個文件):
+   components\admin\performance-dashboard.tsx
+   components\admin\system-monitor.tsx
+   components\assistant\ChatInput.tsx
+   components\assistant\ChatMessage.tsx
+   components\assistant\ChatWindow.tsx
+   components\assistant\index.ts
+   components\calendar\CalendarView.tsx
+   components\calendar\index.ts
+   components\collaboration\EditLockIndicator.tsx
+   components\collaboration\index.ts
+   components\crm\customer-360-view.tsx
+   components\layout\dashboard-header.tsx
+   components\layout\dashboard-mobile-nav.tsx
+   components\layout\dashboard-sidebar.tsx
+   components\meeting-prep\index.ts
+   components\meeting-prep\PrepPackageCard.tsx
+   components\meeting-prep\PrepPackageList.tsx
+   components\meeting-prep\PrepPackageWizard.tsx
+   components\notifications\notification-bell.tsx
+   components\notifications\notification-item.tsx
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\components\admin\performance-dashboard.tsx
+🔍 分析文件: components\admin\performance-dashboard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\components\admin\system-monitor.tsx
+🔍 分析文件: components\admin\system-monitor.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\components\assistant\ChatInput.tsx
+🔍 分析文件: components\assistant\ChatInput.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\components\assistant\ChatMessage.tsx
+🔍 分析文件: components\assistant\ChatMessage.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\components\assistant\ChatWindow.tsx
+🔍 分析文件: components\assistant\ChatWindow.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\components\assistant\index.ts
+🔍 分析文件: components\assistant\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\components\calendar\CalendarView.tsx
+🔍 分析文件: components\calendar\CalendarView.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\components\calendar\index.ts
+🔍 分析文件: components\calendar\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\components\collaboration\EditLockIndicator.tsx
+🔍 分析文件: components\collaboration\EditLockIndicator.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\components\collaboration\index.ts
+🔍 分析文件: components\collaboration\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\components\crm\customer-360-view.tsx
+🔍 分析文件: components\crm\customer-360-view.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\components\layout\dashboard-header.tsx
+🔍 分析文件: components\layout\dashboard-header.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\components\layout\dashboard-mobile-nav.tsx
+🔍 分析文件: components\layout\dashboard-mobile-nav.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\components\layout\dashboard-sidebar.tsx
+🔍 分析文件: components\layout\dashboard-sidebar.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\components\meeting-prep\index.ts
+🔍 分析文件: components\meeting-prep\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\components\meeting-prep\PrepPackageCard.tsx
+🔍 分析文件: components\meeting-prep\PrepPackageCard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\components\meeting-prep\PrepPackageList.tsx
+🔍 分析文件: components\meeting-prep\PrepPackageList.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\components\meeting-prep\PrepPackageWizard.tsx
+🔍 分析文件: components\meeting-prep\PrepPackageWizard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\components\notifications\notification-bell.tsx
+🔍 分析文件: components\notifications\notification-bell.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\components\notifications\notification-item.tsx
+🔍 分析文件: components\notifications\notification-item.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次7完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 8/12 (20個文件):
+   components\notifications\notification-list.tsx
+   components\permissions\CustomerActions.tsx
+   components\permissions\index.ts
+   components\permissions\ProposalActions.tsx
+   components\permissions\ProtectedRoute.tsx
+   components\recommendation\index.ts
+   components\recommendation\RecommendationCard.tsx
+   components\recommendation\RecommendationList.tsx
+   components\reminder\index.ts
+   components\reminder\ReminderCard.tsx
+   components\reminder\ReminderList.tsx
+   components\search\enhanced-search.tsx
+   components\workflow\approval\ApprovalForm.tsx
+   components\workflow\approval\ApprovalProgress.tsx
+   components\workflow\approval\ApprovalTaskList.tsx
+   components\workflow\comments\CommentForm.tsx
+   components\workflow\comments\CommentItem.tsx
+   components\workflow\comments\CommentThread.tsx
+   components\workflow\ProposalStatusBadge.tsx
+   components\workflow\StateTransitionButton.tsx
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\components\notifications\notification-list.tsx
+🔍 分析文件: components\notifications\notification-list.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\components\permissions\CustomerActions.tsx
+🔍 分析文件: components\permissions\CustomerActions.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\components\permissions\index.ts
+🔍 分析文件: components\permissions\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\components\permissions\ProposalActions.tsx
+🔍 分析文件: components\permissions\ProposalActions.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\components\permissions\ProtectedRoute.tsx
+🔍 分析文件: components\permissions\ProtectedRoute.tsx
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\components\recommendation\index.ts
+🔍 分析文件: components\recommendation\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\components\recommendation\RecommendationCard.tsx
+🔍 分析文件: components\recommendation\RecommendationCard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\components\recommendation\RecommendationList.tsx
+🔍 分析文件: components\recommendation\RecommendationList.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\components\reminder\index.ts
+🔍 分析文件: components\reminder\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\components\reminder\ReminderCard.tsx
+🔍 分析文件: components\reminder\ReminderCard.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\components\reminder\ReminderList.tsx
+🔍 分析文件: components\reminder\ReminderList.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\components\search\enhanced-search.tsx
+🔍 分析文件: components\search\enhanced-search.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\approval\ApprovalForm.tsx
+🔍 分析文件: components\workflow\approval\ApprovalForm.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\approval\ApprovalProgress.tsx
+🔍 分析文件: components\workflow\approval\ApprovalProgress.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\approval\ApprovalTaskList.tsx
+🔍 分析文件: components\workflow\approval\ApprovalTaskList.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\comments\CommentForm.tsx
+🔍 分析文件: components\workflow\comments\CommentForm.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\comments\CommentItem.tsx
+🔍 分析文件: components\workflow\comments\CommentItem.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\comments\CommentThread.tsx
+🔍 分析文件: components\workflow\comments\CommentThread.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\ProposalStatusBadge.tsx
+🔍 分析文件: components\workflow\ProposalStatusBadge.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\StateTransitionButton.tsx
+🔍 分析文件: components\workflow\StateTransitionButton.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次8完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 9/12 (20個文件):
+   components\workflow\version\VersionComparison.tsx
+   components\workflow\version\VersionHistory.tsx
+   components\workflow\version\VersionRestore.tsx
+   components\workflow\WorkflowTimeline.tsx
+   healthcheck.js
+   hooks\use-auth.ts
+   hooks\use-permission.ts
+   hooks\use-toast.ts
+   instrumentation.ts
+   jest.config.workflow.js
+   jest.setup.js
+   jest.setup.workflow.js
+   lib\analytics\index.ts
+   lib\analytics\user-behavior-tracker.ts
+   lib\api\error-handler.ts
+   lib\api\response-helper.ts
+   lib\auth\azure-ad-service.ts
+   lib\auth\token-service.ts
+   lib\auth-server.ts
+   lib\auth.ts
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\version\VersionComparison.tsx
+🔍 分析文件: components\workflow\version\VersionComparison.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\version\VersionHistory.tsx
+🔍 分析文件: components\workflow\version\VersionHistory.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\version\VersionRestore.tsx
+🔍 分析文件: components\workflow\version\VersionRestore.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\components\workflow\WorkflowTimeline.tsx
+🔍 分析文件: components\workflow\WorkflowTimeline.tsx
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\healthcheck.js
+🔍 分析文件: healthcheck.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\hooks\use-auth.ts
+🔍 分析文件: hooks\use-auth.ts
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\hooks\use-permission.ts
+🔍 分析文件: hooks\use-permission.ts
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\hooks\use-toast.ts
+🔍 分析文件: hooks\use-toast.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\instrumentation.ts
+🔍 分析文件: instrumentation.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\jest.config.workflow.js
+🔍 分析文件: jest.config.workflow.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\jest.setup.js
+🔍 分析文件: jest.setup.js
+   ✨ 插入新註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\jest.setup.workflow.js
+🔍 分析文件: jest.setup.workflow.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\lib\analytics\index.ts
+🔍 分析文件: lib\analytics\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\lib\analytics\user-behavior-tracker.ts
+🔍 分析文件: lib\analytics\user-behavior-tracker.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\lib\api\error-handler.ts
+🔍 分析文件: lib\api\error-handler.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\lib\api\response-helper.ts
+🔍 分析文件: lib\api\response-helper.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\lib\auth\azure-ad-service.ts
+🔍 分析文件: lib\auth\azure-ad-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\lib\auth\token-service.ts
+🔍 分析文件: lib\auth\token-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\lib\auth-server.ts
+🔍 分析文件: lib\auth-server.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\lib\auth.ts
+🔍 分析文件: lib\auth.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次9完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 10/12 (20個文件):
+   lib\cache\redis-client.ts
+   lib\cache\vector-cache.ts
+   lib\calendar\calendar-mock-service.ts
+   lib\calendar\calendar-sync-service.ts
+   lib\calendar\microsoft-graph-oauth.ts
+   lib\collaboration\edit-lock-manager.ts
+   lib\collaboration\index.ts
+   lib\db.ts
+   lib\errors.ts
+   lib\integrations\customer-360\service.ts
+   lib\integrations\dynamics365\auth.ts
+   lib\integrations\dynamics365\client.ts
+   lib\integrations\dynamics365\sync.ts
+   lib\meeting\index.ts
+   lib\meeting\meeting-intelligence-analyzer.ts
+   lib\meeting\meeting-prep-package.ts
+   lib\pdf\index.ts
+   lib\pdf\pdf-generator.ts
+   lib\pdf\proposal-pdf-template.ts
+   lib\prisma.ts
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\lib\cache\redis-client.ts
+🔍 分析文件: lib\cache\redis-client.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\lib\cache\vector-cache.ts
+🔍 分析文件: lib\cache\vector-cache.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\lib\calendar\calendar-mock-service.ts
+🔍 分析文件: lib\calendar\calendar-mock-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\lib\calendar\calendar-sync-service.ts
+🔍 分析文件: lib\calendar\calendar-sync-service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\lib\calendar\microsoft-graph-oauth.ts
+🔍 分析文件: lib\calendar\microsoft-graph-oauth.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\lib\collaboration\edit-lock-manager.ts
+🔍 分析文件: lib\collaboration\edit-lock-manager.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\lib\collaboration\index.ts
+🔍 分析文件: lib\collaboration\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\lib\db.ts
+🔍 分析文件: lib\db.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\lib\errors.ts
+🔍 分析文件: lib\errors.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\lib\integrations\customer-360\service.ts
+🔍 分析文件: lib\integrations\customer-360\service.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\lib\integrations\dynamics365\auth.ts
+🔍 分析文件: lib\integrations\dynamics365\auth.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\lib\integrations\dynamics365\client.ts
+🔍 分析文件: lib\integrations\dynamics365\client.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\lib\integrations\dynamics365\sync.ts
+🔍 分析文件: lib\integrations\dynamics365\sync.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\lib\meeting\index.ts
+🔍 分析文件: lib\meeting\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\lib\meeting\meeting-intelligence-analyzer.ts
+🔍 分析文件: lib\meeting\meeting-intelligence-analyzer.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\lib\meeting\meeting-prep-package.ts
+🔍 分析文件: lib\meeting\meeting-prep-package.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\lib\pdf\index.ts
+🔍 分析文件: lib\pdf\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\lib\pdf\pdf-generator.ts
+🔍 分析文件: lib\pdf\pdf-generator.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\lib\pdf\proposal-pdf-template.ts
+🔍 分析文件: lib\pdf\proposal-pdf-template.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\lib\prisma.ts
+🔍 分析文件: lib\prisma.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次10完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 11/12 (20個文件):
+   lib\recommendation\index.ts
+   lib\recommendation\recommendation-engine.ts
+   lib\reminder\index.ts
+   lib\reminder\reminder-rule-engine.ts
+   lib\reminder\reminder-scheduler.ts
+   lib\startup\monitoring-initializer.ts
+   lib\template\handlebars-helpers.ts
+   lib\template\template-engine.ts
+   lib\template\template-manager.ts
+   middleware.ts
+   next.config.optimized.js
+   poc\azure-openai-basic-test.js
+   poc\azure-openai-cost-test.js
+   poc\dynamics-365-mock.js
+   poc\dynamics-365-test-mock.js
+   poc\dynamics-365-test.js
+   poc\pgvector-performance-test.js
+   poc\run-all-tests.js
+   poc\test-dynamics-mock.js
+   prisma\seed.ts
+
+
+[1/20] 處理: C:\ai-sales-enablement-webapp\lib\recommendation\index.ts
+🔍 分析文件: lib\recommendation\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/20] 處理: C:\ai-sales-enablement-webapp\lib\recommendation\recommendation-engine.ts
+🔍 分析文件: lib\recommendation\recommendation-engine.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[3/20] 處理: C:\ai-sales-enablement-webapp\lib\reminder\index.ts
+🔍 分析文件: lib\reminder\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[4/20] 處理: C:\ai-sales-enablement-webapp\lib\reminder\reminder-rule-engine.ts
+🔍 分析文件: lib\reminder\reminder-rule-engine.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[5/20] 處理: C:\ai-sales-enablement-webapp\lib\reminder\reminder-scheduler.ts
+🔍 分析文件: lib\reminder\reminder-scheduler.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[6/20] 處理: C:\ai-sales-enablement-webapp\lib\startup\monitoring-initializer.ts
+🔍 分析文件: lib\startup\monitoring-initializer.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[7/20] 處理: C:\ai-sales-enablement-webapp\lib\template\handlebars-helpers.ts
+🔍 分析文件: lib\template\handlebars-helpers.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[8/20] 處理: C:\ai-sales-enablement-webapp\lib\template\template-engine.ts
+🔍 分析文件: lib\template\template-engine.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[9/20] 處理: C:\ai-sales-enablement-webapp\lib\template\template-manager.ts
+🔍 分析文件: lib\template\template-manager.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[10/20] 處理: C:\ai-sales-enablement-webapp\middleware.ts
+🔍 分析文件: middleware.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[11/20] 處理: C:\ai-sales-enablement-webapp\next.config.optimized.js
+🔍 分析文件: next.config.optimized.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[12/20] 處理: C:\ai-sales-enablement-webapp\poc\azure-openai-basic-test.js
+🔍 分析文件: poc\azure-openai-basic-test.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[13/20] 處理: C:\ai-sales-enablement-webapp\poc\azure-openai-cost-test.js
+🔍 分析文件: poc\azure-openai-cost-test.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[14/20] 處理: C:\ai-sales-enablement-webapp\poc\dynamics-365-mock.js
+🔍 分析文件: poc\dynamics-365-mock.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[15/20] 處理: C:\ai-sales-enablement-webapp\poc\dynamics-365-test-mock.js
+🔍 分析文件: poc\dynamics-365-test-mock.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[16/20] 處理: C:\ai-sales-enablement-webapp\poc\dynamics-365-test.js
+🔍 分析文件: poc\dynamics-365-test.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[17/20] 處理: C:\ai-sales-enablement-webapp\poc\pgvector-performance-test.js
+🔍 分析文件: poc\pgvector-performance-test.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[18/20] 處理: C:\ai-sales-enablement-webapp\poc\run-all-tests.js
+🔍 分析文件: poc\run-all-tests.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[19/20] 處理: C:\ai-sales-enablement-webapp\poc\test-dynamics-mock.js
+🔍 分析文件: poc\test-dynamics-mock.js
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[20/20] 處理: C:\ai-sales-enablement-webapp\prisma\seed.ts
+🔍 分析文件: prisma\seed.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次11完成: 20成功, 0跳過, 0失敗
+   耗時: 0秒
+
+⏸️  等待500ms後處理下一批...
+
+📦 批次 12/12 (2個文件):
+   types\ai.ts
+   types\index.ts
+
+
+[1/2] 處理: C:\ai-sales-enablement-webapp\types\ai.ts
+🔍 分析文件: types\ai.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+[2/2] 處理: C:\ai-sales-enablement-webapp\types\index.ts
+🔍 分析文件: types\index.ts
+   🔄 替換現有註釋
+   ✅ 處理成功
+
+✅ 批次12完成: 2成功, 0跳過, 0失敗
+   耗時: 0秒
+
+================================================================================
+🎉 批量處理完成！
+================================================================================
+
+📊 總體統計:
+   總文件數: 399
+   ✅ 成功處理: 399 (100.0%)
+   ⏭️  跳過: 0
+   ❌ 失敗: 0
+
+📋 按優先級統計:
+   critical: 43/43 (100.0%) - 失敗:0
+   high: 69/69 (100.0%) - 失敗:0
+   medium: 32/32 (100.0%) - 失敗:0
+   normal: 33/33 (100.0%) - 失敗:0
+   low: 222/222 (100.0%) - 失敗:0
+
+📄 詳細報告已保存: C:\ai-sales-enablement-webapp\docs\code-comments-generation-report.json
+================================================================================
+
+⏱️  總耗時: 1分13秒
+

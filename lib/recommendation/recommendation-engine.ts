@@ -1,22 +1,11 @@
 /**
- * 個性化推薦引擎
+ * @fileoverview 個性化推薦引擎📋 檔案用途：基於用戶畫像和行為歷史提供智能內容推薦🎯 核心功能：1. 內容推薦：知識庫文章、提案模板、產品信息2. 會議準備推薦：根據會議類型推薦相關資料3. 協同過濾：基於相似用戶的行為推薦4. 混合推薦策略：結合多種算法提供最佳推薦🔗 依賴關係：- lib/analytics/user-behavior-tracker.ts - 用戶行為和畫像數據- lib/meeting/meeting-prep-package.ts - 會議準備包作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2 - 個性化推薦
+ * @module lib/recommendation/recommendation-engine
+ * @description
+ * 個性化推薦引擎📋 檔案用途：基於用戶畫像和行為歷史提供智能內容推薦🎯 核心功能：1. 內容推薦：知識庫文章、提案模板、產品信息2. 會議準備推薦：根據會議類型推薦相關資料3. 協同過濾：基於相似用戶的行為推薦4. 混合推薦策略：結合多種算法提供最佳推薦🔗 依賴關係：- lib/analytics/user-behavior-tracker.ts - 用戶行為和畫像數據- lib/meeting/meeting-prep-package.ts - 會議準備包作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2 - 個性化推薦
  *
- * 📋 檔案用途：
- * 基於用戶畫像和行為歷史提供智能內容推薦
- *
- * 🎯 核心功能：
- * 1. 內容推薦：知識庫文章、提案模板、產品信息
- * 2. 會議準備推薦：根據會議類型推薦相關資料
- * 3. 協同過濾：基於相似用戶的行為推薦
- * 4. 混合推薦策略：結合多種算法提供最佳推薦
- *
- * 🔗 依賴關係：
- * - lib/analytics/user-behavior-tracker.ts - 用戶行為和畫像數據
- * - lib/meeting/meeting-prep-package.ts - 會議準備包
- *
- * 作者：Claude Code
- * 創建時間：2025-10-05
- * Sprint：Sprint 7 Phase 2 - 個性化推薦
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { UserBehaviorTracker, UserProfile, BehaviorType, ContentType } from '@/lib/analytics/user-behavior-tracker';

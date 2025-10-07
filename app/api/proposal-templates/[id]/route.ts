@@ -1,14 +1,11 @@
 /**
- * 提案範本詳情 API 路由
+ * @fileoverview 提案範本詳情 API 路由功能：- 獲取單個範本的詳細信息- 更新範本內容和設定- 刪除範本（軟刪除）- 範本訪問權限控制作者：Claude Code創建時間：2025-09-28
+ * @module app/api/proposal-templates/[id]/route
+ * @description
+ * 提案範本詳情 API 路由功能：- 獲取單個範本的詳細信息- 更新範本內容和設定- 刪除範本（軟刪除）- 範本訪問權限控制作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 獲取單個範本的詳細信息
- * - 更新範本內容和設定
- * - 刪除範本（軟刪除）
- * - 範本訪問權限控制
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

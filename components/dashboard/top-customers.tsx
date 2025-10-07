@@ -1,78 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 重要客戶組件 (components/dashboard/top-customers.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 重要客戶組件 (components/dashboard/top-customers.tsx)================================================================【組件功能】展示高價值潛在客戶和成交機會的組件。包含客戶基本資訊、成交機率、聯絡資訊和下一步行動。【設計用途】- 銷售回顔和客戶關係管理- 高價值客戶的優先級管理- 銷售機會追蹤和預測- 客戶關係狀態監控【客戶狀態】• hot (熱門): 高興趣、成交機率高 (紅色)• warm (溫和): 有興趣、正在跟進 (黃色)• cold (冷淡): 低興趣、需要重新激活 (藍色)• closed (成交): 已成功成交 (綠色)【數據結構】Customer interface:• id - string - 客戶唯一識別符• company - string - 公司名稱• contact - string - 聯絡人名稱• email - string - 電子郵件地址• phone - string - 聯絡電話• location - string - 地理位置• value - string - 預期價值 (馬來西亞令吉)• status - hot|warm|cold|closed - 客戶狀態• lastContact - string - 最後聯絡時間• nextAction - string - 下一步行動計畫• probability - number - 成交機率百分比 (0-100)【視覺特性】• 頭像系統: 使用聯絡人名字縮寫產生頭像• 狀態標籤: 不同顏色代表不同客戶狀態• 成交機率: 進度條和百分比顯示  - 80%+: 綠色 (高機率)  - 60-79%: 黃色 (中等機率)  - <60%: 紅色 (低機率)• 快速操作: 電話和郵件快速聯絡按鈕• 懸停效果: 卡片懸停時邊框和陰影變化【統計資訊】• 熱門客戶數量: 狀態為'hot'的客戶統計• 總預期價值: 所有客戶價值總和 (千位数)【使用範例】```tsx// 在Dashboard中使用<TopCustomers />// 自訂樣式<div className="col-span-1">  <TopCustomers /></div>```【相關檔案】• components/ui/card.tsx - 卡片容器組件• components/ui/button.tsx - 按鈕組件• components/ui/badge.tsx - 標籤組件• components/ui/avatar.tsx - 頭像組件• lucide-react - 圖示庫【開發注意】• 使用'use client'支援客戶端互動• 客戶數據目前是模擬數據，應從CRM API取得• 考慮新增客戶詳細頁面連結• 支援客戶排序和篩選功能• 可新增更多聯絡方式(社交媒體、視訊會議)• 考慮集成客戶活動時間軸和互動歷史================================================================
+ * @module components/dashboard/top-customers
+ * @description
+ * ================================================================AI銷售賦能平台 - 重要客戶組件 (components/dashboard/top-customers.tsx)================================================================【組件功能】展示高價值潛在客戶和成交機會的組件。包含客戶基本資訊、成交機率、聯絡資訊和下一步行動。【設計用途】- 銷售回顔和客戶關係管理- 高價值客戶的優先級管理- 銷售機會追蹤和預測- 客戶關係狀態監控【客戶狀態】• hot (熱門): 高興趣、成交機率高 (紅色)• warm (溫和): 有興趣、正在跟進 (黃色)• cold (冷淡): 低興趣、需要重新激活 (藍色)• closed (成交): 已成功成交 (綠色)【數據結構】Customer interface:• id - string - 客戶唯一識別符• company - string - 公司名稱• contact - string - 聯絡人名稱• email - string - 電子郵件地址• phone - string - 聯絡電話• location - string - 地理位置• value - string - 預期價值 (馬來西亞令吉)• status - hot|warm|cold|closed - 客戶狀態• lastContact - string - 最後聯絡時間• nextAction - string - 下一步行動計畫• probability - number - 成交機率百分比 (0-100)【視覺特性】• 頭像系統: 使用聯絡人名字縮寫產生頭像• 狀態標籤: 不同顏色代表不同客戶狀態• 成交機率: 進度條和百分比顯示  - 80%+: 綠色 (高機率)  - 60-79%: 黃色 (中等機率)  - <60%: 紅色 (低機率)• 快速操作: 電話和郵件快速聯絡按鈕• 懸停效果: 卡片懸停時邊框和陰影變化【統計資訊】• 熱門客戶數量: 狀態為'hot'的客戶統計• 總預期價值: 所有客戶價值總和 (千位数)【使用範例】```tsx// 在Dashboard中使用<TopCustomers />// 自訂樣式<div className="col-span-1">  <TopCustomers /></div>```【相關檔案】• components/ui/card.tsx - 卡片容器組件• components/ui/button.tsx - 按鈕組件• components/ui/badge.tsx - 標籤組件• components/ui/avatar.tsx - 頭像組件• lucide-react - 圖示庫【開發注意】• 使用'use client'支援客戶端互動• 客戶數據目前是模擬數據，應從CRM API取得• 考慮新增客戶詳細頁面連結• 支援客戶排序和篩選功能• 可新增更多聯絡方式(社交媒體、視訊會議)• 考慮集成客戶活動時間軸和互動歷史================================================================
  *
- * 【組件功能】
- * 展示高價值潛在客戶和成交機會的組件。
- * 包含客戶基本資訊、成交機率、聯絡資訊和下一步行動。
- *
- * 【設計用途】
- * - 銷售回顔和客戶關係管理
- * - 高價值客戶的優先級管理
- * - 銷售機會追蹤和預測
- * - 客戶關係狀態監控
- *
- * 【客戶狀態】
- * • hot (熱門): 高興趣、成交機率高 (紅色)
- * • warm (溫和): 有興趣、正在跟進 (黃色)
- * • cold (冷淡): 低興趣、需要重新激活 (藍色)
- * • closed (成交): 已成功成交 (綠色)
- *
- * 【數據結構】
- * Customer interface:
- * • id - string - 客戶唯一識別符
- * • company - string - 公司名稱
- * • contact - string - 聯絡人名稱
- * • email - string - 電子郵件地址
- * • phone - string - 聯絡電話
- * • location - string - 地理位置
- * • value - string - 預期價值 (馬來西亞令吉)
- * • status - hot|warm|cold|closed - 客戶狀態
- * • lastContact - string - 最後聯絡時間
- * • nextAction - string - 下一步行動計畫
- * • probability - number - 成交機率百分比 (0-100)
- *
- * 【視覺特性】
- * • 頭像系統: 使用聯絡人名字縮寫產生頭像
- * • 狀態標籤: 不同顏色代表不同客戶狀態
- * • 成交機率: 進度條和百分比顯示
- *   - 80%+: 綠色 (高機率)
- *   - 60-79%: 黃色 (中等機率)
- *   - <60%: 紅色 (低機率)
- * • 快速操作: 電話和郵件快速聯絡按鈕
- * • 懸停效果: 卡片懸停時邊框和陰影變化
- *
- * 【統計資訊】
- * • 熱門客戶數量: 狀態為'hot'的客戶統計
- * • 總預期價值: 所有客戶價值總和 (千位数)
- *
- * 【使用範例】
- * ```tsx
- * // 在Dashboard中使用
- * <TopCustomers />
- *
- * // 自訂樣式
- * <div className="col-span-1">
- *   <TopCustomers />
- * </div>
- * ```
- *
- * 【相關檔案】
- * • components/ui/card.tsx - 卡片容器組件
- * • components/ui/button.tsx - 按鈕組件
- * • components/ui/badge.tsx - 標籤組件
- * • components/ui/avatar.tsx - 頭像組件
- * • lucide-react - 圖示庫
- *
- * 【開發注意】
- * • 使用'use client'支援客戶端互動
- * • 客戶數據目前是模擬數據，應從CRM API取得
- * • 考慮新增客戶詳細頁面連結
- * • 支援客戶排序和篩選功能
- * • 可新增更多聯絡方式(社交媒體、視訊會議)
- * • 考慮集成客戶活動時間軸和互動歷史
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

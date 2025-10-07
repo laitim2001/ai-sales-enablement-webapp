@@ -1,10 +1,11 @@
 /**
- * 範本預覽 API
+ * @fileoverview 範本預覽 APIPOST /api/templates/[id]/preview - 預覽範本渲染結果@author Claude Code@date 2025-10-02
+ * @module app/api/templates/[id]/preview/route
+ * @description
+ * 範本預覽 APIPOST /api/templates/[id]/preview - 預覽範本渲染結果@author Claude Code@date 2025-10-02
  *
- * POST /api/templates/[id]/preview - 預覽範本渲染結果
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

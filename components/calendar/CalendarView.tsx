@@ -1,22 +1,11 @@
 /**
- * CalendarView組件
+ * @fileoverview CalendarView組件📋 功能說明：- 日曆可視化視圖（日/週/月視圖）- Microsoft Graph日曆事件展示- 會議準備包快速關聯- 事件詳情查看和編輯- 同步狀態展示- 篩選和搜索功能📊 使用場景：- 日曆管理頁面- 會議準備流程- 日程規劃功能作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ * @module components/calendar/CalendarView
+ * @description
+ * CalendarView組件📋 功能說明：- 日曆可視化視圖（日/週/月視圖）- Microsoft Graph日曆事件展示- 會議準備包快速關聯- 事件詳情查看和編輯- 同步狀態展示- 篩選和搜索功能📊 使用場景：- 日曆管理頁面- 會議準備流程- 日程規劃功能作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
  *
- * 📋 功能說明：
- * - 日曆可視化視圖（日/週/月視圖）
- * - Microsoft Graph日曆事件展示
- * - 會議準備包快速關聯
- * - 事件詳情查看和編輯
- * - 同步狀態展示
- * - 篩選和搜索功能
- *
- * 📊 使用場景：
- * - 日曆管理頁面
- * - 會議準備流程
- * - 日程規劃功能
- *
- * 作者：Claude Code
- * 日期：2025-10-05
- * Sprint：Sprint 7 Phase 3
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

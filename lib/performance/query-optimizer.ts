@@ -1,39 +1,11 @@
 /**
- * 資料庫查詢優化系統
+ * @fileoverview 資料庫查詢優化系統功能：- N+1 查詢檢測和預防- 批量查詢優化- 查詢分析和性能追蹤- DataLoader 整合- 查詢快取使用方式：```typescript// 使用 DataLoader 防止 N+1 查詢const userLoader = createDataLoader('users', async (ids) => {  return await db.users.findMany({ where: { id: { in: ids } } });});const users = await Promise.all(  userIds.map(id => userLoader.load(id)));// 批量查詢優化const results = await batchQuery([  { type: 'users', ids: [1, 2, 3] },  { type: 'posts', ids: [10, 20, 30] },]);// 查詢性能追蹤const result = await trackQuery('getUser', async () => {  return await db.users.findUnique({ where: { id } });});```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
+ * @module lib/performance/query-optimizer
+ * @description
+ * 資料庫查詢優化系統功能：- N+1 查詢檢測和預防- 批量查詢優化- 查詢分析和性能追蹤- DataLoader 整合- 查詢快取使用方式：```typescript// 使用 DataLoader 防止 N+1 查詢const userLoader = createDataLoader('users', async (ids) => {  return await db.users.findMany({ where: { id: { in: ids } } });});const users = await Promise.all(  userIds.map(id => userLoader.load(id)));// 批量查詢優化const results = await batchQuery([  { type: 'users', ids: [1, 2, 3] },  { type: 'posts', ids: [10, 20, 30] },]);// 查詢性能追蹤const result = await trackQuery('getUser', async () => {  return await db.users.findUnique({ where: { id } });});```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
  *
- * 功能：
- * - N+1 查詢檢測和預防
- * - 批量查詢優化
- * - 查詢分析和性能追蹤
- * - DataLoader 整合
- * - 查詢快取
- *
- * 使用方式：
- * ```typescript
- * // 使用 DataLoader 防止 N+1 查詢
- * const userLoader = createDataLoader('users', async (ids) => {
- *   return await db.users.findMany({ where: { id: { in: ids } } });
- * });
- *
- * const users = await Promise.all(
- *   userIds.map(id => userLoader.load(id))
- * );
- *
- * // 批量查詢優化
- * const results = await batchQuery([
- *   { type: 'users', ids: [1, 2, 3] },
- *   { type: 'posts', ids: [10, 20, 30] },
- * ]);
- *
- * // 查詢性能追蹤
- * const result = await trackQuery('getUser', async () => {
- *   return await db.users.findUnique({ where: { id } });
- * });
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 4 - 性能優化與高可用性
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 /**

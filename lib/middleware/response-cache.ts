@@ -1,42 +1,11 @@
 /**
- * Response Caching 中間件
- *
- * 提供 HTTP 快取功能，包括 ETag、Cache-Control、條件式請求處理。
- *
- * 【核心功能】
- * 1. HTTP Caching 標準 - ETag、Cache-Control、Last-Modified、304 Not Modified
- * 2. Cache Storage - Memory Cache、Redis Cache、Custom Storage
- * 3. Cache Key 生成 - URL-based、Query-aware、Header-aware、Custom
- * 4. Cache Invalidation - TTL、Manual、Pattern-based、Tag-based
- * 5. Conditional Caching - Method、Status、Content-type filtering
- *
- * 【使用場景】
- * - 減少重複計算和數據庫查詢
- * - 降低伺服器負載和響應時間
- * - 支援分散式快取（Redis）
- * - CDN 和瀏覽器快取優化
- *
- * 【使用範例】
- * ```typescript
- * import { createResponseCache } from '@/lib/middleware/response-cache'
- *
- * const cache = createResponseCache({
- *   defaultTTL: 300, // 5 minutes
- *   useETag: true,
- *   public: true
- * })
- *
- * export async function GET(request: NextRequest) {
- *   return cache.handle(request, async () => {
- *     const data = await fetchData()
- *     return NextResponse.json(data)
- *   })
- * }
- * ```
- *
+ * @fileoverview Response Caching 中間件提供 HTTP 快取功能，包括 ETag、Cache-Control、條件式請求處理。【核心功能】1. HTTP Caching 標準 - ETag、Cache-Control、Last-Modified、304 Not Modified2. Cache Storage - Memory Cache、Redis Cache、Custom Storage3. Cache Key 生成 - URL-based、Query-aware、Header-aware、Custom4. Cache Invalidation - TTL、Manual、Pattern-based、Tag-based5. Conditional Caching - Method、Status、Content-type filtering【使用場景】- 減少重複計算和數據庫查詢- 降低伺服器負載和響應時間- 支援分散式快取（Redis）- CDN 和瀏覽器快取優化【使用範例】```typescriptimport { createResponseCache } from '@/lib/middleware/response-cache'const cache = createResponseCache({  defaultTTL: 300, // 5 minutes  useETag: true,  public: true})export async function GET(request: NextRequest) {  return cache.handle(request, async () => {    const data = await fetchData()    return NextResponse.json(data)  })}```@module lib/middleware/response-cache@author Claude Code@since 2025-10-01
  * @module lib/middleware/response-cache
- * @author Claude Code
- * @since 2025-10-01
+ * @description
+ * Response Caching 中間件提供 HTTP 快取功能，包括 ETag、Cache-Control、條件式請求處理。【核心功能】1. HTTP Caching 標準 - ETag、Cache-Control、Last-Modified、304 Not Modified2. Cache Storage - Memory Cache、Redis Cache、Custom Storage3. Cache Key 生成 - URL-based、Query-aware、Header-aware、Custom4. Cache Invalidation - TTL、Manual、Pattern-based、Tag-based5. Conditional Caching - Method、Status、Content-type filtering【使用場景】- 減少重複計算和數據庫查詢- 降低伺服器負載和響應時間- 支援分散式快取（Redis）- CDN 和瀏覽器快取優化【使用範例】```typescriptimport { createResponseCache } from '@/lib/middleware/response-cache'const cache = createResponseCache({  defaultTTL: 300, // 5 minutes  useETag: true,  public: true})export async function GET(request: NextRequest) {  return cache.handle(request, async () => {    const data = await fetchData()    return NextResponse.json(data)  })}```@module lib/middleware/response-cache@author Claude Code@since 2025-10-01
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

@@ -1,37 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫高級搜索API
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫高級搜索API================================================================【API功能】提供複雜的多條件組合搜索功能，支援邏輯運算符、多層級嵌套條件、以及靈活的排序和過濾。【端點】POST /api/knowledge-base/advanced-search【請求參數】{  conditions: SearchCondition[],  groups: SearchConditionGroup[],  operator: 'AND' | 'OR',  sort_by?: string,  sort_order?: 'asc' | 'desc',  limit?: number,  offset?: number}【回應格式】{  success: true,  results: KnowledgeBase[],  total: number,  metadata: {...}}@author Claude Code@date 2025-10-03@sprint Sprint 6 Week 12 - Advanced Search
+ * @module app/api/knowledge-base/advanced-search/route
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫高級搜索API================================================================【API功能】提供複雜的多條件組合搜索功能，支援邏輯運算符、多層級嵌套條件、以及靈活的排序和過濾。【端點】POST /api/knowledge-base/advanced-search【請求參數】{  conditions: SearchCondition[],  groups: SearchConditionGroup[],  operator: 'AND' | 'OR',  sort_by?: string,  sort_order?: 'asc' | 'desc',  limit?: number,  offset?: number}【回應格式】{  success: true,  results: KnowledgeBase[],  total: number,  metadata: {...}}@author Claude Code@date 2025-10-03@sprint Sprint 6 Week 12 - Advanced Search
  *
- * 【API功能】
- * 提供複雜的多條件組合搜索功能，支援邏輯運算符、
- * 多層級嵌套條件、以及靈活的排序和過濾。
- *
- * 【端點】
- * POST /api/knowledge-base/advanced-search
- *
- * 【請求參數】
- * {
- *   conditions: SearchCondition[],
- *   groups: SearchConditionGroup[],
- *   operator: 'AND' | 'OR',
- *   sort_by?: string,
- *   sort_order?: 'asc' | 'desc',
- *   limit?: number,
- *   offset?: number
- * }
- *
- * 【回應格式】
- * {
- *   success: true,
- *   results: KnowledgeBase[],
- *   total: number,
- *   metadata: {...}
- * }
- *
- * @author Claude Code
- * @date 2025-10-03
- * @sprint Sprint 6 Week 12 - Advanced Search
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

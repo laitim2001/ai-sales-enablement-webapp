@@ -1,14 +1,11 @@
 /**
- * 評論表單組件
+ * @fileoverview 評論表單組件功能：- 新增/編輯評論- @mentions 自動完成- 富文本編輯支持- 表單驗證作者：Claude Code日期：2025-10-01
+ * @module components/workflow/comments/CommentForm
+ * @description
+ * 評論表單組件功能：- 新增/編輯評論- @mentions 自動完成- 富文本編輯支持- 表單驗證作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 新增/編輯評論
- * - @mentions 自動完成
- * - 富文本編輯支持
- * - 表單驗證
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

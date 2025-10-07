@@ -1,3 +1,13 @@
+/**
+ * @fileoverview global-setup - 工具模組
+ * @module e2e/global-setup
+ * @description
+ * 提供輔助功能的工具函數
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 import { chromium, FullConfig } from '@playwright/test'
 
 async function globalSetup(config: FullConfig) {

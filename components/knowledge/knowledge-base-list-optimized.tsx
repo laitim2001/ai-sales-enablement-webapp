@@ -1,66 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫列表優化版組件 (/components/knowledge/knowledge-base-list-optimized.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫列表優化版組件 (/components/knowledge/knowledge-base-list-optimized.tsx)================================================================【組件功能】提供高性能的知識庫文檔列表展示功能，支持虛擬化滾動、React Query緩存、記憶化優化等先進技術，適用於大量文檔的高效管理和瀏覽。【主要職責】• 虛擬化列表 - 使用@tanstack/react-virtual處理大量數據的高效渲染• 數據緩存 - 整合React Query實現智能數據緩存和同步• 性能優化 - 使用memo、useMemo、useCallback優化重渲染• 響應式設計 - 適配不同屏幕尺寸的最優顯示效果• 即時搜索 - 支持防抖搜索和即時篩選功能• 懶加載 - 實現按需加載和無限滾動機制• 狀態管理 - 高效的本地狀態和服務器狀態同步• 用戶交互 - 提供流暢的CRUD操作和批量處理【性能優化特性】• Virtual Scrolling - 只渲染可見區域的項目，支持數萬條記錄• Memoization - 使用React.memo和useMemo防止不必要的重渲染• Debounced Search - 搜索輸入防抖，減少API調用頻率• Query Caching - React Query自動緩存和後台更新• Code Splitting - 組件級別的懶加載和代碼分割• Optimistic Updates - 樂觀更新提升用戶體驗• Background Sync - 後台數據同步和自動重試機制• Memory Management - 智能內存管理和垃圾回收優化【技術架構】• 虛擬化引擎 - @tanstack/react-virtual提供高性能滾動• 狀態管理 - React Query + 本地useState的混合架構• 類型安全 - 完整的TypeScript類型定義和檢查• 性能監控 - 內建性能指標收集和優化建議• 錯誤邊界 - 優雅的錯誤處理和恢復機制• 無障礙支持 - 完整的ARIA標籤和鍵盤導航• SEO優化 - 服務器端渲染和元數據管理• 國際化 - 支持多語言和本地化設置【用戶體驗功能】• 即時反饋 - 所有操作都有即時的視覺反饋• 骨架屏 - 數據加載時的優雅骨架屏動畫• 錯誤恢復 - 網絡錯誤時的智能重試機制• 離線支持 - 基本的離線瀏覽和操作能力• 個性化 - 用戶偏好設置和視圖狀態記憶• 快捷鍵 - 完整的鍵盤快捷鍵支持• 拖拽排序 - 支持文檔的拖拽重排序功能• 批量操作 - 高效的批量選擇和操作界面【相關檔案】• /components/knowledge/knowledge-base-list.tsx - 基礎版本列表組件• /components/knowledge/knowledge-base-filters.tsx - 篩選組件• /components/knowledge/knowledge-search.tsx - 搜索組件• /hooks/useKnowledgeBase.ts - 知識庫數據Hook• /api/knowledge-base - 後端API端點• /lib/react-query.ts - React Query配置【開發注意事項】• 性能監控 - 定期檢查虛擬化性能和內存使用• 緩存策略 - 合理配置React Query的緩存時間• 錯誤處理 - 完善的錯誤邊界和降級方案• 測試覆蓋 - 重點測試虛擬化和性能關鍵路徑• 漸進增強 - 確保基本功能在舊瀏覽器中正常工作
+ * @module components/knowledge/knowledge-base-list-optimized
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫列表優化版組件 (/components/knowledge/knowledge-base-list-optimized.tsx)================================================================【組件功能】提供高性能的知識庫文檔列表展示功能，支持虛擬化滾動、React Query緩存、記憶化優化等先進技術，適用於大量文檔的高效管理和瀏覽。【主要職責】• 虛擬化列表 - 使用@tanstack/react-virtual處理大量數據的高效渲染• 數據緩存 - 整合React Query實現智能數據緩存和同步• 性能優化 - 使用memo、useMemo、useCallback優化重渲染• 響應式設計 - 適配不同屏幕尺寸的最優顯示效果• 即時搜索 - 支持防抖搜索和即時篩選功能• 懶加載 - 實現按需加載和無限滾動機制• 狀態管理 - 高效的本地狀態和服務器狀態同步• 用戶交互 - 提供流暢的CRUD操作和批量處理【性能優化特性】• Virtual Scrolling - 只渲染可見區域的項目，支持數萬條記錄• Memoization - 使用React.memo和useMemo防止不必要的重渲染• Debounced Search - 搜索輸入防抖，減少API調用頻率• Query Caching - React Query自動緩存和後台更新• Code Splitting - 組件級別的懶加載和代碼分割• Optimistic Updates - 樂觀更新提升用戶體驗• Background Sync - 後台數據同步和自動重試機制• Memory Management - 智能內存管理和垃圾回收優化【技術架構】• 虛擬化引擎 - @tanstack/react-virtual提供高性能滾動• 狀態管理 - React Query + 本地useState的混合架構• 類型安全 - 完整的TypeScript類型定義和檢查• 性能監控 - 內建性能指標收集和優化建議• 錯誤邊界 - 優雅的錯誤處理和恢復機制• 無障礙支持 - 完整的ARIA標籤和鍵盤導航• SEO優化 - 服務器端渲染和元數據管理• 國際化 - 支持多語言和本地化設置【用戶體驗功能】• 即時反饋 - 所有操作都有即時的視覺反饋• 骨架屏 - 數據加載時的優雅骨架屏動畫• 錯誤恢復 - 網絡錯誤時的智能重試機制• 離線支持 - 基本的離線瀏覽和操作能力• 個性化 - 用戶偏好設置和視圖狀態記憶• 快捷鍵 - 完整的鍵盤快捷鍵支持• 拖拽排序 - 支持文檔的拖拽重排序功能• 批量操作 - 高效的批量選擇和操作界面【相關檔案】• /components/knowledge/knowledge-base-list.tsx - 基礎版本列表組件• /components/knowledge/knowledge-base-filters.tsx - 篩選組件• /components/knowledge/knowledge-search.tsx - 搜索組件• /hooks/useKnowledgeBase.ts - 知識庫數據Hook• /api/knowledge-base - 後端API端點• /lib/react-query.ts - React Query配置【開發注意事項】• 性能監控 - 定期檢查虛擬化性能和內存使用• 緩存策略 - 合理配置React Query的緩存時間• 錯誤處理 - 完善的錯誤邊界和降級方案• 測試覆蓋 - 重點測試虛擬化和性能關鍵路徑• 漸進增強 - 確保基本功能在舊瀏覽器中正常工作
  *
- * 【組件功能】
- * 提供高性能的知識庫文檔列表展示功能，支持虛擬化滾動、React Query緩存、
- * 記憶化優化等先進技術，適用於大量文檔的高效管理和瀏覽。
- *
- * 【主要職責】
- * • 虛擬化列表 - 使用@tanstack/react-virtual處理大量數據的高效渲染
- * • 數據緩存 - 整合React Query實現智能數據緩存和同步
- * • 性能優化 - 使用memo、useMemo、useCallback優化重渲染
- * • 響應式設計 - 適配不同屏幕尺寸的最優顯示效果
- * • 即時搜索 - 支持防抖搜索和即時篩選功能
- * • 懶加載 - 實現按需加載和無限滾動機制
- * • 狀態管理 - 高效的本地狀態和服務器狀態同步
- * • 用戶交互 - 提供流暢的CRUD操作和批量處理
- *
- * 【性能優化特性】
- * • Virtual Scrolling - 只渲染可見區域的項目，支持數萬條記錄
- * • Memoization - 使用React.memo和useMemo防止不必要的重渲染
- * • Debounced Search - 搜索輸入防抖，減少API調用頻率
- * • Query Caching - React Query自動緩存和後台更新
- * • Code Splitting - 組件級別的懶加載和代碼分割
- * • Optimistic Updates - 樂觀更新提升用戶體驗
- * • Background Sync - 後台數據同步和自動重試機制
- * • Memory Management - 智能內存管理和垃圾回收優化
- *
- * 【技術架構】
- * • 虛擬化引擎 - @tanstack/react-virtual提供高性能滾動
- * • 狀態管理 - React Query + 本地useState的混合架構
- * • 類型安全 - 完整的TypeScript類型定義和檢查
- * • 性能監控 - 內建性能指標收集和優化建議
- * • 錯誤邊界 - 優雅的錯誤處理和恢復機制
- * • 無障礙支持 - 完整的ARIA標籤和鍵盤導航
- * • SEO優化 - 服務器端渲染和元數據管理
- * • 國際化 - 支持多語言和本地化設置
- *
- * 【用戶體驗功能】
- * • 即時反饋 - 所有操作都有即時的視覺反饋
- * • 骨架屏 - 數據加載時的優雅骨架屏動畫
- * • 錯誤恢復 - 網絡錯誤時的智能重試機制
- * • 離線支持 - 基本的離線瀏覽和操作能力
- * • 個性化 - 用戶偏好設置和視圖狀態記憶
- * • 快捷鍵 - 完整的鍵盤快捷鍵支持
- * • 拖拽排序 - 支持文檔的拖拽重排序功能
- * • 批量操作 - 高效的批量選擇和操作界面
- *
- * 【相關檔案】
- * • /components/knowledge/knowledge-base-list.tsx - 基礎版本列表組件
- * • /components/knowledge/knowledge-base-filters.tsx - 篩選組件
- * • /components/knowledge/knowledge-search.tsx - 搜索組件
- * • /hooks/useKnowledgeBase.ts - 知識庫數據Hook
- * • /api/knowledge-base - 後端API端點
- * • /lib/react-query.ts - React Query配置
- *
- * 【開發注意事項】
- * • 性能監控 - 定期檢查虛擬化性能和內存使用
- * • 緩存策略 - 合理配置React Query的緩存時間
- * • 錯誤處理 - 完善的錯誤邊界和降級方案
- * • 測試覆蓋 - 重點測試虛擬化和性能關鍵路徑
- * • 漸進增強 - 確保基本功能在舊瀏覽器中正常工作
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

@@ -1,33 +1,11 @@
 /**
- * API 響應緩存系統
+ * @fileoverview API 響應緩存系統功能：- HTTP 響應緩存- 智能緩存失效- ETags 支持- 條件請求處理- 緩存統計使用方式：```typescript// 在 API Route 中使用export const GET = withCache(  async (request) => {    const data = await fetchData();    return NextResponse.json(data);  },  { ttl: 300, key: 'custom-key' });// 或使用便利函數const cached = await cacheResponse('key', async () => {  return await expensiveOperation();}, { ttl: 600 });```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
+ * @module lib/performance/response-cache
+ * @description
+ * API 響應緩存系統功能：- HTTP 響應緩存- 智能緩存失效- ETags 支持- 條件請求處理- 緩存統計使用方式：```typescript// 在 API Route 中使用export const GET = withCache(  async (request) => {    const data = await fetchData();    return NextResponse.json(data);  },  { ttl: 300, key: 'custom-key' });// 或使用便利函數const cached = await cacheResponse('key', async () => {  return await expensiveOperation();}, { ttl: 600 });```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
  *
- * 功能：
- * - HTTP 響應緩存
- * - 智能緩存失效
- * - ETags 支持
- * - 條件請求處理
- * - 緩存統計
- *
- * 使用方式：
- * ```typescript
- * // 在 API Route 中使用
- * export const GET = withCache(
- *   async (request) => {
- *     const data = await fetchData();
- *     return NextResponse.json(data);
- *   },
- *   { ttl: 300, key: 'custom-key' }
- * );
- *
- * // 或使用便利函數
- * const cached = await cacheResponse('key', async () => {
- *   return await expensiveOperation();
- * }, { ttl: 600 });
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 4 - 性能優化與高可用性
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

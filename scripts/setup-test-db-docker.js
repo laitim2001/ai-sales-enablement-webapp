@@ -1,13 +1,11 @@
 /**
- * 測試數據庫設置腳本 - Docker 版本
+ * @fileoverview 測試數據庫設置腳本 - Docker 版本功能：- 通過 Docker 容器創建測試數據庫- 運行 Prisma 遷移- 生成 Prisma Client運行：node scripts/setup-test-db-docker.js
+ * @module scripts/setup-test-db-docker
+ * @description
+ * 測試數據庫設置腳本 - Docker 版本功能：- 通過 Docker 容器創建測試數據庫- 運行 Prisma 遷移- 生成 Prisma Client運行：node scripts/setup-test-db-docker.js
  *
- * 功能：
- * - 通過 Docker 容器創建測試數據庫
- * - 運行 Prisma 遷移
- * - 生成 Prisma Client
- *
- * 運行：
- * node scripts/setup-test-db-docker.js
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const { exec } = require('child_process');

@@ -1,37 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: 用戶登出API路由（增強版）
- * 檔案用途: AI銷售賦能平台的用戶登出端點
- * 開發階段: MVP Phase 2 Sprint 1 - JWT驗證增強
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: 用戶登出API路由（增強版）檔案用途: AI銷售賦能平台的用戶登出端點開發階段: MVP Phase 2 Sprint 1 - JWT驗證增強================================================================功能索引:1. POST方法 - 處理用戶登出請求安全特色（MVP Phase 2增強）:- Token撤銷: 將access token加入黑名單- Refresh token撤銷: 撤銷當前或所有設備的refresh token- Cookie清除: 立即失效認證cookie- 安全配置: 保持與登入時相同的安全設定- 容錯設計: 即使token無效仍可登出- 錯誤處理: 完整錯誤處理確保服務穩定性API規格:- 方法: POST- 路徑: /api/auth/logout- 請求體: { logoutAllDevices?: boolean }- 回應: { message: 'Logout successful' } | ErrorResponse- Cookie操作: 清除auth-token和refresh-token注意事項:- 採用容錯設計，即使token無效仍會清除cookie- 支援單設備登出或所有設備登出- 前端應在收到成功響應後清除本地儲存的認證資訊更新記錄:- Week 1: 初始版本，基礎登出功能- 2025-09-30: Sprint 1升級 - 新增token撤銷機制================================================================
+ * @module app/api/auth/logout/route
+ * @description
+ * ================================================================檔案名稱: 用戶登出API路由（增強版）檔案用途: AI銷售賦能平台的用戶登出端點開發階段: MVP Phase 2 Sprint 1 - JWT驗證增強================================================================功能索引:1. POST方法 - 處理用戶登出請求安全特色（MVP Phase 2增強）:- Token撤銷: 將access token加入黑名單- Refresh token撤銷: 撤銷當前或所有設備的refresh token- Cookie清除: 立即失效認證cookie- 安全配置: 保持與登入時相同的安全設定- 容錯設計: 即使token無效仍可登出- 錯誤處理: 完整錯誤處理確保服務穩定性API規格:- 方法: POST- 路徑: /api/auth/logout- 請求體: { logoutAllDevices?: boolean }- 回應: { message: 'Logout successful' } | ErrorResponse- Cookie操作: 清除auth-token和refresh-token注意事項:- 採用容錯設計，即使token無效仍會清除cookie- 支援單設備登出或所有設備登出- 前端應在收到成功響應後清除本地儲存的認證資訊更新記錄:- Week 1: 初始版本，基礎登出功能- 2025-09-30: Sprint 1升級 - 新增token撤銷機制================================================================
  *
- * 功能索引:
- * 1. POST方法 - 處理用戶登出請求
- *
- * 安全特色（MVP Phase 2增強）:
- * - Token撤銷: 將access token加入黑名單
- * - Refresh token撤銷: 撤銷當前或所有設備的refresh token
- * - Cookie清除: 立即失效認證cookie
- * - 安全配置: 保持與登入時相同的安全設定
- * - 容錯設計: 即使token無效仍可登出
- * - 錯誤處理: 完整錯誤處理確保服務穩定性
- *
- * API規格:
- * - 方法: POST
- * - 路徑: /api/auth/logout
- * - 請求體: { logoutAllDevices?: boolean }
- * - 回應: { message: 'Logout successful' } | ErrorResponse
- * - Cookie操作: 清除auth-token和refresh-token
- *
- * 注意事項:
- * - 採用容錯設計，即使token無效仍會清除cookie
- * - 支援單設備登出或所有設備登出
- * - 前端應在收到成功響應後清除本地儲存的認證資訊
- *
- * 更新記錄:
- * - Week 1: 初始版本，基礎登出功能
- * - 2025-09-30: Sprint 1升級 - 新增token撤銷機制
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

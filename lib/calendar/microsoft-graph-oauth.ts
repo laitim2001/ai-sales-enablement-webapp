@@ -1,24 +1,11 @@
 /**
- * Microsoft Graph OAuth 2.0 配置模組
+ * @fileoverview Microsoft Graph OAuth 2.0 配置模組📋 功能說明：- Azure AD OAuth 2.0認證流程- 訪問token管理和刷新- Microsoft Graph API授權配置- Token安全存儲🔗 依賴關係：- @azure/msal-node - Microsoft認證庫- Microsoft Graph API📊 使用場景：- Outlook日曆整合- Teams會議同步- 用戶日曆事件讀取作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ * @module lib/calendar/microsoft-graph-oauth
+ * @description
+ * Microsoft Graph OAuth 2.0 配置模組📋 功能說明：- Azure AD OAuth 2.0認證流程- 訪問token管理和刷新- Microsoft Graph API授權配置- Token安全存儲🔗 依賴關係：- @azure/msal-node - Microsoft認證庫- Microsoft Graph API📊 使用場景：- Outlook日曆整合- Teams會議同步- 用戶日曆事件讀取作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
  *
- * 📋 功能說明：
- * - Azure AD OAuth 2.0認證流程
- * - 訪問token管理和刷新
- * - Microsoft Graph API授權配置
- * - Token安全存儲
- *
- * 🔗 依賴關係：
- * - @azure/msal-node - Microsoft認證庫
- * - Microsoft Graph API
- *
- * 📊 使用場景：
- * - Outlook日曆整合
- * - Teams會議同步
- * - 用戶日曆事件讀取
- *
- * 作者：Claude Code
- * 日期：2025-10-05
- * Sprint：Sprint 7 Phase 3
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { ConfidentialClientApplication, AuthorizationCodeRequest, OnBehalfOfRequest } from '@azure/msal-node';

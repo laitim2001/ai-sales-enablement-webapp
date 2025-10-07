@@ -1,29 +1,11 @@
 /**
- * 熔斷器模式實現
+ * @fileoverview 熔斷器模式實現功能：- 防止級聯故障- 快速失敗機制- 自動故障恢復- 半開狀態測試- 熔斷統計追蹤使用方式：```typescriptconst breaker = new CircuitBreaker({  name: 'database',  failureThreshold: 5,  resetTimeout: 60000});const result = await breaker.execute(async () => {  return await db.query('SELECT * FROM users');});```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
+ * @module lib/resilience/circuit-breaker
+ * @description
+ * 熔斷器模式實現功能：- 防止級聯故障- 快速失敗機制- 自動故障恢復- 半開狀態測試- 熔斷統計追蹤使用方式：```typescriptconst breaker = new CircuitBreaker({  name: 'database',  failureThreshold: 5,  resetTimeout: 60000});const result = await breaker.execute(async () => {  return await db.query('SELECT * FROM users');});```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
  *
- * 功能：
- * - 防止級聯故障
- * - 快速失敗機制
- * - 自動故障恢復
- * - 半開狀態測試
- * - 熔斷統計追蹤
- *
- * 使用方式：
- * ```typescript
- * const breaker = new CircuitBreaker({
- *   name: 'database',
- *   failureThreshold: 5,
- *   resetTimeout: 60000
- * });
- *
- * const result = await breaker.execute(async () => {
- *   return await db.query('SELECT * FROM users');
- * });
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 4 - 性能優化與高可用性
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 /**

@@ -1,13 +1,11 @@
 /**
- * 通知已讀標記 API 路由 (Notification Read API Route)
- *
- * 處理通知已讀狀態的更新
- *
- * 端點：
- * - PATCH /api/notifications/read - 標記通知為已讀
- *
+ * @fileoverview 通知已讀標記 API 路由 (Notification Read API Route)處理通知已讀狀態的更新端點：- PATCH /api/notifications/read - 標記通知為已讀@module app/api/notifications/read/route@since Sprint 5 Week 10 Day 2
  * @module app/api/notifications/read/route
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知已讀標記 API 路由 (Notification Read API Route)處理通知已讀狀態的更新端點：- PATCH /api/notifications/read - 標記通知為已讀@module app/api/notifications/read/route@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

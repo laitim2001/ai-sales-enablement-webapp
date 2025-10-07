@@ -1,10 +1,11 @@
 /**
- * 範本複製 API
+ * @fileoverview 範本複製 APIPOST /api/templates/[id]/duplicate - 複製範本@author Claude Code@date 2025-10-02
+ * @module app/api/templates/[id]/duplicate/route
+ * @description
+ * 範本複製 APIPOST /api/templates/[id]/duplicate - 複製範本@author Claude Code@date 2025-10-02
  *
- * POST /api/templates/[id]/duplicate - 複製範本
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

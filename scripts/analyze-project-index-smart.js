@@ -1,9 +1,11 @@
 /**
- * PROJECT-INDEX.md 智能分析腳本 (多視圖索引感知版本)
+ * @fileoverview PROJECT-INDEX.md 智能分析腳本 (多視圖索引感知版本)理解 PROJECT-INDEX.md 的設計:- 多視圖索引: 同一文件在不同章節出現是正常的 (docs目錄、快速導航、優先級)- 真正重複: 同一章節/表格內出現相同文件，或相同目錄被完整索引兩次
+ * @module scripts/analyze-project-index-smart
+ * @description
+ * PROJECT-INDEX.md 智能分析腳本 (多視圖索引感知版本)理解 PROJECT-INDEX.md 的設計:- 多視圖索引: 同一文件在不同章節出現是正常的 (docs目錄、快速導航、優先級)- 真正重複: 同一章節/表格內出現相同文件，或相同目錄被完整索引兩次
  *
- * 理解 PROJECT-INDEX.md 的設計:
- * - 多視圖索引: 同一文件在不同章節出現是正常的 (docs目錄、快速導航、優先級)
- * - 真正重複: 同一章節/表格內出現相同文件，或相同目錄被完整索引兩次
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const fs = require('fs');

@@ -1,23 +1,11 @@
 /**
- * 審計日誌查詢 API
+ * @fileoverview 審計日誌查詢 APIGET /api/audit-logs - 查詢審計日誌（需要ADMIN權限）Query Parameters:- userId: 用戶ID過濾- action: 操作類型過濾（支持數組）- resource: 資源類型過濾（支持數組）- severity: 嚴重級別過濾（支持數組）- success: 成功狀態過濾（true/false）- startDate: 開始日期（ISO 8601格式）- endDate: 結束日期（ISO 8601格式）- ipAddress: IP地址過濾- limit: 返回數量限制（默認100，最大1000）- offset: 分頁偏移量（默認0）@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
+ * @module app/api/audit-logs/route
+ * @description
+ * 審計日誌查詢 APIGET /api/audit-logs - 查詢審計日誌（需要ADMIN權限）Query Parameters:- userId: 用戶ID過濾- action: 操作類型過濾（支持數組）- resource: 資源類型過濾（支持數組）- severity: 嚴重級別過濾（支持數組）- success: 成功狀態過濾（true/false）- startDate: 開始日期（ISO 8601格式）- endDate: 結束日期（ISO 8601格式）- ipAddress: IP地址過濾- limit: 返回數量限制（默認100，最大1000）- offset: 分頁偏移量（默認0）@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
  *
- * GET /api/audit-logs - 查詢審計日誌（需要ADMIN權限）
- *
- * Query Parameters:
- * - userId: 用戶ID過濾
- * - action: 操作類型過濾（支持數組）
- * - resource: 資源類型過濾（支持數組）
- * - severity: 嚴重級別過濾（支持數組）
- * - success: 成功狀態過濾（true/false）
- * - startDate: 開始日期（ISO 8601格式）
- * - endDate: 結束日期（ISO 8601格式）
- * - ipAddress: IP地址過濾
- * - limit: 返回數量限制（默認100，最大1000）
- * - offset: 分頁偏移量（默認0）
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 8 - 審計日誌系統實施
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

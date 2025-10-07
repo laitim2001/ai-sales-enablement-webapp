@@ -1,74 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - AI洞察組件 (components/dashboard/ai-insights.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - AI洞察組件 (components/dashboard/ai-insights.tsx)================================================================【組件功能】AI驅動的智能洞察分析組件，提供基於數據的銷售建議和商機提示。展示不同類型的洞察：商機、警告、建議和成就。【設計用途】- 智能銷售助手和決策支援- 客戶關係管理的主動提醒- 銷售機會識別和風險預警- 業務流程優化建議【洞察類型】• opportunity (商機): 潛在高價值客戶和銷售機會• warning (警告): 客戶流失風險和警示信號• suggestion (建議): 銷售策略和最佳實踐建議• achievement (成就): 目標達成預測和正面反饋【數據結構】Insight interface:• id - string - 洞察唯一識別符• type - 'opportunity'|'warning'|'suggestion'|'achievement' - 洞察類型• title - string - 洞察標題• description - string - 詳細描述說明• confidence - number - AI信心度百分比 (0-100)• action - string - 可選操作標籤• actionHref - string - 操作連結路徑【視覺設計】• 圖示編碼: 每種類型使用不同圖示和顏色  - opportunity: TrendingUp + 綠色  - warning: AlertTriangle + 紅色  - suggestion: Lightbulb + 黃色  - achievement: Star + 藍色• 標籤設計: 顏色帶和類型標識• 信心度指示: 進度條和百分比顯示• 懸停效果: 邊框和陰影變化【信心度指示】• 90%+ : 綠色 (高信心度)• 70-89%: 黃色 (中等信心度)• <70% : 紅色 (低信心度)【使用範例】```tsx// 在Dashboard中使用<AIInsights />// 自訂容器<div className="w-full max-w-lg">  <AIInsights /></div>```【相關檔案】• components/ui/card.tsx - 卡片容器組件• components/ui/button.tsx - 按鈕組件• components/ui/badge.tsx - 標籤組件• lucide-react - 圖示庫【開發注意】• 使用'use client'支援客戶端互動• 洞察數據目前是模擬數據，應從AI服務API取得• 信心度指示可結合機器學習模型的預測結果• 考慮新增實時數據更新和通知系統• 支援洞察的優先級排序和篩選• 可集成更多 AI 服務(如 GPT, Gemini)================================================================
+ * @module components/dashboard/ai-insights
+ * @description
+ * ================================================================AI銷售賦能平台 - AI洞察組件 (components/dashboard/ai-insights.tsx)================================================================【組件功能】AI驅動的智能洞察分析組件，提供基於數據的銷售建議和商機提示。展示不同類型的洞察：商機、警告、建議和成就。【設計用途】- 智能銷售助手和決策支援- 客戶關係管理的主動提醒- 銷售機會識別和風險預警- 業務流程優化建議【洞察類型】• opportunity (商機): 潛在高價值客戶和銷售機會• warning (警告): 客戶流失風險和警示信號• suggestion (建議): 銷售策略和最佳實踐建議• achievement (成就): 目標達成預測和正面反饋【數據結構】Insight interface:• id - string - 洞察唯一識別符• type - 'opportunity'|'warning'|'suggestion'|'achievement' - 洞察類型• title - string - 洞察標題• description - string - 詳細描述說明• confidence - number - AI信心度百分比 (0-100)• action - string - 可選操作標籤• actionHref - string - 操作連結路徑【視覺設計】• 圖示編碼: 每種類型使用不同圖示和顏色  - opportunity: TrendingUp + 綠色  - warning: AlertTriangle + 紅色  - suggestion: Lightbulb + 黃色  - achievement: Star + 藍色• 標籤設計: 顏色帶和類型標識• 信心度指示: 進度條和百分比顯示• 懸停效果: 邊框和陰影變化【信心度指示】• 90%+ : 綠色 (高信心度)• 70-89%: 黃色 (中等信心度)• <70% : 紅色 (低信心度)【使用範例】```tsx// 在Dashboard中使用<AIInsights />// 自訂容器<div className="w-full max-w-lg">  <AIInsights /></div>```【相關檔案】• components/ui/card.tsx - 卡片容器組件• components/ui/button.tsx - 按鈕組件• components/ui/badge.tsx - 標籤組件• lucide-react - 圖示庫【開發注意】• 使用'use client'支援客戶端互動• 洞察數據目前是模擬數據，應從AI服務API取得• 信心度指示可結合機器學習模型的預測結果• 考慮新增實時數據更新和通知系統• 支援洞察的優先級排序和篩選• 可集成更多 AI 服務(如 GPT, Gemini)================================================================
  *
- * 【組件功能】
- * AI驅動的智能洞察分析組件，提供基於數據的銷售建議和商機提示。
- * 展示不同類型的洞察：商機、警告、建議和成就。
- *
- * 【設計用途】
- * - 智能銷售助手和決策支援
- * - 客戶關係管理的主動提醒
- * - 銷售機會識別和風險預警
- * - 業務流程優化建議
- *
- * 【洞察類型】
- * • opportunity (商機): 潛在高價值客戶和銷售機會
- * • warning (警告): 客戶流失風險和警示信號
- * • suggestion (建議): 銷售策略和最佳實踐建議
- * • achievement (成就): 目標達成預測和正面反饋
- *
- * 【數據結構】
- * Insight interface:
- * • id - string - 洞察唯一識別符
- * • type - 'opportunity'|'warning'|'suggestion'|'achievement' - 洞察類型
- * • title - string - 洞察標題
- * • description - string - 詳細描述說明
- * • confidence - number - AI信心度百分比 (0-100)
- * • action - string - 可選操作標籤
- * • actionHref - string - 操作連結路徑
- *
- * 【視覺設計】
- * • 圖示編碼: 每種類型使用不同圖示和顏色
- *   - opportunity: TrendingUp + 綠色
- *   - warning: AlertTriangle + 紅色
- *   - suggestion: Lightbulb + 黃色
- *   - achievement: Star + 藍色
- * • 標籤設計: 顏色帶和類型標識
- * • 信心度指示: 進度條和百分比顯示
- * • 懸停效果: 邊框和陰影變化
- *
- * 【信心度指示】
- * • 90%+ : 綠色 (高信心度)
- * • 70-89%: 黃色 (中等信心度)
- * • <70% : 紅色 (低信心度)
- *
- * 【使用範例】
- * ```tsx
- * // 在Dashboard中使用
- * <AIInsights />
- *
- * // 自訂容器
- * <div className="w-full max-w-lg">
- *   <AIInsights />
- * </div>
- * ```
- *
- * 【相關檔案】
- * • components/ui/card.tsx - 卡片容器組件
- * • components/ui/button.tsx - 按鈕組件
- * • components/ui/badge.tsx - 標籤組件
- * • lucide-react - 圖示庫
- *
- * 【開發注意】
- * • 使用'use client'支援客戶端互動
- * • 洞察數據目前是模擬數據，應從AI服務API取得
- * • 信心度指示可結合機器學習模型的預測結果
- * • 考慮新增實時數據更新和通知系統
- * • 支援洞察的優先級排序和篩選
- * • 可集成更多 AI 服務(如 GPT, Gemini)
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

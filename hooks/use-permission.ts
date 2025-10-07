@@ -1,3 +1,16 @@
+/**
+ * @fileoverview use-permission - 工具模組
+ * @module hooks/use-permission
+ * @description
+ * 提供輔助功能的工具函數
+ *
+ * ### 主要功能:
+ * - usePermission(): 函數功能
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 'use client'
 
 /**

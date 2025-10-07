@@ -1,13 +1,11 @@
 /**
- * Dynamics 365 模擬 API 端點
+ * @fileoverview Dynamics 365 模擬 API 端點功能：- 模擬所有 Dynamics 365 CRM API 端點- 提供測試數據以支持開發和測試- 支持基本的 CRUD 操作作者：Claude Code創建時間：2025-09-28
+ * @module app/api/mock/dynamics365/[...path]/route
+ * @description
+ * Dynamics 365 模擬 API 端點功能：- 模擬所有 Dynamics 365 CRM API 端點- 提供測試數據以支持開發和測試- 支持基本的 CRUD 操作作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 模擬所有 Dynamics 365 CRM API 端點
- * - 提供測試數據以支持開發和測試
- * - 支持基本的 CRUD 操作
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

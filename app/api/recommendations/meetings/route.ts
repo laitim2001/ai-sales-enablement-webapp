@@ -1,34 +1,11 @@
 /**
- * 會議相關推薦API路由
+ * @fileoverview 會議相關推薦API路由📋 檔案用途：提供基於會議上下文的個性化推薦API🔗 API端點：- GET /api/recommendations/meetings - 獲取會議相關推薦📊 請求參數：- meetingId: 會議ID（必需）- limit: 返回數量限制（默認10）- contentType: 內容類型過濾📤 響應格式：{  success: boolean,  data: {    items: RecommendationItem[],    totalCount: number,    meetingContext: {      meetingId: string,      meetingType?: string,      participants?: string[]    }  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ * @module app/api/recommendations/meetings/route
+ * @description
+ * 會議相關推薦API路由📋 檔案用途：提供基於會議上下文的個性化推薦API🔗 API端點：- GET /api/recommendations/meetings - 獲取會議相關推薦📊 請求參數：- meetingId: 會議ID（必需）- limit: 返回數量限制（默認10）- contentType: 內容類型過濾📤 響應格式：{  success: boolean,  data: {    items: RecommendationItem[],    totalCount: number,    meetingContext: {      meetingId: string,      meetingType?: string,      participants?: string[]    }  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
  *
- * 📋 檔案用途：
- * 提供基於會議上下文的個性化推薦API
- *
- * 🔗 API端點：
- * - GET /api/recommendations/meetings - 獲取會議相關推薦
- *
- * 📊 請求參數：
- * - meetingId: 會議ID（必需）
- * - limit: 返回數量限制（默認10）
- * - contentType: 內容類型過濾
- *
- * 📤 響應格式：
- * {
- *   success: boolean,
- *   data: {
- *     items: RecommendationItem[],
- *     totalCount: number,
- *     meetingContext: {
- *       meetingId: string,
- *       meetingType?: string,
- *       participants?: string[]
- *     }
- *   }
- * }
- *
- * 作者：Claude Code
- * 創建時間：2025-10-05
- * Sprint：Sprint 7 Phase 2
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,3 +1,13 @@
+/**
+ * @fileoverview EditLockIndicator - 工具模組
+ * @module components/collaboration/EditLockIndicator
+ * @description
+ * 提供輔助功能的工具函數
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 'use client';
 
 /**

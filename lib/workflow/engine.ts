@@ -1,14 +1,11 @@
 /**
- * 工作流程引擎核心類
+ * @fileoverview 工作流程引擎核心類功能：- 管理提案狀態轉換- 驗證狀態轉換規則- 執行狀態變更和審計記錄- 處理自動化工作流程邏輯作者：Claude Code日期：2025-10-01
+ * @module lib/workflow/engine
+ * @description
+ * 工作流程引擎核心類功能：- 管理提案狀態轉換- 驗證狀態轉換規則- 執行狀態變更和審計記錄- 處理自動化工作流程邏輯作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 管理提案狀態轉換
- * - 驗證狀態轉換規則
- * - 執行狀態變更和審計記錄
- * - 處理自動化工作流程邏輯
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient, ProposalStatus, WorkflowType } from '@prisma/client';

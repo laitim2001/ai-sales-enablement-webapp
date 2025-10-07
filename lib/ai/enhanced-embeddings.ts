@@ -1,14 +1,11 @@
 /**
- * AI 銷售賦能平台 - 增強版 Azure OpenAI Embeddings 服務
+ * @fileoverview AI 銷售賦能平台 - 增強版 Azure OpenAI Embeddings 服務功能特色：- 智能緩存機制（內存+Redis雙層緩存）- 批量處理優化（自動分批、並行控制）- 速率限制和重試機制- 成本追蹤和性能監控- 向量質量驗證Week 5 開發階段 - Task 5.3: Azure OpenAI整合增強
+ * @module lib/ai/enhanced-embeddings
+ * @description
+ * AI 銷售賦能平台 - 增強版 Azure OpenAI Embeddings 服務功能特色：- 智能緩存機制（內存+Redis雙層緩存）- 批量處理優化（自動分批、並行控制）- 速率限制和重試機制- 成本追蹤和性能監控- 向量質量驗證Week 5 開發階段 - Task 5.3: Azure OpenAI整合增強
  *
- * 功能特色：
- * - 智能緩存機制（內存+Redis雙層緩存）
- * - 批量處理優化（自動分批、並行控制）
- * - 速率限制和重試機制
- * - 成本追蹤和性能監控
- * - 向量質量驗證
- *
- * Week 5 開發階段 - Task 5.3: Azure OpenAI整合增強
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { generateEmbedding, generateBatchEmbeddings, EmbeddingResult, BatchEmbeddingResult } from './embeddings'

@@ -1,13 +1,11 @@
 /**
- * 測試數據庫設置腳本
+ * @fileoverview 測試數據庫設置腳本功能：- 創建測試數據庫（如果不存在）- 運行 Prisma 遷移- 清理舊的測試數據運行：node scripts/setup-test-db.js
+ * @module scripts/setup-test-db
+ * @description
+ * 測試數據庫設置腳本功能：- 創建測試數據庫（如果不存在）- 運行 Prisma 遷移- 清理舊的測試數據運行：node scripts/setup-test-db.js
  *
- * 功能：
- * - 創建測試數據庫（如果不存在）
- * - 運行 Prisma 遷移
- * - 清理舊的測試數據
- *
- * 運行：
- * node scripts/setup-test-db.js
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const { exec } = require('child_process');

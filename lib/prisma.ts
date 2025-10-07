@@ -1,28 +1,11 @@
 /**
- * Prisma 客戶端單例模塊
+ * @fileoverview Prisma 客戶端單例模塊📋 檔案用途：提供全局唯一的Prisma客戶端實例，避免開發環境中的連接池耗盡🎯 核心功能：1. 單例模式 - 確保只有一個PrismaClient實例2. 開發環境優化 - 熱重載時重用現有連接3. 生產環境最佳實踐 - 每次創建新實例🔗 使用方式：```typescriptimport { prisma } from '@/lib/prisma'const users = await prisma.user.findMany()```⚠️ 注意事項：- 開發環境：使用global變量避免熱重載時創建多個實例- 生產環境：直接創建單個實例- 連接池管理：Prisma自動管理連接池作者：Claude Code創建時間：2025-10-05
+ * @module lib/prisma
+ * @description
+ * Prisma 客戶端單例模塊📋 檔案用途：提供全局唯一的Prisma客戶端實例，避免開發環境中的連接池耗盡🎯 核心功能：1. 單例模式 - 確保只有一個PrismaClient實例2. 開發環境優化 - 熱重載時重用現有連接3. 生產環境最佳實踐 - 每次創建新實例🔗 使用方式：```typescriptimport { prisma } from '@/lib/prisma'const users = await prisma.user.findMany()```⚠️ 注意事項：- 開發環境：使用global變量避免熱重載時創建多個實例- 生產環境：直接創建單個實例- 連接池管理：Prisma自動管理連接池作者：Claude Code創建時間：2025-10-05
  *
- * 📋 檔案用途：
- * 提供全局唯一的Prisma客戶端實例，避免開發環境中的連接池耗盡
- *
- * 🎯 核心功能：
- * 1. 單例模式 - 確保只有一個PrismaClient實例
- * 2. 開發環境優化 - 熱重載時重用現有連接
- * 3. 生產環境最佳實踐 - 每次創建新實例
- *
- * 🔗 使用方式：
- * ```typescript
- * import { prisma } from '@/lib/prisma'
- *
- * const users = await prisma.user.findMany()
- * ```
- *
- * ⚠️ 注意事項：
- * - 開發環境：使用global變量避免熱重載時創建多個實例
- * - 生產環境：直接創建單個實例
- * - 連接池管理：Prisma自動管理連接池
- *
- * 作者：Claude Code
- * 創建時間：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client'

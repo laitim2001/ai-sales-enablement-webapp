@@ -1,11 +1,11 @@
 /**
- * 編輯鎖定API - 釋放和刷新鎖定
+ * @fileoverview 編輯鎖定API - 釋放和刷新鎖定DELETE /api/collaboration/locks/:lockId - 釋放鎖定PATCH /api/collaboration/locks/:lockId - 刷新鎖定時間作者：Claude Code日期：2025-10-05
+ * @module app/api/collaboration/locks/lock/[lockId]/route
+ * @description
+ * 編輯鎖定API - 釋放和刷新鎖定DELETE /api/collaboration/locks/:lockId - 釋放鎖定PATCH /api/collaboration/locks/:lockId - 刷新鎖定時間作者：Claude Code日期：2025-10-05
  *
- * DELETE /api/collaboration/locks/:lockId - 釋放鎖定
- * PATCH /api/collaboration/locks/:lockId - 刷新鎖定時間
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

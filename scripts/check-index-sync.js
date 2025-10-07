@@ -1,3 +1,13 @@
+/**
+ * @fileoverview 模組 - 測試套件
+ * @module scripts/check-index-sync
+ * @description
+ * 模組的單元測試
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 #!/usr/bin/env node
 /**
  * 索引同步檢查工具

@@ -1,11 +1,11 @@
 /**
- * 範本管理 API - 列表和創建
+ * @fileoverview 範本管理 API - 列表和創建GET  /api/templates - 獲取範本列表POST /api/templates - 創建新範本@author Claude Code@date 2025-10-02
+ * @module app/api/templates/route
+ * @description
+ * 範本管理 API - 列表和創建GET  /api/templates - 獲取範本列表POST /api/templates - 創建新範本@author Claude Code@date 2025-10-02
  *
- * GET  /api/templates - 獲取範本列表
- * POST /api/templates - 創建新範本
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

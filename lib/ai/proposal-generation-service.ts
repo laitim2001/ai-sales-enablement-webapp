@@ -1,15 +1,11 @@
 /**
- * 提案生成管理服務
+ * @fileoverview 提案生成管理服務功能：- 管理提案生成的完整流程- 整合Azure OpenAI和數據庫操作- 處理範本變數替換和內容生成- 提供生成歷史和版本管理- 實現生成狀態追蹤和錯誤處理作者：Claude Code創建時間：2025-09-28
+ * @module lib/ai/proposal-generation-service
+ * @description
+ * 提案生成管理服務功能：- 管理提案生成的完整流程- 整合Azure OpenAI和數據庫操作- 處理範本變數替換和內容生成- 提供生成歷史和版本管理- 實現生成狀態追蹤和錯誤處理作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 管理提案生成的完整流程
- * - 整合Azure OpenAI和數據庫操作
- * - 處理範本變數替換和內容生成
- * - 提供生成歷史和版本管理
- * - 實現生成狀態追蹤和錯誤處理
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client';

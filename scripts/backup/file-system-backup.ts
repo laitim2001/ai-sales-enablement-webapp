@@ -1,28 +1,11 @@
 /**
- * 文件系統備份腳本 (生產級實施)
+ * @fileoverview 文件系統備份腳本 (生產級實施)功能：- uploads/ 目錄備份- 增量備份支持 (基於修改時間)- 備份壓縮 (tar.gz)- 備份驗證- 備份保留策略使用方式：```bash# 完整備份npx tsx scripts/backup/file-system-backup.ts --type full# 增量備份 (只備份最近24小時修改的文件)npx tsx scripts/backup/file-system-backup.ts --type incremental# 驗證備份npx tsx scripts/backup/file-system-backup.ts --verify file-backup-2025-10-06.tar.gz```@author Claude Code@date 2025-10-06@epic Sprint 3 Week 6 - 資料備份系統
+ * @module scripts/backup/file-system-backup
+ * @description
+ * 文件系統備份腳本 (生產級實施)功能：- uploads/ 目錄備份- 增量備份支持 (基於修改時間)- 備份壓縮 (tar.gz)- 備份驗證- 備份保留策略使用方式：```bash# 完整備份npx tsx scripts/backup/file-system-backup.ts --type full# 增量備份 (只備份最近24小時修改的文件)npx tsx scripts/backup/file-system-backup.ts --type incremental# 驗證備份npx tsx scripts/backup/file-system-backup.ts --verify file-backup-2025-10-06.tar.gz```@author Claude Code@date 2025-10-06@epic Sprint 3 Week 6 - 資料備份系統
  *
- * 功能：
- * - uploads/ 目錄備份
- * - 增量備份支持 (基於修改時間)
- * - 備份壓縮 (tar.gz)
- * - 備份驗證
- * - 備份保留策略
- *
- * 使用方式：
- * ```bash
- * # 完整備份
- * npx tsx scripts/backup/file-system-backup.ts --type full
- *
- * # 增量備份 (只備份最近24小時修改的文件)
- * npx tsx scripts/backup/file-system-backup.ts --type incremental
- *
- * # 驗證備份
- * npx tsx scripts/backup/file-system-backup.ts --verify file-backup-2025-10-06.tar.gz
- * ```
- *
- * @author Claude Code
- * @date 2025-10-06
- * @epic Sprint 3 Week 6 - 資料備份系統
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import * as fs from 'fs/promises';

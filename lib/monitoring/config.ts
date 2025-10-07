@@ -1,6 +1,11 @@
 /**
- * 監控配置管理
- * 支持通過環境變數切換監控後端
+ * @fileoverview 監控配置管理支持通過環境變數切換監控後端
+ * @module lib/monitoring/config
+ * @description
+ * 監控配置管理支持通過環境變數切換監控後端
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 export type MonitoringBackend = 'prometheus' | 'azure' | 'jaeger' | 'console';

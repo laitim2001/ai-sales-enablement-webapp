@@ -1,3 +1,13 @@
+/**
+ * @fileoverview 模組 - 測試套件
+ * @module scripts/dev-reminder
+ * @description
+ * 模組的單元測試
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 #!/usr/bin/env node
 /**
  * 每日開發提醒腳本

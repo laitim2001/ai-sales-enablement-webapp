@@ -1,13 +1,11 @@
 /**
- * 單個準備包API路由
+ * @fileoverview 單個準備包API路由功能：- GET: 獲取準備包詳情- PATCH: 更新準備包- DELETE: 刪除準備包作者：Claude Code日期：2025-10-05
+ * @module app/api/meeting-prep/[id]/route
+ * @description
+ * 單個準備包API路由功能：- GET: 獲取準備包詳情- PATCH: 更新準備包- DELETE: 刪除準備包作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - GET: 獲取準備包詳情
- * - PATCH: 更新準備包
- * - DELETE: 刪除準備包
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

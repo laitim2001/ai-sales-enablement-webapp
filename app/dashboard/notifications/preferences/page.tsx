@@ -1,16 +1,11 @@
 /**
- * 通知偏好設置頁面 (Notification Preferences Page)
- *
- * 用戶通知偏好配置頁面
- *
- * 功能：
- * 1. 渠道開關（郵件、站內、推送、短信）
- * 2. 通知類型選擇
- * 3. 安靜時間設置
- * 4. 保存和重置
- *
+ * @fileoverview 通知偏好設置頁面 (Notification Preferences Page)用戶通知偏好配置頁面功能：1. 渠道開關（郵件、站內、推送、短信）2. 通知類型選擇3. 安靜時間設置4. 保存和重置@module app/dashboard/notifications/preferences/page@since Sprint 5 Week 10 Day 2
  * @module app/dashboard/notifications/preferences/page
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知偏好設置頁面 (Notification Preferences Page)用戶通知偏好配置頁面功能：1. 渠道開關（郵件、站內、推送、短信）2. 通知類型選擇3. 安靜時間設置4. 保存和重置@module app/dashboard/notifications/preferences/page@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

@@ -1,17 +1,11 @@
 /**
- * 通知列表組件 (Notification List Component)
- *
- * 顯示通知列表，支援分頁、過濾和批量操作
- *
- * 功能：
- * 1. 分頁加載通知
- * 2. 按分類過濾
- * 3. 批量標記已讀
- * 4. 批量刪除
- * 5. 實時更新（可選）
- *
+ * @fileoverview 通知列表組件 (Notification List Component)顯示通知列表，支援分頁、過濾和批量操作功能：1. 分頁加載通知2. 按分類過濾3. 批量標記已讀4. 批量刪除5. 實時更新（可選）@module components/notifications/notification-list@since Sprint 5 Week 10 Day 2
  * @module components/notifications/notification-list
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知列表組件 (Notification List Component)顯示通知列表，支援分頁、過濾和批量操作功能：1. 分頁加載通知2. 按分類過濾3. 批量標記已讀4. 批量刪除5. 實時更新（可選）@module components/notifications/notification-list@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

@@ -1,16 +1,11 @@
 /**
- * 審計日誌系統 - Prisma整合版本
+ * @fileoverview 審計日誌系統 - Prisma整合版本功能：- 使用Prisma ORM進行資料庫存儲- 完整的RBAC權限檢查審計- 不可篡改的審計追蹤- 合規報告生成- 自動日誌清理（保留期限）@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
+ * @module lib/security/audit-log-prisma
+ * @description
+ * 審計日誌系統 - Prisma整合版本功能：- 使用Prisma ORM進行資料庫存儲- 完整的RBAC權限檢查審計- 不可篡改的審計追蹤- 合規報告生成- 自動日誌清理（保留期限）@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
  *
- * 功能：
- * - 使用Prisma ORM進行資料庫存儲
- * - 完整的RBAC權限檢查審計
- * - 不可篡改的審計追蹤
- * - 合規報告生成
- * - 自動日誌清理（保留期限）
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 8 - 審計日誌系統實施
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient, UserRole, AuditSeverity } from '@prisma/client';

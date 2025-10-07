@@ -1,10 +1,11 @@
 /**
- * Jest 設置 - 工作流程測試專用
+ * @fileoverview Jest 設置 - 工作流程測試專用注意：- 不 mock Prisma Client（使用真實數據庫）- 需要配置測試數據庫環境變數- 測試前會自動清理和遷移數據庫
+ * @module jest.setup.workflow
+ * @description
+ * Jest 設置 - 工作流程測試專用注意：- 不 mock Prisma Client（使用真實數據庫）- 需要配置測試數據庫環境變數- 測試前會自動清理和遷移數據庫
  *
- * 注意：
- * - 不 mock Prisma Client（使用真實數據庫）
- * - 需要配置測試數據庫環境變數
- * - 測試前會自動清理和遷移數據庫
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 // 加載環境變數

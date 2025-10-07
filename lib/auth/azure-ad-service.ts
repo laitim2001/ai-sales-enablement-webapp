@@ -1,50 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: Azure AD / Entra ID SSO服務
- * 檔案用途: AI銷售賦能平台的Azure AD單一登入(SSO)整合
- * 開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: Azure AD / Entra ID SSO服務檔案用途: AI銷售賦能平台的Azure AD單一登入(SSO)整合開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強================================================================功能索引:1. Azure AD OAuth 2.0認證流程2. MSAL Node整合3. Token交換和驗證4. 用戶信息獲取和同步5. SSO登入和登出認證流程:1. 前端跳轉到Azure AD登入頁面2. 用戶在Azure AD完成認證3. Azure AD重定向回應用並附帶授權碼4. 後端用授權碼交換access token5. 獲取用戶信息並創建/更新本地用戶6. 生成JWT tokens（與現有系統整合）7. 設置cookies並返回前端技術特色:- MSAL Node整合: Microsoft官方認證庫- PKCE支援: 增強安全性- Token緩存: 提升性能- 自動用戶同步: 首次登入自動創建用戶- JWT整合: 無縫對接現有JWT系統- 錯誤處理: 完整的錯誤處理機制安全特性:- State參數防CSRF- PKCE (Proof Key for Code Exchange)- Token驗證- Scope限制- 安全重定向URL驗證環境變數要求:- AZURE_AD_CLIENT_ID: Azure AD應用程式ID- AZURE_AD_CLIENT_SECRET: Azure AD應用程式密鑰- AZURE_AD_TENANT_ID: Azure AD租戶ID- NEXT_PUBLIC_APP_URL: 應用程式URL（重定向用）更新記錄:- 2025-09-30: 初始版本，實現Azure AD SSO整合================================================================
+ * @module lib/auth/azure-ad-service
+ * @description
+ * ================================================================檔案名稱: Azure AD / Entra ID SSO服務檔案用途: AI銷售賦能平台的Azure AD單一登入(SSO)整合開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強================================================================功能索引:1. Azure AD OAuth 2.0認證流程2. MSAL Node整合3. Token交換和驗證4. 用戶信息獲取和同步5. SSO登入和登出認證流程:1. 前端跳轉到Azure AD登入頁面2. 用戶在Azure AD完成認證3. Azure AD重定向回應用並附帶授權碼4. 後端用授權碼交換access token5. 獲取用戶信息並創建/更新本地用戶6. 生成JWT tokens（與現有系統整合）7. 設置cookies並返回前端技術特色:- MSAL Node整合: Microsoft官方認證庫- PKCE支援: 增強安全性- Token緩存: 提升性能- 自動用戶同步: 首次登入自動創建用戶- JWT整合: 無縫對接現有JWT系統- 錯誤處理: 完整的錯誤處理機制安全特性:- State參數防CSRF- PKCE (Proof Key for Code Exchange)- Token驗證- Scope限制- 安全重定向URL驗證環境變數要求:- AZURE_AD_CLIENT_ID: Azure AD應用程式ID- AZURE_AD_CLIENT_SECRET: Azure AD應用程式密鑰- AZURE_AD_TENANT_ID: Azure AD租戶ID- NEXT_PUBLIC_APP_URL: 應用程式URL（重定向用）更新記錄:- 2025-09-30: 初始版本，實現Azure AD SSO整合================================================================
  *
- * 功能索引:
- * 1. Azure AD OAuth 2.0認證流程
- * 2. MSAL Node整合
- * 3. Token交換和驗證
- * 4. 用戶信息獲取和同步
- * 5. SSO登入和登出
- *
- * 認證流程:
- * 1. 前端跳轉到Azure AD登入頁面
- * 2. 用戶在Azure AD完成認證
- * 3. Azure AD重定向回應用並附帶授權碼
- * 4. 後端用授權碼交換access token
- * 5. 獲取用戶信息並創建/更新本地用戶
- * 6. 生成JWT tokens（與現有系統整合）
- * 7. 設置cookies並返回前端
- *
- * 技術特色:
- * - MSAL Node整合: Microsoft官方認證庫
- * - PKCE支援: 增強安全性
- * - Token緩存: 提升性能
- * - 自動用戶同步: 首次登入自動創建用戶
- * - JWT整合: 無縫對接現有JWT系統
- * - 錯誤處理: 完整的錯誤處理機制
- *
- * 安全特性:
- * - State參數防CSRF
- * - PKCE (Proof Key for Code Exchange)
- * - Token驗證
- * - Scope限制
- * - 安全重定向URL驗證
- *
- * 環境變數要求:
- * - AZURE_AD_CLIENT_ID: Azure AD應用程式ID
- * - AZURE_AD_CLIENT_SECRET: Azure AD應用程式密鑰
- * - AZURE_AD_TENANT_ID: Azure AD租戶ID
- * - NEXT_PUBLIC_APP_URL: 應用程式URL（重定向用）
- *
- * 更新記錄:
- * - 2025-09-30: 初始版本，實現Azure AD SSO整合
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { ConfidentialClientApplication, Configuration, AuthorizationUrlRequest, AuthorizationCodeRequest } from '@azure/msal-node'

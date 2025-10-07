@@ -1,11 +1,11 @@
 /**
- * Azure OpenAI 成本和性能測試 POC
- * 測試目標：
- * 1. 驗證 Azure OpenAI API 連接
- * 2. 測試不同模型的性能和成本
- * 3. 評估 embedding 生成成本
- * 4. 測試內容生成的 token 消耗
- * 5. 預估月度成本
+ * @fileoverview Azure OpenAI 成本和性能測試 POC測試目標：1. 驗證 Azure OpenAI API 連接2. 測試不同模型的性能和成本3. 評估 embedding 生成成本4. 測試內容生成的 token 消耗5. 預估月度成本
+ * @module poc/azure-openai-cost-test
+ * @description
+ * Azure OpenAI 成本和性能測試 POC測試目標：1. 驗證 Azure OpenAI API 連接2. 測試不同模型的性能和成本3. 評估 embedding 生成成本4. 測試內容生成的 token 消耗5. 預估月度成本
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 require('dotenv').config({ path: '.env.local' });

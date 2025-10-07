@@ -1,3 +1,17 @@
+/**
+ * @fileoverview ProposalActions - React組件
+ * @module components/permissions/ProposalActions
+ * @description
+ * ProposalActions組件的實現
+ *
+ * ### 主要功能:
+ * - ProposalActions(): 函數功能
+ *
+ * @component
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 'use client'
 
 /**

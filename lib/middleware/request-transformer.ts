@@ -1,39 +1,11 @@
 /**
- * Request Transformation 中間件
- *
- * 提供請求數據的標準化、清理和轉換功能，確保 API 接收到格式統一的數據。
- *
- * 【核心功能】
- * 1. 數據標準化 - 統一欄位命名、日期格式、數值格式
- * 2. 批量請求處理 - 支援批量操作的包裝和解包
- * 3. 數據轉換 - 扁平化/深化、結構重組
- * 4. 數據清理 - 移除空值、修剪空白、去重
- *
- * 【使用場景】
- * - 前端數據格式不統一（camelCase vs snake_case）
- * - 需要批量處理多個請求
- * - 需要清理和標準化用戶輸入
- * - 需要轉換嵌套數據結構
- *
- * 【使用範例】
- * ```typescript
- * import { createRequestTransformer } from '@/lib/middleware/request-transformer'
- *
- * const transformer = createRequestTransformer({
- *   fieldNaming: 'snake_case',
- *   removeEmpty: true,
- *   trimStrings: true
- * })
- *
- * export async function POST(request: NextRequest) {
- *   const transformedRequest = await transformer.transform(request)
- *   // 現在 request body 已經標準化
- * }
- * ```
- *
+ * @fileoverview Request Transformation 中間件提供請求數據的標準化、清理和轉換功能，確保 API 接收到格式統一的數據。【核心功能】1. 數據標準化 - 統一欄位命名、日期格式、數值格式2. 批量請求處理 - 支援批量操作的包裝和解包3. 數據轉換 - 扁平化/深化、結構重組4. 數據清理 - 移除空值、修剪空白、去重【使用場景】- 前端數據格式不統一（camelCase vs snake_case）- 需要批量處理多個請求- 需要清理和標準化用戶輸入- 需要轉換嵌套數據結構【使用範例】```typescriptimport { createRequestTransformer } from '@/lib/middleware/request-transformer'const transformer = createRequestTransformer({  fieldNaming: 'snake_case',  removeEmpty: true,  trimStrings: true})export async function POST(request: NextRequest) {  const transformedRequest = await transformer.transform(request)  // 現在 request body 已經標準化}```@module lib/middleware/request-transformer@author Claude Code@since 2025-10-01
  * @module lib/middleware/request-transformer
- * @author Claude Code
- * @since 2025-10-01
+ * @description
+ * Request Transformation 中間件提供請求數據的標準化、清理和轉換功能，確保 API 接收到格式統一的數據。【核心功能】1. 數據標準化 - 統一欄位命名、日期格式、數值格式2. 批量請求處理 - 支援批量操作的包裝和解包3. 數據轉換 - 扁平化/深化、結構重組4. 數據清理 - 移除空值、修剪空白、去重【使用場景】- 前端數據格式不統一（camelCase vs snake_case）- 需要批量處理多個請求- 需要清理和標準化用戶輸入- 需要轉換嵌套數據結構【使用範例】```typescriptimport { createRequestTransformer } from '@/lib/middleware/request-transformer'const transformer = createRequestTransformer({  fieldNaming: 'snake_case',  removeEmpty: true,  trimStrings: true})export async function POST(request: NextRequest) {  const transformedRequest = await transformer.transform(request)  // 現在 request body 已經標準化}```@module lib/middleware/request-transformer@author Claude Code@since 2025-10-01
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

@@ -1,15 +1,11 @@
 /**
- * 知識庫版本回滾組件
+ * @fileoverview 知識庫版本回滾組件功能：- 版本回滾確認對話框- 顯示回滾影響範圍- 支持回滾原因記錄- 安全檢查和權限驗證作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
+ * @module components/knowledge/version/KnowledgeVersionRestore
+ * @description
+ * 知識庫版本回滾組件功能：- 版本回滾確認對話框- 顯示回滾影響範圍- 支持回滾原因記錄- 安全檢查和權限驗證作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
  *
- * 功能：
- * - 版本回滾確認對話框
- * - 顯示回滾影響範圍
- * - 支持回滾原因記錄
- * - 安全檢查和權限驗證
- *
- * 作者：Claude Code
- * 日期：2025-10-03
- * Sprint: 6 Week 12
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

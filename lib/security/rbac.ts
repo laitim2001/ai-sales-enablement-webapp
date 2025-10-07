@@ -1,26 +1,11 @@
 /**
- * RBAC (Role-Based Access Control) 角色權限系統
+ * @fileoverview RBAC (Role-Based Access Control) 角色權限系統功能：- 定義角色和權限映射- 權限檢查和驗證- 資源級別訪問控制- 操作級別權限控制（CRUD）權限模型：- 角色 (Role): 用戶的職能角色（ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER）- 資源 (Resource): 系統資源（customers, proposals, knowledge_base等）- 操作 (Action): 對資源的操作（create, read, update, delete）- 權限 (Permission): 角色對資源執行操作的許可設計原則：- 最小權限原則（Principle of Least Privilege）- 職責分離原則（Separation of Duties）- 易於擴展和維護@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
+ * @module lib/security/rbac
+ * @description
+ * RBAC (Role-Based Access Control) 角色權限系統功能：- 定義角色和權限映射- 權限檢查和驗證- 資源級別訪問控制- 操作級別權限控制（CRUD）權限模型：- 角色 (Role): 用戶的職能角色（ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER）- 資源 (Resource): 系統資源（customers, proposals, knowledge_base等）- 操作 (Action): 對資源的操作（create, read, update, delete）- 權限 (Permission): 角色對資源執行操作的許可設計原則：- 最小權限原則（Principle of Least Privilege）- 職責分離原則（Separation of Duties）- 易於擴展和維護@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
  *
- * 功能：
- * - 定義角色和權限映射
- * - 權限檢查和驗證
- * - 資源級別訪問控制
- * - 操作級別權限控制（CRUD）
- *
- * 權限模型：
- * - 角色 (Role): 用戶的職能角色（ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER）
- * - 資源 (Resource): 系統資源（customers, proposals, knowledge_base等）
- * - 操作 (Action): 對資源的操作（create, read, update, delete）
- * - 權限 (Permission): 角色對資源執行操作的許可
- *
- * 設計原則：
- * - 最小權限原則（Principle of Least Privilege）
- * - 職責分離原則（Separation of Duties）
- * - 易於擴展和維護
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 3 - 安全加固與合規
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 /**

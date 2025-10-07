@@ -1,14 +1,11 @@
 /**
- * 提案範本管理 API 路由
+ * @fileoverview 提案範本管理 API 路由功能：- 提供提案範本的CRUD操作- 支援範本搜尋、篩選、排序功能- 範本權限和訪問控制- 範本版本管理和使用統計作者：Claude Code創建時間：2025-09-28
+ * @module app/api/proposal-templates/route
+ * @description
+ * 提案範本管理 API 路由功能：- 提供提案範本的CRUD操作- 支援範本搜尋、篩選、排序功能- 範本權限和訪問控制- 範本版本管理和使用統計作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 提供提案範本的CRUD操作
- * - 支援範本搜尋、篩選、排序功能
- * - 範本權限和訪問控制
- * - 範本版本管理和使用統計
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

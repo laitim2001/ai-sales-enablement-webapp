@@ -1,47 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫分析統計API
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫分析統計API================================================================【API功能】提供知識庫的全面分析統計數據，支持多維度數據查詢和時間範圍篩選。【路由端點】GET /api/knowledge-base/analytics - 獲取知識庫分析統計數據【查詢參數】• type: 統計類型  - overview: 總體概覽  - top-viewed: 熱門查看文檔  - top-edited: 熱門編輯文檔  - type-distribution: 類型分布  - category-distribution: 分類分布  - status-distribution: 狀態分布  - folder-usage: 資料夾使用  - user-activity: 用戶活動• timeRange: 時間範圍 (today/week/month/custom)• startDate: 自定義開始日期 (ISO格式)• endDate: 自定義結束日期 (ISO格式)• limit: 結果數量限制 (默認10)【響應格式】{  "success": true,  "data": { ... },  "metadata": {    "type": "overview",    "timeRange": "month",    "timestamp": "2025-10-03T12:00:00Z"  }}【權限要求】• 需要 JWT 驗證• 需要 ADMIN 或 MANAGER 角色（部分統計功能）@author Claude Code@date 2025-10-03@sprint Sprint 6 Week 12
+ * @module app/api/knowledge-base/analytics/route
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫分析統計API================================================================【API功能】提供知識庫的全面分析統計數據，支持多維度數據查詢和時間範圍篩選。【路由端點】GET /api/knowledge-base/analytics - 獲取知識庫分析統計數據【查詢參數】• type: 統計類型  - overview: 總體概覽  - top-viewed: 熱門查看文檔  - top-edited: 熱門編輯文檔  - type-distribution: 類型分布  - category-distribution: 分類分布  - status-distribution: 狀態分布  - folder-usage: 資料夾使用  - user-activity: 用戶活動• timeRange: 時間範圍 (today/week/month/custom)• startDate: 自定義開始日期 (ISO格式)• endDate: 自定義結束日期 (ISO格式)• limit: 結果數量限制 (默認10)【響應格式】{  "success": true,  "data": { ... },  "metadata": {    "type": "overview",    "timeRange": "month",    "timestamp": "2025-10-03T12:00:00Z"  }}【權限要求】• 需要 JWT 驗證• 需要 ADMIN 或 MANAGER 角色（部分統計功能）@author Claude Code@date 2025-10-03@sprint Sprint 6 Week 12
  *
- * 【API功能】
- * 提供知識庫的全面分析統計數據，支持多維度數據查詢和時間範圍篩選。
- *
- * 【路由端點】
- * GET /api/knowledge-base/analytics - 獲取知識庫分析統計數據
- *
- * 【查詢參數】
- * • type: 統計類型
- *   - overview: 總體概覽
- *   - top-viewed: 熱門查看文檔
- *   - top-edited: 熱門編輯文檔
- *   - type-distribution: 類型分布
- *   - category-distribution: 分類分布
- *   - status-distribution: 狀態分布
- *   - folder-usage: 資料夾使用
- *   - user-activity: 用戶活動
- * • timeRange: 時間範圍 (today/week/month/custom)
- * • startDate: 自定義開始日期 (ISO格式)
- * • endDate: 自定義結束日期 (ISO格式)
- * • limit: 結果數量限制 (默認10)
- *
- * 【響應格式】
- * {
- *   "success": true,
- *   "data": { ... },
- *   "metadata": {
- *     "type": "overview",
- *     "timeRange": "month",
- *     "timestamp": "2025-10-03T12:00:00Z"
- *   }
- * }
- *
- * 【權限要求】
- * • 需要 JWT 驗證
- * • 需要 ADMIN 或 MANAGER 角色（部分統計功能）
- *
- * @author Claude Code
- * @date 2025-10-03
- * @sprint Sprint 6 Week 12
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

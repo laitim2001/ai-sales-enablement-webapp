@@ -1,12 +1,11 @@
 /**
- * 提醒API路由 - 單個提醒操作
+ * @fileoverview 提醒API路由 - 單個提醒操作功能：- GET: 獲取單個提醒詳情- DELETE: 忽略提醒作者：Claude Code日期：2025-10-05
+ * @module app/api/reminders/[id]/route
+ * @description
+ * 提醒API路由 - 單個提醒操作功能：- GET: 獲取單個提醒詳情- DELETE: 忽略提醒作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - GET: 獲取單個提醒詳情
- * - DELETE: 忽略提醒
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

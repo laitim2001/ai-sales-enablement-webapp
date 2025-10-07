@@ -1,14 +1,11 @@
 /**
- * 提案範本統計 API 路由
+ * @fileoverview 提案範本統計 API 路由功能：- 獲取範本使用統計數據- 分析範本生成效果- 提供範本優化建議- 生成使用報告作者：Claude Code創建時間：2025-09-28
+ * @module app/api/proposal-templates/[id]/stats/route
+ * @description
+ * 提案範本統計 API 路由功能：- 獲取範本使用統計數據- 分析範本生成效果- 提供範本優化建議- 生成使用報告作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 獲取範本使用統計數據
- * - 分析範本生成效果
- * - 提供範本優化建議
- * - 生成使用報告
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

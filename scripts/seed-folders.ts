@@ -1,8 +1,11 @@
 /**
- * 測試資料夾種子數據腳本
+ * @fileoverview 測試資料夾種子數據腳本用於創建初始測試資料夾結構運行方式: npx tsx scripts/seed-folders.ts
+ * @module scripts/seed-folders
+ * @description
+ * 測試資料夾種子數據腳本用於創建初始測試資料夾結構運行方式: npx tsx scripts/seed-folders.ts
  *
- * 用於創建初始測試資料夾結構
- * 運行方式: npx tsx scripts/seed-folders.ts
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client'

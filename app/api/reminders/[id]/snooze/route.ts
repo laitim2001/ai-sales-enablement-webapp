@@ -1,11 +1,11 @@
 /**
- * 提醒延遲API路由
+ * @fileoverview 提醒延遲API路由功能：- PATCH: 延遲提醒（snooze）作者：Claude Code日期：2025-10-05
+ * @module app/api/reminders/[id]/snooze/route
+ * @description
+ * 提醒延遲API路由功能：- PATCH: 延遲提醒（snooze）作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - PATCH: 延遲提醒（snooze）
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

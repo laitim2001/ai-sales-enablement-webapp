@@ -1,37 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 安全頭部中間件 (lib/middleware/security-headers.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 安全頭部中間件 (lib/middleware/security-headers.ts)================================================================【檔案功能】實現完整的HTTP安全頭部配置，防範常見的Web安全威脅。提供OWASP推薦的安全標準和最佳實踐。【主要職責】• XSS防護 - X-XSS-Protection和CSP頭部• 點擊劫持防護 - X-Frame-Options配置• HTTPS強制 - HSTS (HTTP Strict Transport Security)• 內容類型保護 - X-Content-Type-Options• 引用來源控制 - Referrer-Policy【技術實現】• CSP Builder - 靈活的內容安全策略構建器• Environment Aware - 根據環境調整安全級別• OWASP Compliant - 遵循OWASP安全標準• Performance Optimized - 最小化頭部大小• Edge Compatible - 支援Edge Runtime【使用場景】• API Gateway - 統一的安全頭部管理• Web應用 - 全站安全防護• 微服務 - 服務間通信安全• 合規要求 - 滿足安全審計標準• 生產環境 - 企業級安全保護【相關檔案】• middleware.ts - 使用安全頭部中間件• docs/api-gateway-architecture.md - 安全策略文檔• docs/security-guidelines.md - 安全實踐指南
+ * @module lib/middleware/security-headers
+ * @description
+ * ================================================================AI銷售賦能平台 - 安全頭部中間件 (lib/middleware/security-headers.ts)================================================================【檔案功能】實現完整的HTTP安全頭部配置，防範常見的Web安全威脅。提供OWASP推薦的安全標準和最佳實踐。【主要職責】• XSS防護 - X-XSS-Protection和CSP頭部• 點擊劫持防護 - X-Frame-Options配置• HTTPS強制 - HSTS (HTTP Strict Transport Security)• 內容類型保護 - X-Content-Type-Options• 引用來源控制 - Referrer-Policy【技術實現】• CSP Builder - 靈活的內容安全策略構建器• Environment Aware - 根據環境調整安全級別• OWASP Compliant - 遵循OWASP安全標準• Performance Optimized - 最小化頭部大小• Edge Compatible - 支援Edge Runtime【使用場景】• API Gateway - 統一的安全頭部管理• Web應用 - 全站安全防護• 微服務 - 服務間通信安全• 合規要求 - 滿足安全審計標準• 生產環境 - 企業級安全保護【相關檔案】• middleware.ts - 使用安全頭部中間件• docs/api-gateway-architecture.md - 安全策略文檔• docs/security-guidelines.md - 安全實踐指南
  *
- * 【檔案功能】
- * 實現完整的HTTP安全頭部配置，防範常見的Web安全威脅。
- * 提供OWASP推薦的安全標準和最佳實踐。
- *
- * 【主要職責】
- * • XSS防護 - X-XSS-Protection和CSP頭部
- * • 點擊劫持防護 - X-Frame-Options配置
- * • HTTPS強制 - HSTS (HTTP Strict Transport Security)
- * • 內容類型保護 - X-Content-Type-Options
- * • 引用來源控制 - Referrer-Policy
- *
- * 【技術實現】
- * • CSP Builder - 靈活的內容安全策略構建器
- * • Environment Aware - 根據環境調整安全級別
- * • OWASP Compliant - 遵循OWASP安全標準
- * • Performance Optimized - 最小化頭部大小
- * • Edge Compatible - 支援Edge Runtime
- *
- * 【使用場景】
- * • API Gateway - 統一的安全頭部管理
- * • Web應用 - 全站安全防護
- * • 微服務 - 服務間通信安全
- * • 合規要求 - 滿足安全審計標準
- * • 生產環境 - 企業級安全保護
- *
- * 【相關檔案】
- * • middleware.ts - 使用安全頭部中間件
- * • docs/api-gateway-architecture.md - 安全策略文檔
- * • docs/security-guidelines.md - 安全實踐指南
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextResponse } from 'next/server'

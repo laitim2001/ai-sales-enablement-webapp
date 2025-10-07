@@ -1,26 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 文件解析器統一導出
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 文件解析器統一導出================================================================【檔案功能】統一導出所有文件解析器，提供便捷的文件類型檢測和自動解析功能【支持格式】• PDF - pdf-parse• Word - mammoth (.docx, .doc)• Excel - xlsx (.xlsx, .xls, .csv)• 圖片 - tesseract.js (PNG, JPG, JPEG)【使用示例】```tsimport { detectFileType, parseFile } from '@/lib/parsers'const buffer = await readFile('document.pdf')const type = detectFileType(buffer, 'document.pdf')const result = await parseFile(buffer, type)console.log(result.text)```
+ * @module lib/parsers/index
+ * @description
+ * ================================================================AI銷售賦能平台 - 文件解析器統一導出================================================================【檔案功能】統一導出所有文件解析器，提供便捷的文件類型檢測和自動解析功能【支持格式】• PDF - pdf-parse• Word - mammoth (.docx, .doc)• Excel - xlsx (.xlsx, .xls, .csv)• 圖片 - tesseract.js (PNG, JPG, JPEG)【使用示例】```tsimport { detectFileType, parseFile } from '@/lib/parsers'const buffer = await readFile('document.pdf')const type = detectFileType(buffer, 'document.pdf')const result = await parseFile(buffer, type)console.log(result.text)```
  *
- * 【檔案功能】
- * 統一導出所有文件解析器，提供便捷的文件類型檢測和自動解析功能
- *
- * 【支持格式】
- * • PDF - pdf-parse
- * • Word - mammoth (.docx, .doc)
- * • Excel - xlsx (.xlsx, .xls, .csv)
- * • 圖片 - tesseract.js (PNG, JPG, JPEG)
- *
- * 【使用示例】
- * ```ts
- * import { detectFileType, parseFile } from '@/lib/parsers'
- *
- * const buffer = await readFile('document.pdf')
- * const type = detectFileType(buffer, 'document.pdf')
- * const result = await parseFile(buffer, type)
- * console.log(result.text)
- * ```
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 // 導出所有解析器

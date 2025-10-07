@@ -1,14 +1,11 @@
 /**
- * 版本回滾組件
+ * @fileoverview 版本回滾組件功能：- 版本回滾確認對話框- 顯示回滾影響範圍- 支持創建回滾前備份- 回滾原因記錄作者：Claude Code日期：2025-10-01
+ * @module components/workflow/version/VersionRestore
+ * @description
+ * 版本回滾組件功能：- 版本回滾確認對話框- 顯示回滾影響範圍- 支持創建回滾前備份- 回滾原因記錄作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 版本回滾確認對話框
- * - 顯示回滾影響範圍
- * - 支持創建回滾前備份
- * - 回滾原因記錄
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

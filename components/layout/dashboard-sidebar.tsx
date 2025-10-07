@@ -1,77 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - Dashboard側邊欄 (components/layout/dashboard-sidebar.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - Dashboard側邊欄 (components/layout/dashboard-sidebar.tsx)================================================================【組件功能】Dashboard的主導航列，提供結構化的功能分組和導航連結。包含品牌標識、用戶資訊和多層級功能選單。【設計用途】- 主要功能選單和導航系統- 用戶角色和權限展示- 工作流程引導和功能探索- 平台功能結構和組織【導航分組】• 概覽區: 儀表板、任務、銷售活動• 客戶管理: 客戶列表、銷售機會、客戶分析• AI工具: AI搜尋、AI助手、提案生成、對話分析• 知識管理: 知識庫、智能搜尋、文檔管理、收藏• 底部導航: 設定、幫助中心【視覺特性】• 品牌區域: AI大腦圖示 + 平台名稱• 用戶卡片: 頭像 + 名稱 + 角色 + 在線狀態• 活躍狀態: 當前頁面高亮顯示• 圖示系統: 每個功能搭配相應圖示• 通知標記: 部分項目顯示數量或NEW標籤• 懸停效果: 平滑過渡和背景變化【動態功能】• 路徑偵測: 使用Next.js usePathname偵測當前頁面• 活躍狀態: 當前頁面高亮顯示• 悲停提示: 每個項目都有功能描述• 角色適配: 根據用戶角色顯示不同標籤【數據結構】NavigationItem:• name - string - 選單項目名稱• href - string - 目標頁面路徑• icon - React.ComponentType - Lucide圖示組件• badge - string|number - 可選的標籤顯示• description - string - 功能描述文字NavigationSection:• title - string - 分組標題• items - NavigationItem[] - 該分組的選單項目【使用範例】```tsx// 在DashboardLayout中使用<DashboardSidebar />// 自訂容器<aside className="custom-sidebar">  <DashboardSidebar /></aside>```【相關檔案】• next/link - Next.js路由組件• next/navigation - usePathname Hook• @/hooks/use-auth - 認證Hook，獲取用戶資訊• @/lib/utils - cn工具函數• lucide-react - 圖示庫【開發注意】• 使用'use client'支援路徑偵測和狀態管理• 通知數量目前是模擬數據，應從實時API取得• 考慮根據用戶權限動態顯示/隱藏功能項目• 支援收縮/展開功能和行動版適配• 可新增搜尋功能和最近使用記錄• 考慮新增更多個人化設定和布局選項================================================================
+ * @module components/layout/dashboard-sidebar
+ * @description
+ * ================================================================AI銷售賦能平台 - Dashboard側邊欄 (components/layout/dashboard-sidebar.tsx)================================================================【組件功能】Dashboard的主導航列，提供結構化的功能分組和導航連結。包含品牌標識、用戶資訊和多層級功能選單。【設計用途】- 主要功能選單和導航系統- 用戶角色和權限展示- 工作流程引導和功能探索- 平台功能結構和組織【導航分組】• 概覽區: 儀表板、任務、銷售活動• 客戶管理: 客戶列表、銷售機會、客戶分析• AI工具: AI搜尋、AI助手、提案生成、對話分析• 知識管理: 知識庫、智能搜尋、文檔管理、收藏• 底部導航: 設定、幫助中心【視覺特性】• 品牌區域: AI大腦圖示 + 平台名稱• 用戶卡片: 頭像 + 名稱 + 角色 + 在線狀態• 活躍狀態: 當前頁面高亮顯示• 圖示系統: 每個功能搭配相應圖示• 通知標記: 部分項目顯示數量或NEW標籤• 懸停效果: 平滑過渡和背景變化【動態功能】• 路徑偵測: 使用Next.js usePathname偵測當前頁面• 活躍狀態: 當前頁面高亮顯示• 悲停提示: 每個項目都有功能描述• 角色適配: 根據用戶角色顯示不同標籤【數據結構】NavigationItem:• name - string - 選單項目名稱• href - string - 目標頁面路徑• icon - React.ComponentType - Lucide圖示組件• badge - string|number - 可選的標籤顯示• description - string - 功能描述文字NavigationSection:• title - string - 分組標題• items - NavigationItem[] - 該分組的選單項目【使用範例】```tsx// 在DashboardLayout中使用<DashboardSidebar />// 自訂容器<aside className="custom-sidebar">  <DashboardSidebar /></aside>```【相關檔案】• next/link - Next.js路由組件• next/navigation - usePathname Hook• @/hooks/use-auth - 認證Hook，獲取用戶資訊• @/lib/utils - cn工具函數• lucide-react - 圖示庫【開發注意】• 使用'use client'支援路徑偵測和狀態管理• 通知數量目前是模擬數據，應從實時API取得• 考慮根據用戶權限動態顯示/隱藏功能項目• 支援收縮/展開功能和行動版適配• 可新增搜尋功能和最近使用記錄• 考慮新增更多個人化設定和布局選項================================================================
  *
- * 【組件功能】
- * Dashboard的主導航列，提供結構化的功能分組和導航連結。
- * 包含品牌標識、用戶資訊和多層級功能選單。
- *
- * 【設計用途】
- * - 主要功能選單和導航系統
- * - 用戶角色和權限展示
- * - 工作流程引導和功能探索
- * - 平台功能結構和組織
- *
- * 【導航分組】
- * • 概覽區: 儀表板、任務、銷售活動
- * • 客戶管理: 客戶列表、銷售機會、客戶分析
- * • AI工具: AI搜尋、AI助手、提案生成、對話分析
- * • 知識管理: 知識庫、智能搜尋、文檔管理、收藏
- * • 底部導航: 設定、幫助中心
- *
- * 【視覺特性】
- * • 品牌區域: AI大腦圖示 + 平台名稱
- * • 用戶卡片: 頭像 + 名稱 + 角色 + 在線狀態
- * • 活躍狀態: 當前頁面高亮顯示
- * • 圖示系統: 每個功能搭配相應圖示
- * • 通知標記: 部分項目顯示數量或NEW標籤
- * • 懸停效果: 平滑過渡和背景變化
- *
- * 【動態功能】
- * • 路徑偵測: 使用Next.js usePathname偵測當前頁面
- * • 活躍狀態: 當前頁面高亮顯示
- * • 悲停提示: 每個項目都有功能描述
- * • 角色適配: 根據用戶角色顯示不同標籤
- *
- * 【數據結構】
- * NavigationItem:
- * • name - string - 選單項目名稱
- * • href - string - 目標頁面路徑
- * • icon - React.ComponentType - Lucide圖示組件
- * • badge - string|number - 可選的標籤顯示
- * • description - string - 功能描述文字
- *
- * NavigationSection:
- * • title - string - 分組標題
- * • items - NavigationItem[] - 該分組的選單項目
- *
- * 【使用範例】
- * ```tsx
- * // 在DashboardLayout中使用
- * <DashboardSidebar />
- *
- * // 自訂容器
- * <aside className="custom-sidebar">
- *   <DashboardSidebar />
- * </aside>
- * ```
- *
- * 【相關檔案】
- * • next/link - Next.js路由組件
- * • next/navigation - usePathname Hook
- * • @/hooks/use-auth - 認證Hook，獲取用戶資訊
- * • @/lib/utils - cn工具函數
- * • lucide-react - 圖示庫
- *
- * 【開發注意】
- * • 使用'use client'支援路徑偵測和狀態管理
- * • 通知數量目前是模擬數據，應從實時API取得
- * • 考慮根據用戶權限動態顯示/隱藏功能項目
- * • 支援收縮/展開功能和行動版適配
- * • 可新增搜尋功能和最近使用記錄
- * • 考慮新增更多個人化設定和布局選項
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

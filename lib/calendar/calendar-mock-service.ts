@@ -1,15 +1,11 @@
 /**
- * Microsoft Graph Calendar Mock Service
+ * @fileoverview Microsoft Graph Calendar Mock Service提供開發環境下的模擬日曆服務,無需真實的Azure AD配置功能:- 模擬OAuth認證流程- 模擬日曆事件CRUD操作- 模擬增量同步- 生成測試用日曆數據@module calendar-mock-service
+ * @module lib/calendar/calendar-mock-service
+ * @description
+ * Microsoft Graph Calendar Mock Service提供開發環境下的模擬日曆服務,無需真實的Azure AD配置功能:- 模擬OAuth認證流程- 模擬日曆事件CRUD操作- 模擬增量同步- 生成測試用日曆數據@module calendar-mock-service
  *
- * 提供開發環境下的模擬日曆服務,無需真實的Azure AD配置
- *
- * 功能:
- * - 模擬OAuth認證流程
- * - 模擬日曆事件CRUD操作
- * - 模擬增量同步
- * - 生成測試用日曆數據
- *
- * @module calendar-mock-service
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { randomUUID } from 'crypto';

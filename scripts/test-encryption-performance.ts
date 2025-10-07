@@ -1,46 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 加密性能測試腳本 (scripts/test-encryption-performance.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 加密性能測試腳本 (scripts/test-encryption-performance.ts)================================================================【檔案功能】測試欄位級加密對資料庫操作的性能影響。評估不同資料大小和加密欄位數量對效能的影響。【測試內容】• 單筆加密/解密性能測試• 批量加密/解密性能測試• 不同資料大小的加密性能比較• Azure Key Vault金鑰載入性能測試• 記憶體使用分析【使用方式】```bash# 基礎性能測試npm run test:encryption-perf# 或直接執行ts-node scripts/test-encryption-performance.ts# 詳細模式ts-node scripts/test-encryption-performance.ts --verbose# 指定測試輪數ts-node scripts/test-encryption-performance.ts --iterations 1000```【輸出報告】- 控制台輸出詳細性能指標- 可選: 生成JSON格式的性能報告到 output/encryption-performance-report.json【相關檔案】• lib/security/encryption.ts - 加密服務實現• lib/security/sensitive-fields-config.ts - 敏感欄位配置• lib/security/azure-key-vault.ts - Azure Key Vault服務【更新記錄】- Sprint 3 Week 5: 初始測試腳本================================================================
+ * @module scripts/test-encryption-performance
+ * @description
+ * ================================================================AI銷售賦能平台 - 加密性能測試腳本 (scripts/test-encryption-performance.ts)================================================================【檔案功能】測試欄位級加密對資料庫操作的性能影響。評估不同資料大小和加密欄位數量對效能的影響。【測試內容】• 單筆加密/解密性能測試• 批量加密/解密性能測試• 不同資料大小的加密性能比較• Azure Key Vault金鑰載入性能測試• 記憶體使用分析【使用方式】```bash# 基礎性能測試npm run test:encryption-perf# 或直接執行ts-node scripts/test-encryption-performance.ts# 詳細模式ts-node scripts/test-encryption-performance.ts --verbose# 指定測試輪數ts-node scripts/test-encryption-performance.ts --iterations 1000```【輸出報告】- 控制台輸出詳細性能指標- 可選: 生成JSON格式的性能報告到 output/encryption-performance-report.json【相關檔案】• lib/security/encryption.ts - 加密服務實現• lib/security/sensitive-fields-config.ts - 敏感欄位配置• lib/security/azure-key-vault.ts - Azure Key Vault服務【更新記錄】- Sprint 3 Week 5: 初始測試腳本================================================================
  *
- * 【檔案功能】
- * 測試欄位級加密對資料庫操作的性能影響。
- * 評估不同資料大小和加密欄位數量對效能的影響。
- *
- * 【測試內容】
- * • 單筆加密/解密性能測試
- * • 批量加密/解密性能測試
- * • 不同資料大小的加密性能比較
- * • Azure Key Vault金鑰載入性能測試
- * • 記憶體使用分析
- *
- * 【使用方式】
- * ```bash
- * # 基礎性能測試
- * npm run test:encryption-perf
- *
- * # 或直接執行
- * ts-node scripts/test-encryption-performance.ts
- *
- * # 詳細模式
- * ts-node scripts/test-encryption-performance.ts --verbose
- *
- * # 指定測試輪數
- * ts-node scripts/test-encryption-performance.ts --iterations 1000
- * ```
- *
- * 【輸出報告】
- * - 控制台輸出詳細性能指標
- * - 可選: 生成JSON格式的性能報告到 output/encryption-performance-report.json
- *
- * 【相關檔案】
- * • lib/security/encryption.ts - 加密服務實現
- * • lib/security/sensitive-fields-config.ts - 敏感欄位配置
- * • lib/security/azure-key-vault.ts - Azure Key Vault服務
- *
- * 【更新記錄】
- * - Sprint 3 Week 5: 初始測試腳本
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { EncryptionService } from '../lib/security/encryption';

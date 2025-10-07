@@ -1,20 +1,11 @@
 /**
- * 提案範本管理器
+ * @fileoverview 提案範本管理器功能：- 範本 CRUD 操作（創建/讀取/更新/刪除）- 範本搜索和過濾（分類/標籤/關鍵字）- 範本版本管理（版本控制/回滾）- 範本訪問控制（權限管理）- 範本使用統計（使用次數/評分）設計模式：- Repository Pattern: 數據訪問抽象- Builder Pattern: 範本查詢構建- Strategy Pattern: 不同訪問級別策略@author Claude Code@date 2025-10-02
+ * @module lib/template/template-manager
+ * @description
+ * 提案範本管理器功能：- 範本 CRUD 操作（創建/讀取/更新/刪除）- 範本搜索和過濾（分類/標籤/關鍵字）- 範本版本管理（版本控制/回滾）- 範本訪問控制（權限管理）- 範本使用統計（使用次數/評分）設計模式：- Repository Pattern: 數據訪問抽象- Builder Pattern: 範本查詢構建- Strategy Pattern: 不同訪問級別策略@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - 範本 CRUD 操作（創建/讀取/更新/刪除）
- * - 範本搜索和過濾（分類/標籤/關鍵字）
- * - 範本版本管理（版本控制/回滾）
- * - 範本訪問控制（權限管理）
- * - 範本使用統計（使用次數/評分）
- *
- * 設計模式：
- * - Repository Pattern: 數據訪問抽象
- * - Builder Pattern: 範本查詢構建
- * - Strategy Pattern: 不同訪問級別策略
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient, TemplateCategory, TemplateAccess, Prisma } from '@prisma/client';

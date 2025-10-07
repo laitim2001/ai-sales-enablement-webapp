@@ -1,15 +1,11 @@
 /**
- * API速率限制中間件
+ * @fileoverview API速率限制中間件功能：- 基於用戶ID和IP地址的速率限制- 支援不同API端點的不同限制策略- Redis緩存支援（可選）- 內存緩存回退機制- 速率限制狀態追蹤和日誌作者：Claude Code創建時間：2025-09-28
+ * @module lib/middleware/rate-limiter
+ * @description
+ * API速率限制中間件功能：- 基於用戶ID和IP地址的速率限制- 支援不同API端點的不同限制策略- Redis緩存支援（可選）- 內存緩存回退機制- 速率限制狀態追蹤和日誌作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 基於用戶ID和IP地址的速率限制
- * - 支援不同API端點的不同限制策略
- * - Redis緩存支援（可選）
- * - 內存緩存回退機制
- * - 速率限制狀態追蹤和日誌
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

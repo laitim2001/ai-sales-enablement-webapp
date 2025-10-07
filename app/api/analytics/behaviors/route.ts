@@ -1,11 +1,11 @@
 /**
- * 用戶行為歷史API路由
+ * @fileoverview 用戶行為歷史API路由功能：- GET: 獲取用戶行為歷史作者：Claude Code日期：2025-10-05
+ * @module app/api/analytics/behaviors/route
+ * @description
+ * 用戶行為歷史API路由功能：- GET: 獲取用戶行為歷史作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - GET: 獲取用戶行為歷史
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

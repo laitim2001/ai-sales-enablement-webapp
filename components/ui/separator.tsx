@@ -1,13 +1,11 @@
 /**
- * Separator UI組件
+ * @fileoverview Separator UI組件功能：- 提供視覺分隔線組件- 支援水平和垂直分隔- 語義化分隔元素作者：Claude Code創建時間：2025-09-28
+ * @module components/ui/separator
+ * @description
+ * Separator UI組件功能：- 提供視覺分隔線組件- 支援水平和垂直分隔- 語義化分隔元素作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 提供視覺分隔線組件
- * - 支援水平和垂直分隔
- * - 語義化分隔元素
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 "use client"

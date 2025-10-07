@@ -1,21 +1,11 @@
 /**
- * Dynamics 365 數據同步服務
+ * @fileoverview Dynamics 365 數據同步服務功能：- CRM 數據與本地資料庫的雙向同步- 增量同步和完整同步支援- 衝突檢測和解決機制- 同步狀態追蹤和錯誤處理- 自動排程和手動觸發支援的同步實體：- Account → Customer (客戶公司)- Contact → CustomerContact (聯絡人)- Opportunity → SalesOpportunity (銷售機會)- Activity → Interaction (互動記錄)作者：Claude Code創建時間：2025-09-28
+ * @module lib/integrations/dynamics365/sync
+ * @description
+ * Dynamics 365 數據同步服務功能：- CRM 數據與本地資料庫的雙向同步- 增量同步和完整同步支援- 衝突檢測和解決機制- 同步狀態追蹤和錯誤處理- 自動排程和手動觸發支援的同步實體：- Account → Customer (客戶公司)- Contact → CustomerContact (聯絡人)- Opportunity → SalesOpportunity (銷售機會)- Activity → Interaction (互動記錄)作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - CRM 數據與本地資料庫的雙向同步
- * - 增量同步和完整同步支援
- * - 衝突檢測和解決機制
- * - 同步狀態追蹤和錯誤處理
- * - 自動排程和手動觸發
- *
- * 支援的同步實體：
- * - Account → Customer (客戶公司)
- * - Contact → CustomerContact (聯絡人)
- * - Opportunity → SalesOpportunity (銷售機會)
- * - Activity → Interaction (互動記錄)
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client';

@@ -1,15 +1,11 @@
 /**
- * 用戶行為追蹤引擎
+ * @fileoverview 用戶行為追蹤引擎功能：- 追蹤內容瀏覽行為- 追蹤搜索查詢- 追蹤用戶互動- 建立用戶畫像- 生成推薦依據作者：Claude Code日期：2025-10-05
+ * @module lib/analytics/user-behavior-tracker
+ * @description
+ * 用戶行為追蹤引擎功能：- 追蹤內容瀏覽行為- 追蹤搜索查詢- 追蹤用戶互動- 建立用戶畫像- 生成推薦依據作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - 追蹤內容瀏覽行為
- * - 追蹤搜索查詢
- * - 追蹤用戶互動
- * - 建立用戶畫像
- * - 生成推薦依據
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client';

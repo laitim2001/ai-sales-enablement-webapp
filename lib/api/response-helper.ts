@@ -1,43 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - API響應助手模組
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - API響應助手模組================================================================【檔案功能】提供統一的API響應格式化工具，確保所有API端點使用一致的響應結構支援成功響應、錯誤響應和元數據管理【主要職責】• 響應格式標準化 - 所有API響應使用統一格式• 錯誤處理標準化 - 統一的錯誤響應結構• 元數據管理 - 請求ID、時間戳等系統信息• HTTP狀態碼管理 - 自動設置正確的HTTP狀態【響應格式】成功響應:{  success: true,  data: any,  metadata: { requestId, timestamp, ... }}錯誤響應:{  success: false,  error: { type, message, statusCode, ... },  metadata: { requestId, timestamp, ... }}【技術特點】• TypeScript類型安全 - 完整的類型定義• 自動狀態碼處理 - 根據錯誤類型自動設置• 元數據自動填充 - 自動添加系統相關信息• 擴展性設計 - 支援自定義元數據和錯誤信息【相關檔案】• lib/errors.ts - 統一錯誤處理系統• app/api/ - 所有API路由處理器• middleware.ts - 中間件系統
+ * @module lib/api/response-helper
+ * @description
+ * ================================================================AI銷售賦能平台 - API響應助手模組================================================================【檔案功能】提供統一的API響應格式化工具，確保所有API端點使用一致的響應結構支援成功響應、錯誤響應和元數據管理【主要職責】• 響應格式標準化 - 所有API響應使用統一格式• 錯誤處理標準化 - 統一的錯誤響應結構• 元數據管理 - 請求ID、時間戳等系統信息• HTTP狀態碼管理 - 自動設置正確的HTTP狀態【響應格式】成功響應:{  success: true,  data: any,  metadata: { requestId, timestamp, ... }}錯誤響應:{  success: false,  error: { type, message, statusCode, ... },  metadata: { requestId, timestamp, ... }}【技術特點】• TypeScript類型安全 - 完整的類型定義• 自動狀態碼處理 - 根據錯誤類型自動設置• 元數據自動填充 - 自動添加系統相關信息• 擴展性設計 - 支援自定義元數據和錯誤信息【相關檔案】• lib/errors.ts - 統一錯誤處理系統• app/api/ - 所有API路由處理器• middleware.ts - 中間件系統
  *
- * 【檔案功能】
- * 提供統一的API響應格式化工具，確保所有API端點使用一致的響應結構
- * 支援成功響應、錯誤響應和元數據管理
- *
- * 【主要職責】
- * • 響應格式標準化 - 所有API響應使用統一格式
- * • 錯誤處理標準化 - 統一的錯誤響應結構
- * • 元數據管理 - 請求ID、時間戳等系統信息
- * • HTTP狀態碼管理 - 自動設置正確的HTTP狀態
- *
- * 【響應格式】
- * 成功響應:
- * {
- *   success: true,
- *   data: any,
- *   metadata: { requestId, timestamp, ... }
- * }
- *
- * 錯誤響應:
- * {
- *   success: false,
- *   error: { type, message, statusCode, ... },
- *   metadata: { requestId, timestamp, ... }
- * }
- *
- * 【技術特點】
- * • TypeScript類型安全 - 完整的類型定義
- * • 自動狀態碼處理 - 根據錯誤類型自動設置
- * • 元數據自動填充 - 自動添加系統相關信息
- * • 擴展性設計 - 支援自定義元數據和錯誤信息
- *
- * 【相關檔案】
- * • lib/errors.ts - 統一錯誤處理系統
- * • app/api/ - 所有API路由處理器
- * • middleware.ts - 中間件系統
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextResponse } from 'next/server'

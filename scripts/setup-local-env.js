@@ -1,11 +1,11 @@
 /**
- * 本地開發環境設置助手
+ * @fileoverview 本地開發環境設置助手功能：1. 檢查並創建 .env.local 配置文件2. 初始化模擬數據3. 驗證所有配置4. 提供配置指引和故障排除
+ * @module scripts/setup-local-env
+ * @description
+ * 本地開發環境設置助手功能：1. 檢查並創建 .env.local 配置文件2. 初始化模擬數據3. 驗證所有配置4. 提供配置指引和故障排除
  *
- * 功能：
- * 1. 檢查並創建 .env.local 配置文件
- * 2. 初始化模擬數據
- * 3. 驗證所有配置
- * 4. 提供配置指引和故障排除
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const fs = require('fs').promises;

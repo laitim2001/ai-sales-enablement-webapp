@@ -1,23 +1,11 @@
 /**
- * PDF Generator Service
- *
- * 功能：使用 Puppeteer 將 HTML 內容轉換為 PDF
- *
- * 核心功能：
- * - HTML 到 PDF 轉換
- * - 自定義頁面設置（A4、邊距、頁眉頁腳）
- * - 高質量渲染
- * - 錯誤處理和資源管理
- *
- * 使用範例：
- * ```typescript
- * const pdfBuffer = await generatePDFFromHTML(htmlContent, {
- *   format: 'A4',
- *   margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' }
- * });
- * ```
- *
+ * @fileoverview PDF Generator Service功能：使用 Puppeteer 將 HTML 內容轉換為 PDF核心功能：- HTML 到 PDF 轉換- 自定義頁面設置（A4、邊距、頁眉頁腳）- 高質量渲染- 錯誤處理和資源管理使用範例：```typescriptconst pdfBuffer = await generatePDFFromHTML(htmlContent, {  format: 'A4',  margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' }});```@module lib/pdf/pdf-generator
  * @module lib/pdf/pdf-generator
+ * @description
+ * PDF Generator Service功能：使用 Puppeteer 將 HTML 內容轉換為 PDF核心功能：- HTML 到 PDF 轉換- 自定義頁面設置（A4、邊距、頁眉頁腳）- 高質量渲染- 錯誤處理和資源管理使用範例：```typescriptconst pdfBuffer = await generatePDFFromHTML(htmlContent, {  format: 'A4',  margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' }});```@module lib/pdf/pdf-generator
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import puppeteer, { Browser, PDFOptions } from 'puppeteer';

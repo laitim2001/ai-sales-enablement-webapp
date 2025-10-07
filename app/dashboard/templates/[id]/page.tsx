@@ -1,16 +1,11 @@
 /**
- * 範本編輯頁面
+ * @fileoverview 範本編輯頁面功能：- 載入現有範本數據- 編輯範本基本信息（名稱/描述/分類/訪問級別）- 編輯範本內容（Handlebars 模板）- 編輯變數配置（類型/標籤/必填/默認值）- 實時預覽- 保存更新@author Claude Code@date 2025-10-02
+ * @module app/dashboard/templates/[id]/page
+ * @description
+ * 範本編輯頁面功能：- 載入現有範本數據- 編輯範本基本信息（名稱/描述/分類/訪問級別）- 編輯範本內容（Handlebars 模板）- 編輯變數配置（類型/標籤/必填/默認值）- 實時預覽- 保存更新@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - 載入現有範本數據
- * - 編輯範本基本信息（名稱/描述/分類/訪問級別）
- * - 編輯範本內容（Handlebars 模板）
- * - 編輯變數配置（類型/標籤/必填/默認值）
- * - 實時預覽
- * - 保存更新
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

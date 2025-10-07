@@ -1,6 +1,11 @@
 /**
- * 智能補充缺失文件到 PROJECT-INDEX.md
- * 優先級策略：高+中優先級文件（約80個）
+ * @fileoverview 智能補充缺失文件到 PROJECT-INDEX.md優先級策略：高+中優先級文件（約80個）
+ * @module scripts/add-missing-files-to-index
+ * @description
+ * 智能補充缺失文件到 PROJECT-INDEX.md優先級策略：高+中優先級文件（約80個）
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const fs = require('fs');

@@ -1,14 +1,11 @@
 /**
- * 工作流程時間線組件
+ * @fileoverview 工作流程時間線組件功能：- 顯示提案狀態轉換歷史- 垂直時間線佈局- 顯示轉換詳情（時間、用戶、原因）- 支持自動轉換標記作者：Claude Code日期：2025-10-01
+ * @module components/workflow/WorkflowTimeline
+ * @description
+ * 工作流程時間線組件功能：- 顯示提案狀態轉換歷史- 垂直時間線佈局- 顯示轉換詳情（時間、用戶、原因）- 支持自動轉換標記作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 顯示提案狀態轉換歷史
- * - 垂直時間線佈局
- * - 顯示轉換詳情（時間、用戶、原因）
- * - 支持自動轉換標記
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import React from 'react';

@@ -1,16 +1,11 @@
 /**
- * 聊天訊息組件
+ * @fileoverview 聊天訊息組件功能：- 展示單條聊天訊息- 支援用戶和AI助手兩種角色- Markdown渲染支持- 時間戳顯示- 載入動畫（打字指示器）@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
+ * @module components/assistant/ChatMessage
+ * @description
+ * 聊天訊息組件功能：- 展示單條聊天訊息- 支援用戶和AI助手兩種角色- Markdown渲染支持- 時間戳顯示- 載入動畫（打字指示器）@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
  *
- * 功能：
- * - 展示單條聊天訊息
- * - 支援用戶和AI助手兩種角色
- * - Markdown渲染支持
- * - 時間戳顯示
- * - 載入動畫（打字指示器）
- *
- * @author Claude Code
- * @date 2025-10-05
- * @epic Sprint 7 - 會議準備與智能助手
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

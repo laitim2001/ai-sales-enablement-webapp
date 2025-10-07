@@ -1,13 +1,11 @@
 /**
- * Jest 配置 - 工作流程測試專用
+ * @fileoverview Jest 配置 - 工作流程測試專用用途：- 使用真實的 Prisma Client（不使用 mock）- 連接測試數據庫- 支持數據庫整合測試運行命令：npm run test:workflow
+ * @module jest.config.workflow
+ * @description
+ * Jest 配置 - 工作流程測試專用用途：- 使用真實的 Prisma Client（不使用 mock）- 連接測試數據庫- 支持數據庫整合測試運行命令：npm run test:workflow
  *
- * 用途：
- * - 使用真實的 Prisma Client（不使用 mock）
- * - 連接測試數據庫
- * - 支持數據庫整合測試
- *
- * 運行命令：
- * npm run test:workflow
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const nextJest = require('next/jest')

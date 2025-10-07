@@ -1,31 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - PDF文件解析器
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - PDF文件解析器================================================================【檔案功能】使用 pdf-parse 套件解析 PDF 文件，提取純文本內容支持多頁 PDF，自動處理編碼和格式【主要職責】• PDF文件讀取 - 從 Buffer 或文件路徑讀取 PDF• 文本提取 - 提取所有頁面的純文本內容• 元數據提取 - 提取標題、作者、創建日期等信息• 錯誤處理 - 處理損壞或加密的 PDF 文件【使用場景】• 批量上傳 - 用戶上傳 PDF 文件到知識庫• 內容索引 - 為搜索引擎建立索引• 嵌入向量 - 為 AI 搜索生成向量【技術依賴】• pdf-parse - PDF 解析核心套件• Buffer - Node.js 二進制數據處理【相關檔案】• lib/parsers/word-parser.ts - Word 文檔解析器• lib/parsers/excel-parser.ts - Excel/CSV 解析器• lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
+ * @module lib/parsers/pdf-parser
+ * @description
+ * ================================================================AI銷售賦能平台 - PDF文件解析器================================================================【檔案功能】使用 pdf-parse 套件解析 PDF 文件，提取純文本內容支持多頁 PDF，自動處理編碼和格式【主要職責】• PDF文件讀取 - 從 Buffer 或文件路徑讀取 PDF• 文本提取 - 提取所有頁面的純文本內容• 元數據提取 - 提取標題、作者、創建日期等信息• 錯誤處理 - 處理損壞或加密的 PDF 文件【使用場景】• 批量上傳 - 用戶上傳 PDF 文件到知識庫• 內容索引 - 為搜索引擎建立索引• 嵌入向量 - 為 AI 搜索生成向量【技術依賴】• pdf-parse - PDF 解析核心套件• Buffer - Node.js 二進制數據處理【相關檔案】• lib/parsers/word-parser.ts - Word 文檔解析器• lib/parsers/excel-parser.ts - Excel/CSV 解析器• lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
  *
- * 【檔案功能】
- * 使用 pdf-parse 套件解析 PDF 文件，提取純文本內容
- * 支持多頁 PDF，自動處理編碼和格式
- *
- * 【主要職責】
- * • PDF文件讀取 - 從 Buffer 或文件路徑讀取 PDF
- * • 文本提取 - 提取所有頁面的純文本內容
- * • 元數據提取 - 提取標題、作者、創建日期等信息
- * • 錯誤處理 - 處理損壞或加密的 PDF 文件
- *
- * 【使用場景】
- * • 批量上傳 - 用戶上傳 PDF 文件到知識庫
- * • 內容索引 - 為搜索引擎建立索引
- * • 嵌入向量 - 為 AI 搜索生成向量
- *
- * 【技術依賴】
- * • pdf-parse - PDF 解析核心套件
- * • Buffer - Node.js 二進制數據處理
- *
- * 【相關檔案】
- * • lib/parsers/word-parser.ts - Word 文檔解析器
- * • lib/parsers/excel-parser.ts - Excel/CSV 解析器
- * • lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import pdf from 'pdf-parse'

@@ -1,20 +1,11 @@
 /**
- * 提案詳情 API 路由
+ * @fileoverview 提案詳情 API 路由功能：- GET: 獲取提案詳細信息- PATCH: 更新提案- DELETE: 刪除提案- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: READ權限 (所有角色)- PATCH: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)- DELETE: DELETE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)@author Claude Code@date 2025-10-02@updated 2025-10-06 (RBAC整合)
+ * @module app/api/proposals/[id]/route
+ * @description
+ * 提案詳情 API 路由功能：- GET: 獲取提案詳細信息- PATCH: 更新提案- DELETE: 刪除提案- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: READ權限 (所有角色)- PATCH: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)- DELETE: DELETE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)@author Claude Code@date 2025-10-02@updated 2025-10-06 (RBAC整合)
  *
- * 功能：
- * - GET: 獲取提案詳細信息
- * - PATCH: 更新提案
- * - DELETE: 刪除提案
- * - RBAC權限控制整合 (Sprint 3 Week 7)
- *
- * 權限要求：
- * - GET: READ權限 (所有角色)
- * - PATCH: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)
- * - DELETE: DELETE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)
- *
- * @author Claude Code
- * @date 2025-10-02
- * @updated 2025-10-06 (RBAC整合)
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

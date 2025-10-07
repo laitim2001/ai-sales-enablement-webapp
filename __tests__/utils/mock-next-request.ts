@@ -1,10 +1,11 @@
 /**
- * Mock NextRequest Helper for Jest Testing
+ * @fileoverview Mock NextRequest Helper for Jest TestingJest @jest-environment node does not properly initialize NextRequest.headersThis helper provides a mock implementation for testing purposes.@see https://github.com/vercel/next.js/issues/... (known issue)
+ * @module __tests__/utils/mock-next-request
+ * @description
+ * Mock NextRequest Helper for Jest TestingJest @jest-environment node does not properly initialize NextRequest.headersThis helper provides a mock implementation for testing purposes.@see https://github.com/vercel/next.js/issues/... (known issue)
  *
- * Jest @jest-environment node does not properly initialize NextRequest.headers
- * This helper provides a mock implementation for testing purposes.
- *
- * @see https://github.com/vercel/next.js/issues/... (known issue)
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest } from 'next/server'

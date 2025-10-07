@@ -1,9 +1,11 @@
 /**
- * Dynamics 365 API 連接測試 POC
- * 測試目標：
- * 1. 驗證 OAuth 2.0 認證流程
- * 2. 測試 API 速率限制（6000/分鐘）
- * 3. 驗證數據讀取能力
+ * @fileoverview Dynamics 365 API 連接測試 POC測試目標：1. 驗證 OAuth 2.0 認證流程2. 測試 API 速率限制（6000/分鐘）3. 驗證數據讀取能力
+ * @module poc/dynamics-365-test
+ * @description
+ * Dynamics 365 API 連接測試 POC測試目標：1. 驗證 OAuth 2.0 認證流程2. 測試 API 速率限制（6000/分鐘）3. 驗證數據讀取能力
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 require('dotenv').config();

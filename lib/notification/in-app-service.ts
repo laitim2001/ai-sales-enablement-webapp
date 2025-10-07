@@ -1,16 +1,11 @@
 /**
- * 站內通知服務 (In-App Notification Service)
- *
- * 處理站內通知的實時推送和查詢功能
- *
- * 主要功能：
- * 1. 實時通知推送（未來可整合 WebSocket/SSE）
- * 2. 通知徽章計數
- * 3. 通知分組和排序
- * 4. 通知預覽和詳情
- *
+ * @fileoverview 站內通知服務 (In-App Notification Service)處理站內通知的實時推送和查詢功能主要功能：1. 實時通知推送（未來可整合 WebSocket/SSE）2. 通知徽章計數3. 通知分組和排序4. 通知預覽和詳情@module lib/notification/in-app-service@since Sprint 5 Week 10
  * @module lib/notification/in-app-service
- * @since Sprint 5 Week 10
+ * @description
+ * 站內通知服務 (In-App Notification Service)處理站內通知的實時推送和查詢功能主要功能：1. 實時通知推送（未來可整合 WebSocket/SSE）2. 通知徽章計數3. 通知分組和排序4. 通知預覽和詳情@module lib/notification/in-app-service@since Sprint 5 Week 10
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient, NotificationPriority, NotificationCategory } from '@prisma/client'

@@ -1,29 +1,11 @@
 /**
- * Azure Key Vault 整合服務
+ * @fileoverview Azure Key Vault 整合服務功能：- 雲端加密金鑰管理- 敏感資料(Secrets)存儲- 加密金鑰輪換- 證書管理- 高可用性金鑰訪問使用場景：- 資料庫加密金鑰管理- API金鑰安全存儲- 第三方服務憑證管理- JWT簽名金鑰輪換安全特性：- 托管式金鑰管理（Azure負責密鑰安全）- 存取記錄和審計- 金鑰版本控制- 自動備份和恢復- RBAC權限控制@author Claude Code@date 2025-10-05@epic Sprint 3 - 安全加固與合規
+ * @module lib/security/azure-key-vault
+ * @description
+ * Azure Key Vault 整合服務功能：- 雲端加密金鑰管理- 敏感資料(Secrets)存儲- 加密金鑰輪換- 證書管理- 高可用性金鑰訪問使用場景：- 資料庫加密金鑰管理- API金鑰安全存儲- 第三方服務憑證管理- JWT簽名金鑰輪換安全特性：- 托管式金鑰管理（Azure負責密鑰安全）- 存取記錄和審計- 金鑰版本控制- 自動備份和恢復- RBAC權限控制@author Claude Code@date 2025-10-05@epic Sprint 3 - 安全加固與合規
  *
- * 功能：
- * - 雲端加密金鑰管理
- * - 敏感資料(Secrets)存儲
- * - 加密金鑰輪換
- * - 證書管理
- * - 高可用性金鑰訪問
- *
- * 使用場景：
- * - 資料庫加密金鑰管理
- * - API金鑰安全存儲
- * - 第三方服務憑證管理
- * - JWT簽名金鑰輪換
- *
- * 安全特性：
- * - 托管式金鑰管理（Azure負責密鑰安全）
- * - 存取記錄和審計
- * - 金鑰版本控制
- * - 自動備份和恢復
- * - RBAC權限控制
- *
- * @author Claude Code
- * @date 2025-10-05
- * @epic Sprint 3 - 安全加固與合規
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { SecretClient } from '@azure/keyvault-secrets';

@@ -1,14 +1,11 @@
 /**
- * 通知 API 路由 (Notifications API Route)
- *
- * 處理通知的查詢、創建和刪除操作
- *
- * 端點：
- * - GET /api/notifications - 獲取通知列表（支援分頁、過濾）
- * - DELETE /api/notifications - 刪除通知（支援批量刪除）
- *
+ * @fileoverview 通知 API 路由 (Notifications API Route)處理通知的查詢、創建和刪除操作端點：- GET /api/notifications - 獲取通知列表（支援分頁、過濾）- DELETE /api/notifications - 刪除通知（支援批量刪除）@module app/api/notifications/route@since Sprint 5 Week 10 Day 2
  * @module app/api/notifications/route
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知 API 路由 (Notifications API Route)處理通知的查詢、創建和刪除操作端點：- GET /api/notifications - 獲取通知列表（支援分頁、過濾）- DELETE /api/notifications - 刪除通知（支援批量刪除）@module app/api/notifications/route@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

@@ -1,18 +1,11 @@
 /**
- * 通知引擎 (Notification Engine)
- *
- * 核心通知生成和發送引擎，支援多渠道通知、優先級管理、批次處理和模板系統
- *
- * 主要功能：
- * 1. 通知創建和管理
- * 2. 多渠道發送（站內、郵件）
- * 3. 優先級和過期管理
- * 4. 用戶偏好支援
- * 5. 模板系統整合
- * 6. 批次處理
- *
+ * @fileoverview 通知引擎 (Notification Engine)核心通知生成和發送引擎，支援多渠道通知、優先級管理、批次處理和模板系統主要功能：1. 通知創建和管理2. 多渠道發送（站內、郵件）3. 優先級和過期管理4. 用戶偏好支援5. 模板系統整合6. 批次處理@module lib/notification/engine@since Sprint 5 Week 10
  * @module lib/notification/engine
- * @since Sprint 5 Week 10
+ * @description
+ * 通知引擎 (Notification Engine)核心通知生成和發送引擎，支援多渠道通知、優先級管理、批次處理和模板系統主要功能：1. 通知創建和管理2. 多渠道發送（站內、郵件）3. 優先級和過期管理4. 用戶偏好支援5. 模板系統整合6. 批次處理@module lib/notification/engine@since Sprint 5 Week 10
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient, NotificationType, NotificationCategory, NotificationPriority, NotificationStatus, NotificationChannel } from '@prisma/client'

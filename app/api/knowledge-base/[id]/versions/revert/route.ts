@@ -1,12 +1,11 @@
 /**
- * 知識庫版本回滾 API 路由
+ * @fileoverview 知識庫版本回滾 API 路由端點：- POST /api/knowledge-base/[id]/versions/revert - 回滾到指定版本作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
+ * @module app/api/knowledge-base/[id]/versions/revert/route
+ * @description
+ * 知識庫版本回滾 API 路由端點：- POST /api/knowledge-base/[id]/versions/revert - 回滾到指定版本作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
  *
- * 端點：
- * - POST /api/knowledge-base/[id]/versions/revert - 回滾到指定版本
- *
- * 作者：Claude Code
- * 日期：2025-10-03
- * Sprint: 6 Week 12
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

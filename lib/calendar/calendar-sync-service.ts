@@ -1,25 +1,11 @@
 /**
- * 日曆同步服務
+ * @fileoverview 日曆同步服務📋 功能說明：- Microsoft Graph日曆事件同步- 增量同步機制（Delta Query）- 會議自動同步- 同步狀態追蹤- 衝突處理🔗 依賴關係：- @microsoft/microsoft-graph-client - Graph API客戶端- lib/calendar/microsoft-graph-oauth - OAuth認證📊 使用場景：- Outlook日曆同步- 會議準備包自動關聯- 日曆事件創建和更新作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ * @module lib/calendar/calendar-sync-service
+ * @description
+ * 日曆同步服務📋 功能說明：- Microsoft Graph日曆事件同步- 增量同步機制（Delta Query）- 會議自動同步- 同步狀態追蹤- 衝突處理🔗 依賴關係：- @microsoft/microsoft-graph-client - Graph API客戶端- lib/calendar/microsoft-graph-oauth - OAuth認證📊 使用場景：- Outlook日曆同步- 會議準備包自動關聯- 日曆事件創建和更新作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
  *
- * 📋 功能說明：
- * - Microsoft Graph日曆事件同步
- * - 增量同步機制（Delta Query）
- * - 會議自動同步
- * - 同步狀態追蹤
- * - 衝突處理
- *
- * 🔗 依賴關係：
- * - @microsoft/microsoft-graph-client - Graph API客戶端
- * - lib/calendar/microsoft-graph-oauth - OAuth認證
- *
- * 📊 使用場景：
- * - Outlook日曆同步
- * - 會議準備包自動關聯
- * - 日曆事件創建和更新
- *
- * 作者：Claude Code
- * 日期：2025-10-05
- * Sprint：Sprint 7 Phase 3
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { Client } from '@microsoft/microsoft-graph-client';

@@ -1,36 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 根佈局組件 (app/layout.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 根佈局組件 (app/layout.tsx)================================================================【檔案功能】此檔案是Next.js App Router的根佈局組件，定義整個應用程式的全域結構負責設定HTML文檔結構、元數據配置、字體加載和全域狀態管理【主要職責】• HTML根結構定義 - 設定語言、頭部和主體結構• 元數據管理 - SEO優化、Open Graph、Twitter Cards• 全域字體配置 - Google Fonts字體加載和應用• 認證狀態管理 - 全域認證Context Provider• 全域樣式加載 - 引入Tailwind CSS和自定義樣式【技術特點】• 使用Next.js 14 App Router架構• 支援TypeScript嚴格模式• SEO友好的元數據配置• 響應式設計和國際化支援• 安全的認證狀態管理【相關檔案】• globals.css - 全域CSS樣式定義• hooks/use-auth.tsx - 認證狀態管理• components/ui/* - UI組件庫【開發注意】• 元數據變更需要重新部署才能生效• 字體變更會影響全站載入效能• AuthProvider必須包裹所有需要認證的頁面• suppressHydrationWarning用於避免SSR/CSR差異
+ * @module app/layout
+ * @description
+ * ================================================================AI銷售賦能平台 - 根佈局組件 (app/layout.tsx)================================================================【檔案功能】此檔案是Next.js App Router的根佈局組件，定義整個應用程式的全域結構負責設定HTML文檔結構、元數據配置、字體加載和全域狀態管理【主要職責】• HTML根結構定義 - 設定語言、頭部和主體結構• 元數據管理 - SEO優化、Open Graph、Twitter Cards• 全域字體配置 - Google Fonts字體加載和應用• 認證狀態管理 - 全域認證Context Provider• 全域樣式加載 - 引入Tailwind CSS和自定義樣式【技術特點】• 使用Next.js 14 App Router架構• 支援TypeScript嚴格模式• SEO友好的元數據配置• 響應式設計和國際化支援• 安全的認證狀態管理【相關檔案】• globals.css - 全域CSS樣式定義• hooks/use-auth.tsx - 認證狀態管理• components/ui/* - UI組件庫【開發注意】• 元數據變更需要重新部署才能生效• 字體變更會影響全站載入效能• AuthProvider必須包裹所有需要認證的頁面• suppressHydrationWarning用於避免SSR/CSR差異
  *
- * 【檔案功能】
- * 此檔案是Next.js App Router的根佈局組件，定義整個應用程式的全域結構
- * 負責設定HTML文檔結構、元數據配置、字體加載和全域狀態管理
- *
- * 【主要職責】
- * • HTML根結構定義 - 設定語言、頭部和主體結構
- * • 元數據管理 - SEO優化、Open Graph、Twitter Cards
- * • 全域字體配置 - Google Fonts字體加載和應用
- * • 認證狀態管理 - 全域認證Context Provider
- * • 全域樣式加載 - 引入Tailwind CSS和自定義樣式
- *
- * 【技術特點】
- * • 使用Next.js 14 App Router架構
- * • 支援TypeScript嚴格模式
- * • SEO友好的元數據配置
- * • 響應式設計和國際化支援
- * • 安全的認證狀態管理
- *
- * 【相關檔案】
- * • globals.css - 全域CSS樣式定義
- * • hooks/use-auth.tsx - 認證狀態管理
- * • components/ui/* - UI組件庫
- *
- * 【開發注意】
- * • 元數據變更需要重新部署才能生效
- * • 字體變更會影響全站載入效能
- * • AuthProvider必須包裹所有需要認證的頁面
- * • suppressHydrationWarning用於避免SSR/CSR差異
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import type { Metadata } from 'next'        // Next.js元數據類型定義

@@ -1,16 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: 單個知識庫資料夾API路由
- * 檔案用途: Sprint 6 - 資料夾詳情、更新、刪除API
- * 開發階段: Week 11 Day 1
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: 單個知識庫資料夾API路由檔案用途: Sprint 6 - 資料夾詳情、更新、刪除API開發階段: Week 11 Day 1================================================================功能索引:1. GET /api/knowledge-folders/[id] - 獲取資料夾詳情2. PATCH /api/knowledge-folders/[id] - 更新資料夾3. DELETE /api/knowledge-folders/[id] - 刪除資料夾================================================================
+ * @module app/api/knowledge-folders/[id]/route
+ * @description
+ * ================================================================檔案名稱: 單個知識庫資料夾API路由檔案用途: Sprint 6 - 資料夾詳情、更新、刪除API開發階段: Week 11 Day 1================================================================功能索引:1. GET /api/knowledge-folders/[id] - 獲取資料夾詳情2. PATCH /api/knowledge-folders/[id] - 更新資料夾3. DELETE /api/knowledge-folders/[id] - 刪除資料夾================================================================
  *
- * 功能索引:
- * 1. GET /api/knowledge-folders/[id] - 獲取資料夾詳情
- * 2. PATCH /api/knowledge-folders/[id] - 更新資料夾
- * 3. DELETE /api/knowledge-folders/[id] - 刪除資料夾
- *
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

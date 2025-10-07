@@ -1,16 +1,11 @@
 /**
- * 通知中心頁面 (Notifications Center Page)
- *
- * 通知管理主頁面，支援分類查看、批量操作和偏好設置
- *
- * 功能：
- * 1. 按分類查看通知
- * 2. 篩選未讀通知
- * 3. 批量標記已讀/刪除
- * 4. 跳轉到通知偏好設置
- *
+ * @fileoverview 通知中心頁面 (Notifications Center Page)通知管理主頁面，支援分類查看、批量操作和偏好設置功能：1. 按分類查看通知2. 篩選未讀通知3. 批量標記已讀/刪除4. 跳轉到通知偏好設置@module app/dashboard/notifications/page@since Sprint 5 Week 10 Day 2
  * @module app/dashboard/notifications/page
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知中心頁面 (Notifications Center Page)通知管理主頁面，支援分類查看、批量操作和偏好設置功能：1. 按分類查看通知2. 篩選未讀通知3. 批量標記已讀/刪除4. 跳轉到通知偏好設置@module app/dashboard/notifications/page@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

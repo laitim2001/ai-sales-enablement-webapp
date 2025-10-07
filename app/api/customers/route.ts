@@ -1,21 +1,11 @@
 /**
- * 客戶列表 API 路由
+ * @fileoverview 客戶列表 API 路由功能：- 提供客戶列表查詢API- 支援搜尋、篩選、排序功能- 整合Dynamics 365同步數據- 分頁和批量操作支援- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: LIST權限 (ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER)- POST: CREATE權限 (ADMIN, SALES_MANAGER, SALES_REP)- PATCH: UPDATE權限 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)作者：Claude Code創建時間：2025-09-28更新時間：2025-10-06 (RBAC整合)
+ * @module app/api/customers/route
+ * @description
+ * 客戶列表 API 路由功能：- 提供客戶列表查詢API- 支援搜尋、篩選、排序功能- 整合Dynamics 365同步數據- 分頁和批量操作支援- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: LIST權限 (ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER)- POST: CREATE權限 (ADMIN, SALES_MANAGER, SALES_REP)- PATCH: UPDATE權限 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)作者：Claude Code創建時間：2025-09-28更新時間：2025-10-06 (RBAC整合)
  *
- * 功能：
- * - 提供客戶列表查詢API
- * - 支援搜尋、篩選、排序功能
- * - 整合Dynamics 365同步數據
- * - 分頁和批量操作支援
- * - RBAC權限控制整合 (Sprint 3 Week 7)
- *
- * 權限要求：
- * - GET: LIST權限 (ADMIN, SALES_MANAGER, SALES_REP, MARKETING, VIEWER)
- * - POST: CREATE權限 (ADMIN, SALES_MANAGER, SALES_REP)
- * - PATCH: UPDATE權限 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
- * 更新時間：2025-10-06 (RBAC整合)
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

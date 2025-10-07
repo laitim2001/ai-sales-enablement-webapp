@@ -1,37 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 路由配置 (lib/middleware/routing-config.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 路由配置 (lib/middleware/routing-config.ts)================================================================【檔案功能】集中管理所有API路由的配置，包括認證要求、速率限制和CORS策略。提供類型安全的路由配置定義，確保API網關的正確運作。【主要職責】• 路由定義 - 定義所有API端點的匹配規則• 認證配置 - 指定每個路由的認證要求和方法• 速率限制 - 配置端點特定的速率限制規則• CORS策略 - 定義跨域訪問規則• 版本控制 - 管理API版本路由【技術實現】• Type-Safe Config - TypeScript類型保護• Priority Routing - 優先級排序確保正確匹配• Flexible Patterns - 支援字符串、正則和通配符• Environment Aware - 根據環境調整配置• Maintainable - 集中管理便於維護【使用場景】• API Gateway - 路由請求分發• 認證檢查 - 決定認證策略• 速率限制 - 應用端點限制• CORS處理 - 跨域策略應用• 版本管理 - API版本路由【相關檔案】• middleware.ts - 使用此配置進行路由匹配• lib/middleware/route-matcher.ts - 路由匹配邏輯• docs/api-gateway-architecture.md - 架構設計文檔
+ * @module lib/middleware/routing-config
+ * @description
+ * ================================================================AI銷售賦能平台 - 路由配置 (lib/middleware/routing-config.ts)================================================================【檔案功能】集中管理所有API路由的配置，包括認證要求、速率限制和CORS策略。提供類型安全的路由配置定義，確保API網關的正確運作。【主要職責】• 路由定義 - 定義所有API端點的匹配規則• 認證配置 - 指定每個路由的認證要求和方法• 速率限制 - 配置端點特定的速率限制規則• CORS策略 - 定義跨域訪問規則• 版本控制 - 管理API版本路由【技術實現】• Type-Safe Config - TypeScript類型保護• Priority Routing - 優先級排序確保正確匹配• Flexible Patterns - 支援字符串、正則和通配符• Environment Aware - 根據環境調整配置• Maintainable - 集中管理便於維護【使用場景】• API Gateway - 路由請求分發• 認證檢查 - 決定認證策略• 速率限制 - 應用端點限制• CORS處理 - 跨域策略應用• 版本管理 - API版本路由【相關檔案】• middleware.ts - 使用此配置進行路由匹配• lib/middleware/route-matcher.ts - 路由匹配邏輯• docs/api-gateway-architecture.md - 架構設計文檔
  *
- * 【檔案功能】
- * 集中管理所有API路由的配置，包括認證要求、速率限制和CORS策略。
- * 提供類型安全的路由配置定義，確保API網關的正確運作。
- *
- * 【主要職責】
- * • 路由定義 - 定義所有API端點的匹配規則
- * • 認證配置 - 指定每個路由的認證要求和方法
- * • 速率限制 - 配置端點特定的速率限制規則
- * • CORS策略 - 定義跨域訪問規則
- * • 版本控制 - 管理API版本路由
- *
- * 【技術實現】
- * • Type-Safe Config - TypeScript類型保護
- * • Priority Routing - 優先級排序確保正確匹配
- * • Flexible Patterns - 支援字符串、正則和通配符
- * • Environment Aware - 根據環境調整配置
- * • Maintainable - 集中管理便於維護
- *
- * 【使用場景】
- * • API Gateway - 路由請求分發
- * • 認證檢查 - 決定認證策略
- * • 速率限制 - 應用端點限制
- * • CORS處理 - 跨域策略應用
- * • 版本管理 - API版本路由
- *
- * 【相關檔案】
- * • middleware.ts - 使用此配置進行路由匹配
- * • lib/middleware/route-matcher.ts - 路由匹配邏輯
- * • docs/api-gateway-architecture.md - 架構設計文檔
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { RouteConfig } from './route-matcher'

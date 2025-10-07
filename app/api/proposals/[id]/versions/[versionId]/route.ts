@@ -1,12 +1,11 @@
 /**
- * 單個版本操作 API 路由
+ * @fileoverview 單個版本操作 API 路由功能：- GET: 獲取特定版本詳情- DELETE: 刪除版本（僅非當前版本）@author Claude Code@date 2025-10-02
+ * @module app/api/proposals/[id]/versions/[versionId]/route
+ * @description
+ * 單個版本操作 API 路由功能：- GET: 獲取特定版本詳情- DELETE: 刪除版本（僅非當前版本）@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - GET: 獲取特定版本詳情
- * - DELETE: 刪除版本（僅非當前版本）
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,14 +1,11 @@
 /**
- * 新建提案範本頁面
+ * @fileoverview 新建提案範本頁面功能：- 提案範本創建和編輯- Handlebars語法支援和預覽- 變數定義和管理- 範本測試和驗證作者：Claude Code創建時間：2025-09-28
+ * @module app/dashboard/proposals/templates/new/page
+ * @description
+ * 新建提案範本頁面功能：- 提案範本創建和編輯- Handlebars語法支援和預覽- 變數定義和管理- 範本測試和驗證作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 提案範本創建和編輯
- * - Handlebars語法支援和預覽
- * - 變數定義和管理
- * - 範本測試和驗證
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

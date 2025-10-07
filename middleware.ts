@@ -1,56 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - API網關中間件 (middleware.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - API網關中間件 (middleware.ts)================================================================【檔案功能】Next.js全局中間件，實現完整的API網關功能層。提供請求追蹤、CORS處理、安全頭部和路由匹配。【主要職責】• 請求追蹤 - 為每個請求生成唯一ID• CORS處理 - 跨域請求支援和預檢處理• 安全頭部 - CSP、HSTS等安全策略• 路由匹配 - 智能路由分發和配置• 錯誤處理 - 統一的錯誤記錄和響應【技術實現】• Edge Runtime - 邊緣計算支援• Modular Design - 模塊化中間件組合• Type Safety - TypeScript類型保護• Performance - 高效的路由匹配和緩存• Security - OWASP推薦的安全實踐【架構層次】Layer 0 (HTTPS): HTTPS強制和HSTS (Sprint 3安全加固)Layer 1 (Edge): 請求ID、CORS、安全頭部Layer 2 (Auth): JWT、Azure AD、API Key (在lib/middleware.ts)Layer 3 (Rate Limit): 多層速率限制 (在lib/middleware.ts)Layer 4 (Routing): 路由匹配和分發Layer 5 (Business Logic): API路由處理器【相關檔案】• lib/middleware/request-id.ts - 請求ID生成器• lib/middleware/route-matcher.ts - 路由匹配器• lib/middleware/cors.ts - CORS中間件• lib/middleware/security-headers.ts - 安全頭部中間件• lib/middleware/https-enforcement.ts - HTTPS強制中間件 (Sprint 3)• lib/middleware/routing-config.ts - 路由配置• lib/middleware.ts - 認證和速率限制中間件• docs/api-gateway-architecture.md - 架構設計文檔【更新記錄】- MVP Phase 1: 基礎中間件和請求追蹤- MVP Phase 2 Sprint 1: API網關核心架構實現  - 請求ID生成系統  - 路由匹配器和配置  - CORS中間件  - 安全頭部中間件- MVP Phase 2 Sprint 3: 安全加固與合規  - HTTPS強制和重定向 (Layer 0)  - HSTS安全頭部設置  - 代理頭部信任配置================================================================
+ * @module middleware
+ * @description
+ * ================================================================AI銷售賦能平台 - API網關中間件 (middleware.ts)================================================================【檔案功能】Next.js全局中間件，實現完整的API網關功能層。提供請求追蹤、CORS處理、安全頭部和路由匹配。【主要職責】• 請求追蹤 - 為每個請求生成唯一ID• CORS處理 - 跨域請求支援和預檢處理• 安全頭部 - CSP、HSTS等安全策略• 路由匹配 - 智能路由分發和配置• 錯誤處理 - 統一的錯誤記錄和響應【技術實現】• Edge Runtime - 邊緣計算支援• Modular Design - 模塊化中間件組合• Type Safety - TypeScript類型保護• Performance - 高效的路由匹配和緩存• Security - OWASP推薦的安全實踐【架構層次】Layer 0 (HTTPS): HTTPS強制和HSTS (Sprint 3安全加固)Layer 1 (Edge): 請求ID、CORS、安全頭部Layer 2 (Auth): JWT、Azure AD、API Key (在lib/middleware.ts)Layer 3 (Rate Limit): 多層速率限制 (在lib/middleware.ts)Layer 4 (Routing): 路由匹配和分發Layer 5 (Business Logic): API路由處理器【相關檔案】• lib/middleware/request-id.ts - 請求ID生成器• lib/middleware/route-matcher.ts - 路由匹配器• lib/middleware/cors.ts - CORS中間件• lib/middleware/security-headers.ts - 安全頭部中間件• lib/middleware/https-enforcement.ts - HTTPS強制中間件 (Sprint 3)• lib/middleware/routing-config.ts - 路由配置• lib/middleware.ts - 認證和速率限制中間件• docs/api-gateway-architecture.md - 架構設計文檔【更新記錄】- MVP Phase 1: 基礎中間件和請求追蹤- MVP Phase 2 Sprint 1: API網關核心架構實現  - 請求ID生成系統  - 路由匹配器和配置  - CORS中間件  - 安全頭部中間件- MVP Phase 2 Sprint 3: 安全加固與合規  - HTTPS強制和重定向 (Layer 0)  - HSTS安全頭部設置  - 代理頭部信任配置================================================================
  *
- * 【檔案功能】
- * Next.js全局中間件，實現完整的API網關功能層。
- * 提供請求追蹤、CORS處理、安全頭部和路由匹配。
- *
- * 【主要職責】
- * • 請求追蹤 - 為每個請求生成唯一ID
- * • CORS處理 - 跨域請求支援和預檢處理
- * • 安全頭部 - CSP、HSTS等安全策略
- * • 路由匹配 - 智能路由分發和配置
- * • 錯誤處理 - 統一的錯誤記錄和響應
- *
- * 【技術實現】
- * • Edge Runtime - 邊緣計算支援
- * • Modular Design - 模塊化中間件組合
- * • Type Safety - TypeScript類型保護
- * • Performance - 高效的路由匹配和緩存
- * • Security - OWASP推薦的安全實踐
- *
- * 【架構層次】
- * Layer 0 (HTTPS): HTTPS強制和HSTS (Sprint 3安全加固)
- * Layer 1 (Edge): 請求ID、CORS、安全頭部
- * Layer 2 (Auth): JWT、Azure AD、API Key (在lib/middleware.ts)
- * Layer 3 (Rate Limit): 多層速率限制 (在lib/middleware.ts)
- * Layer 4 (Routing): 路由匹配和分發
- * Layer 5 (Business Logic): API路由處理器
- *
- * 【相關檔案】
- * • lib/middleware/request-id.ts - 請求ID生成器
- * • lib/middleware/route-matcher.ts - 路由匹配器
- * • lib/middleware/cors.ts - CORS中間件
- * • lib/middleware/security-headers.ts - 安全頭部中間件
- * • lib/middleware/https-enforcement.ts - HTTPS強制中間件 (Sprint 3)
- * • lib/middleware/routing-config.ts - 路由配置
- * • lib/middleware.ts - 認證和速率限制中間件
- * • docs/api-gateway-architecture.md - 架構設計文檔
- *
- * 【更新記錄】
- * - MVP Phase 1: 基礎中間件和請求追蹤
- * - MVP Phase 2 Sprint 1: API網關核心架構實現
- *   - 請求ID生成系統
- *   - 路由匹配器和配置
- *   - CORS中間件
- *   - 安全頭部中間件
- * - MVP Phase 2 Sprint 3: 安全加固與合規
- *   - HTTPS強制和重定向 (Layer 0)
- *   - HSTS安全頭部設置
- *   - 代理頭部信任配置
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

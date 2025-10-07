@@ -1,15 +1,11 @@
 /**
- * 智能助手聊天API
+ * @fileoverview 智能助手聊天API功能：- 處理用戶查詢- Azure OpenAI GPT-4集成- 上下文管理- 對話歷史追蹤@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
+ * @module app/api/assistant/chat/route
+ * @description
+ * 智能助手聊天API功能：- 處理用戶查詢- Azure OpenAI GPT-4集成- 上下文管理- 對話歷史追蹤@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
  *
- * 功能：
- * - 處理用戶查詢
- * - Azure OpenAI GPT-4集成
- * - 上下文管理
- * - 對話歷史追蹤
- *
- * @author Claude Code
- * @date 2025-10-05
- * @epic Sprint 7 - 會議準備與智能助手
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

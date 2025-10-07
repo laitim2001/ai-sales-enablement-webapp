@@ -1,10 +1,11 @@
 /**
- * 測試 Dynamics 365 模擬模式
+ * @fileoverview 測試 Dynamics 365 模擬模式功能：- 驗證模擬 API 端點正常工作- 測試 Dynamics365Client 在模擬模式下的運行- 確保模擬數據正確返回
+ * @module poc/test-dynamics-mock
+ * @description
+ * 測試 Dynamics 365 模擬模式功能：- 驗證模擬 API 端點正常工作- 測試 Dynamics365Client 在模擬模式下的運行- 確保模擬數據正確返回
  *
- * 功能：
- * - 驗證模擬 API 端點正常工作
- * - 測試 Dynamics365Client 在模擬模式下的運行
- * - 確保模擬數據正確返回
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 require('dotenv').config({ path: '.env.local' });

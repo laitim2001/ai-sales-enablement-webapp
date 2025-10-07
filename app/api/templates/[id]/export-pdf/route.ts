@@ -1,28 +1,11 @@
 /**
- * 範本 PDF 導出 API
+ * @fileoverview 範本 PDF 導出 API端點: POST /api/templates/[id]/export-pdf功能：- 獲取範本內容- 使用提供的變數值渲染範本- 生成專業的 PDF 文檔- 返回 PDF 文件供下載請求體：```json{  "variables": {    "customerName": "ABC公司",    "productName": "AI銷售平台",    "price": "50000"  }}```響應：PDF 文件流（application/pdf）@module app/api/templates/[id]/export-pdf
+ * @module app/api/templates/[id]/export-pdf/route
+ * @description
+ * 範本 PDF 導出 API端點: POST /api/templates/[id]/export-pdf功能：- 獲取範本內容- 使用提供的變數值渲染範本- 生成專業的 PDF 文檔- 返回 PDF 文件供下載請求體：```json{  "variables": {    "customerName": "ABC公司",    "productName": "AI銷售平台",    "price": "50000"  }}```響應：PDF 文件流（application/pdf）@module app/api/templates/[id]/export-pdf
  *
- * 端點: POST /api/templates/[id]/export-pdf
- *
- * 功能：
- * - 獲取範本內容
- * - 使用提供的變數值渲染範本
- * - 生成專業的 PDF 文檔
- * - 返回 PDF 文件供下載
- *
- * 請求體：
- * ```json
- * {
- *   "variables": {
- *     "customerName": "ABC公司",
- *     "productName": "AI銷售平台",
- *     "price": "50000"
- *   }
- * }
- * ```
- *
- * 響應：PDF 文件流（application/pdf）
- *
- * @module app/api/templates/[id]/export-pdf
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

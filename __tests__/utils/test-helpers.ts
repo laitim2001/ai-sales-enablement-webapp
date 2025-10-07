@@ -1,3 +1,16 @@
+/**
+ * @fileoverview 模組 - 測試套件
+ * @module __tests__/utils/test-helpers
+ * @description
+ * 模組的單元測試
+ *
+ * ### 主要功能:
+ * - TestHelper類: 類功能
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 // 測試輔助工具
 
 export const createMockUser = (overrides = {}) => ({

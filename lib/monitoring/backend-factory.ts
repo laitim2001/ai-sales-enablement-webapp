@@ -1,6 +1,11 @@
 /**
- * OpenTelemetry 後端工廠
- * 根據配置動態創建不同的監控後端
+ * @fileoverview OpenTelemetry 後端工廠根據配置動態創建不同的監控後端
+ * @module lib/monitoring/backend-factory
+ * @description
+ * OpenTelemetry 後端工廠根據配置動態創建不同的監控後端
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NodeSDK } from '@opentelemetry/sdk-node';

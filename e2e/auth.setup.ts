@@ -1,3 +1,13 @@
+/**
+ * @fileoverview auth.setup - 工具模組
+ * @module e2e/auth.setup
+ * @description
+ * 提供輔助功能的工具函數
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
+ */
+
 import { test as setup, expect } from '@playwright/test'
 import { TEST_USER } from './fixtures/auth'
 

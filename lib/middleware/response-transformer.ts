@@ -1,41 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 響應轉換中間件 (lib/middleware/response-transformer.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 響應轉換中間件 (lib/middleware/response-transformer.ts)================================================================【檔案功能】提供全面的響應轉換功能，支援多種格式、分頁包裝和 HATEOAS 連結生成。確保 API 響應的一致性、可讀性和 RESTful 最佳實踐。【主要職責】• Content Negotiation - 根據 Accept header 返回不同格式• Format Transformation - JSON/XML/CSV 格式轉換• Pagination Envelope - 統一的分頁響應格式• HATEOAS Links - 自動生成相關資源連結• Field Filtering - 根據查詢參數選擇性返回欄位• Response Normalization - 標準化響應結構【技術實現】• Content Type Negotiation - 智能格式選擇• Transformer Pipeline - 可組合的轉換鏈• Hypermedia Support - RESTful HATEOAS 實現• Selective Serialization - 欄位過濾和投影• Edge Compatible - 支援 Edge Runtime【使用場景】• RESTful API - 標準化響應格式• 分頁端點 - 統一分頁結構• 資源導航 - HATEOAS 連結生成• 多格式支援 - JSON/XML/CSV 輸出• 性能優化 - 欄位過濾減少傳輸【相關檔案】• middleware.ts - 使用轉換中間件處理響應• app/api/{route}/route.ts - API 路由中的響應轉換• docs/api-response-format.md - 響應格式文檔作者：Claude Code創建時間：2025-09-30
+ * @module lib/middleware/response-transformer
+ * @description
+ * ================================================================AI銷售賦能平台 - 響應轉換中間件 (lib/middleware/response-transformer.ts)================================================================【檔案功能】提供全面的響應轉換功能，支援多種格式、分頁包裝和 HATEOAS 連結生成。確保 API 響應的一致性、可讀性和 RESTful 最佳實踐。【主要職責】• Content Negotiation - 根據 Accept header 返回不同格式• Format Transformation - JSON/XML/CSV 格式轉換• Pagination Envelope - 統一的分頁響應格式• HATEOAS Links - 自動生成相關資源連結• Field Filtering - 根據查詢參數選擇性返回欄位• Response Normalization - 標準化響應結構【技術實現】• Content Type Negotiation - 智能格式選擇• Transformer Pipeline - 可組合的轉換鏈• Hypermedia Support - RESTful HATEOAS 實現• Selective Serialization - 欄位過濾和投影• Edge Compatible - 支援 Edge Runtime【使用場景】• RESTful API - 標準化響應格式• 分頁端點 - 統一分頁結構• 資源導航 - HATEOAS 連結生成• 多格式支援 - JSON/XML/CSV 輸出• 性能優化 - 欄位過濾減少傳輸【相關檔案】• middleware.ts - 使用轉換中間件處理響應• app/api/{route}/route.ts - API 路由中的響應轉換• docs/api-response-format.md - 響應格式文檔作者：Claude Code創建時間：2025-09-30
  *
- * 【檔案功能】
- * 提供全面的響應轉換功能，支援多種格式、分頁包裝和 HATEOAS 連結生成。
- * 確保 API 響應的一致性、可讀性和 RESTful 最佳實踐。
- *
- * 【主要職責】
- * • Content Negotiation - 根據 Accept header 返回不同格式
- * • Format Transformation - JSON/XML/CSV 格式轉換
- * • Pagination Envelope - 統一的分頁響應格式
- * • HATEOAS Links - 自動生成相關資源連結
- * • Field Filtering - 根據查詢參數選擇性返回欄位
- * • Response Normalization - 標準化響應結構
- *
- * 【技術實現】
- * • Content Type Negotiation - 智能格式選擇
- * • Transformer Pipeline - 可組合的轉換鏈
- * • Hypermedia Support - RESTful HATEOAS 實現
- * • Selective Serialization - 欄位過濾和投影
- * • Edge Compatible - 支援 Edge Runtime
- *
- * 【使用場景】
- * • RESTful API - 標準化響應格式
- * • 分頁端點 - 統一分頁結構
- * • 資源導航 - HATEOAS 連結生成
- * • 多格式支援 - JSON/XML/CSV 輸出
- * • 性能優化 - 欄位過濾減少傳輸
- *
- * 【相關檔案】
- * • middleware.ts - 使用轉換中間件處理響應
- * • app/api/{route}/route.ts - API 路由中的響應轉換
- * • docs/api-response-format.md - 響應格式文檔
- *
- * 作者：Claude Code
- * 創建時間：2025-09-30
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

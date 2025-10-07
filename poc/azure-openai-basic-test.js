@@ -1,9 +1,11 @@
 /**
- * Azure OpenAI 基本連接測試
- * 測試目標：
- * 1. 驗證 Azure OpenAI 連接正常
- * 2. 測試 GPT-4o 部署可用性
- * 3. 簡單成本預估
+ * @fileoverview Azure OpenAI 基本連接測試測試目標：1. 驗證 Azure OpenAI 連接正常2. 測試 GPT-4o 部署可用性3. 簡單成本預估
+ * @module poc/azure-openai-basic-test
+ * @description
+ * Azure OpenAI 基本連接測試測試目標：1. 驗證 Azure OpenAI 連接正常2. 測試 GPT-4o 部署可用性3. 簡單成本預估
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 require('dotenv').config({ path: '.env.local' });

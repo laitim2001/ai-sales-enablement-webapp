@@ -1,14 +1,11 @@
 /**
- * 系統監控初始化配置
+ * @fileoverview 系統監控初始化配置功能：- 啟動連接狀態監控服務- 配置監控參數和警報閾值- 提供監控生命周期管理- 整合速率限制統計監控作者：Claude Code創建時間：2025-09-28
+ * @module lib/monitoring/monitor-init
+ * @description
+ * 系統監控初始化配置功能：- 啟動連接狀態監控服務- 配置監控參數和警報閾值- 提供監控生命周期管理- 整合速率限制統計監控作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 啟動連接狀態監控服務
- * - 配置監控參數和警報閾值
- * - 提供監控生命周期管理
- * - 整合速率限制統計監控
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { startGlobalMonitoring, stopGlobalMonitoring, getConnectionMonitor } from './connection-monitor';

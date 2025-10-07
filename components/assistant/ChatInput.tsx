@@ -1,16 +1,11 @@
 /**
- * 聊天輸入組件
+ * @fileoverview 聊天輸入組件功能：- 文本輸入區域- 發送按鈕- Enter鍵發送（Shift+Enter換行）- 載入狀態管理- 字符計數@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
+ * @module components/assistant/ChatInput
+ * @description
+ * 聊天輸入組件功能：- 文本輸入區域- 發送按鈕- Enter鍵發送（Shift+Enter換行）- 載入狀態管理- 字符計數@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
  *
- * 功能：
- * - 文本輸入區域
- * - 發送按鈕
- * - Enter鍵發送（Shift+Enter換行）
- * - 載入狀態管理
- * - 字符計數
- *
- * @author Claude Code
- * @date 2025-10-05
- * @epic Sprint 7 - 會議準備與智能助手
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

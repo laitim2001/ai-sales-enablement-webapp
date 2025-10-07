@@ -1,10 +1,11 @@
 /**
- * Sprint 7 UAT Test Runner
+ * @fileoverview Sprint 7 UAT Test RunnerSystematically executes all 38 UAT test cases and generates a detailed report@author Claude Code@date 2025-10-05
+ * @module scripts/uat-test-runner
+ * @description
+ * Sprint 7 UAT Test RunnerSystematically executes all 38 UAT test cases and generates a detailed report@author Claude Code@date 2025-10-05
  *
- * Systematically executes all 38 UAT test cases and generates a detailed report
- *
- * @author Claude Code
- * @date 2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const http = require('http');

@@ -1,11 +1,11 @@
 /**
- * 審計日誌列表組件
+ * @fileoverview 審計日誌列表組件顯示審計日誌的表格列表，支持分頁和詳情查看@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @module components/audit/AuditLogList
+ * @description
+ * 審計日誌列表組件顯示審計日誌的表格列表，支持分頁和詳情查看@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
  *
- * 顯示審計日誌的表格列表，支持分頁和詳情查看
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

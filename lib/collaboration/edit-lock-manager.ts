@@ -1,14 +1,11 @@
 /**
- * 編輯鎖定管理系統
+ * @fileoverview 編輯鎖定管理系統功能：- 獲取和釋放文檔編輯鎖- 檢測編輯衝突- 自動過期處理- 協作通知作者：Claude Code日期：2025-10-05
+ * @module lib/collaboration/edit-lock-manager
+ * @description
+ * 編輯鎖定管理系統功能：- 獲取和釋放文檔編輯鎖- 檢測編輯衝突- 自動過期處理- 協作通知作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - 獲取和釋放文檔編輯鎖
- * - 檢測編輯衝突
- * - 自動過期處理
- * - 協作通知
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client';

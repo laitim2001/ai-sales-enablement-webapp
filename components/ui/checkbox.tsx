@@ -1,13 +1,11 @@
 /**
- * Checkbox UI組件
+ * @fileoverview Checkbox UI組件功能：- 提供可勾選的複選框組件- 支援不同狀態和樣式- 整合表單驗證作者：Claude Code創建時間：2025-09-28
+ * @module components/ui/checkbox
+ * @description
+ * Checkbox UI組件功能：- 提供可勾選的複選框組件- 支援不同狀態和樣式- 整合表單驗證作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 提供可勾選的複選框組件
- * - 支援不同狀態和樣式
- * - 整合表單驗證
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 "use client"

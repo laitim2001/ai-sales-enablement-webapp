@@ -1,72 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫智能搜尋頁面 (app/dashboard/knowledge/search/page.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫智能搜尋頁面 (app/dashboard/knowledge/search/page.tsx)================================================================【檔案功能】提供知識庫專用的AI驅動智能搜尋界面，整合多種搜尋模式和高級篩選功能，支持文本、語義和混合搜尋，為用戶提供精確、高效的知識檢索体驗。【主要職責】• 多模式搜尋引擎 - 文本/語義/混合三種搜尋模式• 知識庫整合 - KnowledgeSearch組件深度整合• 搜尋結果顯示 - 相關性評分和精確匹配• 操作指導系統 - 搜尋技巧和使用建議• 快速導航系統 - 麵包屑導航和快速操作連結• 智能建議系統 - Sprint 6 Week 12: 搜尋歷史和智能建議整合【頁面結構】• 導航區域 - 返回按鈕 + 標題 + 功能介紹• 麵包屑區域 - 完整的導航路徑显示• 主要內容區 - 左側KnowledgeSearch組件(2/3寬度)• 側邊欄區域 - 右側功能卡片集合(1/3寬度)【側邊欄功能】• 搜尋模式說明 - 文本/語義/混合搜尋的特點說明• 搜尋技巧指導 - 精確匹配、語義查詢、篩選技巧• 熱門搜索 - Sprint 6 Week 12: 顯示熱門搜索詞和搜索次數• 搜索歷史 - Sprint 6 Week 12: 最近搜索記錄和快速重複搜索• 快速操作連結 - 上傳、創建、瀏覽等快捷入口【搜尋模式】• 文本搜尋 - 關鍵字精確匹配，適合查找特定詞彙• 語義搜尋 - AI理解查詢含義，找到語義相關內容• 混合搜尋 - 結合文本和語義搜尋，提供最佳結果【用戶流程】1. 從知識庫主頁面進入智能搜尋2. 閱讀搜尋模式說明，選擇適合的搜尋方式3. 輸入搜尋查詢或使用熱門搜索/歷史搜索快捷入口4. 點擊搜尋或調整搜尋參數5. 查看搜尋結果和相關性評分6. 使用快速操作連結執行後續操作【URL參數】• 路徑：/dashboard/knowledge/search• 無動態參數，為靜態頁面【狀態管理】• Sprint 6 Week 12: 整合 SearchHistoryManager• 搜尋歷史和緩存由 SearchHistoryManager 統一管理• localStorage 持久化，支持雲端同步【相關檔案】• components/knowledge/knowledge-search.tsx - 核心搜尋組件• components/knowledge/search-suggestions.tsx - Sprint 6 Week 12: 搜索建議組件• lib/knowledge/search-history-manager.ts - Sprint 6 Week 12: 搜索歷史管理器• app/dashboard/knowledge/page.tsx - 知識庫主頁面• app/dashboard/knowledge/upload/page.tsx - 文檔上傳頁面• app/dashboard/knowledge/create/page.tsx - 手動創建頁面• components/ui/card.tsx - UI卡片組件• components/ui/button.tsx - 按鈕UI組件【開發注意】• 搜尋性能：KnowledgeSearch組件需優化搜尋速度和精確度• 緩存機制：搜尋結果和常用查詢的緩存策略• 可訪問性：搜尋界面和結果列表的鍵盤導航• 響應式設計：大小螢幕上的側邊欄適配• 錯誤處理：搜尋失敗和網路中斷的用戶提示• Sprint 6 Week 12: 搜索歷史本地存儲和雲端同步
+ * @module app/dashboard/knowledge/search/page
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫智能搜尋頁面 (app/dashboard/knowledge/search/page.tsx)================================================================【檔案功能】提供知識庫專用的AI驅動智能搜尋界面，整合多種搜尋模式和高級篩選功能，支持文本、語義和混合搜尋，為用戶提供精確、高效的知識檢索体驗。【主要職責】• 多模式搜尋引擎 - 文本/語義/混合三種搜尋模式• 知識庫整合 - KnowledgeSearch組件深度整合• 搜尋結果顯示 - 相關性評分和精確匹配• 操作指導系統 - 搜尋技巧和使用建議• 快速導航系統 - 麵包屑導航和快速操作連結• 智能建議系統 - Sprint 6 Week 12: 搜尋歷史和智能建議整合【頁面結構】• 導航區域 - 返回按鈕 + 標題 + 功能介紹• 麵包屑區域 - 完整的導航路徑显示• 主要內容區 - 左側KnowledgeSearch組件(2/3寬度)• 側邊欄區域 - 右側功能卡片集合(1/3寬度)【側邊欄功能】• 搜尋模式說明 - 文本/語義/混合搜尋的特點說明• 搜尋技巧指導 - 精確匹配、語義查詢、篩選技巧• 熱門搜索 - Sprint 6 Week 12: 顯示熱門搜索詞和搜索次數• 搜索歷史 - Sprint 6 Week 12: 最近搜索記錄和快速重複搜索• 快速操作連結 - 上傳、創建、瀏覽等快捷入口【搜尋模式】• 文本搜尋 - 關鍵字精確匹配，適合查找特定詞彙• 語義搜尋 - AI理解查詢含義，找到語義相關內容• 混合搜尋 - 結合文本和語義搜尋，提供最佳結果【用戶流程】1. 從知識庫主頁面進入智能搜尋2. 閱讀搜尋模式說明，選擇適合的搜尋方式3. 輸入搜尋查詢或使用熱門搜索/歷史搜索快捷入口4. 點擊搜尋或調整搜尋參數5. 查看搜尋結果和相關性評分6. 使用快速操作連結執行後續操作【URL參數】• 路徑：/dashboard/knowledge/search• 無動態參數，為靜態頁面【狀態管理】• Sprint 6 Week 12: 整合 SearchHistoryManager• 搜尋歷史和緩存由 SearchHistoryManager 統一管理• localStorage 持久化，支持雲端同步【相關檔案】• components/knowledge/knowledge-search.tsx - 核心搜尋組件• components/knowledge/search-suggestions.tsx - Sprint 6 Week 12: 搜索建議組件• lib/knowledge/search-history-manager.ts - Sprint 6 Week 12: 搜索歷史管理器• app/dashboard/knowledge/page.tsx - 知識庫主頁面• app/dashboard/knowledge/upload/page.tsx - 文檔上傳頁面• app/dashboard/knowledge/create/page.tsx - 手動創建頁面• components/ui/card.tsx - UI卡片組件• components/ui/button.tsx - 按鈕UI組件【開發注意】• 搜尋性能：KnowledgeSearch組件需優化搜尋速度和精確度• 緩存機制：搜尋結果和常用查詢的緩存策略• 可訪問性：搜尋界面和結果列表的鍵盤導航• 響應式設計：大小螢幕上的側邊欄適配• 錯誤處理：搜尋失敗和網路中斷的用戶提示• Sprint 6 Week 12: 搜索歷史本地存儲和雲端同步
  *
- * 【檔案功能】
- * 提供知識庫專用的AI驅動智能搜尋界面，整合多種搜尋模式和高級篩選功能，
- * 支持文本、語義和混合搜尋，為用戶提供精確、高效的知識檢索体驗。
- *
- * 【主要職責】
- * • 多模式搜尋引擎 - 文本/語義/混合三種搜尋模式
- * • 知識庫整合 - KnowledgeSearch組件深度整合
- * • 搜尋結果顯示 - 相關性評分和精確匹配
- * • 操作指導系統 - 搜尋技巧和使用建議
- * • 快速導航系統 - 麵包屑導航和快速操作連結
- * • 智能建議系統 - Sprint 6 Week 12: 搜尋歷史和智能建議整合
- *
- * 【頁面結構】
- * • 導航區域 - 返回按鈕 + 標題 + 功能介紹
- * • 麵包屑區域 - 完整的導航路徑显示
- * • 主要內容區 - 左側KnowledgeSearch組件(2/3寬度)
- * • 側邊欄區域 - 右側功能卡片集合(1/3寬度)
- *
- * 【側邊欄功能】
- * • 搜尋模式說明 - 文本/語義/混合搜尋的特點說明
- * • 搜尋技巧指導 - 精確匹配、語義查詢、篩選技巧
- * • 熱門搜索 - Sprint 6 Week 12: 顯示熱門搜索詞和搜索次數
- * • 搜索歷史 - Sprint 6 Week 12: 最近搜索記錄和快速重複搜索
- * • 快速操作連結 - 上傳、創建、瀏覽等快捷入口
- *
- * 【搜尋模式】
- * • 文本搜尋 - 關鍵字精確匹配，適合查找特定詞彙
- * • 語義搜尋 - AI理解查詢含義，找到語義相關內容
- * • 混合搜尋 - 結合文本和語義搜尋，提供最佳結果
- *
- * 【用戶流程】
- * 1. 從知識庫主頁面進入智能搜尋
- * 2. 閱讀搜尋模式說明，選擇適合的搜尋方式
- * 3. 輸入搜尋查詢或使用熱門搜索/歷史搜索快捷入口
- * 4. 點擊搜尋或調整搜尋參數
- * 5. 查看搜尋結果和相關性評分
- * 6. 使用快速操作連結執行後續操作
- *
- * 【URL參數】
- * • 路徑：/dashboard/knowledge/search
- * • 無動態參數，為靜態頁面
- *
- * 【狀態管理】
- * • Sprint 6 Week 12: 整合 SearchHistoryManager
- * • 搜尋歷史和緩存由 SearchHistoryManager 統一管理
- * • localStorage 持久化，支持雲端同步
- *
- * 【相關檔案】
- * • components/knowledge/knowledge-search.tsx - 核心搜尋組件
- * • components/knowledge/search-suggestions.tsx - Sprint 6 Week 12: 搜索建議組件
- * • lib/knowledge/search-history-manager.ts - Sprint 6 Week 12: 搜索歷史管理器
- * • app/dashboard/knowledge/page.tsx - 知識庫主頁面
- * • app/dashboard/knowledge/upload/page.tsx - 文檔上傳頁面
- * • app/dashboard/knowledge/create/page.tsx - 手動創建頁面
- * • components/ui/card.tsx - UI卡片組件
- * • components/ui/button.tsx - 按鈕UI組件
- *
- * 【開發注意】
- * • 搜尋性能：KnowledgeSearch組件需優化搜尋速度和精確度
- * • 緩存機制：搜尋結果和常用查詢的緩存策略
- * • 可訪問性：搜尋界面和結果列表的鍵盤導航
- * • 響應式設計：大小螢幕上的側邊欄適配
- * • 錯誤處理：搜尋失敗和網路中斷的用戶提示
- * • Sprint 6 Week 12: 搜索歷史本地存儲和雲端同步
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

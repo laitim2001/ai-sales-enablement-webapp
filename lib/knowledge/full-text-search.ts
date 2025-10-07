@@ -1,22 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 全文檢索增強模塊
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 全文檢索增強模塊================================================================【功能說明】提供 PostgreSQL Full-Text Search 的高級功能封裝，支持中文分詞、相關性排序、高亮顯示和搜索質量優化。【主要功能】• 全文檢索查詢構建 - ts_query 和 ts_vector• 中文分詞支持 - Jieba 分詞整合• 相關性排序 - ts_rank 評分優化• 搜索高亮 - ts_headline 結果高亮• 查詢優化 - 停用詞過濾和同義詞擴展@author Claude Code@date 2025-10-03@sprint Sprint 6 Week 12 - Advanced Search Phase 4
+ * @module lib/knowledge/full-text-search
+ * @description
+ * ================================================================AI銷售賦能平台 - 全文檢索增強模塊================================================================【功能說明】提供 PostgreSQL Full-Text Search 的高級功能封裝，支持中文分詞、相關性排序、高亮顯示和搜索質量優化。【主要功能】• 全文檢索查詢構建 - ts_query 和 ts_vector• 中文分詞支持 - Jieba 分詞整合• 相關性排序 - ts_rank 評分優化• 搜索高亮 - ts_headline 結果高亮• 查詢優化 - 停用詞過濾和同義詞擴展@author Claude Code@date 2025-10-03@sprint Sprint 6 Week 12 - Advanced Search Phase 4
  *
- * 【功能說明】
- * 提供 PostgreSQL Full-Text Search 的高級功能封裝，
- * 支持中文分詞、相關性排序、高亮顯示和搜索質量優化。
- *
- * 【主要功能】
- * • 全文檢索查詢構建 - ts_query 和 ts_vector
- * • 中文分詞支持 - Jieba 分詞整合
- * • 相關性排序 - ts_rank 評分優化
- * • 搜索高亮 - ts_headline 結果高亮
- * • 查詢優化 - 停用詞過濾和同義詞擴展
- *
- * @author Claude Code
- * @date 2025-10-03
- * @sprint Sprint 6 Week 12 - Advanced Search Phase 4
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { Prisma } from '@prisma/client';

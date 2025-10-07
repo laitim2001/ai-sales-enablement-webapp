@@ -1,14 +1,11 @@
 /**
- * 連接狀態監控服務
+ * @fileoverview 連接狀態監控服務功能：- 監控外部API連接狀態（Azure OpenAI、Dynamics 365）- 資料庫連接健康檢查- 連接狀態統計和警報- 自動重連機制作者：Claude Code創建時間：2025-09-28
+ * @module lib/monitoring/connection-monitor
+ * @description
+ * 連接狀態監控服務功能：- 監控外部API連接狀態（Azure OpenAI、Dynamics 365）- 資料庫連接健康檢查- 連接狀態統計和警報- 自動重連機制作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 監控外部API連接狀態（Azure OpenAI、Dynamics 365）
- * - 資料庫連接健康檢查
- * - 連接狀態統計和警報
- * - 自動重連機制
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient } from '@prisma/client';

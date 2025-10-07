@@ -1,14 +1,11 @@
 /**
- * 版本比較組件
+ * @fileoverview 版本比較組件功能：- 並排顯示兩個版本的差異- 高亮顯示變更內容- 支持文字和結構化數據比較- 統計變更摘要作者：Claude Code日期：2025-10-01
+ * @module components/workflow/version/VersionComparison
+ * @description
+ * 版本比較組件功能：- 並排顯示兩個版本的差異- 高亮顯示變更內容- 支持文字和結構化數據比較- 統計變更摘要作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 並排顯示兩個版本的差異
- * - 高亮顯示變更內容
- * - 支持文字和結構化數據比較
- * - 統計變更摘要
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

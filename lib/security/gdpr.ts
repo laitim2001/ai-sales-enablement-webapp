@@ -1,30 +1,11 @@
 /**
- * GDPR/PDPA 合規功能
+ * @fileoverview GDPR/PDPA 合規功能功能：- 個人資料導出（Right to Data Portability）- 個人資料刪除（Right to be Forgotten）- 資料處理記錄- 同意管理使用方式：```typescript// 導出用戶資料const data = await GDPRService.exportUserData(userId);// 刪除用戶資料await GDPRService.deleteUserData(userId, { reason: 'User request' });// 記錄同意await GDPRService.recordConsent(userId, {  type: ConsentType.MARKETING,  granted: true,});```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
+ * @module lib/security/gdpr
+ * @description
+ * GDPR/PDPA 合規功能功能：- 個人資料導出（Right to Data Portability）- 個人資料刪除（Right to be Forgotten）- 資料處理記錄- 同意管理使用方式：```typescript// 導出用戶資料const data = await GDPRService.exportUserData(userId);// 刪除用戶資料await GDPRService.deleteUserData(userId, { reason: 'User request' });// 記錄同意await GDPRService.recordConsent(userId, {  type: ConsentType.MARKETING,  granted: true,});```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
  *
- * 功能：
- * - 個人資料導出（Right to Data Portability）
- * - 個人資料刪除（Right to be Forgotten）
- * - 資料處理記錄
- * - 同意管理
- *
- * 使用方式：
- * ```typescript
- * // 導出用戶資料
- * const data = await GDPRService.exportUserData(userId);
- *
- * // 刪除用戶資料
- * await GDPRService.deleteUserData(userId, { reason: 'User request' });
- *
- * // 記錄同意
- * await GDPRService.recordConsent(userId, {
- *   type: ConsentType.MARKETING,
- *   granted: true,
- * });
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 3 - 安全加固與合規
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 /**

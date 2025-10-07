@@ -1,14 +1,11 @@
 /**
- * 提案範本測試 API 路由
+ * @fileoverview 提案範本測試 API 路由功能：- 測試範本編譯和渲染- 驗證變數完整性- 預覽範本生成效果- 範本語法檢查作者：Claude Code創建時間：2025-09-28
+ * @module app/api/proposal-templates/[id]/test/route
+ * @description
+ * 提案範本測試 API 路由功能：- 測試範本編譯和渲染- 驗證變數完整性- 預覽範本生成效果- 範本語法檢查作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 測試範本編譯和渲染
- * - 驗證變數完整性
- * - 預覽範本生成效果
- * - 範本語法檢查
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

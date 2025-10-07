@@ -1,64 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫文檔編輯組件 (/components/knowledge/knowledge-document-edit.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫文檔編輯組件 (/components/knowledge/knowledge-document-edit.tsx)================================================================【組件功能】提供知識庫文檔的編輯功能，包括標題、內容、類別、狀態、作者和標籤的修改，支持富文本編輯、自動保存、表單驗證、數據同步和錯誤處理。【主要職責】• 文檔加載 - 從後端API獲取現有文檔數據• 富文本編輯 - 整合Tiptap編輯器支持格式化內容• 自動保存 - 3秒防抖自動保存機制• 表單管理 - 管理所有編輯表單欄位的狀態• 數據驗證 - 對表單輸入進行基本驗證• 數據更新 - 提交修改後的數據到後端• 錯誤處理 - 顯示驗證和API錯誤訊息• 成功回饋 - 顯示成功消息和自動跳轉• 路由導航 - 提供取消和返回功能• 資料格式 - 轉換標籤字符串為陣列格式【新增功能 - Sprint 6 Week 11 Day 2】• 富文本編輯器 - Tiptap編輯器整合 (替代原textarea)• 自動保存 - 3秒防抖自動保存，實時保存狀態顯示• 保存狀態 - idle/saving/saved/error 狀態管理• 手動保存 - 保留手動保存按鈕支持【Props介面】• documentId - number - 要編輯的文檔ID【狀態管理】• document - DocumentData | null - 原始文檔數據• formData - 表單數據物件  - title: string - 文檔標題  - content: string - 文檔內容 (HTML格式)  - category: string - 文檔類別  - status: string - 文檔狀態  - author: string - 作者資訊  - tags: string - 標籤字符串(逗號分隔)• loading - boolean - 數據加載狀態• saveStatus - 'idle' | 'saving' | 'saved' | 'error' - 保存狀態• lastSaved - Date | null - 最後保存時間• error - string | null - 錯誤訊息• successMessage - string | null - 成功訊息【用戶互動】• 富文本編輯 - 使用Tiptap編輯器編輯內容• 表單輸入 - 即時更新表單狀態並清除錯誤• 自動保存 - 3秒後自動保存修改• 手動保存 - 點擊保存按鈕立即保存• 表單提交 - 驗證通過後提交更新数據• 取消操作 - 返回文檔詳情頁面【相關檔案】• /api/knowledge-base/[id] - 文檔獲取和更新API端點• /components/knowledge/rich-text-editor.tsx - 富文本編輯器組件• /components/ui/button.tsx - 按鈕組件• /app/dashboard/knowledge/[id]/edit/page.tsx - 父頁面組件• /app/dashboard/knowledge/[id]/page.tsx - 文檔詳情頁面@updated 2025-10-02 - Sprint 6 Week 11 Day 2
+ * @module components/knowledge/knowledge-document-edit
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫文檔編輯組件 (/components/knowledge/knowledge-document-edit.tsx)================================================================【組件功能】提供知識庫文檔的編輯功能，包括標題、內容、類別、狀態、作者和標籤的修改，支持富文本編輯、自動保存、表單驗證、數據同步和錯誤處理。【主要職責】• 文檔加載 - 從後端API獲取現有文檔數據• 富文本編輯 - 整合Tiptap編輯器支持格式化內容• 自動保存 - 3秒防抖自動保存機制• 表單管理 - 管理所有編輯表單欄位的狀態• 數據驗證 - 對表單輸入進行基本驗證• 數據更新 - 提交修改後的數據到後端• 錯誤處理 - 顯示驗證和API錯誤訊息• 成功回饋 - 顯示成功消息和自動跳轉• 路由導航 - 提供取消和返回功能• 資料格式 - 轉換標籤字符串為陣列格式【新增功能 - Sprint 6 Week 11 Day 2】• 富文本編輯器 - Tiptap編輯器整合 (替代原textarea)• 自動保存 - 3秒防抖自動保存，實時保存狀態顯示• 保存狀態 - idle/saving/saved/error 狀態管理• 手動保存 - 保留手動保存按鈕支持【Props介面】• documentId - number - 要編輯的文檔ID【狀態管理】• document - DocumentData | null - 原始文檔數據• formData - 表單數據物件  - title: string - 文檔標題  - content: string - 文檔內容 (HTML格式)  - category: string - 文檔類別  - status: string - 文檔狀態  - author: string - 作者資訊  - tags: string - 標籤字符串(逗號分隔)• loading - boolean - 數據加載狀態• saveStatus - 'idle' | 'saving' | 'saved' | 'error' - 保存狀態• lastSaved - Date | null - 最後保存時間• error - string | null - 錯誤訊息• successMessage - string | null - 成功訊息【用戶互動】• 富文本編輯 - 使用Tiptap編輯器編輯內容• 表單輸入 - 即時更新表單狀態並清除錯誤• 自動保存 - 3秒後自動保存修改• 手動保存 - 點擊保存按鈕立即保存• 表單提交 - 驗證通過後提交更新数據• 取消操作 - 返回文檔詳情頁面【相關檔案】• /api/knowledge-base/[id] - 文檔獲取和更新API端點• /components/knowledge/rich-text-editor.tsx - 富文本編輯器組件• /components/ui/button.tsx - 按鈕組件• /app/dashboard/knowledge/[id]/edit/page.tsx - 父頁面組件• /app/dashboard/knowledge/[id]/page.tsx - 文檔詳情頁面@updated 2025-10-02 - Sprint 6 Week 11 Day 2
  *
- * 【組件功能】
- * 提供知識庫文檔的編輯功能，包括標題、內容、類別、狀態、作者和標籤的
- * 修改，支持富文本編輯、自動保存、表單驗證、數據同步和錯誤處理。
- *
- * 【主要職責】
- * • 文檔加載 - 從後端API獲取現有文檔數據
- * • 富文本編輯 - 整合Tiptap編輯器支持格式化內容
- * • 自動保存 - 3秒防抖自動保存機制
- * • 表單管理 - 管理所有編輯表單欄位的狀態
- * • 數據驗證 - 對表單輸入進行基本驗證
- * • 數據更新 - 提交修改後的數據到後端
- * • 錯誤處理 - 顯示驗證和API錯誤訊息
- * • 成功回饋 - 顯示成功消息和自動跳轉
- * • 路由導航 - 提供取消和返回功能
- * • 資料格式 - 轉換標籤字符串為陣列格式
- *
- * 【新增功能 - Sprint 6 Week 11 Day 2】
- * • 富文本編輯器 - Tiptap編輯器整合 (替代原textarea)
- * • 自動保存 - 3秒防抖自動保存，實時保存狀態顯示
- * • 保存狀態 - idle/saving/saved/error 狀態管理
- * • 手動保存 - 保留手動保存按鈕支持
- *
- * 【Props介面】
- * • documentId - number - 要編輯的文檔ID
- *
- * 【狀態管理】
- * • document - DocumentData | null - 原始文檔數據
- * • formData - 表單數據物件
- *   - title: string - 文檔標題
- *   - content: string - 文檔內容 (HTML格式)
- *   - category: string - 文檔類別
- *   - status: string - 文檔狀態
- *   - author: string - 作者資訊
- *   - tags: string - 標籤字符串(逗號分隔)
- * • loading - boolean - 數據加載狀態
- * • saveStatus - 'idle' | 'saving' | 'saved' | 'error' - 保存狀態
- * • lastSaved - Date | null - 最後保存時間
- * • error - string | null - 錯誤訊息
- * • successMessage - string | null - 成功訊息
- *
- * 【用戶互動】
- * • 富文本編輯 - 使用Tiptap編輯器編輯內容
- * • 表單輸入 - 即時更新表單狀態並清除錯誤
- * • 自動保存 - 3秒後自動保存修改
- * • 手動保存 - 點擊保存按鈕立即保存
- * • 表單提交 - 驗證通過後提交更新数據
- * • 取消操作 - 返回文檔詳情頁面
- *
- * 【相關檔案】
- * • /api/knowledge-base/[id] - 文檔獲取和更新API端點
- * • /components/knowledge/rich-text-editor.tsx - 富文本編輯器組件
- * • /components/ui/button.tsx - 按鈕組件
- * • /app/dashboard/knowledge/[id]/edit/page.tsx - 父頁面組件
- * • /app/dashboard/knowledge/[id]/page.tsx - 文檔詳情頁面
- *
- * @updated 2025-10-02 - Sprint 6 Week 11 Day 2
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

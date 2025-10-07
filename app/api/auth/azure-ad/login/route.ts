@@ -1,32 +1,11 @@
 /**
- * ================================================================
- * 檔案名稱: Azure AD SSO登入API路由
- * 檔案用途: AI銷售賦能平台的Azure AD單一登入啟動端點
- * 開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強
- * ================================================================
+ * @fileoverview ================================================================檔案名稱: Azure AD SSO登入API路由檔案用途: AI銷售賦能平台的Azure AD單一登入啟動端點開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強================================================================功能索引:1. GET方法 - 重定向到Azure AD登入頁面認證流程:1. 生成CSRF防護的state參數2. 生成Azure AD授權URL3. 重定向用戶到Azure AD登入頁面4. Azure AD驗證後重定向回callback端點API規格:- 方法: GET- 路徑: /api/auth/azure-ad/login- 回應: 302重定向到Azure AD安全特性:- State參數防CSRF攻擊- PKCE支援（由MSAL自動處理）- 安全的重定向URL更新記錄:- 2025-09-30: 初始版本，實現Azure AD SSO登入啟動================================================================
+ * @module app/api/auth/azure-ad/login/route
+ * @description
+ * ================================================================檔案名稱: Azure AD SSO登入API路由檔案用途: AI銷售賦能平台的Azure AD單一登入啟動端點開發階段: MVP Phase 2 Sprint 1 - 企業級認證增強================================================================功能索引:1. GET方法 - 重定向到Azure AD登入頁面認證流程:1. 生成CSRF防護的state參數2. 生成Azure AD授權URL3. 重定向用戶到Azure AD登入頁面4. Azure AD驗證後重定向回callback端點API規格:- 方法: GET- 路徑: /api/auth/azure-ad/login- 回應: 302重定向到Azure AD安全特性:- State參數防CSRF攻擊- PKCE支援（由MSAL自動處理）- 安全的重定向URL更新記錄:- 2025-09-30: 初始版本，實現Azure AD SSO登入啟動================================================================
  *
- * 功能索引:
- * 1. GET方法 - 重定向到Azure AD登入頁面
- *
- * 認證流程:
- * 1. 生成CSRF防護的state參數
- * 2. 生成Azure AD授權URL
- * 3. 重定向用戶到Azure AD登入頁面
- * 4. Azure AD驗證後重定向回callback端點
- *
- * API規格:
- * - 方法: GET
- * - 路徑: /api/auth/azure-ad/login
- * - 回應: 302重定向到Azure AD
- *
- * 安全特性:
- * - State參數防CSRF攻擊
- * - PKCE支援（由MSAL自動處理）
- * - 安全的重定向URL
- *
- * 更新記錄:
- * - 2025-09-30: 初始版本，實現Azure AD SSO登入啟動
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextResponse } from 'next/server'

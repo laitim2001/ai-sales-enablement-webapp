@@ -1,16 +1,11 @@
 /**
- * 知識庫版本歷史組件
+ * @fileoverview 知識庫版本歷史組件功能：- 顯示知識庫文檔的所有版本快照- 版本列表與時間線- 支持版本比較和回滾- 顯示版本標籤和創建者- 支持版本刪除（非當前版本）作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
+ * @module components/knowledge/version/KnowledgeVersionHistory
+ * @description
+ * 知識庫版本歷史組件功能：- 顯示知識庫文檔的所有版本快照- 版本列表與時間線- 支持版本比較和回滾- 顯示版本標籤和創建者- 支持版本刪除（非當前版本）作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
  *
- * 功能：
- * - 顯示知識庫文檔的所有版本快照
- * - 版本列表與時間線
- * - 支持版本比較和回滾
- * - 顯示版本標籤和創建者
- * - 支持版本刪除（非當前版本）
- *
- * 作者：Claude Code
- * 日期：2025-10-03
- * Sprint: 6 Week 12
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

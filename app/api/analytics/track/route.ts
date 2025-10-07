@@ -1,11 +1,11 @@
 /**
- * 用戶行為追蹤API路由
+ * @fileoverview 用戶行為追蹤API路由功能：- POST: 記錄用戶行為作者：Claude Code日期：2025-10-05
+ * @module app/api/analytics/track/route
+ * @description
+ * 用戶行為追蹤API路由功能：- POST: 記錄用戶行為作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - POST: 記錄用戶行為
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

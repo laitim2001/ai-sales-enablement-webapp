@@ -1,12 +1,11 @@
 /**
- * 範本管理 API - 單個範本操作
+ * @fileoverview 範本管理 API - 單個範本操作GET    /api/templates/[id] - 獲取範本詳情PUT    /api/templates/[id] - 更新範本DELETE /api/templates/[id] - 刪除範本@author Claude Code@date 2025-10-02
+ * @module app/api/templates/[id]/route
+ * @description
+ * 範本管理 API - 單個範本操作GET    /api/templates/[id] - 獲取範本詳情PUT    /api/templates/[id] - 更新範本DELETE /api/templates/[id] - 刪除範本@author Claude Code@date 2025-10-02
  *
- * GET    /api/templates/[id] - 獲取範本詳情
- * PUT    /api/templates/[id] - 更新範本
- * DELETE /api/templates/[id] - 刪除範本
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

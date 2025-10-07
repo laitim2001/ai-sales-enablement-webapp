@@ -1,12 +1,11 @@
 /**
- * 知識庫版本比較 API 路由
+ * @fileoverview 知識庫版本比較 API 路由端點：- POST /api/knowledge-base/[id]/versions/compare - 比較兩個版本作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
+ * @module app/api/knowledge-base/[id]/versions/compare/route
+ * @description
+ * 知識庫版本比較 API 路由端點：- POST /api/knowledge-base/[id]/versions/compare - 比較兩個版本作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
  *
- * 端點：
- * - POST /api/knowledge-base/[id]/versions/compare - 比較兩個版本
- *
- * 作者：Claude Code
- * 日期：2025-10-03
- * Sprint: 6 Week 12
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

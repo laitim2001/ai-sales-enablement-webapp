@@ -1,15 +1,11 @@
 /**
- * 範本預覽頁面（獨立頁面）
+ * @fileoverview 範本預覽頁面（獨立頁面）功能：- 載入範本數據- 顯示範本基本信息- 提供變數輸入表單- 實時預覽渲染結果- 導出 PDF（後續功能）@author Claude Code@date 2025-10-02
+ * @module app/dashboard/templates/[id]/preview/page
+ * @description
+ * 範本預覽頁面（獨立頁面）功能：- 載入範本數據- 顯示範本基本信息- 提供變數輸入表單- 實時預覽渲染結果- 導出 PDF（後續功能）@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - 載入範本數據
- * - 顯示範本基本信息
- * - 提供變數輸入表單
- * - 實時預覽渲染結果
- * - 導出 PDF（後續功能）
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

@@ -1,50 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫處理任務API (app/api/knowledge-base/processing/route.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫處理任務API (app/api/knowledge-base/processing/route.ts)================================================================【檔案功能】提供知識庫處理任務管理的RESTful API端點，負責處理文檔向量化、內容分析、索引建立等後台處理任務的創建、查詢和狀態更新【主要職責】• 處理任務查詢 - 獲取處理任務列表，支援分頁、篩選和統計• 任務創建管理 - 手動觸發處理任務，支援優先級設定• 狀態更新追蹤 - 更新任務處理進度和狀態變更• 任務調度支援 - 為後台處理系統提供任務隊列管理• 統計資訊提供 - 24小時內任務執行統計和狀態分佈【API規格】• GET /api/knowledge-base/processing - 獲取處理任務列表  參數: status, task_type, knowledge_base_id, limit, offset  回應: { success, data[], pagination, stats }• POST /api/knowledge-base/processing - 手動觸發處理任務  參數: { knowledge_base_id, task_type, priority, metadata }  回應: { success, data, message }• PUT /api/knowledge-base/processing/[id] - 更新任務狀態  參數: { status, progress, processed_items, error_message }  回應: { success, data, message }【使用場景】• 後台文檔處理 - 向量化、分析、索引建立• 任務狀態監控 - 管理介面查看處理進度• 錯誤處理追蹤 - 失敗任務的錯誤信息記錄• 手動重試機制 - 支援管理員手動觸發處理• 系統性能監控 - 處理任務統計和性能分析【相關檔案】• lib/auth-server.ts - 用戶身份驗證• lib/errors.ts - 錯誤處理和分類• lib/db.ts - 數據庫連接和查詢• @prisma/client - ProcessingStatus, ProcessingType 枚舉【開發注意】• 支援多種處理類型：VECTORIZATION, ANALYSIS, INDEXING• 任務狀態包含：PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED• 實現事務性狀態更新，確保知識庫項目狀態同步• 提供24小時統計避免性能問題• 支援任務優先級和自定義元數據• 防止重複任務創建的驗證機制
+ * @module app/api/knowledge-base/processing/route
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫處理任務API (app/api/knowledge-base/processing/route.ts)================================================================【檔案功能】提供知識庫處理任務管理的RESTful API端點，負責處理文檔向量化、內容分析、索引建立等後台處理任務的創建、查詢和狀態更新【主要職責】• 處理任務查詢 - 獲取處理任務列表，支援分頁、篩選和統計• 任務創建管理 - 手動觸發處理任務，支援優先級設定• 狀態更新追蹤 - 更新任務處理進度和狀態變更• 任務調度支援 - 為後台處理系統提供任務隊列管理• 統計資訊提供 - 24小時內任務執行統計和狀態分佈【API規格】• GET /api/knowledge-base/processing - 獲取處理任務列表  參數: status, task_type, knowledge_base_id, limit, offset  回應: { success, data[], pagination, stats }• POST /api/knowledge-base/processing - 手動觸發處理任務  參數: { knowledge_base_id, task_type, priority, metadata }  回應: { success, data, message }• PUT /api/knowledge-base/processing/[id] - 更新任務狀態  參數: { status, progress, processed_items, error_message }  回應: { success, data, message }【使用場景】• 後台文檔處理 - 向量化、分析、索引建立• 任務狀態監控 - 管理介面查看處理進度• 錯誤處理追蹤 - 失敗任務的錯誤信息記錄• 手動重試機制 - 支援管理員手動觸發處理• 系統性能監控 - 處理任務統計和性能分析【相關檔案】• lib/auth-server.ts - 用戶身份驗證• lib/errors.ts - 錯誤處理和分類• lib/db.ts - 數據庫連接和查詢• @prisma/client - ProcessingStatus, ProcessingType 枚舉【開發注意】• 支援多種處理類型：VECTORIZATION, ANALYSIS, INDEXING• 任務狀態包含：PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED• 實現事務性狀態更新，確保知識庫項目狀態同步• 提供24小時統計避免性能問題• 支援任務優先級和自定義元數據• 防止重複任務創建的驗證機制
  *
- * 【檔案功能】
- * 提供知識庫處理任務管理的RESTful API端點，負責處理文檔向量化、
- * 內容分析、索引建立等後台處理任務的創建、查詢和狀態更新
- *
- * 【主要職責】
- * • 處理任務查詢 - 獲取處理任務列表，支援分頁、篩選和統計
- * • 任務創建管理 - 手動觸發處理任務，支援優先級設定
- * • 狀態更新追蹤 - 更新任務處理進度和狀態變更
- * • 任務調度支援 - 為後台處理系統提供任務隊列管理
- * • 統計資訊提供 - 24小時內任務執行統計和狀態分佈
- *
- * 【API規格】
- * • GET /api/knowledge-base/processing - 獲取處理任務列表
- *   參數: status, task_type, knowledge_base_id, limit, offset
- *   回應: { success, data[], pagination, stats }
- * • POST /api/knowledge-base/processing - 手動觸發處理任務
- *   參數: { knowledge_base_id, task_type, priority, metadata }
- *   回應: { success, data, message }
- * • PUT /api/knowledge-base/processing/[id] - 更新任務狀態
- *   參數: { status, progress, processed_items, error_message }
- *   回應: { success, data, message }
- *
- * 【使用場景】
- * • 後台文檔處理 - 向量化、分析、索引建立
- * • 任務狀態監控 - 管理介面查看處理進度
- * • 錯誤處理追蹤 - 失敗任務的錯誤信息記錄
- * • 手動重試機制 - 支援管理員手動觸發處理
- * • 系統性能監控 - 處理任務統計和性能分析
- *
- * 【相關檔案】
- * • lib/auth-server.ts - 用戶身份驗證
- * • lib/errors.ts - 錯誤處理和分類
- * • lib/db.ts - 數據庫連接和查詢
- * • @prisma/client - ProcessingStatus, ProcessingType 枚舉
- *
- * 【開發注意】
- * • 支援多種處理類型：VECTORIZATION, ANALYSIS, INDEXING
- * • 任務狀態包含：PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED
- * • 實現事務性狀態更新，確保知識庫項目狀態同步
- * • 提供24小時統計避免性能問題
- * • 支援任務優先級和自定義元數據
- * • 防止重複任務創建的驗證機制
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'    // Next.js請求和回應處理

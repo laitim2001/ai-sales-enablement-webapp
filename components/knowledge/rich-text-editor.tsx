@@ -1,23 +1,11 @@
 /**
- * 富文本編輯器組件 - 基於 Tiptap
+ * @fileoverview 富文本編輯器組件 - 基於 Tiptap功能特性:- 基本文本格式化 (粗體、斜體、刪除線、代碼)- 多級標題支持 (H1-H6)- 列表功能 (有序列表、無序列表)- 鏈接插入和編輯- 圖片上傳和管理- Markdown 快捷鍵支持- 佔位符文本- 協作編輯準備 (future)技術棧:- Tiptap (基於 ProseMirror)- React Hooks- TypeScript- shadcn/ui 組件@created 2025-10-02 - Sprint 6 Week 11 Day 2
+ * @module components/knowledge/rich-text-editor
+ * @description
+ * 富文本編輯器組件 - 基於 Tiptap功能特性:- 基本文本格式化 (粗體、斜體、刪除線、代碼)- 多級標題支持 (H1-H6)- 列表功能 (有序列表、無序列表)- 鏈接插入和編輯- 圖片上傳和管理- Markdown 快捷鍵支持- 佔位符文本- 協作編輯準備 (future)技術棧:- Tiptap (基於 ProseMirror)- React Hooks- TypeScript- shadcn/ui 組件@created 2025-10-02 - Sprint 6 Week 11 Day 2
  *
- * 功能特性:
- * - 基本文本格式化 (粗體、斜體、刪除線、代碼)
- * - 多級標題支持 (H1-H6)
- * - 列表功能 (有序列表、無序列表)
- * - 鏈接插入和編輯
- * - 圖片上傳和管理
- * - Markdown 快捷鍵支持
- * - 佔位符文本
- * - 協作編輯準備 (future)
- *
- * 技術棧:
- * - Tiptap (基於 ProseMirror)
- * - React Hooks
- * - TypeScript
- * - shadcn/ui 組件
- *
- * @created 2025-10-02 - Sprint 6 Week 11 Day 2
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

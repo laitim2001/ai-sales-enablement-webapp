@@ -1,14 +1,11 @@
 /**
- * 提案版本控制系統
+ * @fileoverview 提案版本控制系統功能：- 追蹤提案的所有修改歷史- 支援版本比較和回溯- 記錄變更詳情和差異- 提供版本標籤和分類作者：Claude Code日期：2025-10-01
+ * @module lib/workflow/version-control
+ * @description
+ * 提案版本控制系統功能：- 追蹤提案的所有修改歷史- 支援版本比較和回溯- 記錄變更詳情和差異- 提供版本標籤和分類作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 追蹤提案的所有修改歷史
- * - 支援版本比較和回溯
- * - 記錄變更詳情和差異
- * - 提供版本標籤和分類
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient, Proposal, ProposalVersion } from '@prisma/client';

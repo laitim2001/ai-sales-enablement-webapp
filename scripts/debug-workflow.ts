@@ -1,6 +1,11 @@
 /**
- * 調試工作流程引擎
- * 單獨測試狀態轉換功能
+ * @fileoverview 調試工作流程引擎單獨測試狀態轉換功能
+ * @module scripts/debug-workflow
+ * @description
+ * 調試工作流程引擎單獨測試狀態轉換功能
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { PrismaClient, ProposalStatus } from '@prisma/client';

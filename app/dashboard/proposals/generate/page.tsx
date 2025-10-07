@@ -1,14 +1,11 @@
 /**
- * AI提案生成頁面
+ * @fileoverview AI提案生成頁面功能：- 選擇提案範本- 填寫範本變數- 調整AI生成參數- 執行AI生成並顯示結果作者：Claude Code創建時間：2025-09-28
+ * @module app/dashboard/proposals/generate/page
+ * @description
+ * AI提案生成頁面功能：- 選擇提案範本- 填寫範本變數- 調整AI生成參數- 執行AI生成並顯示結果作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 選擇提案範本
- * - 填寫範本變數
- * - 調整AI生成參數
- * - 執行AI生成並顯示結果
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

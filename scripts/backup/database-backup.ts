@@ -1,38 +1,11 @@
 /**
- * PostgreSQL 資料庫備份腳本 (生產級實施)
+ * @fileoverview PostgreSQL 資料庫備份腳本 (生產級實施)功能：- PostgreSQL pg_dump 自動備份- 備份壓縮和加密- 備份驗證 (SHA-256校驗)- 備份保留策略 (30天)- Azure Blob Storage上傳 (可選)- 備份日誌記錄使用方式：```bash# 完整備份npx tsx scripts/backup/database-backup.ts --type full# 增量備份 (需要WAL歸檔配置)npx tsx scripts/backup/database-backup.ts --type incremental# 驗證備份npx tsx scripts/backup/database-backup.ts --verify backup-2025-10-06.sql.gz```環境變數：- DATABASE_URL: PostgreSQL連接字串- BACKUP_DIR: 備份目錄路徑 (默認: ./backups)- BACKUP_RETENTION_DAYS: 保留天數 (默認: 30)- ENABLE_BACKUP_ENCRYPTION: 是否加密備份 (默認: true)- ENCRYPTION_KEY: 加密金鑰 (需Base64編碼)- AZURE_STORAGE_ACCOUNT_NAME: Azure存儲帳戶 (可選)- AZURE_STORAGE_ACCOUNT_KEY: Azure存儲金鑰 (可選)@author Claude Code@date 2025-10-06@epic Sprint 3 Week 6 - 資料備份系統
+ * @module scripts/backup/database-backup
+ * @description
+ * PostgreSQL 資料庫備份腳本 (生產級實施)功能：- PostgreSQL pg_dump 自動備份- 備份壓縮和加密- 備份驗證 (SHA-256校驗)- 備份保留策略 (30天)- Azure Blob Storage上傳 (可選)- 備份日誌記錄使用方式：```bash# 完整備份npx tsx scripts/backup/database-backup.ts --type full# 增量備份 (需要WAL歸檔配置)npx tsx scripts/backup/database-backup.ts --type incremental# 驗證備份npx tsx scripts/backup/database-backup.ts --verify backup-2025-10-06.sql.gz```環境變數：- DATABASE_URL: PostgreSQL連接字串- BACKUP_DIR: 備份目錄路徑 (默認: ./backups)- BACKUP_RETENTION_DAYS: 保留天數 (默認: 30)- ENABLE_BACKUP_ENCRYPTION: 是否加密備份 (默認: true)- ENCRYPTION_KEY: 加密金鑰 (需Base64編碼)- AZURE_STORAGE_ACCOUNT_NAME: Azure存儲帳戶 (可選)- AZURE_STORAGE_ACCOUNT_KEY: Azure存儲金鑰 (可選)@author Claude Code@date 2025-10-06@epic Sprint 3 Week 6 - 資料備份系統
  *
- * 功能：
- * - PostgreSQL pg_dump 自動備份
- * - 備份壓縮和加密
- * - 備份驗證 (SHA-256校驗)
- * - 備份保留策略 (30天)
- * - Azure Blob Storage上傳 (可選)
- * - 備份日誌記錄
- *
- * 使用方式：
- * ```bash
- * # 完整備份
- * npx tsx scripts/backup/database-backup.ts --type full
- *
- * # 增量備份 (需要WAL歸檔配置)
- * npx tsx scripts/backup/database-backup.ts --type incremental
- *
- * # 驗證備份
- * npx tsx scripts/backup/database-backup.ts --verify backup-2025-10-06.sql.gz
- * ```
- *
- * 環境變數：
- * - DATABASE_URL: PostgreSQL連接字串
- * - BACKUP_DIR: 備份目錄路徑 (默認: ./backups)
- * - BACKUP_RETENTION_DAYS: 保留天數 (默認: 30)
- * - ENABLE_BACKUP_ENCRYPTION: 是否加密備份 (默認: true)
- * - ENCRYPTION_KEY: 加密金鑰 (需Base64編碼)
- * - AZURE_STORAGE_ACCOUNT_NAME: Azure存儲帳戶 (可選)
- * - AZURE_STORAGE_ACCOUNT_KEY: Azure存儲金鑰 (可選)
- *
- * @author Claude Code
- * @date 2025-10-06
- * @epic Sprint 3 Week 6 - 資料備份系統
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { exec } from 'child_process';

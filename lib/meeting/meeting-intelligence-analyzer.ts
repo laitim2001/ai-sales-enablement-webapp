@@ -1,23 +1,11 @@
 /**
- * 會議智能分析引擎
+ * @fileoverview 會議智能分析引擎📋 檔案用途：使用Azure OpenAI GPT-4分析會議信息，提取關鍵信息並生成智能建議🎯 核心功能：1. 會議信息提取：參與者、主題、客戶名稱、會議類型2. 相關資料檢索：客戶歷史、提案、產品資料、案例3. AI建議生成：議程、討論重點、潛在問題、後續行動4. 上下文管理：多輪對話和歷史記錄🔗 依賴關係：- lib/ai/azure-openai-service.ts - Azure OpenAI API調用- lib/analytics/user-behavior-tracker.ts - 用戶行為分析- lib/meeting/meeting-prep-package.ts - 會議準備包生成作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2 - AI智能分析
+ * @module lib/meeting/meeting-intelligence-analyzer
+ * @description
+ * 會議智能分析引擎📋 檔案用途：使用Azure OpenAI GPT-4分析會議信息，提取關鍵信息並生成智能建議🎯 核心功能：1. 會議信息提取：參與者、主題、客戶名稱、會議類型2. 相關資料檢索：客戶歷史、提案、產品資料、案例3. AI建議生成：議程、討論重點、潛在問題、後續行動4. 上下文管理：多輪對話和歷史記錄🔗 依賴關係：- lib/ai/azure-openai-service.ts - Azure OpenAI API調用- lib/analytics/user-behavior-tracker.ts - 用戶行為分析- lib/meeting/meeting-prep-package.ts - 會議準備包生成作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2 - AI智能分析
  *
- * 📋 檔案用途：
- * 使用Azure OpenAI GPT-4分析會議信息，提取關鍵信息並生成智能建議
- *
- * 🎯 核心功能：
- * 1. 會議信息提取：參與者、主題、客戶名稱、會議類型
- * 2. 相關資料檢索：客戶歷史、提案、產品資料、案例
- * 3. AI建議生成：議程、討論重點、潛在問題、後續行動
- * 4. 上下文管理：多輪對話和歷史記錄
- *
- * 🔗 依賴關係：
- * - lib/ai/azure-openai-service.ts - Azure OpenAI API調用
- * - lib/analytics/user-behavior-tracker.ts - 用戶行為分析
- * - lib/meeting/meeting-prep-package.ts - 會議準備包生成
- *
- * 作者：Claude Code
- * 創建時間：2025-10-05
- * Sprint：Sprint 7 Phase 2 - AI智能分析
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { AzureOpenAIService, AIGenerationRequest, AIGenerationResponse } from '@/lib/ai/azure-openai-service';

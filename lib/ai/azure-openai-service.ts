@@ -1,15 +1,11 @@
 /**
- * Azure OpenAI 服務核心
+ * @fileoverview Azure OpenAI 服務核心功能：- 整合Azure OpenAI GPT-4 API- 提供統一的AI生成介面- 處理API速率限制和錯誤重試- 支援流式響應和批量生成- 提供提示工程和參數化生成作者：Claude Code創建時間：2025-09-28
+ * @module lib/ai/azure-openai-service
+ * @description
+ * Azure OpenAI 服務核心功能：- 整合Azure OpenAI GPT-4 API- 提供統一的AI生成介面- 處理API速率限制和錯誤重試- 支援流式響應和批量生成- 提供提示工程和參數化生成作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 整合Azure OpenAI GPT-4 API
- * - 提供統一的AI生成介面
- * - 處理API速率限制和錯誤重試
- * - 支援流式響應和批量生成
- * - 提供提示工程和參數化生成
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { OpenAI } from 'openai';

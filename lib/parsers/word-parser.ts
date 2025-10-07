@@ -1,31 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - Word文檔解析器
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - Word文檔解析器================================================================【檔案功能】使用 mammoth 套件解析 Word 文檔 (.docx, .doc)，提取純文本或 HTML 內容支持段落、標題、列表、表格等格式【主要職責】• Word 文檔讀取 - 從 Buffer 讀取 .docx/.doc 文件• 文本提取 - 提取純文本內容，保留段落結構• HTML 提取 - 可選提取 HTML 格式，保留格式• 元數據提取 - 提取作者、標題等信息（如有）【使用場景】• 批量上傳 - 用戶上傳 Word 文檔到知識庫• 內容索引 - 為搜索引擎建立索引• 格式化內容 - 需要保留格式的場景【技術依賴】• mammoth - Word 文檔解析套件• Buffer - Node.js 二進制數據處理【相關檔案】• lib/parsers/pdf-parser.ts - PDF 解析器• lib/parsers/excel-parser.ts - Excel/CSV 解析器• lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
+ * @module lib/parsers/word-parser
+ * @description
+ * ================================================================AI銷售賦能平台 - Word文檔解析器================================================================【檔案功能】使用 mammoth 套件解析 Word 文檔 (.docx, .doc)，提取純文本或 HTML 內容支持段落、標題、列表、表格等格式【主要職責】• Word 文檔讀取 - 從 Buffer 讀取 .docx/.doc 文件• 文本提取 - 提取純文本內容，保留段落結構• HTML 提取 - 可選提取 HTML 格式，保留格式• 元數據提取 - 提取作者、標題等信息（如有）【使用場景】• 批量上傳 - 用戶上傳 Word 文檔到知識庫• 內容索引 - 為搜索引擎建立索引• 格式化內容 - 需要保留格式的場景【技術依賴】• mammoth - Word 文檔解析套件• Buffer - Node.js 二進制數據處理【相關檔案】• lib/parsers/pdf-parser.ts - PDF 解析器• lib/parsers/excel-parser.ts - Excel/CSV 解析器• lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
  *
- * 【檔案功能】
- * 使用 mammoth 套件解析 Word 文檔 (.docx, .doc)，提取純文本或 HTML 內容
- * 支持段落、標題、列表、表格等格式
- *
- * 【主要職責】
- * • Word 文檔讀取 - 從 Buffer 讀取 .docx/.doc 文件
- * • 文本提取 - 提取純文本內容，保留段落結構
- * • HTML 提取 - 可選提取 HTML 格式，保留格式
- * • 元數據提取 - 提取作者、標題等信息（如有）
- *
- * 【使用場景】
- * • 批量上傳 - 用戶上傳 Word 文檔到知識庫
- * • 內容索引 - 為搜索引擎建立索引
- * • 格式化內容 - 需要保留格式的場景
- *
- * 【技術依賴】
- * • mammoth - Word 文檔解析套件
- * • Buffer - Node.js 二進制數據處理
- *
- * 【相關檔案】
- * • lib/parsers/pdf-parser.ts - PDF 解析器
- * • lib/parsers/excel-parser.ts - Excel/CSV 解析器
- * • lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import mammoth from 'mammoth'

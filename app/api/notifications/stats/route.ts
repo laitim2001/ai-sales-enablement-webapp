@@ -1,13 +1,11 @@
 /**
- * 通知統計 API 路由 (Notification Stats API Route)
- *
- * 處理通知統計數據的查詢
- *
- * 端點：
- * - GET /api/notifications/stats - 獲取通知統計摘要
- *
+ * @fileoverview 通知統計 API 路由 (Notification Stats API Route)處理通知統計數據的查詢端點：- GET /api/notifications/stats - 獲取通知統計摘要@module app/api/notifications/stats/route@since Sprint 5 Week 10 Day 2
  * @module app/api/notifications/stats/route
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知統計 API 路由 (Notification Stats API Route)處理通知統計數據的查詢端點：- GET /api/notifications/stats - 獲取通知統計摘要@module app/api/notifications/stats/route@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

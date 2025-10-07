@@ -1,8 +1,18 @@
 #!/usr/bin/env ts-node
 
 /**
- * Knowledge Base E2E Test Runner
+ * @fileoverview Knowledge Base E2E Test Runner - 知識庫端到端測試套件
+ * @module e2e/run-knowledge-tests
+ * @description
  * Comprehensive test suite for knowledge base functionality
+ * 測試範圍：
+ * - 知識庫CRUD操作
+ * - 搜索和過濾功能
+ * - 版本控制和歷史記錄
+ * - 權限和訪問控制
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { execSync } from 'child_process'

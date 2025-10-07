@@ -1,5 +1,11 @@
 /**
+ * @fileoverview 調試登入 API 腳本
+ * @module scripts/debug-login-api
+ * @description
  * 調試登入 API 腳本
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 async function testLoginAPI() {

@@ -1,14 +1,11 @@
 /**
- * 提醒列表組件
+ * @fileoverview 提醒列表組件功能：- 顯示用戶的所有提醒- 支持按狀態篩選- 支持刷新列表- 集成提醒卡片操作作者：Claude Code日期：2025-10-05
+ * @module components/reminder/ReminderList
+ * @description
+ * 提醒列表組件功能：- 顯示用戶的所有提醒- 支持按狀態篩選- 支持刷新列表- 集成提醒卡片操作作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - 顯示用戶的所有提醒
- * - 支持按狀態篩選
- * - 支持刷新列表
- * - 集成提醒卡片操作
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

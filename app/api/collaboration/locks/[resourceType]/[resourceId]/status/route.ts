@@ -1,10 +1,11 @@
 /**
- * 編輯鎖定狀態API - 檢查資源的鎖定和衝突狀態
+ * @fileoverview 編輯鎖定狀態API - 檢查資源的鎖定和衝突狀態GET /api/collaboration/locks/:resourceType/:resourceId/status作者：Claude Code日期：2025-10-05
+ * @module app/api/collaboration/locks/[resourceType]/[resourceId]/status/route
+ * @description
+ * 編輯鎖定狀態API - 檢查資源的鎖定和衝突狀態GET /api/collaboration/locks/:resourceType/:resourceId/status作者：Claude Code日期：2025-10-05
  *
- * GET /api/collaboration/locks/:resourceType/:resourceId/status
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

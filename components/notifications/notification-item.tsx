@@ -1,16 +1,11 @@
 /**
- * 通知項目組件 (Notification Item Component)
- *
- * 顯示單個通知的詳細信息，支援不同類型的通知展示
- *
- * 功能：
- * 1. 根據通知類型顯示不同圖標和樣式
- * 2. 支援已讀/未讀狀態
- * 3. 顯示時間戳和優先級
- * 4. 支援點擊跳轉和操作
- *
+ * @fileoverview 通知項目組件 (Notification Item Component)顯示單個通知的詳細信息，支援不同類型的通知展示功能：1. 根據通知類型顯示不同圖標和樣式2. 支援已讀/未讀狀態3. 顯示時間戳和優先級4. 支援點擊跳轉和操作@module components/notifications/notification-item@since Sprint 5 Week 10 Day 2
  * @module components/notifications/notification-item
- * @since Sprint 5 Week 10 Day 2
+ * @description
+ * 通知項目組件 (Notification Item Component)顯示單個通知的詳細信息，支援不同類型的通知展示功能：1. 根據通知類型顯示不同圖標和樣式2. 支援已讀/未讀狀態3. 顯示時間戳和優先級4. 支援點擊跳轉和操作@module components/notifications/notification-item@since Sprint 5 Week 10 Day 2
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

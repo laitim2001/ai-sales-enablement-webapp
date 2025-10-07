@@ -1,14 +1,11 @@
 /**
- * 評論串組件
+ * @fileoverview 評論串組件功能：- 顯示評論樹狀結構- 支持嵌套回覆- @mentions 高亮顯示- 評論狀態管理（開啟/已解決）作者：Claude Code日期：2025-10-01
+ * @module components/workflow/comments/CommentThread
+ * @description
+ * 評論串組件功能：- 顯示評論樹狀結構- 支持嵌套回覆- @mentions 高亮顯示- 評論狀態管理（開啟/已解決）作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 顯示評論樹狀結構
- * - 支持嵌套回覆
- * - @mentions 高亮顯示
- * - 評論狀態管理（開啟/已解決）
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

@@ -1,14 +1,11 @@
 /**
- * 提案管理主頁面
+ * @fileoverview 提案管理主頁面功能：- 提案範本管理和瀏覽- AI提案生成入口- 生成歷史查看- 範本搜尋和篩選作者：Claude Code創建時間：2025-09-28
+ * @module app/dashboard/proposals/page
+ * @description
+ * 提案管理主頁面功能：- 提案範本管理和瀏覽- AI提案生成入口- 生成歷史查看- 範本搜尋和篩選作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 提案範本管理和瀏覽
- * - AI提案生成入口
- * - 生成歷史查看
- * - 範本搜尋和篩選
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

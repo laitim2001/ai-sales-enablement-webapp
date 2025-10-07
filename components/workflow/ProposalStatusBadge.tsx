@@ -1,13 +1,11 @@
 /**
- * 提案狀態徽章組件
+ * @fileoverview 提案狀態徽章組件功能：- 顯示提案當前狀態- 狀態對應的顏色和圖標- 支持大小變化作者：Claude Code日期：2025-10-01
+ * @module components/workflow/ProposalStatusBadge
+ * @description
+ * 提案狀態徽章組件功能：- 顯示提案當前狀態- 狀態對應的顏色和圖標- 支持大小變化作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 顯示提案當前狀態
- * - 狀態對應的顏色和圖標
- * - 支持大小變化
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import React from 'react';

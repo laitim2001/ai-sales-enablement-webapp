@@ -1,20 +1,11 @@
 /**
- * 客戶360度視圖 API 路由
+ * @fileoverview 客戶360度視圖 API 路由功能：- 提供客戶完整檔案和相關數據- 聚合聯絡人、銷售機會、互動歷史- 生成AI洞察和建議- 查找相關知識庫內容- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: READ權限 (所有角色)- PUT: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)作者：Claude Code創建時間：2025-09-28更新時間：2025-10-06 (RBAC整合)
+ * @module app/api/customers/[id]/360-view/route
+ * @description
+ * 客戶360度視圖 API 路由功能：- 提供客戶完整檔案和相關數據- 聚合聯絡人、銷售機會、互動歷史- 生成AI洞察和建議- 查找相關知識庫內容- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: READ權限 (所有角色)- PUT: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)作者：Claude Code創建時間：2025-09-28更新時間：2025-10-06 (RBAC整合)
  *
- * 功能：
- * - 提供客戶完整檔案和相關數據
- * - 聚合聯絡人、銷售機會、互動歷史
- * - 生成AI洞察和建議
- * - 查找相關知識庫內容
- * - RBAC權限控制整合 (Sprint 3 Week 7)
- *
- * 權限要求：
- * - GET: READ權限 (所有角色)
- * - PUT: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的客戶)
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
- * 更新時間：2025-10-06 (RBAC整合)
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

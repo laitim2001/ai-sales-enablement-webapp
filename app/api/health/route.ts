@@ -1,14 +1,11 @@
 /**
- * 系統健康檢查 API 路由
+ * @fileoverview 系統健康檢查 API 路由功能：- 提供系統整體健康狀態- 各服務連接狀態監控- 性能指標統計- 健康檢查端點作者：Claude Code創建時間：2025-09-28
+ * @module app/api/health/route
+ * @description
+ * 系統健康檢查 API 路由功能：- 提供系統整體健康狀態- 各服務連接狀態監控- 性能指標統計- 健康檢查端點作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 提供系統整體健康狀態
- * - 各服務連接狀態監控
- * - 性能指標統計
- * - 健康檢查端點
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

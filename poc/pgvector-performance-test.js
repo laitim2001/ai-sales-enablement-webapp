@@ -1,10 +1,11 @@
 /**
- * PostgreSQL + pgvector 性能測試 POC
- * 測試目標：
- * 1. 驗證 pgvector 擴展安裝和基本功能
- * 2. 測試向量插入性能
- * 3. 測試向量相似性搜索性能
- * 4. 評估不同向量維度的性能影響
+ * @fileoverview PostgreSQL + pgvector 性能測試 POC測試目標：1. 驗證 pgvector 擴展安裝和基本功能2. 測試向量插入性能3. 測試向量相似性搜索性能4. 評估不同向量維度的性能影響
+ * @module poc/pgvector-performance-test
+ * @description
+ * PostgreSQL + pgvector 性能測試 POC測試目標：1. 驗證 pgvector 擴展安裝和基本功能2. 測試向量插入性能3. 測試向量相似性搜索性能4. 評估不同向量維度的性能影響
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 require('dotenv').config();

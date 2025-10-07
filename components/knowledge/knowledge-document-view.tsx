@@ -1,72 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫文檔檢視組件 (/components/knowledge/knowledge-document-view.tsx)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫文檔檢視組件 (/components/knowledge/knowledge-document-view.tsx)================================================================【組件功能】提供知識庫文檔的詳細檢視功能，包括文檔內容預覽、分塊資訊查看、處理記錄查看、文檔編輯和刪除操作、及標籤和狀態管理等完整功能。【主要職責】• 文檔加載 - 從後端API獲取文檔完整資訊• 內容預覽 - 整合DocumentPreview組件進行文檔預覽• 分塊檢視 - 顯示文檔被切分的內容分塊• 處理記錄 - 查看文檔的處理任務和進度• 編輯功能 - 導航到文檔編輯頁面• 刪除功能 - 提供文檔刪除功能和確認• 狀態顯示 - 展示文檔狀態和處理狀態• 選項卡導航 - 在內容、分塊和處理記錄間切換【Props介面】• documentId - number - 文檔的唯一識別碼【狀態管理】• document - DocumentData | null - 文檔完整資訊• loading - boolean - 數據加載狀態• error - string | null - 錯誤訊息• activeTab - 'content' | 'chunks' | 'processing' - 當前激活的選項卡• deleting - boolean - 刪除操作狀態【用戶互動】• 選項卡切換 - 在不同的檢視模式間切換• 編輯操作 - 跳轉到文檔編輯頁面• 刪除操作 - 显示確認對話框後執行刪除• 分享功能 - 預留的文檔分享功能• 重試加載 - 當加載失敗時提供重試選項【渲染邏輯】• 加載狀態 - 顯示載入動畫和提示• 錯誤狀態 - 顯示錯誤訊息和重試按鈕• 文檔標頭 - 文檔標題、作者、日期等基本資訊• 狀態標籤 - 文檔狀態和處理狀態的視覺化顯示• 操作按鈕 - 編輯、分享、刪除等操作• 選項卡內容 - 根據當前選項卡顯示不同內容【Hook使用】• useState - 管理文檔数據、加載狀態和選項卡狀態• useEffect - 在組件加載時自動獲取文檔数據• useRouter - 用於頁面跳轉和導航【副作用處理】• 文檔加載 - 從/api/knowledge-base/[id]端點獲取文檔数據• 文檔刪除 - 向/api/knowledge-base/[id]發送DELETE請求• JWT認證 - 在所有API請求中包含認證token• 錯誤處理 - 捕獲和展示網路和API錯誤【相關檔案】• /components/knowledge/document-preview.tsx - 文檔預覽組件• /components/ui/button.tsx - 按鈕組件• /api/knowledge-base/[id] - 文檔API端點• /app/dashboard/knowledge/[id]/page.tsx - 父頁面組件• /app/dashboard/knowledge/[id]/edit/page.tsx - 編輯頁面【開發注意】• 錯誤處理 - 提供完整的錯誤訊息和復原操作• 性能優化 - 使用適當的加載狀態和懶加載• 安全性 - 刪除操作需要用戶確認• 用戶體驗 - 提供直覺的選項卡導航和狀態顯示• 数據同步 - 確保數據更新後的狀態同步• 設計一致性 - 與其他知識庫組件保持一致的設計風格
+ * @module components/knowledge/knowledge-document-view
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫文檔檢視組件 (/components/knowledge/knowledge-document-view.tsx)================================================================【組件功能】提供知識庫文檔的詳細檢視功能，包括文檔內容預覽、分塊資訊查看、處理記錄查看、文檔編輯和刪除操作、及標籤和狀態管理等完整功能。【主要職責】• 文檔加載 - 從後端API獲取文檔完整資訊• 內容預覽 - 整合DocumentPreview組件進行文檔預覽• 分塊檢視 - 顯示文檔被切分的內容分塊• 處理記錄 - 查看文檔的處理任務和進度• 編輯功能 - 導航到文檔編輯頁面• 刪除功能 - 提供文檔刪除功能和確認• 狀態顯示 - 展示文檔狀態和處理狀態• 選項卡導航 - 在內容、分塊和處理記錄間切換【Props介面】• documentId - number - 文檔的唯一識別碼【狀態管理】• document - DocumentData | null - 文檔完整資訊• loading - boolean - 數據加載狀態• error - string | null - 錯誤訊息• activeTab - 'content' | 'chunks' | 'processing' - 當前激活的選項卡• deleting - boolean - 刪除操作狀態【用戶互動】• 選項卡切換 - 在不同的檢視模式間切換• 編輯操作 - 跳轉到文檔編輯頁面• 刪除操作 - 显示確認對話框後執行刪除• 分享功能 - 預留的文檔分享功能• 重試加載 - 當加載失敗時提供重試選項【渲染邏輯】• 加載狀態 - 顯示載入動畫和提示• 錯誤狀態 - 顯示錯誤訊息和重試按鈕• 文檔標頭 - 文檔標題、作者、日期等基本資訊• 狀態標籤 - 文檔狀態和處理狀態的視覺化顯示• 操作按鈕 - 編輯、分享、刪除等操作• 選項卡內容 - 根據當前選項卡顯示不同內容【Hook使用】• useState - 管理文檔数據、加載狀態和選項卡狀態• useEffect - 在組件加載時自動獲取文檔数據• useRouter - 用於頁面跳轉和導航【副作用處理】• 文檔加載 - 從/api/knowledge-base/[id]端點獲取文檔数據• 文檔刪除 - 向/api/knowledge-base/[id]發送DELETE請求• JWT認證 - 在所有API請求中包含認證token• 錯誤處理 - 捕獲和展示網路和API錯誤【相關檔案】• /components/knowledge/document-preview.tsx - 文檔預覽組件• /components/ui/button.tsx - 按鈕組件• /api/knowledge-base/[id] - 文檔API端點• /app/dashboard/knowledge/[id]/page.tsx - 父頁面組件• /app/dashboard/knowledge/[id]/edit/page.tsx - 編輯頁面【開發注意】• 錯誤處理 - 提供完整的錯誤訊息和復原操作• 性能優化 - 使用適當的加載狀態和懶加載• 安全性 - 刪除操作需要用戶確認• 用戶體驗 - 提供直覺的選項卡導航和狀態顯示• 数據同步 - 確保數據更新後的狀態同步• 設計一致性 - 與其他知識庫組件保持一致的設計風格
  *
- * 【組件功能】
- * 提供知識庫文檔的詳細檢視功能，包括文檔內容預覽、分塊資訊查看、
- * 處理記錄查看、文檔編輯和刪除操作、及標籤和狀態管理等完整功能。
- *
- * 【主要職責】
- * • 文檔加載 - 從後端API獲取文檔完整資訊
- * • 內容預覽 - 整合DocumentPreview組件進行文檔預覽
- * • 分塊檢視 - 顯示文檔被切分的內容分塊
- * • 處理記錄 - 查看文檔的處理任務和進度
- * • 編輯功能 - 導航到文檔編輯頁面
- * • 刪除功能 - 提供文檔刪除功能和確認
- * • 狀態顯示 - 展示文檔狀態和處理狀態
- * • 選項卡導航 - 在內容、分塊和處理記錄間切換
- *
- * 【Props介面】
- * • documentId - number - 文檔的唯一識別碼
- *
- * 【狀態管理】
- * • document - DocumentData | null - 文檔完整資訊
- * • loading - boolean - 數據加載狀態
- * • error - string | null - 錯誤訊息
- * • activeTab - 'content' | 'chunks' | 'processing' - 當前激活的選項卡
- * • deleting - boolean - 刪除操作狀態
- *
- * 【用戶互動】
- * • 選項卡切換 - 在不同的檢視模式間切換
- * • 編輯操作 - 跳轉到文檔編輯頁面
- * • 刪除操作 - 显示確認對話框後執行刪除
- * • 分享功能 - 預留的文檔分享功能
- * • 重試加載 - 當加載失敗時提供重試選項
- *
- * 【渲染邏輯】
- * • 加載狀態 - 顯示載入動畫和提示
- * • 錯誤狀態 - 顯示錯誤訊息和重試按鈕
- * • 文檔標頭 - 文檔標題、作者、日期等基本資訊
- * • 狀態標籤 - 文檔狀態和處理狀態的視覺化顯示
- * • 操作按鈕 - 編輯、分享、刪除等操作
- * • 選項卡內容 - 根據當前選項卡顯示不同內容
- *
- * 【Hook使用】
- * • useState - 管理文檔数據、加載狀態和選項卡狀態
- * • useEffect - 在組件加載時自動獲取文檔数據
- * • useRouter - 用於頁面跳轉和導航
- *
- * 【副作用處理】
- * • 文檔加載 - 從/api/knowledge-base/[id]端點獲取文檔数據
- * • 文檔刪除 - 向/api/knowledge-base/[id]發送DELETE請求
- * • JWT認證 - 在所有API請求中包含認證token
- * • 錯誤處理 - 捕獲和展示網路和API錯誤
- *
- * 【相關檔案】
- * • /components/knowledge/document-preview.tsx - 文檔預覽組件
- * • /components/ui/button.tsx - 按鈕組件
- * • /api/knowledge-base/[id] - 文檔API端點
- * • /app/dashboard/knowledge/[id]/page.tsx - 父頁面組件
- * • /app/dashboard/knowledge/[id]/edit/page.tsx - 編輯頁面
- *
- * 【開發注意】
- * • 錯誤處理 - 提供完整的錯誤訊息和復原操作
- * • 性能優化 - 使用適當的加載狀態和懶加載
- * • 安全性 - 刪除操作需要用戶確認
- * • 用戶體驗 - 提供直覺的選項卡導航和狀態顯示
- * • 数據同步 - 確保數據更新後的狀態同步
- * • 設計一致性 - 與其他知識庫組件保持一致的設計風格
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client'

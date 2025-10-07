@@ -1,30 +1,11 @@
 /**
- * 重試策略系統
+ * @fileoverview 重試策略系統功能：- 可配置重試策略- 退避算法（固定、線性、指數、抖動）- 條件重試（基於錯誤類型）- 重試統計追蹤- 超時控制- 回調通知使用方式：```typescriptconst retry = new RetryPolicy({  maxAttempts: 3,  backoff: 'exponential',  retryableErrors: ['ECONNRESET', 'ETIMEDOUT']});const result = await retry.execute(async () => {  return await fetch('https://api.example.com/data');});```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
+ * @module lib/resilience/retry
+ * @description
+ * 重試策略系統功能：- 可配置重試策略- 退避算法（固定、線性、指數、抖動）- 條件重試（基於錯誤類型）- 重試統計追蹤- 超時控制- 回調通知使用方式：```typescriptconst retry = new RetryPolicy({  maxAttempts: 3,  backoff: 'exponential',  retryableErrors: ['ECONNRESET', 'ETIMEDOUT']});const result = await retry.execute(async () => {  return await fetch('https://api.example.com/data');});```@author Claude Code@date 2025-10-01@epic Sprint 4 - 性能優化與高可用性
  *
- * 功能：
- * - 可配置重試策略
- * - 退避算法（固定、線性、指數、抖動）
- * - 條件重試（基於錯誤類型）
- * - 重試統計追蹤
- * - 超時控制
- * - 回調通知
- *
- * 使用方式：
- * ```typescript
- * const retry = new RetryPolicy({
- *   maxAttempts: 3,
- *   backoff: 'exponential',
- *   retryableErrors: ['ECONNRESET', 'ETIMEDOUT']
- * });
- *
- * const result = await retry.execute(async () => {
- *   return await fetch('https://api.example.com/data');
- * });
- * ```
- *
- * @author Claude Code
- * @date 2025-10-01
- * @epic Sprint 4 - 性能優化與高可用性
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 /**

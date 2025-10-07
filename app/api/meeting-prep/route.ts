@@ -1,12 +1,11 @@
 /**
- * 會議準備包API路由
+ * @fileoverview 會議準備包API路由功能：- GET: 獲取用戶的準備包列表- POST: 創建新準備包作者：Claude Code日期：2025-10-05
+ * @module app/api/meeting-prep/route
+ * @description
+ * 會議準備包API路由功能：- GET: 獲取用戶的準備包列表- POST: 創建新準備包作者：Claude Code日期：2025-10-05
  *
- * 功能：
- * - GET: 獲取用戶的準備包列表
- * - POST: 創建新準備包
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

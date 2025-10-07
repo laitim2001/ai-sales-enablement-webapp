@@ -1,32 +1,11 @@
 /**
- * 內容推薦API路由
+ * @fileoverview 內容推薦API路由📋 檔案用途：提供基於用戶畫像的個性化內容推薦API🔗 API端點：- GET /api/recommendations/content - 獲取個性化內容推薦📊 請求參數：- limit: 返回數量限制（默認10）- contentType: 內容類型過濾（KNOWLEDGE_BASE/PROPOSAL/TEMPLATE等）- strategy: 推薦策略（collaborative/content_based/hybrid/popularity）- excludeIds: 排除的項目ID列表📤 響應格式：{  success: boolean,  data: {    items: RecommendationItem[],    totalCount: number,    strategy: string,    confidence: number  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ * @module app/api/recommendations/content/route
+ * @description
+ * 內容推薦API路由📋 檔案用途：提供基於用戶畫像的個性化內容推薦API🔗 API端點：- GET /api/recommendations/content - 獲取個性化內容推薦📊 請求參數：- limit: 返回數量限制（默認10）- contentType: 內容類型過濾（KNOWLEDGE_BASE/PROPOSAL/TEMPLATE等）- strategy: 推薦策略（collaborative/content_based/hybrid/popularity）- excludeIds: 排除的項目ID列表📤 響應格式：{  success: boolean,  data: {    items: RecommendationItem[],    totalCount: number,    strategy: string,    confidence: number  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
  *
- * 📋 檔案用途：
- * 提供基於用戶畫像的個性化內容推薦API
- *
- * 🔗 API端點：
- * - GET /api/recommendations/content - 獲取個性化內容推薦
- *
- * 📊 請求參數：
- * - limit: 返回數量限制（默認10）
- * - contentType: 內容類型過濾（KNOWLEDGE_BASE/PROPOSAL/TEMPLATE等）
- * - strategy: 推薦策略（collaborative/content_based/hybrid/popularity）
- * - excludeIds: 排除的項目ID列表
- *
- * 📤 響應格式：
- * {
- *   success: boolean,
- *   data: {
- *     items: RecommendationItem[],
- *     totalCount: number,
- *     strategy: string,
- *     confidence: number
- *   }
- * }
- *
- * 作者：Claude Code
- * 創建時間：2025-10-05
- * Sprint：Sprint 7 Phase 2
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

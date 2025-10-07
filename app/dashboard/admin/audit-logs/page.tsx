@@ -1,11 +1,11 @@
 /**
- * 審計日誌管理頁面
+ * @fileoverview 審計日誌管理頁面僅限ADMIN角色訪問，提供完整的審計日誌查詢、篩選、統計和導出功能@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @module app/dashboard/admin/audit-logs/page
+ * @description
+ * 審計日誌管理頁面僅限ADMIN角色訪問，提供完整的審計日誌查詢、篩選、統計和導出功能@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
  *
- * 僅限ADMIN角色訪問，提供完整的審計日誌查詢、篩選、統計和導出功能
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

@@ -1,33 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 敏感欄位加密配置 (lib/security/sensitive-fields-config.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 敏感欄位加密配置 (lib/security/sensitive-fields-config.ts)================================================================【檔案功能】定義需要進行欄位級加密的數據模型和欄位清單。提供統一的敏感欄位配置管理,確保敏感資料的一致性加密。【主要職責】• 敏感欄位定義 - 明確指定哪些Model的哪些欄位需要加密• 加密優先級 - 定義HIGH/MEDIUM/LOW三級優先級• 配置管理 - 集中管理所有敏感欄位配置• 性能優化 - 支援選擇性加密和批量處理• 合規支援 - 符合GDPR、PDPA等資料保護法規【安全等級定義】• HIGH (關鍵) - 個人身份資訊(PII)、財務資訊、機密商業數據• MEDIUM (敏感) - 聯繫資訊、業務記錄、內部備註• LOW (一般) - 非機密描述、公開資訊【相關檔案】• lib/security/encryption.ts - 加密服務實現• lib/security/azure-key-vault.ts - 金鑰管理服務• prisma/schema.prisma - 資料庫Schema定義• scripts/test-encryption-performance.ts - 加密性能測試【更新記錄】- Sprint 3 Week 5: 初始配置 - Customer、Contact、SalesOpportunity敏感欄位================================================================
+ * @module lib/security/sensitive-fields-config
+ * @description
+ * ================================================================AI銷售賦能平台 - 敏感欄位加密配置 (lib/security/sensitive-fields-config.ts)================================================================【檔案功能】定義需要進行欄位級加密的數據模型和欄位清單。提供統一的敏感欄位配置管理,確保敏感資料的一致性加密。【主要職責】• 敏感欄位定義 - 明確指定哪些Model的哪些欄位需要加密• 加密優先級 - 定義HIGH/MEDIUM/LOW三級優先級• 配置管理 - 集中管理所有敏感欄位配置• 性能優化 - 支援選擇性加密和批量處理• 合規支援 - 符合GDPR、PDPA等資料保護法規【安全等級定義】• HIGH (關鍵) - 個人身份資訊(PII)、財務資訊、機密商業數據• MEDIUM (敏感) - 聯繫資訊、業務記錄、內部備註• LOW (一般) - 非機密描述、公開資訊【相關檔案】• lib/security/encryption.ts - 加密服務實現• lib/security/azure-key-vault.ts - 金鑰管理服務• prisma/schema.prisma - 資料庫Schema定義• scripts/test-encryption-performance.ts - 加密性能測試【更新記錄】- Sprint 3 Week 5: 初始配置 - Customer、Contact、SalesOpportunity敏感欄位================================================================
  *
- * 【檔案功能】
- * 定義需要進行欄位級加密的數據模型和欄位清單。
- * 提供統一的敏感欄位配置管理,確保敏感資料的一致性加密。
- *
- * 【主要職責】
- * • 敏感欄位定義 - 明確指定哪些Model的哪些欄位需要加密
- * • 加密優先級 - 定義HIGH/MEDIUM/LOW三級優先級
- * • 配置管理 - 集中管理所有敏感欄位配置
- * • 性能優化 - 支援選擇性加密和批量處理
- * • 合規支援 - 符合GDPR、PDPA等資料保護法規
- *
- * 【安全等級定義】
- * • HIGH (關鍵) - 個人身份資訊(PII)、財務資訊、機密商業數據
- * • MEDIUM (敏感) - 聯繫資訊、業務記錄、內部備註
- * • LOW (一般) - 非機密描述、公開資訊
- *
- * 【相關檔案】
- * • lib/security/encryption.ts - 加密服務實現
- * • lib/security/azure-key-vault.ts - 金鑰管理服務
- * • prisma/schema.prisma - 資料庫Schema定義
- * • scripts/test-encryption-performance.ts - 加密性能測試
- *
- * 【更新記錄】
- * - Sprint 3 Week 5: 初始配置 - Customer、Contact、SalesOpportunity敏感欄位
- * ================================================================
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 /**

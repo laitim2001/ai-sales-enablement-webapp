@@ -1,9 +1,11 @@
 /**
- * 資源級別權限細化服務
- *
- * 基於資源狀態、屬性、關係等條件的細粒度訪問控制
- *
+ * @fileoverview 資源級別權限細化服務基於資源狀態、屬性、關係等條件的細粒度訪問控制@module lib/security/resource-conditions
  * @module lib/security/resource-conditions
+ * @description
+ * 資源級別權限細化服務基於資源狀態、屬性、關係等條件的細粒度訪問控制@module lib/security/resource-conditions
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { UserRole, Resource, Action } from './rbac';

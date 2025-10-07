@@ -1,21 +1,11 @@
 /**
- * Dynamics 365 Web API 客戶端
+ * @fileoverview Dynamics 365 Web API 客戶端功能：- Dynamics 365 實體資料的 CRUD 操作- 自動認證和錯誤處理- 批次操作和分頁支援- 查詢建構器和資料轉換支援的實體：- Account (客戶公司)- Contact (聯絡人)- Opportunity (銷售機會)- Product (產品)- Activity (活動記錄)作者：Claude Code創建時間：2025-09-28
+ * @module lib/integrations/dynamics365/client
+ * @description
+ * Dynamics 365 Web API 客戶端功能：- Dynamics 365 實體資料的 CRUD 操作- 自動認證和錯誤處理- 批次操作和分頁支援- 查詢建構器和資料轉換支援的實體：- Account (客戶公司)- Contact (聯絡人)- Opportunity (銷售機會)- Product (產品)- Activity (活動記錄)作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - Dynamics 365 實體資料的 CRUD 操作
- * - 自動認證和錯誤處理
- * - 批次操作和分頁支援
- * - 查詢建構器和資料轉換
- *
- * 支援的實體：
- * - Account (客戶公司)
- * - Contact (聯絡人)
- * - Opportunity (銷售機會)
- * - Product (產品)
- * - Activity (活動記錄)
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { getDynamics365AuthHeaders, Dynamics365AuthError } from './auth';

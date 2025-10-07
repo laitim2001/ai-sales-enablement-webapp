@@ -1,55 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 知識庫搜索建議API (app/api/knowledge-base/suggestions/route.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 知識庫搜索建議API (app/api/knowledge-base/suggestions/route.ts)================================================================【檔案功能】提供智能搜索建議系統的RESTful API端點，包含實時搜索建議、自動補全、相關搜索、使用記錄追蹤和統計分析等功能【主要職責】• 實時搜索建議 - 基於用戶輸入提供智能搜索建議• 自動補全功能 - 快速自動補全用戶輸入的搜索詞• 相關搜索推薦 - 根據搜索歷史推薦相關搜索詞• 使用行為追蹤 - 記錄用戶搜索行為和使用統計• 個性化建議 - 基於用戶歷史提供個性化搜索建議• 多語言支援 - 支援多語言搜索建議和自動檢測• 拼寫糾錯 - 提供智能拼寫錯誤糾正功能【API規格】• GET /api/knowledge-base/suggestions - 獲取搜索建議  參數: q/query, userId, language, category, limit, includeTypes, excludeTypes  回應: { success, data, meta }• POST /api/knowledge-base/suggestions - 複雜建議操作  actions: suggestions, autocomplete, record, related  回應: 根據action類型返回對應數據• DELETE /api/knowledge-base/suggestions - 清理過期數據  權限: 管理員權限• PATCH /api/knowledge-base/suggestions - 獲取統計信息  權限: 認證用戶【使用場景】• 搜索框自動補全 - 用戶輸入時的實時建議• 搜索結果優化 - 提供相關搜索詞擴展結果• 用戶體驗改善 - 拼寫糾錯和智能建議• 搜索行為分析 - 了解用戶搜索模式和熱門詞彙• 個性化推薦 - 基於歷史行為的個性化搜索建議【相關檔案】• lib/search/search-suggestions.ts - 搜索建議服務核心邏輯• lib/errors.ts - 錯誤處理和分類• @clerk/nextjs - 用戶身份驗證• crypto - UUID生成和安全功能【開發注意】• 支援多種建議類型：completion, related, popular, personalized, correction, category• 實現30分鐘緩存機制提升響應速度• 提供詳細的請求ID和處理時間追蹤• 支援語言自動檢測和多語言建議• 包含用戶個性化和使用統計功能• 實現優雅的錯誤處理和日誌記錄Week 5 開發階段 - Task 5.4: 實時搜索建議系統 API
+ * @module app/api/knowledge-base/suggestions/route
+ * @description
+ * ================================================================AI銷售賦能平台 - 知識庫搜索建議API (app/api/knowledge-base/suggestions/route.ts)================================================================【檔案功能】提供智能搜索建議系統的RESTful API端點，包含實時搜索建議、自動補全、相關搜索、使用記錄追蹤和統計分析等功能【主要職責】• 實時搜索建議 - 基於用戶輸入提供智能搜索建議• 自動補全功能 - 快速自動補全用戶輸入的搜索詞• 相關搜索推薦 - 根據搜索歷史推薦相關搜索詞• 使用行為追蹤 - 記錄用戶搜索行為和使用統計• 個性化建議 - 基於用戶歷史提供個性化搜索建議• 多語言支援 - 支援多語言搜索建議和自動檢測• 拼寫糾錯 - 提供智能拼寫錯誤糾正功能【API規格】• GET /api/knowledge-base/suggestions - 獲取搜索建議  參數: q/query, userId, language, category, limit, includeTypes, excludeTypes  回應: { success, data, meta }• POST /api/knowledge-base/suggestions - 複雜建議操作  actions: suggestions, autocomplete, record, related  回應: 根據action類型返回對應數據• DELETE /api/knowledge-base/suggestions - 清理過期數據  權限: 管理員權限• PATCH /api/knowledge-base/suggestions - 獲取統計信息  權限: 認證用戶【使用場景】• 搜索框自動補全 - 用戶輸入時的實時建議• 搜索結果優化 - 提供相關搜索詞擴展結果• 用戶體驗改善 - 拼寫糾錯和智能建議• 搜索行為分析 - 了解用戶搜索模式和熱門詞彙• 個性化推薦 - 基於歷史行為的個性化搜索建議【相關檔案】• lib/search/search-suggestions.ts - 搜索建議服務核心邏輯• lib/errors.ts - 錯誤處理和分類• @clerk/nextjs - 用戶身份驗證• crypto - UUID生成和安全功能【開發注意】• 支援多種建議類型：completion, related, popular, personalized, correction, category• 實現30分鐘緩存機制提升響應速度• 提供詳細的請求ID和處理時間追蹤• 支援語言自動檢測和多語言建議• 包含用戶個性化和使用統計功能• 實現優雅的錯誤處理和日誌記錄Week 5 開發階段 - Task 5.4: 實時搜索建議系統 API
  *
- * 【檔案功能】
- * 提供智能搜索建議系統的RESTful API端點，包含實時搜索建議、
- * 自動補全、相關搜索、使用記錄追蹤和統計分析等功能
- *
- * 【主要職責】
- * • 實時搜索建議 - 基於用戶輸入提供智能搜索建議
- * • 自動補全功能 - 快速自動補全用戶輸入的搜索詞
- * • 相關搜索推薦 - 根據搜索歷史推薦相關搜索詞
- * • 使用行為追蹤 - 記錄用戶搜索行為和使用統計
- * • 個性化建議 - 基於用戶歷史提供個性化搜索建議
- * • 多語言支援 - 支援多語言搜索建議和自動檢測
- * • 拼寫糾錯 - 提供智能拼寫錯誤糾正功能
- *
- * 【API規格】
- * • GET /api/knowledge-base/suggestions - 獲取搜索建議
- *   參數: q/query, userId, language, category, limit, includeTypes, excludeTypes
- *   回應: { success, data, meta }
- * • POST /api/knowledge-base/suggestions - 複雜建議操作
- *   actions: suggestions, autocomplete, record, related
- *   回應: 根據action類型返回對應數據
- * • DELETE /api/knowledge-base/suggestions - 清理過期數據
- *   權限: 管理員權限
- * • PATCH /api/knowledge-base/suggestions - 獲取統計信息
- *   權限: 認證用戶
- *
- * 【使用場景】
- * • 搜索框自動補全 - 用戶輸入時的實時建議
- * • 搜索結果優化 - 提供相關搜索詞擴展結果
- * • 用戶體驗改善 - 拼寫糾錯和智能建議
- * • 搜索行為分析 - 了解用戶搜索模式和熱門詞彙
- * • 個性化推薦 - 基於歷史行為的個性化搜索建議
- *
- * 【相關檔案】
- * • lib/search/search-suggestions.ts - 搜索建議服務核心邏輯
- * • lib/errors.ts - 錯誤處理和分類
- * • @clerk/nextjs - 用戶身份驗證
- * • crypto - UUID生成和安全功能
- *
- * 【開發注意】
- * • 支援多種建議類型：completion, related, popular, personalized, correction, category
- * • 實現30分鐘緩存機制提升響應速度
- * • 提供詳細的請求ID和處理時間追蹤
- * • 支援語言自動檢測和多語言建議
- * • 包含用戶個性化和使用統計功能
- * • 實現優雅的錯誤處理和日誌記錄
- *
- * Week 5 開發階段 - Task 5.4: 實時搜索建議系統 API
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'              // Next.js請求和回應處理

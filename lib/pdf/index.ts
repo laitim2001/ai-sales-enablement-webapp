@@ -1,9 +1,11 @@
 /**
- * PDF Generation Module
+ * @fileoverview PDF Generation Module統一導出所有 PDF 相關功能@module lib/pdf
+ * @module lib/pdf/index
+ * @description
+ * PDF Generation Module統一導出所有 PDF 相關功能@module lib/pdf
  *
- * 統一導出所有 PDF 相關功能
- *
- * @module lib/pdf
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 export {

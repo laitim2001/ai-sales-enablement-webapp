@@ -1,49 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 優化版知識庫API (app/api/knowledge-base/route-optimized.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 優化版知識庫API (app/api/knowledge-base/route-optimized.ts)================================================================【檔案功能】提供高性能、具備緩存機制的知識庫管理RESTful API端點專注於查詢優化、緩存策略和性能監控的進階版本【主要職責】• 優化查詢性能 - 使用Redis緩存和查詢優化技術• 知識庫列表管理 - 支援複雜篩選、排序和分頁功能• 文檔創建優化 - 批量標籤處理和重複內容檢測• 緩存策略管理 - 多層緩存和自動失效機制• 性能監控追蹤 - 請求處理時間和效能指標收集【API規格】• GET /api/knowledge-base - 獲取知識庫列表（優化版）  參數: page, limit, category, status, search, tags, sort, order  回應: { success, data[], pagination, meta }  緩存: 5分鐘列表緩存，支援條件緩存• POST /api/knowledge-base - 創建知識庫項目（優化版）  參數: { title, content, category, tags, metadata }  回應: { success, data, message }  功能: 重複檢測、批量標籤處理、自動處理任務【使用場景】• 高流量文檔瀏覽 - 緩存機制提升響應速度• 複雜查詢需求 - 多條件篩選和全文搜索• 批量文檔操作 - 優化的創建和更新流程• 性能敏感應用 - 需要快速響應的前端介面• 大規模部署 - 支援高併發和負載均衡【相關檔案】• lib/cache/redis-client.ts - Redis緩存服務• lib/performance/monitor.ts - 性能監控包裝器• lib/auth-server.ts - 身份驗證服務• lib/errors.ts - 統一錯誤處理【開發注意】• 使用多層緩存策略：列表(5分鐘)、項目(10分鐘)、搜索(15分鐘)• 實現內容哈希重複檢測，避免重複文檔• 支援批量標籤操作，減少數據庫查詢次數• 包含性能追蹤和監控功能• 提供Cache-Control標頭優化客戶端緩存• 使用事務確保數據一致性
+ * @module app/api/knowledge-base/route-optimized
+ * @description
+ * ================================================================AI銷售賦能平台 - 優化版知識庫API (app/api/knowledge-base/route-optimized.ts)================================================================【檔案功能】提供高性能、具備緩存機制的知識庫管理RESTful API端點專注於查詢優化、緩存策略和性能監控的進階版本【主要職責】• 優化查詢性能 - 使用Redis緩存和查詢優化技術• 知識庫列表管理 - 支援複雜篩選、排序和分頁功能• 文檔創建優化 - 批量標籤處理和重複內容檢測• 緩存策略管理 - 多層緩存和自動失效機制• 性能監控追蹤 - 請求處理時間和效能指標收集【API規格】• GET /api/knowledge-base - 獲取知識庫列表（優化版）  參數: page, limit, category, status, search, tags, sort, order  回應: { success, data[], pagination, meta }  緩存: 5分鐘列表緩存，支援條件緩存• POST /api/knowledge-base - 創建知識庫項目（優化版）  參數: { title, content, category, tags, metadata }  回應: { success, data, message }  功能: 重複檢測、批量標籤處理、自動處理任務【使用場景】• 高流量文檔瀏覽 - 緩存機制提升響應速度• 複雜查詢需求 - 多條件篩選和全文搜索• 批量文檔操作 - 優化的創建和更新流程• 性能敏感應用 - 需要快速響應的前端介面• 大規模部署 - 支援高併發和負載均衡【相關檔案】• lib/cache/redis-client.ts - Redis緩存服務• lib/performance/monitor.ts - 性能監控包裝器• lib/auth-server.ts - 身份驗證服務• lib/errors.ts - 統一錯誤處理【開發注意】• 使用多層緩存策略：列表(5分鐘)、項目(10分鐘)、搜索(15分鐘)• 實現內容哈希重複檢測，避免重複文檔• 支援批量標籤操作，減少數據庫查詢次數• 包含性能追蹤和監控功能• 提供Cache-Control標頭優化客戶端緩存• 使用事務確保數據一致性
  *
- * 【檔案功能】
- * 提供高性能、具備緩存機制的知識庫管理RESTful API端點
- * 專注於查詢優化、緩存策略和性能監控的進階版本
- *
- * 【主要職責】
- * • 優化查詢性能 - 使用Redis緩存和查詢優化技術
- * • 知識庫列表管理 - 支援複雜篩選、排序和分頁功能
- * • 文檔創建優化 - 批量標籤處理和重複內容檢測
- * • 緩存策略管理 - 多層緩存和自動失效機制
- * • 性能監控追蹤 - 請求處理時間和效能指標收集
- *
- * 【API規格】
- * • GET /api/knowledge-base - 獲取知識庫列表（優化版）
- *   參數: page, limit, category, status, search, tags, sort, order
- *   回應: { success, data[], pagination, meta }
- *   緩存: 5分鐘列表緩存，支援條件緩存
- * • POST /api/knowledge-base - 創建知識庫項目（優化版）
- *   參數: { title, content, category, tags, metadata }
- *   回應: { success, data, message }
- *   功能: 重複檢測、批量標籤處理、自動處理任務
- *
- * 【使用場景】
- * • 高流量文檔瀏覽 - 緩存機制提升響應速度
- * • 複雜查詢需求 - 多條件篩選和全文搜索
- * • 批量文檔操作 - 優化的創建和更新流程
- * • 性能敏感應用 - 需要快速響應的前端介面
- * • 大規模部署 - 支援高併發和負載均衡
- *
- * 【相關檔案】
- * • lib/cache/redis-client.ts - Redis緩存服務
- * • lib/performance/monitor.ts - 性能監控包裝器
- * • lib/auth-server.ts - 身份驗證服務
- * • lib/errors.ts - 統一錯誤處理
- *
- * 【開發注意】
- * • 使用多層緩存策略：列表(5分鐘)、項目(10分鐘)、搜索(15分鐘)
- * • 實現內容哈希重複檢測，避免重複文檔
- * • 支援批量標籤操作，減少數據庫查詢次數
- * • 包含性能追蹤和監控功能
- * • 提供Cache-Control標頭優化客戶端緩存
- * • 使用事務確保數據一致性
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'              // Next.js請求和回應處理

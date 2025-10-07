@@ -1,21 +1,11 @@
 /**
- * 範本變數替換引擎
+ * @fileoverview 範本變數替換引擎功能：- Handlebars 範本編譯和渲染- 自定義 Helper 函數（日期/貨幣/條件/循環）- 範本變數驗證- 安全的 HTML 轉義- 錯誤處理和提示支援語法：- 基本變數: {{company_name}}- 條件: {{#if is_premium}}...{{/if}}- 循環: {{#each products}}...{{/each}}- Helper: {{formatDate date}} {{formatCurrency price}}@author Claude Code@date 2025-10-02
+ * @module lib/template/template-engine
+ * @description
+ * 範本變數替換引擎功能：- Handlebars 範本編譯和渲染- 自定義 Helper 函數（日期/貨幣/條件/循環）- 範本變數驗證- 安全的 HTML 轉義- 錯誤處理和提示支援語法：- 基本變數: {{company_name}}- 條件: {{#if is_premium}}...{{/if}}- 循環: {{#each products}}...{{/each}}- Helper: {{formatDate date}} {{formatCurrency price}}@author Claude Code@date 2025-10-02
  *
- * 功能：
- * - Handlebars 範本編譯和渲染
- * - 自定義 Helper 函數（日期/貨幣/條件/循環）
- * - 範本變數驗證
- * - 安全的 HTML 轉義
- * - 錯誤處理和提示
- *
- * 支援語法：
- * - 基本變數: {{company_name}}
- * - 條件: {{#if is_premium}}...{{/if}}
- * - 循環: {{#each products}}...{{/each}}
- * - Helper: {{formatDate date}} {{formatCurrency price}}
- *
- * @author Claude Code
- * @date 2025-10-02
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import Handlebars from 'handlebars';

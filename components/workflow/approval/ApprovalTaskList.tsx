@@ -1,14 +1,11 @@
 /**
- * 審批任務列表組件
+ * @fileoverview 審批任務列表組件功能：- 顯示待處理和已完成的審批任務- 支持篩選和排序- 顯示任務優先級和截止日期- 快速操作入口作者：Claude Code日期：2025-10-01
+ * @module components/workflow/approval/ApprovalTaskList
+ * @description
+ * 審批任務列表組件功能：- 顯示待處理和已完成的審批任務- 支持篩選和排序- 顯示任務優先級和截止日期- 快速操作入口作者：Claude Code日期：2025-10-01
  *
- * 功能：
- * - 顯示待處理和已完成的審批任務
- * - 支持篩選和排序
- * - 顯示任務優先級和截止日期
- * - 快速操作入口
- *
- * 作者：Claude Code
- * 日期：2025-10-01
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

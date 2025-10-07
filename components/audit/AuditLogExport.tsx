@@ -1,11 +1,11 @@
 /**
- * 審計日誌導出組件
+ * @fileoverview 審計日誌導出組件支持CSV和JSON格式導出審計日誌@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @module components/audit/AuditLogExport
+ * @description
+ * 審計日誌導出組件支持CSV和JSON格式導出審計日誌@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
  *
- * 支持CSV和JSON格式導出審計日誌
- *
- * @author Claude Code
- * @date 2025-10-07
- * @epic Sprint 3 Week 8 Phase 3 - 審計日誌UI組件
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

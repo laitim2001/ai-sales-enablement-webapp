@@ -1,11 +1,11 @@
 /**
- * 編輯鎖定API - 獲取和管理編輯鎖定
+ * @fileoverview 編輯鎖定API - 獲取和管理編輯鎖定POST /api/collaboration/locks - 獲取編輯鎖定GET /api/collaboration/locks/user/:userId - 獲取用戶的所有鎖定作者：Claude Code日期：2025-10-05
+ * @module app/api/collaboration/locks/route
+ * @description
+ * 編輯鎖定API - 獲取和管理編輯鎖定POST /api/collaboration/locks - 獲取編輯鎖定GET /api/collaboration/locks/user/:userId - 獲取用戶的所有鎖定作者：Claude Code日期：2025-10-05
  *
- * POST /api/collaboration/locks - 獲取編輯鎖定
- * GET /api/collaboration/locks/user/:userId - 獲取用戶的所有鎖定
- *
- * 作者：Claude Code
- * 日期：2025-10-05
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

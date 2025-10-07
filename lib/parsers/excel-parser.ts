@@ -1,31 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - Excel/CSV 文件解析器
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - Excel/CSV 文件解析器================================================================【檔案功能】使用 xlsx 套件解析 Excel (.xlsx, .xls) 和 CSV 文件支持多工作表、公式、格式化數值等功能【主要職責】• Excel 文件讀取 - 從 Buffer 讀取 .xlsx/.xls 文件• CSV 文件讀取 - 解析 CSV 格式數據• 工作表解析 - 支持多工作表提取• 數據轉換 - 將表格數據轉為結構化文本或 JSON【使用場景】• 批量上傳 - 用戶上傳 Excel/CSV 文件到知識庫• 數據導入 - 從表格導入結構化數據• 內容索引 - 為搜索引擎建立索引【技術依賴】• xlsx - Excel/CSV 解析核心套件• Buffer - Node.js 二進制數據處理【相關檔案】• lib/parsers/pdf-parser.ts - PDF 解析器• lib/parsers/word-parser.ts - Word 文檔解析器• lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
+ * @module lib/parsers/excel-parser
+ * @description
+ * ================================================================AI銷售賦能平台 - Excel/CSV 文件解析器================================================================【檔案功能】使用 xlsx 套件解析 Excel (.xlsx, .xls) 和 CSV 文件支持多工作表、公式、格式化數值等功能【主要職責】• Excel 文件讀取 - 從 Buffer 讀取 .xlsx/.xls 文件• CSV 文件讀取 - 解析 CSV 格式數據• 工作表解析 - 支持多工作表提取• 數據轉換 - 將表格數據轉為結構化文本或 JSON【使用場景】• 批量上傳 - 用戶上傳 Excel/CSV 文件到知識庫• 數據導入 - 從表格導入結構化數據• 內容索引 - 為搜索引擎建立索引【技術依賴】• xlsx - Excel/CSV 解析核心套件• Buffer - Node.js 二進制數據處理【相關檔案】• lib/parsers/pdf-parser.ts - PDF 解析器• lib/parsers/word-parser.ts - Word 文檔解析器• lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
  *
- * 【檔案功能】
- * 使用 xlsx 套件解析 Excel (.xlsx, .xls) 和 CSV 文件
- * 支持多工作表、公式、格式化數值等功能
- *
- * 【主要職責】
- * • Excel 文件讀取 - 從 Buffer 讀取 .xlsx/.xls 文件
- * • CSV 文件讀取 - 解析 CSV 格式數據
- * • 工作表解析 - 支持多工作表提取
- * • 數據轉換 - 將表格數據轉為結構化文本或 JSON
- *
- * 【使用場景】
- * • 批量上傳 - 用戶上傳 Excel/CSV 文件到知識庫
- * • 數據導入 - 從表格導入結構化數據
- * • 內容索引 - 為搜索引擎建立索引
- *
- * 【技術依賴】
- * • xlsx - Excel/CSV 解析核心套件
- * • Buffer - Node.js 二進制數據處理
- *
- * 【相關檔案】
- * • lib/parsers/pdf-parser.ts - PDF 解析器
- * • lib/parsers/word-parser.ts - Word 文檔解析器
- * • lib/parsers/image-ocr-parser.ts - 圖片 OCR 解析器
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import * as XLSX from 'xlsx'

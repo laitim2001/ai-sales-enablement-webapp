@@ -1,9 +1,11 @@
 /**
- * Next.js Instrumentation Hook
- * 在應用啟動時自動初始化 OpenTelemetry
+ * @fileoverview Next.js Instrumentation Hook在應用啟動時自動初始化 OpenTelemetry此文件由 Next.js 自動加載，無需手動導入詳見: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
+ * @module instrumentation
+ * @description
+ * Next.js Instrumentation Hook在應用啟動時自動初始化 OpenTelemetry此文件由 Next.js 自動加載，無需手動導入詳見: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
  *
- * 此文件由 Next.js 自動加載，無需手動導入
- * 詳見: https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 export async function register() {

@@ -1,14 +1,11 @@
 /**
- * AI提案生成 API 路由
+ * @fileoverview AI提案生成 API 路由功能：- 提供AI驅動的提案內容生成服務- 支援範本化生成和自定義生成- 實現生成狀態追蹤和結果管理- 整合Azure OpenAI GPT-4服務作者：Claude Code創建時間：2025-09-28
+ * @module app/api/ai/generate-proposal/route
+ * @description
+ * AI提案生成 API 路由功能：- 提供AI驅動的提案內容生成服務- 支援範本化生成和自定義生成- 實現生成狀態追蹤和結果管理- 整合Azure OpenAI GPT-4服務作者：Claude Code創建時間：2025-09-28
  *
- * 功能：
- * - 提供AI驅動的提案內容生成服務
- * - 支援範本化生成和自定義生成
- * - 實現生成狀態追蹤和結果管理
- * - 整合Azure OpenAI GPT-4服務
- *
- * 作者：Claude Code
- * 創建時間：2025-09-28
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';

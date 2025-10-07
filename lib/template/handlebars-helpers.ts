@@ -1,6 +1,11 @@
 /**
- * Handlebars 自定義 Helpers
- * 為 Handlebars 模板引擎註冊自定義輔助函數
+ * @fileoverview Handlebars 自定義 Helpers為 Handlebars 模板引擎註冊自定義輔助函數
+ * @module lib/template/handlebars-helpers
+ * @description
+ * Handlebars 自定義 Helpers為 Handlebars 模板引擎註冊自定義輔助函數
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import Handlebars from 'handlebars';

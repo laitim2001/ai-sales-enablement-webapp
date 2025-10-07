@@ -1,16 +1,11 @@
 /**
- * 聊天視窗組件
+ * @fileoverview 聊天視窗組件功能：- 完整的對話介面- 訊息列表展示- 自動滾動到最新訊息- 對話歷史管理- 快捷操作支持@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
+ * @module components/assistant/ChatWindow
+ * @description
+ * 聊天視窗組件功能：- 完整的對話介面- 訊息列表展示- 自動滾動到最新訊息- 對話歷史管理- 快捷操作支持@author Claude Code@date 2025-10-05@epic Sprint 7 - 會議準備與智能助手
  *
- * 功能：
- * - 完整的對話介面
- * - 訊息列表展示
- * - 自動滾動到最新訊息
- * - 對話歷史管理
- * - 快捷操作支持
- *
- * @author Claude Code
- * @date 2025-10-05
- * @epic Sprint 7 - 會議準備與智能助手
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 'use client';

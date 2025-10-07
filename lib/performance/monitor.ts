@@ -1,37 +1,11 @@
 /**
- * ================================================================
- * AI銷售賦能平台 - 基礎性能監控系統 (/lib/performance/monitor.ts)
- * ================================================================
+ * @fileoverview ================================================================AI銷售賦能平台 - 基礎性能監控系統 (/lib/performance/monitor.ts)================================================================【檔案功能】提供基礎的API性能監控功能，專注於數據庫持久化和實時性能追蹤。與高階性能監控系統配合，負責基礎數據收集和Core Web Vitals追蹤。【主要職責】• API性能追蹤 - 記錄每個API請求的響應時間、狀態碼和資源使用情況• 數據庫持久化 - 將性能指標批次寫入PostgreSQL數據庫進行長期儲存• 實時警報監控 - 檢測慢查詢、大響應和伺服器錯誤並即時警報• 性能報告生成 - 提供基於SQL查詢的詳細性能分析報告• 中間件整合 - 提供便捷的性能追蹤中間件，可輕鬆整合到任何API路由• Core Web Vitals - 追蹤前端性能指標，配合Google Analytics進行分析• 資源使用監控 - 監控Node.js進程的記憶體和CPU使用狀況• 數據清理管理 - 自動清理過期性能數據，維護數據庫性能【技術實現】• Prisma ORM整合 - 使用Prisma進行高效的數據庫操作和SQL查詢• 批次寫入優化 - 累積100筆記錄或30秒後批次寫入，減少數據庫負載• 自動表格創建 - 動態創建performance_metrics表格和相關索引• JWT Token解析 - 自動提取用戶ID用於用戶級別的性能分析• 記憶體使用追蹤 - 使用Node.js process.memoryUsage()監控記憶體狀態• 錯誤恢復機制 - 數據庫寫入失敗時將數據放回隊列重試• 性能閾值監控 - 可配置的性能警報閾值和多級警報系統• SQL查詢優化 - 使用聚合查詢和窗口函數進行高效的性能統計分析【相關檔案】• /lib/monitoring/performance-monitor.ts - 高階性能監控系統，提供更豐富的分析功能• /lib/api/error-handler.ts - API錯誤處理系統，可整合性能監控• /app/api/route.ts - 各API路由檔案，使用withPerformanceTracking中間件• /components/admin/PerformanceDashboard.tsx - 性能監控界面，展示收集的數據
+ * @module lib/performance/monitor
+ * @description
+ * ================================================================AI銷售賦能平台 - 基礎性能監控系統 (/lib/performance/monitor.ts)================================================================【檔案功能】提供基礎的API性能監控功能，專注於數據庫持久化和實時性能追蹤。與高階性能監控系統配合，負責基礎數據收集和Core Web Vitals追蹤。【主要職責】• API性能追蹤 - 記錄每個API請求的響應時間、狀態碼和資源使用情況• 數據庫持久化 - 將性能指標批次寫入PostgreSQL數據庫進行長期儲存• 實時警報監控 - 檢測慢查詢、大響應和伺服器錯誤並即時警報• 性能報告生成 - 提供基於SQL查詢的詳細性能分析報告• 中間件整合 - 提供便捷的性能追蹤中間件，可輕鬆整合到任何API路由• Core Web Vitals - 追蹤前端性能指標，配合Google Analytics進行分析• 資源使用監控 - 監控Node.js進程的記憶體和CPU使用狀況• 數據清理管理 - 自動清理過期性能數據，維護數據庫性能【技術實現】• Prisma ORM整合 - 使用Prisma進行高效的數據庫操作和SQL查詢• 批次寫入優化 - 累積100筆記錄或30秒後批次寫入，減少數據庫負載• 自動表格創建 - 動態創建performance_metrics表格和相關索引• JWT Token解析 - 自動提取用戶ID用於用戶級別的性能分析• 記憶體使用追蹤 - 使用Node.js process.memoryUsage()監控記憶體狀態• 錯誤恢復機制 - 數據庫寫入失敗時將數據放回隊列重試• 性能閾值監控 - 可配置的性能警報閾值和多級警報系統• SQL查詢優化 - 使用聚合查詢和窗口函數進行高效的性能統計分析【相關檔案】• /lib/monitoring/performance-monitor.ts - 高階性能監控系統，提供更豐富的分析功能• /lib/api/error-handler.ts - API錯誤處理系統，可整合性能監控• /app/api/route.ts - 各API路由檔案，使用withPerformanceTracking中間件• /components/admin/PerformanceDashboard.tsx - 性能監控界面，展示收集的數據
  *
- * 【檔案功能】
- * 提供基礎的API性能監控功能，專注於數據庫持久化和實時性能追蹤。
- * 與高階性能監控系統配合，負責基礎數據收集和Core Web Vitals追蹤。
- *
- * 【主要職責】
- * • API性能追蹤 - 記錄每個API請求的響應時間、狀態碼和資源使用情況
- * • 數據庫持久化 - 將性能指標批次寫入PostgreSQL數據庫進行長期儲存
- * • 實時警報監控 - 檢測慢查詢、大響應和伺服器錯誤並即時警報
- * • 性能報告生成 - 提供基於SQL查詢的詳細性能分析報告
- * • 中間件整合 - 提供便捷的性能追蹤中間件，可輕鬆整合到任何API路由
- * • Core Web Vitals - 追蹤前端性能指標，配合Google Analytics進行分析
- * • 資源使用監控 - 監控Node.js進程的記憶體和CPU使用狀況
- * • 數據清理管理 - 自動清理過期性能數據，維護數據庫性能
- *
- * 【技術實現】
- * • Prisma ORM整合 - 使用Prisma進行高效的數據庫操作和SQL查詢
- * • 批次寫入優化 - 累積100筆記錄或30秒後批次寫入，減少數據庫負載
- * • 自動表格創建 - 動態創建performance_metrics表格和相關索引
- * • JWT Token解析 - 自動提取用戶ID用於用戶級別的性能分析
- * • 記憶體使用追蹤 - 使用Node.js process.memoryUsage()監控記憶體狀態
- * • 錯誤恢復機制 - 數據庫寫入失敗時將數據放回隊列重試
- * • 性能閾值監控 - 可配置的性能警報閾值和多級警報系統
- * • SQL查詢優化 - 使用聚合查詢和窗口函數進行高效的性能統計分析
- *
- * 【相關檔案】
- * • /lib/monitoring/performance-monitor.ts - 高階性能監控系統，提供更豐富的分析功能
- * • /lib/api/error-handler.ts - API錯誤處理系統，可整合性能監控
- * • /app/api/route.ts - 各API路由檔案，使用withPerformanceTracking中間件
- * • /components/admin/PerformanceDashboard.tsx - 性能監控界面，展示收集的數據
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server'

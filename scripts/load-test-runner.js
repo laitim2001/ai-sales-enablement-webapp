@@ -1,16 +1,11 @@
 /**
- * MVP2 負載測試運行器
- * 使用 autocannon 進行HTTP負載測試
+ * @fileoverview MVP2 負載測試運行器使用 autocannon 進行HTTP負載測試測試場景:1. 煙霧測試 (Smoke Test): 10用戶, 5分鐘2. 負載測試 (Load Test): 100→300→500用戶3. 壓力測試 (Stress Test): 700→1000用戶使用方法:node scripts/load-test-runner.js [test-type]test-type: smoke | load | stress | all
+ * @module scripts/load-test-runner
+ * @description
+ * MVP2 負載測試運行器使用 autocannon 進行HTTP負載測試測試場景:1. 煙霧測試 (Smoke Test): 10用戶, 5分鐘2. 負載測試 (Load Test): 100→300→500用戶3. 壓力測試 (Stress Test): 700→1000用戶使用方法:node scripts/load-test-runner.js [test-type]test-type: smoke | load | stress | all
  *
- * 測試場景:
- * 1. 煙霧測試 (Smoke Test): 10用戶, 5分鐘
- * 2. 負載測試 (Load Test): 100→300→500用戶
- * 3. 壓力測試 (Stress Test): 700→1000用戶
- *
- * 使用方法:
- * node scripts/load-test-runner.js [test-type]
- *
- * test-type: smoke | load | stress | all
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 const autocannon = require('autocannon');

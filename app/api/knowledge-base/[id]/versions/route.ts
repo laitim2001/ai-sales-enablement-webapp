@@ -1,13 +1,11 @@
 /**
- * 知識庫版本管理 API 路由
+ * @fileoverview 知識庫版本管理 API 路由端點：- GET /api/knowledge-base/[id]/versions - 獲取版本列表- POST /api/knowledge-base/[id]/versions - 創建新版本作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
+ * @module app/api/knowledge-base/[id]/versions/route
+ * @description
+ * 知識庫版本管理 API 路由端點：- GET /api/knowledge-base/[id]/versions - 獲取版本列表- POST /api/knowledge-base/[id]/versions - 創建新版本作者：Claude Code日期：2025-10-03Sprint: 6 Week 12
  *
- * 端點：
- * - GET /api/knowledge-base/[id]/versions - 獲取版本列表
- * - POST /api/knowledge-base/[id]/versions - 創建新版本
- *
- * 作者：Claude Code
- * 日期：2025-10-03
- * Sprint: 6 Week 12
+ * @created 2025-10-08
+ * @lastModified 2025-10-08
  */
 
 import { NextRequest, NextResponse } from 'next/server';
