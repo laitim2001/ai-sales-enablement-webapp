@@ -651,6 +651,7 @@
 > - ✅ Week 6: 核心安全基礎設施100%完成 (資料備份~1,300行 + 安全掃描~400行 + RBAC設計~750行)
 > - ✅ Week 7: RBAC完整實施100%完成 (7天計劃 - API整合+前端整合+完整測試,~3,545行)
 > - 🔄 Week 8: 審計日誌系統 (50%完成 - Phase 1+2完成，Phase 3待開始)
+> - 🔄 Week 9: 細粒度權限控制 (50%完成 - Day 1-3完成，Day 4-6待開始，~2,290行)
 
 ### Week 5: 資料安全強化 ✅ **100%完成 (2025-10-06)**
 
@@ -729,11 +730,11 @@
   - [ ] 開發角色分配介面
   - [ ] 實現權限檢查中間件
 
-- [ ] **細粒度權限控制**
-  - [ ] 實現資源級別權限
-  - [ ] 實現欄位級別權限
-  - [ ] 實現操作級別權限（CRUD）
-  - [ ] 編寫權限測試套件
+- [x] **細粒度權限控制** ✅ **Sprint 3 Week 9 Day 1-3完成 (2025-10-07, ~2,290行)**
+  - [x] 實現欄位級別權限 (Day 1-2, ~1,005行)
+  - [x] 實現資源級別權限 (Day 3, ~1,285行)
+  - [ ] 實現操作級別權限（CRUD細化） - Day 4 待開始
+  - [x] 編寫權限測試套件 (78個測試, 100% pass rate)
 
 - [ ] **多租戶資料隔離**
   - [ ] 實現租戶識別邏輯
@@ -1221,6 +1222,142 @@
 - ✅ Git提交: 7個 (780747e, 8348690, 22ffc0e, 3498fa6, 472459e, f7e2b4f + 文檔更新)
 - ✅ Sprint 3 Week 7進度: 100%完成 (7天/7天)
 - ✅ 總代碼量: ~3,545行 (後端+前端+測試)
+
+---
+
+### Week 9: 細粒度權限控制 🔄 **50%完成 (Day 1-3完成, 2025-10-07)**
+
+> **🎯 目標**: 在RBAC基礎上實現更細緻的權限控制（欄位級別、資源級別、操作級別）
+
+#### ✅ Day 1-2: 欄位級別權限控制 (2025-10-07, ~1,005行)
+
+**完成的文件** (2個核心文件):
+
+- [x] **欄位權限服務** (lib/security/field-level-permissions.ts, ~535行):
+  - [x] 3種欄位安全級別: PUBLIC (完全可見), PROTECTED (部分角色可見), PRIVATE (僅創建者可見)
+  - [x] 4個核心資源欄位配置: Customer, Contact, SalesOpportunity, Proposal
+  - [x] 泛型filterSensitiveFields方法: 根據角色和擁有權自動過濾敏感欄位
+  - [x] 擁有權驗證邏輯: created_by, user_id, owner_id自動比對
+  - [x] 完整TypeScript類型安全
+  - [x] 6個輔助方法: getResourceConfig, getSensitiveFields, isFieldSensitive等
+
+- [x] **完整測試套件** (__tests__/lib/security/field-level-permissions.test.ts, ~470行):
+  - [x] 33個測試用例, 100% pass rate
+  - [x] 9個測試套件 (Customer/Contact/SalesOpportunity/Proposal/Multi-resource/Edge-cases等)
+  - [x] 覆蓋所有角色組合測試 (ADMIN/SALES_MANAGER/SALES_REP/MARKETING/VIEWER)
+  - [x] 擁有權測試 (owner vs non-owner)
+  - [x] 邊界條件測試 (null user, missing config, undefined fields)
+
+**技術特性**:
+- [x] 欄位級別訪問控制 (3級安全等級)
+- [x] 基於角色的欄位過濾
+- [x] 擁有權驗證邏輯 (created_by/user_id/owner_id)
+- [x] 泛型類型安全實現
+- [x] 完整測試覆蓋
+
+**Git提交記錄**:
+- [x] Commit (待記錄): Sprint 3 Week 9 Day 1-2 - 欄位級別權限控制完整實施
+
+**Day 1-2統計**:
+- 新增文件: 2個
+- 核心服務: ~535行
+- 測試代碼: ~470行
+- 總代碼量: ~1,005行
+- 測試通過率: 100% (33/33)
+
+#### ✅ Day 3: 資源級別權限細化 (2025-10-07, ~1,285行)
+
+**完成的文件** (2個核心文件):
+
+- [x] **資源條件服務** (lib/security/resource-conditions.ts, ~470行):
+  - [x] 5種條件類型: STATUS (狀態), ATTRIBUTE (屬性), RELATIONSHIP (關係), TIME (時間), CUSTOM (自定義)
+  - [x] 9種條件操作符: equals, notEquals, in, notIn, contains, gt, lt, gte, lte
+  - [x] 10個資源訪問條件配置:
+    * PROPOSALS: SALES_REP只能編輯DRAFT/PENDING_REVIEW, SALES_MANAGER只能批准PENDING_REVIEW
+    * CUSTOMERS: SALES_REP只能更新/刪除分配給自己的客戶
+    * SALES_OPPORTUNITIES: SALES_REP只能更新自己的機會且不能修改WON/LOST
+    * KNOWLEDGE_BASE: MARKETING只能發布REVIEWED內容, SALES_REP不能刪除PUBLISHED內容
+    * TEMPLATES: MARKETING只能發布自己創建的模板
+  - [x] checkConditions核心方法: 資源條件驗證邏輯
+  - [x] 動態值替換: {{userId}}模式支持
+  - [x] 6個輔助方法: getConditions, hasConditions, getAllConditions等
+
+- [x] **完整測試套件** (__tests__/lib/security/resource-conditions.test.ts, ~815行):
+  - [x] 45個測試用例, 100% pass rate
+  - [x] 10個測試套件 (PROPOSALS/CUSTOMERS/SALES_OPPORTUNITIES/KNOWLEDGE_BASE/TEMPLATES等)
+  - [x] 所有5個資源的條件測試
+  - [x] 所有9個條件操作符測試
+  - [x] 動態值替換測試 ({{userId}})
+  - [x] 邊界條件和錯誤處理測試
+  - [x] 輔助方法測試
+  - [x] 複雜整合場景測試
+
+**技術特性**:
+- [x] 資源級別條件驗證
+- [x] 5種條件類型支持
+- [x] 9種條件操作符
+- [x] 動態值替換機制
+- [x] AND邏輯條件檢查 (所有條件必須滿足)
+- [x] Null/undefined安全處理
+- [x] 完整TypeScript類型安全
+
+**測試修復記錄**:
+- [x] 初始測試結果: 4個失敗 (41/45通過)
+- [x] 問題診斷: OR邏輯錯誤 (應該是AND邏輯)
+- [x] 修復應用: 改為AND邏輯 (所有條件配置都必須滿足)
+- [x] 最終結果: 100%通過 (45/45)
+
+**Git提交記錄**:
+- [x] Commit 19aa490: Sprint 3 Week 9 Day 3 - 資源級別權限細化完整實施
+
+**Day 3統計**:
+- 新增文件: 2個
+- 核心服務: ~470行
+- 測試代碼: ~815行
+- 總代碼量: ~1,285行
+- 測試通過率: 100% (45/45)
+
+#### ⏳ Day 4: 操作級別權限（CRUD細化） - 待開始
+
+**計劃功能**:
+- [ ] 實現操作級別權限服務 (action-level-permissions.ts)
+- [ ] CREATE/READ/UPDATE/DELETE細化控制
+- [ ] 批量操作權限管理
+- [ ] 特殊操作權限 (APPROVE/PUBLISH/ARCHIVE/ASSIGN)
+- [ ] 編寫完整測試套件
+
+#### ⏳ Day 5: 統一入口點和中間件整合 - 待開始
+
+**計劃功能**:
+- [ ] 創建統一權限檢查入口 (unified-permission-check.ts)
+- [ ] 整合三層權限檢查 (欄位+資源+操作)
+- [ ] Next.js API路由中間件整合
+- [ ] 前端權限Hook更新
+- [ ] 編寫整合測試
+
+#### ⏳ Day 6: 文檔和驗收 - 待開始
+
+**計劃功能**:
+- [ ] 更新細粒度權限設計文檔
+- [ ] 創建使用指南和最佳實踐
+- [ ] 編寫E2E測試場景
+- [ ] 性能影響評估
+- [ ] 完整驗收測試
+
+**Week 9 驗收標準** (50%完成):
+- [x] ✅ Day 1-2: 欄位級別權限控制 (~1,005行, 33測試100%通過)
+- [x] ✅ Day 3: 資源級別權限細化 (~1,285行, 45測試100%通過)
+- [ ] ⏳ Day 4: 操作級別權限（CRUD細化）
+- [ ] ⏳ Day 5: 統一入口點和中間件整合
+- [ ] ⏳ Day 6: 文檔和驗收
+
+**Day 1-3總計**:
+- ✅ 核心服務: 2個 (~1,005行)
+- ✅ 測試套件: 2個 (~1,285行)
+- ✅ 總代碼量: ~2,290行
+- ✅ 總測試: 78個 (33 + 45), 100% pass rate
+- ✅ Git提交: 1個 (19aa490 - Day 3資源級別權限)
+- ✅ Sprint 3 Week 9進度: 50%完成 (3天/6天)
 
 ---
 
