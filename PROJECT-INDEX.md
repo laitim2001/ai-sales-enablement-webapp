@@ -1,10 +1,12 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月7日 - Sprint 3 Week 9 欄位級別權限控制完成
+> **📅 最後更新**: 2025年10月7日 - MVP2優化建議執行追蹤啟動
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 >
 > **✨ 最新添加**:
+> - 📈 MVP2優化建議執行追蹤 (2025-10-07): 優化任務追蹤文檔（9大任務，短期/中期/長期建議，實時進度更新，Sprint 6高級編輯器已完成30%）
+> - 🎨 Sprint 6高級編輯器工具 (2025-10-07): 文檔模板系統 + 協作評論 + 表格支持 + Sheet組件（~920行，commit c29dcb9）
 > - 📚 驗證報告使用指南 (2025-10-07): 完整使用指南（8個使用場景，AI助手特定指南，快速查詢表，文檔維護指南）
 > - 📊 MVP2清單同步報告 (2025-10-07): 完整同步報告（基於驗證報告更新，83%進度校準，7個Sprint詳細同步）
 > - 📊 MVP1+MVP2完整驗證分析完成 (2025-10-07): 史詩級完整驗證報告（2400+行，13個Sprint驗證，91%完成度，4.8/5評級，企業級就緒確認）
@@ -97,6 +99,7 @@
 | **MVP1+MVP2完整驗證報告** | `claudedocs/mvp1-mvp2-complete-verification-report.md` | MVP1+MVP2史詩級完整驗證報告（2400+行，13個Sprint驗證，91%完成度，4.8/5評級） | 🔴 極高  |
 | **MVP2清單同步報告** | `claudedocs/mvp2-checklist-sync-report.md` | MVP2實施清單同步完整報告（基於驗證報告更新，83%進度校準，7個Sprint詳細同步，質量保證） | 🔴 極高  |
 | **驗證報告使用指南** | `claudedocs/HOW-TO-USE-VERIFICATION-REPORTS.md` | MVP驗證報告完整使用指南（8個使用場景，AI助手特定指南，快速查詢表，文檔維護指南） | 🔴 極高  |
+| **MVP2優化建議執行追蹤** | `claudedocs/mvp2-optimization-tracking.md` | MVP2優化建議執行追蹤文檔（9大優化任務，短期/中期/長期建議，實時進度更新，5%總體完成度） | 🔴 極高  |
 | **Microsoft Graph設置指南** | `docs/microsoft-graph-setup-guide.md` | Microsoft Graph日曆整合完整配置指南（Azure AD/OAuth/權限） | 🟡 高    |
 | **新開發者設置指南** | `docs/NEW-DEVELOPER-SETUP-GUIDE.md` | 新開發者環境自動化設置完整指南 | 🔴 極高  |
 | **Sprint 3安全設置指南** | `docs/sprint3-security-setup-guide.md` | Sprint 3安全加固完整設置和配置指南（加密/Key Vault/HTTPS/RBAC/審計） | 🔴 極高  |
