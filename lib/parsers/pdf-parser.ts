@@ -8,7 +8,8 @@
  * @lastModified 2025-10-08
  */
 
-import pdf from 'pdf-parse'
+// @ts-ignore - pdf-parse has incorrect type definitions
+const pdf = require('pdf-parse')
 
 /**
  * PDF 解析結果介面
