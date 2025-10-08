@@ -21,7 +21,13 @@
       "Bash(findstr:*)",
       "Bash(node:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(psql:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(npx prisma:*)",
+      "Bash(timeout 10 bash -c 'while ! curl -s http://localhost:3000 > /dev/null; do sleep 1; done; echo \"\"Server ready\"\"')",
+      "Bash(npm run:*)"
     ],
     "deny": [],
     "ask": []

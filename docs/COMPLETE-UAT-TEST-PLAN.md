@@ -359,7 +359,7 @@ handleSearchSubmit	@	knowledge-search.tsx:307
 - ✅ 模板預覽正常
 - ✅ 模板可見性設置正確 (PRIVATE/TEAM/PUBLIC)
 
-**實際結果**: 1. 在dashboard 頁看不到有範本管理的選項 2. 在嘗試保存模版時 , 在F12 console log中出現了以下報錯 : page.tsx:268
+**實際結果**: 1. 在dashboard 可以看到有範本管理的選項 2. 在嘗試保存模版時 , 在F12 console log中出現了以下報錯 : page.tsx:268
  POST http://localhost:3000/api/templates 403 (Forbidden)
 handleSave	@	page.tsx:268  3. 在[預覽] 時就會出現以下報錯 : page.tsx:192
  POST http://localhost:3000/api/templates/preview-temp 500 (Internal Server Error)
