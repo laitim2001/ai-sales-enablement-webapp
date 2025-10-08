@@ -2,8 +2,8 @@
 
 **生成時間**: 2025-10-08
 **初始錯誤數**: 126個
-**當前錯誤數**: 101個
-**已修復**: 25個錯誤 (19.8%)
+**當前錯誤數**: 98個
+**已修復**: 28個錯誤 (22.2%)
 **修復狀態**: 🟡 進行中
 
 ---
@@ -17,11 +17,20 @@
 - pdf-parse模塊導入錯誤 (1個文件)
 - **成效**: 減少25個TypeScript錯誤
 
+✅ **階段2: RBAC類型定義修復** - 完成
+- Resource.TEMPLATES別名添加
+- checkOwnership函數實現和導出
+- 移除未使用的@ts-expect-error註釋
+- **成效**: 減少3個TypeScript錯誤 (實際修復12個，但其他新增問題)
+
 | 修復項目 | 文件數 | 錯誤減少 | 狀態 |
 |---------|-------|---------|------|
 | TipTap Table導入 | 2 | ~22個 | ✅ 完成 |
 | pdf-parse導入 | 1 | ~3個 | ✅ 完成 |
-| **總計** | **3** | **25** | ✅ |
+| Resource.TEMPLATES別名 | 1 | ~8個 | ✅ 完成 |
+| checkOwnership導出 | 1 | ~1個 | ✅ 完成 |
+| 移除@ts-expect-error | 1 | ~4個 | ✅ 完成 |
+| **總計** | **6** | **28** | ✅ |
 
 ---
 
@@ -99,11 +108,192 @@ const pdf = require('pdf-parse')
 
 ---
 
-## 剩餘101個錯誤分類
+### ✅ 修復3: Resource.TEMPLATES別名添加 (1個文件)
 
-### 類別A: Prisma Schema不同步問題 (~50個錯誤)
+**影響文件**:
+1. `lib/security/rbac.ts`
 
-**主要文件**: `lib/security/audit-log-prisma.ts`
+**問題描述**:
+```typescript
+// ❌ 測試文件使用 Resource.TEMPLATES
+Resource.TEMPLATES
+// error TS2339: Property 'TEMPLATES' does not exist on type 'typeof Resource'.
+```
+
+**TypeScript錯誤**:
+```
+error TS2339: Property 'TEMPLATES' does not exist on type 'typeof Resource'.
+```
+
+**修復方案**:
+```typescript
+// ✅ 正確: 添加TEMPLATES別名
+export enum Resource {
+  // 提案管理
+  PROPOSALS = 'proposals',
+  PROPOSAL_TEMPLATES = 'proposal_templates',
+  TEMPLATES = 'proposal_templates', // Alias for PROPOSAL_TEMPLATES
+  PROPOSAL_GENERATIONS = 'proposal_generations',
+  // ...
+}
+```
+
+**根本原因**:
+- 測試文件使用`Resource.TEMPLATES`簡寫
+- enum中只有完整名稱`PROPOSAL_TEMPLATES`
+- 缺少別名導致8個測試文件報錯
+
+**錯誤減少**: ~8個
+
+---
+
+### ✅ 修復4: checkOwnership函數實現和導出 (1個文件)
+
+**影響文件**:
+1. `lib/security/rbac.ts`
+
+**問題描述**:
+```typescript
+// ❌ 錯誤: 函數未導出
+import { checkOwnership } from '@/lib/security/rbac'
+// error TS2614: Module has no exported member 'checkOwnership'.
+```
+
+**修復方案**:
+```typescript
+// ✅ 正確: 實現並導出checkOwnership函數
+export interface OwnershipCheckResult {
+  allowed: boolean;
+  reason: string;
+}
+
+export interface OwnershipCheckParams {
+  userRole: UserRole;
+  userId: number;
+  resourceOwnerId?: number;
+  resource: Resource;
+  teamAccess?: boolean;
+}
+
+export function checkOwnership(params: OwnershipCheckParams): OwnershipCheckResult {
+  const { userRole, userId, resourceOwnerId, resource, teamAccess = false } = params;
+
+  // ADMIN 可以訪問所有資源
+  if (RBACService.isAdmin(userRole)) {
+    return {
+      allowed: true,
+      reason: 'ADMIN has access to all resources'
+    };
+  }
+
+  // 檢查擁有權邏輯...
+}
+```
+
+**根本原因**:
+- 測試文件需要`checkOwnership`函數
+- rbac.ts只有`owns`函數（返回boolean）
+- 需要返回`{allowed, reason}`結構的函數
+
+**錯誤減少**: ~1個
+
+---
+
+### ✅ 修復5: 移除未使用的@ts-expect-error註釋 (1個文件)
+
+**影響文件**:
+1. `__tests__/lib/security/rbac-permissions.test.ts`
+
+**問題描述**:
+```typescript
+// ❌ 錯誤: @ts-expect-error未使用
+// @ts-expect-error Testing invalid role
+const result = RBACService.hasPermission('INVALID_ROLE', ...)
+// error TS2578: Unused '@ts-expect-error' directive.
+```
+
+**修復方案**:
+```typescript
+// ✅ 正確: 使用'as any'類型斷言
+// Testing invalid role (type assertion required for invalid values)
+const result = RBACService.hasPermission('INVALID_ROLE' as any, ...)
+```
+
+**根本原因**:
+- TypeScript不再對這些測試報錯
+- `@ts-expect-error`期望有錯誤但實際沒有
+- 需要改用`as any`來繞過類型檢查
+
+**錯誤減少**: ~4個
+
+---
+
+## 剩餘98個錯誤分類
+
+**當前錯誤總數**: 98個
+**已修復**: 28個 (22.2%)
+**修復進度**: 126 → 98
+
+### 類別A: 測試Mock配置問題 (~5個錯誤)
+
+**主要文件**:
+- `__tests__/lib/collaboration/edit-lock-manager.test.ts`
+
+**問題摘要**:
+```typescript
+// Mock對象缺少mockResolvedValue方法
+(prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser)
+// ❌ Property 'mockResolvedValue' does not exist
+```
+
+**根本原因**:
+- Prisma Client mock類型定義不完整
+- 需要更好的mock配置
+
+**修復建議**:
+```typescript
+import { mockDeep, DeepMockProxy } from 'jest-mock-extended'
+const prismaMock = mockDeep<PrismaClient>()
+```
+
+---
+
+### 類別B: AuditLog相關類型問題 (~15個錯誤)
+
+**主要文件**:
+- `app/api/audit-logs/export/route.ts`
+- `app/api/audit-logs/route.ts`
+- `app/dashboard/admin/audit-logs/page.tsx`
+- `components/audit/AuditLogExport.tsx`
+- `components/audit/AuditLogStats.tsx`
+
+**問題摘要**:
+```typescript
+// 1. AuditSeverity類型不匹配
+severity: query.severity as AuditSeverity
+// error: Type '"INFO"' is not assignable to type 'AuditSeverity'
+
+// 2. userRole屬性不存在
+log.userRole
+// error: Property 'userRole' does not exist on type 'AuditLogEntry'
+
+// 3. severity屬性大小寫錯誤
+logsBySeverity.info
+// error: Property 'info' does not exist. Did you mean 'INFO'?
+```
+
+**根本原因**:
+- Prisma AuditSeverity和應用層AuditSeverity類型衝突
+- AuditLogEntry接口缺少userRole屬性
+- 代碼使用小寫severity但enum是大寫
+
+**錯誤數量**: ~15個
+
+---
+
+### 類別C: Promise處理錯誤 (~60個錯誤)
+
+**主要文件**: `lib/security/encryption.test.ts`
 
 **問題摘要**:
 ```typescript
@@ -359,27 +549,60 @@ npm run build  # 生產構建
 
 ### 當前狀態
 
-⚠️ **剩餘101個錯誤**:
-- 50個: Prisma Schema不同步 (最優先)
-- 20個: 測試Mock配置
-- 15個: RBAC類型定義
-- 10個: Promise處理
-- 6個: 其他零散問題
+⚠️ **剩餘98個錯誤**:
+- 60個: Promise處理錯誤 (encryption.test.ts)
+- 15個: AuditLog相關類型問題
+- 10個: 其他零散問題
+- 5個: 測試Mock配置
+- 8個: 新發現的類型問題
+
+**修復進度**:
+- ✅ 階段1完成: 導入錯誤 (25個修復)
+- ✅ 階段2完成: RBAC類型定義 (3個修復)
+- 🔄 階段3進行中: Promise處理錯誤
+- ⏳ 階段4待處理: AuditLog類型修復
 
 ### 建議
 
 **對於開發和測試**:
 - ✅ 可以立即啟動開發服務器
 - ✅ 大部分功能可以正常使用
-- ⚠️ 審計日誌功能可能有問題
+- ⚠️ encryption.test.ts測試會失敗（60個錯誤）
+- ⚠️ 審計日誌UI可能有顯示問題
 
 **對於生產部署**:
-- ❌ 建議修復Prisma和RBAC錯誤後再構建
-- 估計修復時間: 1-2小時
-- 可以分階段修復，逐步改善
+- ⚠️ 建議修復Promise和AuditLog錯誤後再構建
+- 估計剩餘修復時間: 2-3小時
+- 優先修復: Promise處理 (60個) → AuditLog類型 (15個)
 
 ---
 
 **報告生成**: Claude Code
 **檢查時間**: 2025-10-08
-**下次更新**: 完成階段2和3後
+**最後更新**: 2025-10-08 (完成階段2修復)
+**下次更新**: 完成Promise和AuditLog修復後
+
+---
+
+## 附錄: 剩餘錯誤詳細列表
+
+### A. Promise處理錯誤 (60個)
+**文件**: `lib/security/encryption.test.ts`
+- 缺少await關鍵字導致所有加密測試失敗
+- 需要系統性添加async/await
+
+### B. AuditLog類型問題 (15個)
+**文件**: 5個文件涉及審計日誌UI和API
+- AuditSeverity類型轉換問題
+- AuditLogEntry缺少userRole屬性
+- severity屬性大小寫不一致
+
+### C. 測試Mock配置 (5個)
+**文件**: `__tests__/lib/collaboration/edit-lock-manager.test.ts`
+- Prisma mock缺少mockResolvedValue方法
+
+### D. 其他零散問題 (18個)
+- microsoft-graph-oauth refreshToken問題
+- search-analytics變數名錯誤
+- fine-grained-permissions導入和參數問題
+- AuthContextType缺少token屬性
