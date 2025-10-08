@@ -23,10 +23,19 @@ import { verifyToken } from '@/lib/auth-server'
  */
 export async function POST(request: NextRequest) {
   try {
-    // 驗證用戶身份
-    const user = await verifyToken(request)
-    if (!user) {
+    // 驗證用戶身份 - 從 header 或 cookie 獲取 token
+    let token = request.headers.get('authorization')?.replace('Bearer ', '')
+    if (!token) {
+      token = request.cookies.get('auth-token')?.value
+    }
+
+    if (!token) {
       throw AppError.unauthorized('請先登入')
+    }
+
+    const payload = verifyToken(token)
+    if (!payload || typeof payload !== 'object' || !payload.userId) {
+      throw AppError.unauthorized('無效的認證令牌')
     }
 
     // 解析請求體
@@ -46,9 +55,10 @@ export async function POST(request: NextRequest) {
         category: true,
         created_at: true,
         created_by: true,
-        user: {
+        creator: {
           select: {
-            username: true,
+            first_name: true,
+            last_name: true,
             email: true
           }
         }
@@ -56,7 +66,11 @@ export async function POST(request: NextRequest) {
     })
 
     if (existingFile) {
-      // 文件已存在
+      // 文件已存在 - 組合用戶顯示名稱
+      const uploaderName = existingFile.creator
+        ? `${existingFile.creator.first_name} ${existingFile.creator.last_name}`.trim() || existingFile.creator.email
+        : 'Unknown'
+
       return NextResponse.json({
         success: true,
         data: {
@@ -66,7 +80,7 @@ export async function POST(request: NextRequest) {
             title: existingFile.title,
             category: existingFile.category,
             uploadedAt: existingFile.created_at,
-            uploadedBy: existingFile.user?.username || existingFile.user?.email || 'Unknown'
+            uploadedBy: uploaderName
           },
           message: `文件「${fileName || '未命名'}」已存在於知識庫中`
         }

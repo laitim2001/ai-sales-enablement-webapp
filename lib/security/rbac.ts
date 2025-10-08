@@ -180,9 +180,10 @@ const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     { resource: Resource.PROPOSAL_TEMPLATES, actions: [Action.READ, Action.LIST] },
     { resource: Resource.PROPOSAL_GENERATIONS, actions: [Action.CREATE, Action.READ, Action.LIST] },
 
-    // 知識庫：讀取和搜索
-    { resource: Resource.KNOWLEDGE_BASE, actions: [Action.READ, Action.LIST, Action.SEARCH] },
-    { resource: Resource.KNOWLEDGE_TAGS, actions: [Action.READ, Action.LIST] },
+    // 知識庫：可創建、讀取和搜索（允許銷售代表分享經驗和最佳實踐）
+    { resource: Resource.KNOWLEDGE_BASE, actions: [Action.CREATE, Action.READ, Action.UPDATE, Action.LIST, Action.SEARCH, Action.IMPORT] },
+    { resource: Resource.KNOWLEDGE_TAGS, actions: [Action.CREATE, Action.READ, Action.LIST] },
+    { resource: Resource.KNOWLEDGE_CHUNKS, actions: [Action.CREATE, Action.READ] },
 
     // 文檔和記錄：個人記錄
     { resource: Resource.DOCUMENTS, actions: [Action.CREATE, Action.READ, Action.UPDATE, Action.LIST] },

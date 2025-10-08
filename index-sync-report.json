@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-07T10:45:27.475Z",
+  "timestamp": "2025-10-08T13:49:53.382Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -7,11 +7,11 @@
     "workingDirectory": "C:\\ai-sales-enablement-webapp"
   },
   "summary": {
-    "totalIssues": 5,
+    "totalIssues": 7,
     "highSeverity": 0,
-    "mediumSeverity": 5,
+    "mediumSeverity": 7,
     "lowSeverity": 0,
-    "suggestions": 5,
+    "suggestions": 1,
     "indexFilesChecked": [
       "AI-ASSISTANT-GUIDE.md",
       "PROJECT-INDEX.md"
@@ -19,6 +19,20 @@
     "status": "needs_attention"
   },
   "issues": [
+    {
+      "type": "broken_reference",
+      "file": "AI-ASSISTANT-GUIDE.md",
+      "reference": "node scripts/analyze-project-index-smart.js",
+      "severity": "medium",
+      "message": "索引文件 AI-ASSISTANT-GUIDE.md 中的路徑引用失效: node scripts/analyze-project-index-smart.js"
+    },
+    {
+      "type": "broken_reference",
+      "file": "AI-ASSISTANT-GUIDE.md",
+      "reference": "node scripts/add-missing-files-to-index.js",
+      "severity": "medium",
+      "message": "索引文件 AI-ASSISTANT-GUIDE.md 中的路徑引用失效: node scripts/add-missing-files-to-index.js"
+    },
     {
       "type": "broken_reference",
       "file": "PROJECT-INDEX.md",
@@ -58,44 +72,12 @@
   "suggestions": [
     {
       "type": "add_to_index",
-      "file": "docs\\index-maintenance-root-cause-analysis.md",
+      "file": "app\\api\\knowledge-base\\check-duplicate\\route.ts",
       "importance": "medium",
       "severity": "low",
-      "message": "建議將重要文件加入索引: docs\\index-maintenance-root-cause-analysis.md",
-      "modifiedTime": "2025-10-03T15:14:43.979Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "components\\permissions\\index.ts",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: components\\permissions\\index.ts",
-      "modifiedTime": "2025-10-06T16:17:39.527Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "app\\api\\audit-logs\\export\\route.ts",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: app\\api\\audit-logs\\export\\route.ts",
-      "modifiedTime": "2025-10-06T17:04:25.260Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "app\\api\\audit-logs\\route.ts",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: app\\api\\audit-logs\\route.ts",
-      "modifiedTime": "2025-10-06T17:03:48.328Z"
-    },
-    {
-      "type": "add_to_index",
-      "file": "app\\api\\audit-logs\\stats\\route.ts",
-      "importance": "medium",
-      "severity": "low",
-      "message": "建議將重要文件加入索引: app\\api\\audit-logs\\stats\\route.ts",
-      "modifiedTime": "2025-10-06T17:04:01.366Z"
+      "message": "建議將重要文件加入索引: app\\api\\knowledge-base\\check-duplicate\\route.ts",
+      "modifiedTime": "2025-10-08T09:10:43.615Z"
     }
   ],
-  "lastUpdated": "2025-10-07T10:45:27.476Z"
+  "lastUpdated": "2025-10-08T13:49:53.382Z"
 }

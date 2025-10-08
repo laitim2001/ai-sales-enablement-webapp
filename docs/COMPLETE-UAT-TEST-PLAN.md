@@ -238,7 +238,7 @@ SALES_REP: ✅ 個人數據 ❌ 團隊數據 ❌ 系統設置
 - ✅ 顯示創建時間和作者
 - ✅ 自動生成向量嵌入 (後端背景任務)
 
-**實際結果**: 顯示了 : "表單驗證錯誤, 您沒有執行此操作的權限"
+**實際結果**: 測試成功
 **文檔ID**: ______________________
 **狀態**: ⬜ Pass ⬜ Fail
 
@@ -261,7 +261,7 @@ SALES_REP: ✅ 個人數據 ❌ 團隊數據 ❌ 系統設置
 - ✅ 版本號增加
 - ✅ 顯示"最後更新時間"
 
-**實際結果**: 1. 成功訪問頁面, 2. 看不到文件的原內容, 只是看到上傳的檔案的名稱 3. 可以編輯和保存成功 4. 版本號正常增加  5. 顯示了"最後更新時間"  6. 但是在編輯了其中一個記錄之後, 就突然出現了載入失敗 , Failed to fetch knowledge base items (knowledge-base-list.tsx:246  GET http://localhost:3000/api/knowledge-base?page=1&limit=20&sort=updated_at&order=desc 500 (Internal Server Error))
+**實際結果**: 1. 成功訪問頁面, 2. 看不到文件的原內容, 只是看到上傳的檔案的名稱 3. 可以編輯和保存成功 4. 版本號正常增加  5. 顯示了"最後更新時間"
 **版本號**: v1 → v____
 **狀態**: ⬜ Pass ⬜ Fail
 
@@ -282,7 +282,11 @@ SALES_REP: ✅ 個人數據 ❌ 團隊數據 ❌ 系統設置
 - ✅ 搜索時間 < 1秒
 - ✅ 顯示搜索建議
 
-**實際結果**: 由於在知識庫中出現了錯誤, 所以不能夠繼續此測試 , 會在按下"搜索" 之後出現 : "Search Failed"
+**實際結果**: 由於在知識庫中出現了錯誤, 所以不能夠繼續此測試 , 會在按下"搜索" 之後出現 : "Search Failed" : knowledge-search.tsx:271
+ POST http://localhost:3000/api/knowledge-base/search 500 (Internal Server Error)
+performSearch	@	knowledge-search.tsx:271
+handleSearchSubmit	@	knowledge-search.tsx:307
+
 **搜索時間**: ______ ms
 **返回結果數**: ______
 **狀態**: ⬜ Pass ⬜ Fail
@@ -305,7 +309,7 @@ SALES_REP: ✅ 個人數據 ❌ 團隊數據 ❌ 系統設置
 - ✅ 顯示篩選結果數量
 - ✅ 可以清除篩選
 
-**實際結果**: 接下高級搜索過濾之後, 會顯示了 "載入資料夾失敗 (500) 的報錯
+**實際結果**: 1. 按下 [高級搜索過濾] 之後可以選取 限制類別, 標籤篩選 和 資料夾篩選
 **篩選後結果數**: ______
 **狀態**: ⬜ Pass ⬜ Fail
 
@@ -328,7 +332,7 @@ SALES_REP: ✅ 個人數據 ❌ 團隊數據 ❌ 系統設置
 - ✅ 自動提取文本內容 (後端)
 - ✅ 生成向量嵌入 (後端背景任務)
 
-**實際結果**: 1. 可以成功上傳不同類型的文件 , 2. 但是看起來沒有自動提取文本內容  3. 也不知道怎樣去測試已經生成向量嵌入
+**實際結果**: 1. 可以成功上傳不同類型的文件 , 2. 但是沒有自動提取文本內容  3. 也不知道怎樣去測試已經生成向量嵌入
 **上傳文件名**: ______________________
 **文件大小**: ______ MB
 **處理時間**: ______ 秒
@@ -355,8 +359,13 @@ SALES_REP: ✅ 個人數據 ❌ 團隊數據 ❌ 系統設置
 - ✅ 模板預覽正常
 - ✅ 模板可見性設置正確 (PRIVATE/TEAM/PUBLIC)
 
-**實際結果**: 在嘗試保存提案模版時 , 在F12 console log中出現了以下報錯 : page.tsx:268
- POST http://localhost:3000/api/templates 401 (Unauthorized)
+**實際結果**: 1. 在dashboard 頁看不到有範本管理的選項 2. 在嘗試保存模版時 , 在F12 console log中出現了以下報錯 : page.tsx:268
+ POST http://localhost:3000/api/templates 403 (Forbidden)
+handleSave	@	page.tsx:268  3. 在[預覽] 時就會出現以下報錯 : page.tsx:192
+ POST http://localhost:3000/api/templates/preview-temp 500 (Internal Server Error)
+handlePreview	@	page.tsx:192
+
+
 **模板ID**: ______________________
 **狀態**: ⬜ Pass ⬜ Fail
 
