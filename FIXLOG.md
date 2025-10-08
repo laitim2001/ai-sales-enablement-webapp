@@ -8,6 +8,7 @@
 
 | 日期 | 問題類型 | 狀態 | 描述 |
 |------|----------|------|------|
+| 2025-10-08 | 🎨 前端UX/React狀態 | ✅ 已解決 | [FIX-022: 範本編輯頁面預覽按鈕無反應 - 缺少自動切換標籤頁](#fix-022-範本編輯頁面預覽按鈕無反應-缺少自動切換標籤頁) |
 | 2025-10-08 | 🎨 範本引擎/Handlebars | ✅ 已解決 | [FIX-021: 範本預覽500錯誤 - Handlebars Helper貨幣格式化參數問題](#fix-021-範本預覽500錯誤-handlebars-helper貨幣格式化參數問題) |
 | 2025-10-08 | 🔧 Git Hook/Shebang | ✅ 已解決 | [FIX-020: check-index-sync.js shebang位置問題 - pre-push hook執行失敗](#fix-020-check-index-syncjs-shebang位置問題-pre-push-hook執行失敗) |
 | 2025-10-06 | 🌐 SSR/Metadata | ✅ 已解決 | [FIX-019: Knowledge Base編輯頁面SSR阻塞 - generateMetadata端口不一致](#fix-019-knowledge-base編輯頁面ssr阻塞-generatemetadata端口不一致) |
@@ -31,6 +32,7 @@
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
 
 ## 🔍 快速搜索
+- **前端UX問題**: FIX-022
 - **範本引擎/Handlebars問題**: FIX-021
 - **SSR/渲染問題**: FIX-019
 - **TypeScript問題**: FIX-018, FIX-005
@@ -39,19 +41,247 @@
 - **監控系統問題**: FIX-015
 - **環境/依賴問題**: FIX-014, FIX-013
 - **認證問題**: FIX-017, FIX-009, FIX-001, FIX-002, FIX-003
-- **前端問題**: FIX-011, FIX-008, FIX-006, FIX-004
+- **前端問題**: FIX-022, FIX-011, FIX-008, FIX-006, FIX-004
 - **API問題**: FIX-012, FIX-010, FIX-007, FIX-004
 - **Next.js緩存問題**: FIX-011, FIX-010
 - **搜索/Prisma問題**: FIX-012
 - **OpenTelemetry/監控問題**: FIX-018
 - **環境變數/配置問題**: FIX-019
-- **UAT測試問題**: FIX-021
+- **UAT測試問題**: FIX-022, FIX-021
+- **React狀態管理問題**: FIX-022
 
 ## 📝 維護指南
 - **新增修復記錄**: 在索引表頂部添加新條目，在詳細記錄頂部添加完整內容
 - **編號規則**: 按時間順序遞增 (FIX-010, FIX-011...)
 - **狀態標記**: ✅已解決 / 🔄進行中 / ❌未解決 / 📋待修復
 - **問題級別**: 🔴Critical / 🟡High / 🟢Medium / 🔵Low
+
+---
+
+## FIX-022: 範本編輯頁面預覽按鈕無反應 - 缺少自動切換標籤頁
+
+**日期**: 2025-10-08
+**發現者**: UAT測試 TC-PROP-001
+**狀態**: ✅ 已解決
+**級別**: 🟢 Minor
+**影響範圍**: 範本編輯頁面（`/dashboard/templates/[id]`）預覽功能UX體驗
+
+### 問題描述
+
+**初始症狀**:
+- 在範本編輯頁面（`http://localhost:3000/dashboard/templates/[id]`）點擊頂部的「預覽」按鈕後，沒有任何可見反應
+- 用戶無法看到預覽結果，感覺按鈕無效
+- 但實際上預覽HTML已成功獲取並存儲在state中
+- 對比：從範本列表頁面點擊預覽，可以正確導航到專門的預覽頁面（`/templates/[id]/preview`）
+
+**問題根因**:
+1. **UI反饋缺失**: 預覽按鈕只調用API獲取HTML並存儲在state中，但沒有切換到顯示預覽內容的標籤頁
+2. **狀態與視圖分離**: 預覽HTML存儲在`previewHtml` state中，但只在"預覽"標籤頁的`TabsContent`中顯示
+3. **非受控標籤頁**: `Tabs`組件使用`defaultValue`而非受控的`value`屬性，無法程序化控制激活哪個標籤
+4. **用戶行為不符**: 用戶需要點擊預覽按鈕後，手動切換到"預覽"標籤才能看到結果
+
+### 技術細節
+
+**問題代碼** (修復前):
+```typescript
+// app/dashboard/templates/[id]/page.tsx
+
+// ❌ 問題1: 沒有標籤頁狀態控制
+// const [activeTab, setActiveTab] = useState('basic'); // 缺失
+
+const handlePreview = async () => {
+  try {
+    setIsPreviewLoading(true);
+    const response = await fetch(`/api/templates/${templateId}/preview`, {
+      /* ... */
+    });
+    const result = await response.json();
+
+    if (result.success) {
+      setPreviewHtml(result.data.html);
+      // ❌ 問題2: 獲取HTML後沒有切換到預覽標籤頁
+    } else {
+      throw new Error(result.error);
+    }
+  } catch (error) {
+    toast({ /* ... */ });
+  } finally {
+    setIsPreviewLoading(false);
+  }
+};
+
+// ❌ 問題3: Tabs組件使用defaultValue，無法程序化控制
+<Tabs defaultValue="basic" className="space-y-6">
+  <TabsList>
+    <TabsTrigger value="basic">基本信息</TabsTrigger>
+    <TabsTrigger value="content">範本內容</TabsTrigger>
+    <TabsTrigger value="variables">變數配置</TabsTrigger>
+    <TabsTrigger value="preview">預覽</TabsTrigger>
+  </TabsList>
+
+  {/* 預覽內容只在preview標籤頁中顯示 */}
+  <TabsContent value="preview">
+    {previewHtml ? (
+      <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
+    ) : (
+      <p>點擊「重新預覽」按鈕生成預覽</p>
+    )}
+  </TabsContent>
+</Tabs>
+```
+
+**修復方案**:
+
+```typescript
+// app/dashboard/templates/[id]/page.tsx
+
+// ✅ 修復1: 添加標籤頁狀態控制
+const [activeTab, setActiveTab] = useState('basic');
+
+const handlePreview = async () => {
+  try {
+    setIsPreviewLoading(true);
+    const response = await fetch(`/api/templates/${templateId}/preview`, {
+      /* ... */
+    });
+    const result = await response.json();
+
+    if (result.success) {
+      setPreviewHtml(result.data.html);
+      // ✅ 修復2: 自動切換到預覽標籤頁
+      setActiveTab('preview');
+    } else {
+      throw new Error(result.error);
+    }
+  } catch (error) {
+    toast({ /* ... */ });
+  } finally {
+    setIsPreviewLoading(false);
+  }
+};
+
+// ✅ 修復3: 使用受控的Tabs組件
+<Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+  <TabsList>
+    <TabsTrigger value="basic">基本信息</TabsTrigger>
+    <TabsTrigger value="content">範本內容</TabsTrigger>
+    <TabsTrigger value="variables">變數配置</TabsTrigger>
+    <TabsTrigger value="preview">預覽</TabsTrigger>
+  </TabsList>
+
+  {/* 預覽內容會在activeTab='preview'時自動顯示 */}
+  <TabsContent value="preview">
+    {previewHtml ? (
+      <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
+    ) : (
+      <p>點擊「重新預覽」按鈕生成預覽</p>
+    )}
+  </TabsContent>
+</Tabs>
+```
+
+### 修復實施
+
+**修改的文件**:
+```
+app/dashboard/templates/[id]/page.tsx
+```
+
+**修改內容**:
+1. **第109-114行**: 添加`activeTab`狀態管理
+   ```typescript
+   // 預覽
+   const [previewHtml, setPreviewHtml] = useState('');
+   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+
+   // 標籤頁控制
+   const [activeTab, setActiveTab] = useState('basic');
+   ```
+
+2. **第268-271行**: 在`handlePreview`函數中添加自動切換邏輯
+   ```typescript
+   if (result.success) {
+     setPreviewHtml(result.data.html);
+     // 自動切換到預覽標籤頁
+     setActiveTab('preview');
+   }
+   ```
+
+3. **第357行**: 將Tabs組件改為受控模式
+   ```typescript
+   // 修復前: <Tabs defaultValue="basic" className="space-y-6">
+   // 修復後:
+   <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+   ```
+
+### 測試驗證
+
+**測試步驟**:
+1. ✅ 啟動開發服務器：`npm run dev`
+2. ✅ 訪問範本編輯頁面：`http://localhost:3000/dashboard/templates/[id]`
+3. ✅ 點擊頂部「預覽」按鈕
+4. ✅ 預期行為：自動切換到"預覽"標籤頁並顯示預覽內容
+5. ✅ 驗證：預覽HTML正確顯示，用戶體驗流暢
+
+**測試結果**:
+- ✅ 預覽按鈕點擊後，頁面自動切換到"預覽"標籤
+- ✅ 預覽內容立即可見，無需手動切換標籤
+- ✅ 用戶體驗得到顯著改善
+- ✅ UAT測試TC-PROP-001通過
+
+### 相關問題
+
+**相關修復**:
+- FIX-021: 範本預覽500錯誤（Handlebars Helper參數問題）- 同一UAT測試用例發現的另一個問題
+
+**關聯測試用例**:
+- TC-PROP-001: 創建提案模板 - UAT測試
+
+### 經驗教訓
+
+**UX設計原則**:
+1. **即時反饋**: 用戶操作應該有立即可見的反應
+2. **最小驚訝原則**: 用戶點擊"預覽"按鈕時，期望立即看到預覽結果
+3. **減少操作步驟**: 避免讓用戶進行額外的手動操作才能看到結果
+
+**React狀態管理**:
+1. **受控組件**: 需要程序化控制的UI組件應該使用受控模式（value + onChange）
+2. **狀態與視圖同步**: 確保state變化能立即反映到UI上
+3. **用戶流程設計**: API調用成功後，應考慮後續的UI狀態更新
+
+**測試要點**:
+1. **端到端測試**: 不僅測試API是否成功，還要測試完整的用戶體驗流程
+2. **UX驗證**: 確保功能不僅"能用"，還要"好用"
+3. **反饋機制**: 所有異步操作都應該有適當的loading狀態和結果反饋
+
+### 預防措施
+
+**代碼審查清單**:
+- [ ] 異步操作完成後，UI是否有可見的反饋？
+- [ ] 用戶是否需要額外的操作才能看到結果？
+- [ ] 組件狀態控制是否符合用戶預期？
+- [ ] 是否有明確的loading和success/error狀態？
+
+**設計模式**:
+```typescript
+// ✅ 推薦模式：API調用 + UI狀態更新
+const handleAction = async () => {
+  try {
+    setLoading(true);
+    const result = await apiCall();
+
+    if (result.success) {
+      setState(result.data);
+      // 重要: 更新UI狀態以顯示結果
+      showResult(); // 或 setActiveView('result')
+    }
+  } catch (error) {
+    showError(error);
+  } finally {
+    setLoading(false);
+  }
+};
+```
 
 ---
 

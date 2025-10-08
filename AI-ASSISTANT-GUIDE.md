@@ -49,7 +49,26 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-08)**:
-- 🔧 TC-PROP-001範本預覽功能修復完成！⭐️ **最新**
+- 🎨 TC-PROP-001範本預覽UX優化完成！⭐️ **最新**
+  - 🐛 **問題發現**: 範本編輯頁面預覽按鈕點擊無可見反應
+    * 點擊「預覽」按鈕後，預覽HTML成功獲取但用戶看不到
+    * 需要手動切換到「預覽」標籤頁才能看到結果
+    * 用戶體驗不直觀，操作步驟過多
+  - 🔍 **根本原因**: UI反饋缺失和組件狀態管理問題
+    * 預覽按鈕只獲取HTML存儲在state，沒有切換標籤頁
+    * Tabs組件使用defaultValue，無法程序化控制
+    * 狀態與視圖分離：previewHtml有值但不可見
+  - ✅ **修復實施**: app/dashboard/templates/[id]/page.tsx (~8行修改)
+    * 添加activeTab狀態管理標籤頁 (第113-114行)
+    * handlePreview中添加setActiveTab('preview') (第270-271行)
+    * Tabs組件改為受控模式：value={activeTab} onValueChange={setActiveTab} (第357行)
+  - 📊 **成效統計**:
+    * 操作步驟：3步 → 1步 (-67%)
+    * 用戶體驗：點擊預覽 → 立即看到結果 ✅
+    * TC-PROP-001：✅ 完全通過（包含UX驗證）
+  - 📝 **文檔更新**: FIXLOG.md (FIX-022), DEVELOPMENT-LOG.md, UAT-TEST-PROGRESS-TRACKER.md
+
+- 🔧 TC-PROP-001範本預覽功能修復完成！
   - 🐛 **問題發現**: UAT測試TC-PROP-001時發現範本預覽500錯誤
   - 🔍 **根本原因**: Handlebars Helper參數機制理解錯誤
     * Helper最後一個參數是options對象（包含hash, data等）

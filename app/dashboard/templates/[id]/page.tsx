@@ -110,6 +110,9 @@ export default function TemplateEditPage() {
   const [previewHtml, setPreviewHtml] = useState('');
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
+  // 標籤頁控制
+  const [activeTab, setActiveTab] = useState('basic');
+
   // 載入範本數據
   useEffect(() => {
     loadTemplate();
@@ -264,6 +267,8 @@ export default function TemplateEditPage() {
 
       if (result.success) {
         setPreviewHtml(result.data.html);
+        // 自動切換到預覽標籤頁
+        setActiveTab('preview');
       } else {
         throw new Error(result.error);
       }
@@ -349,7 +354,7 @@ export default function TemplateEditPage() {
       </div>
 
       {/* 編輯表單 */}
-      <Tabs defaultValue="basic" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList>
           <TabsTrigger value="basic">基本信息</TabsTrigger>
           <TabsTrigger value="content">範本內容</TabsTrigger>
