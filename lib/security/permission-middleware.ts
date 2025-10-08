@@ -646,12 +646,12 @@ async function logPermissionAudit(params: {
       userAgent,
       requestId,
       details: {
-        requestedResource: requirement.resource, // Renamed to avoid conflict with resource parameter
-        actions: Array.isArray(requirement.action) ? requirement.action : [requirement.action],
+        requestedResource: requirement.resource,
+        permissionActions: Array.isArray(requirement.action) ? requirement.action : [requirement.action],
         requireAll: requirement.requireAll,
         checkOwnership: requirement.checkOwnership,
         resourceOwnerId: requirement.resourceOwnerId,
-        reason,
+        denialReason: reason,
       },
     });
   } catch (error) {

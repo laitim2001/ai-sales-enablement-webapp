@@ -139,7 +139,7 @@ describe('EditLockManager', () => {
     it('應該在非擁有者嘗試釋放時拋出錯誤', async () => {
       const lock = await lockManager.acquireLock('KnowledgeBase', 1, 100);
 
-      mockPrisma.user.findUnique.mockResolvedValue({
+      (mockPrisma.user.findUnique as any).mockResolvedValue({
         id: 200,
         role: 'SALES_REP',
       } as any);
@@ -152,7 +152,7 @@ describe('EditLockManager', () => {
     it('應該允許管理員釋放他人的鎖定', async () => {
       const lock = await lockManager.acquireLock('KnowledgeBase', 1, 100);
 
-      mockPrisma.user.findUnique.mockResolvedValue({
+      (mockPrisma.user.findUnique as any).mockResolvedValue({
         id: 200,
         role: 'ADMIN',
       } as any);
@@ -194,7 +194,7 @@ describe('EditLockManager', () => {
     it('應該檢測到其他用戶的鎖定衝突', async () => {
       await lockManager.acquireLock('KnowledgeBase', 1, 100);
 
-      mockPrisma.user.findUnique.mockResolvedValue({
+      (mockPrisma.user.findUnique as any).mockResolvedValue({
         id: 100,
         first_name: 'Test',
         last_name: 'User',
@@ -208,7 +208,7 @@ describe('EditLockManager', () => {
     });
 
     it('應該檢測到版本衝突', async () => {
-      mockPrisma.knowledgeBase.findUnique.mockResolvedValue({
+      (mockPrisma.knowledgeBase.findUnique as any).mockResolvedValue({
         id: 1,
         version: 5,
       } as any);
@@ -226,7 +226,7 @@ describe('EditLockManager', () => {
     });
 
     it('應該在沒有衝突時返回無衝突', async () => {
-      mockPrisma.knowledgeBase.findUnique.mockResolvedValue({
+      (mockPrisma.knowledgeBase.findUnique as any).mockResolvedValue({
         id: 1,
         version: 3,
       } as any);

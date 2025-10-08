@@ -11,7 +11,6 @@
 import { UserRole, Resource, Action } from './rbac';
 import {
   FieldLevelPermissionService,
-  FieldFilterResult,
 } from './field-level-permissions';
 import {
   ResourceConditionService,
@@ -199,9 +198,9 @@ export class FineGrainedPermissionService {
     ) {
       // 批量數據過濾
       if (Array.isArray(data)) {
-        const filteredData = FieldLevelPermissionService.filterFieldsBatch(
-          resource,
+        const filteredData = FieldLevelPermissionService.filterFieldsArray(
           userRole,
+          resource,
           data
         );
         if (details) details.fieldRestriction = true;
@@ -213,16 +212,19 @@ export class FineGrainedPermissionService {
       }
 
       // 單條數據過濾
-      const filterResult: FieldFilterResult =
-        FieldLevelPermissionService.filterFields(resource, userRole, data);
+      const filteredData = FieldLevelPermissionService.filterFields(
+        userRole,
+        resource,
+        data
+      );
 
-      if (filterResult.filteredData !== data) {
+      if (filteredData !== data) {
         if (details) details.fieldRestriction = true;
       }
 
       return {
         allowed: true,
-        filteredData: filterResult.filteredData,
+        filteredData,
         restrictionDetails: details,
       };
     }
@@ -319,8 +321,11 @@ export class FineGrainedPermissionService {
     action: Action
   ): boolean {
     // 檢查是否有欄位級別限制
-    const hasFieldRestrictions =
-      FieldLevelPermissionService.hasRestrictedFields(resource, userRole);
+    const restrictedFields = FieldLevelPermissionService.getRestrictedFields(
+      userRole,
+      resource
+    );
+    const hasFieldRestrictions = restrictedFields.length > 0;
 
     // 檢查是否有資源條件限制
     const hasResourceConditions = ResourceConditionService.hasConditions(
@@ -383,11 +388,8 @@ export class FineGrainedPermissionService {
 
     // 獲取欄位級別限制
     const restrictedFields =
-      FieldLevelPermissionService.getRestrictedFields(resource, userRole) ||
-      [];
-    summary.fieldRestrictions = restrictedFields.map(
-      (field) => `${field.field} (${field.securityLevel})`
-    );
+      FieldLevelPermissionService.getRestrictedFields(userRole, resource) || [];
+    summary.fieldRestrictions = restrictedFields;
 
     // 獲取資源條件限制
     const resourceConditions = ResourceConditionService.getConditions(
