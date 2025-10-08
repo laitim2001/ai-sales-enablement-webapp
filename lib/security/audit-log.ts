@@ -104,6 +104,7 @@ export interface AuditLogEntry {
   userId: number;
   userName?: string;
   userEmail?: string;
+  userRole?: string;
   action: AuditAction;
   resource: AuditResource;
   resourceId?: string;

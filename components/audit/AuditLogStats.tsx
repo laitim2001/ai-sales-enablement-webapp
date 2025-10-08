@@ -167,7 +167,7 @@ export function AuditLogStats({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(stats.logsBySeverity.info || 0).toLocaleString()}
+              {(stats.logsBySeverity.INFO || 0).toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               一般信息日誌
@@ -183,9 +183,9 @@ export function AuditLogStats({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-destructive">
-              {((stats.logsBySeverity.warning || 0) +
-                (stats.logsBySeverity.error || 0) +
-                (stats.logsBySeverity.critical || 0)
+              {((stats.logsBySeverity.WARNING || 0) +
+                (stats.logsBySeverity.ERROR || 0) +
+                (stats.logsBySeverity.CRITICAL || 0)
               ).toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -277,13 +277,13 @@ export function AuditLogStats({
             <div className="flex flex-col">
               <span className="text-sm font-medium text-muted-foreground mb-2">INFO</span>
               <div className="text-2xl font-bold text-blue-600">
-                {(stats.logsBySeverity.info || 0).toLocaleString()}
+                {(stats.logsBySeverity.INFO || 0).toLocaleString()}
               </div>
               <div className="mt-2 h-2 w-full bg-blue-100 rounded-full">
                 <div
                   className="h-full bg-blue-600 rounded-full"
                   style={{
-                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.info || 0) / stats.totalLogs) * 100 : 0}%`,
+                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.INFO || 0) / stats.totalLogs) * 100 : 0}%`,
                   }}
                 />
               </div>
@@ -292,13 +292,13 @@ export function AuditLogStats({
             <div className="flex flex-col">
               <span className="text-sm font-medium text-muted-foreground mb-2">WARNING</span>
               <div className="text-2xl font-bold text-yellow-600">
-                {(stats.logsBySeverity.warning || 0).toLocaleString()}
+                {(stats.logsBySeverity.WARNING || 0).toLocaleString()}
               </div>
               <div className="mt-2 h-2 w-full bg-yellow-100 rounded-full">
                 <div
                   className="h-full bg-yellow-600 rounded-full"
                   style={{
-                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.warning || 0) / stats.totalLogs) * 100 : 0}%`,
+                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.WARNING || 0) / stats.totalLogs) * 100 : 0}%`,
                   }}
                 />
               </div>
@@ -307,13 +307,13 @@ export function AuditLogStats({
             <div className="flex flex-col">
               <span className="text-sm font-medium text-muted-foreground mb-2">ERROR</span>
               <div className="text-2xl font-bold text-red-600">
-                {(stats.logsBySeverity.error || 0).toLocaleString()}
+                {(stats.logsBySeverity.ERROR || 0).toLocaleString()}
               </div>
               <div className="mt-2 h-2 w-full bg-red-100 rounded-full">
                 <div
                   className="h-full bg-red-600 rounded-full"
                   style={{
-                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.error || 0) / stats.totalLogs) * 100 : 0}%`,
+                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.ERROR || 0) / stats.totalLogs) * 100 : 0}%`,
                   }}
                 />
               </div>
@@ -322,13 +322,13 @@ export function AuditLogStats({
             <div className="flex flex-col">
               <span className="text-sm font-medium text-muted-foreground mb-2">CRITICAL</span>
               <div className="text-2xl font-bold text-purple-600">
-                {(stats.logsBySeverity.critical || 0).toLocaleString()}
+                {(stats.logsBySeverity.CRITICAL || 0).toLocaleString()}
               </div>
               <div className="mt-2 h-2 w-full bg-purple-100 rounded-full">
                 <div
                   className="h-full bg-purple-600 rounded-full"
                   style={{
-                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.critical || 0) / stats.totalLogs) * 100 : 0}%`,
+                    width: `${stats.totalLogs > 0 ? ((stats.logsBySeverity.CRITICAL || 0) / stats.totalLogs) * 100 : 0}%`,
                   }}
                 />
               </div>
