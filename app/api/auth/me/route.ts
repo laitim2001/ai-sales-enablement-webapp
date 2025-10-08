@@ -10,15 +10,9 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/auth-server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/db'
 import { ApiErrorHandler, withErrorHandling } from '@/lib/api/error-handler'
 import { AppError } from '@/lib/errors'
-
-/**
- * Prisma資料庫客戶端實例
- * 用於查詢用戶資訊和更新最後登入時間
- */
-const prisma = new PrismaClient()
 
 /**
  * 用戶資訊查詢處理函數
@@ -116,11 +110,13 @@ async function meHandler(request: NextRequest): Promise<NextResponse> {
       }
     }
 
+    // 處理Prisma查詢錯誤
+    if (error instanceof Error && error.message.includes('Prisma')) {
+      throw AppError.internalError('Database error occurred', error)
+    }
+
     // 重新拋出其他未知錯誤
     throw error
-  } finally {
-    // 確保資料庫連線正確關閉，防止連線洩漏
-    await prisma.$disconnect()
   }
 }
 
