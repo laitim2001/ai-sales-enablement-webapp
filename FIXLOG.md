@@ -8,6 +8,7 @@
 
 | 日期 | 問題類型 | 狀態 | 描述 |
 |------|----------|------|------|
+| 2025-10-08 | 🎨 範本引擎/Handlebars | ✅ 已解決 | [FIX-021: 範本預覽500錯誤 - Handlebars Helper貨幣格式化參數問題](#fix-021-範本預覽500錯誤-handlebars-helper貨幣格式化參數問題) |
 | 2025-10-08 | 🔧 Git Hook/Shebang | ✅ 已解決 | [FIX-020: check-index-sync.js shebang位置問題 - pre-push hook執行失敗](#fix-020-check-index-syncjs-shebang位置問題-pre-push-hook執行失敗) |
 | 2025-10-06 | 🌐 SSR/Metadata | ✅ 已解決 | [FIX-019: Knowledge Base編輯頁面SSR阻塞 - generateMetadata端口不一致](#fix-019-knowledge-base編輯頁面ssr阻塞-generatemetadata端口不一致) |
 | 2025-10-05 | 🔧 TypeScript編譯 | ✅ 已解決 | [FIX-018: TypeScript類型錯誤大規模修復 - 從63個錯誤降至0個](#fix-018-typescript類型錯誤大規模修復-從63個錯誤降至0個) |
@@ -30,6 +31,7 @@
 | 2025-09-24 | 🔑 認證/JWT | ✅ 已解決 | [FIX-001: JWT_SECRET客戶端訪問錯誤](#fix-001-jwt_secret客戶端訪問錯誤) |
 
 ## 🔍 快速搜索
+- **範本引擎/Handlebars問題**: FIX-021
 - **SSR/渲染問題**: FIX-019
 - **TypeScript問題**: FIX-018, FIX-005
 - **JWT/Token問題**: FIX-017, FIX-009, FIX-001, FIX-002, FIX-003
@@ -43,12 +45,207 @@
 - **搜索/Prisma問題**: FIX-012
 - **OpenTelemetry/監控問題**: FIX-018
 - **環境變數/配置問題**: FIX-019
+- **UAT測試問題**: FIX-021
 
 ## 📝 維護指南
 - **新增修復記錄**: 在索引表頂部添加新條目，在詳細記錄頂部添加完整內容
 - **編號規則**: 按時間順序遞增 (FIX-010, FIX-011...)
 - **狀態標記**: ✅已解決 / 🔄進行中 / ❌未解決 / 📋待修復
 - **問題級別**: 🔴Critical / 🟡High / 🟢Medium / 🔵Low
+
+---
+
+## FIX-021: 範本預覽500錯誤 - Handlebars Helper貨幣格式化參數問題
+
+**日期**: 2025-10-08
+**發現者**: UAT測試 TC-PROP-001
+**狀態**: ✅ 已解決
+**級別**: 🟡 Major
+**影響範圍**: 提案範本預覽功能，所有使用formatCurrency/formatDate/formatNumber的範本
+
+### 問題描述
+
+**初始症狀**:
+- UAT測試TC-PROP-001（創建提案模板）時，點擊「預覽」按鈕出現500錯誤
+- 前端錯誤：`POST http://localhost:3000/api/templates/[id]/preview 500 (Internal Server Error)`
+- API響應：`範本預覽失敗: 範本渲染失敗: Invalid currency code : [object Object]`
+
+**問題根因**:
+1. **Handlebars Helper參數機制誤解**: Handlebars在調用helper時，如果有多個參數，最後一個參數會是options對象（包含hash, data等），而不是直接的值
+2. **參數處理錯誤**: 原代碼將options對象直接作為currency參數傳遞給`Intl.NumberFormat`
+3. **類型驗證失敗**: `Intl.NumberFormat`接收到`[object Object]`而不是有效的貨幣代碼（如"TWD"），導致拋出錯誤
+
+### 技術細節
+
+**錯誤的Helper實現** (問題狀態):
+```typescript
+// lib/template/template-engine.ts:70-80
+this.handlebars.registerHelper('formatCurrency', (amount: number, currency?: string) => {
+  if (typeof amount !== 'number') return amount;
+  currency = currency || 'TWD';
+
+  const formatted = new Intl.NumberFormat('zh-TW', {
+    style: 'currency',
+    currency: currency,  // ❌ currency 實際是 options 對象
+  }).format(amount);
+
+  return formatted;
+});
+```
+
+**問題分析**:
+```typescript
+// 當模板中這樣調用時：
+{{formatCurrency price}}
+
+// Handlebars實際傳遞的參數：
+// amount = price的值（例如：1000）
+// currency = options對象（包含hash, data等屬性）
+
+// 導致錯誤：
+new Intl.NumberFormat('zh-TW', {
+  style: 'currency',
+  currency: {hash: {}, data: {}, ...}  // ❌ 應該是"TWD"字符串
+})
+```
+
+**正確的Helper實現** (修復後):
+```typescript
+// lib/template/template-engine.ts:70-101
+this.handlebars.registerHelper('formatCurrency', function(amount: number, options?: any) {
+  // 如果amount不是數字，直接返回
+  if (typeof amount !== 'number') return amount;
+
+  // 處理Handlebars options對象
+  // 如果第二個參數是options對象（有hash屬性），從hash中獲取currency
+  // 否則將其視為currency字符串
+  let currency = 'TWD';
+  if (options && typeof options === 'object' && options.hash) {
+    // 從options.hash中獲取currency參數
+    currency = options.hash.currency || 'TWD';
+  } else if (typeof options === 'string') {
+    // 直接傳遞的currency字符串
+    currency = options;
+  }
+
+  try {
+    const formatted = new Intl.NumberFormat('zh-TW', {
+      style: 'currency',
+      currency: currency,
+    }).format(amount);
+
+    return formatted;
+  } catch (error) {
+    // 如果貨幣代碼無效，回退到TWD
+    console.warn(`Invalid currency code: ${currency}, falling back to TWD`);
+    return new Intl.NumberFormat('zh-TW', {
+      style: 'currency',
+      currency: 'TWD',
+    }).format(amount);
+  }
+});
+```
+
+### 修復步驟
+
+1. **修復formatCurrency helper** (lib/template/template-engine.ts:70-101)
+   - 添加options對象檢測邏輯
+   - 從options.hash中正確提取參數
+   - 添加錯誤處理和回退機制
+
+2. **修復formatDate helper** (lib/template/template-engine.ts:48-73)
+   - 同樣的options對象處理邏輯
+   - 從options.hash中提取format參數
+
+3. **修復formatNumber helper** (lib/template/template-engine.ts:110-125)
+   - 同樣的options對象處理邏輯
+   - 從options.hash中提取decimals參數
+
+4. **修復formatPercent helper** (lib/template/template-engine.ts:128-140)
+   - 同樣的options對象處理邏輯
+   - 從options.hash中提取decimals參數
+
+### 測試驗證
+
+**修復前測試**:
+```bash
+curl -X POST http://localhost:3000/api/templates/[id]/preview \
+  -H "Content-Type: application/json" \
+  -d '{"useTestData":true}'
+
+# 結果: 500錯誤
+{"success":false,"error":"範本預覽失敗: 範本渲染失敗: Invalid currency code : [object Object]"}
+```
+
+**修復後測試**:
+```bash
+curl -X POST http://localhost:3000/api/templates/[id]/preview \
+  -H "Content-Type: application/json" \
+  -d '{"useTestData":true}'
+
+# 結果: 200成功
+{
+  "success": true,
+  "data": {
+    "html": "# 範例公司名稱 銷售提案\n...\n總計：$1,000.00\n...",
+    "testData": {...},
+    "template": {...}
+  },
+  "message": "範本預覽成功"
+}
+```
+
+### 影響範圍
+
+**受影響的功能**:
+- ✅ 提案範本預覽 (已修復)
+- ✅ 所有使用formatCurrency的範本 (已修復)
+- ✅ 所有使用formatDate的範本 (已修復)
+- ✅ 所有使用formatNumber的範本 (已修復)
+- ✅ 所有使用formatPercent的範本 (已修復)
+
+**修復的文件**:
+- `lib/template/template-engine.ts` (~140行修改)
+
+### 預防措施
+
+**未來開發建議**:
+1. **Handlebars Helper開發規範**:
+   - 始終將最後一個參數視為options對象
+   - 使用`function`聲明而非箭頭函數（確保正確的this綁定）
+   - 從options.hash中提取命名參數
+
+2. **Helper參數提取模式**:
+   ```typescript
+   this.handlebars.registerHelper('myHelper', function(value: any, options?: any) {
+     // 提取命名參數
+     let param1 = 'default';
+     if (options && typeof options === 'object' && options.hash) {
+       param1 = options.hash.param1 || 'default';
+     } else if (typeof options === 'string') {
+       param1 = options;
+     }
+
+     // 使用param1...
+   });
+   ```
+
+3. **測試要求**:
+   - 為所有helper添加單元測試
+   - 測試無參數、單參數、多參數調用場景
+   - 測試邊界情況和錯誤處理
+
+### 經驗教訓
+
+**關鍵教訓**:
+1. ✅ **理解框架機制**: 深入理解Handlebars的helper調用機制，不能僅憑直覺
+2. ✅ **參數類型驗證**: 始終驗證參數類型，不要假設參數類型
+3. ✅ **錯誤處理**: 添加try-catch和回退機制，提供友好的錯誤信息
+4. ✅ **UAT測試價值**: UAT測試發現了開發過程中未發現的問題
+
+**相關文檔**:
+- Handlebars Helper API: https://handlebarsjs.com/guide/block-helpers.html
+- Intl.NumberFormat: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
 
 ---
 

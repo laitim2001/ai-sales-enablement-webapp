@@ -49,7 +49,25 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-08)**:
-- 🎉 UAT測試啟動 + 文件上傳體驗優化完成！⭐️ **最新**
+- 🔧 TC-PROP-001範本預覽功能修復完成！⭐️ **最新**
+  - 🐛 **問題發現**: UAT測試TC-PROP-001時發現範本預覽500錯誤
+  - 🔍 **根本原因**: Handlebars Helper參數機制理解錯誤
+    * Helper最後一個參數是options對象（包含hash, data等）
+    * 原代碼將options對象直接作為currency參數傳遞
+    * 導致`Intl.NumberFormat`接收`[object Object]`而非"TWD"
+  - ✅ **修復實施**: lib/template/template-engine.ts (~87行修改)
+    * formatCurrency helper: 添加options對象檢測，從hash提取currency
+    * formatDate helper: 同樣邏輯，從hash提取format參數
+    * formatNumber helper: 同樣邏輯，從hash提取decimals參數
+    * formatPercent helper: 同樣邏輯，從hash提取decimals參數
+  - 📊 **測試結果**:
+    * 修復前: 500錯誤 (Invalid currency code: [object Object])
+    * 修復後: 200成功 (總計：$1,000.00)
+    * UAT TC-PROP-001: ✅ 通過
+  - 📈 **UAT進度**: 1/33 (3%)，1個Major缺陷已修復
+  - 📝 **文檔更新**: FIXLOG.md (FIX-021), DEVELOPMENT-LOG.md, UAT-TEST-PROGRESS-TRACKER.md
+
+- 🎉 UAT測試啟動 + 文件上傳體驗優化完成！
   - 📊 **UAT測試開始**:
     * ✅ 啟動開發服務器進行 UAT 測試
     * 🌐 測試環境：http://localhost:3000

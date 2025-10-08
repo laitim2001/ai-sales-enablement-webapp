@@ -45,12 +45,18 @@ export class TemplateEngine {
    */
   private registerHelpers() {
     // 日期格式化
-    this.handlebars.registerHelper('formatDate', (date: string | Date, format?: string) => {
+    this.handlebars.registerHelper('formatDate', function(date: string | Date, options?: any) {
       if (!date) return '';
       const d = new Date(date);
       if (isNaN(d.getTime())) return date;
 
-      format = format || 'YYYY-MM-DD';
+      // 處理Handlebars options對象
+      let format = 'YYYY-MM-DD';
+      if (options && typeof options === 'object' && options.hash) {
+        format = options.hash.format || 'YYYY-MM-DD';
+      } else if (typeof options === 'string') {
+        format = options;
+      }
 
       const year = d.getFullYear();
       const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -67,31 +73,70 @@ export class TemplateEngine {
     });
 
     // 貨幣格式化
-    this.handlebars.registerHelper('formatCurrency', (amount: number, currency?: string) => {
+    this.handlebars.registerHelper('formatCurrency', function(amount: number, options?: any) {
+      // 如果amount不是數字，直接返回
       if (typeof amount !== 'number') return amount;
-      currency = currency || 'TWD';
 
-      const formatted = new Intl.NumberFormat('zh-TW', {
-        style: 'currency',
-        currency: currency,
-      }).format(amount);
+      // 處理Handlebars options對象
+      // 如果第二個參數是options對象（有hash屬性），從hash中獲取currency
+      // 否則將其視為currency字符串
+      let currency = 'TWD';
+      if (options && typeof options === 'object' && options.hash) {
+        // 從options.hash中獲取currency參數
+        currency = options.hash.currency || 'TWD';
+      } else if (typeof options === 'string') {
+        // 直接傳遞的currency字符串
+        currency = options;
+      }
 
-      return formatted;
+      try {
+        const formatted = new Intl.NumberFormat('zh-TW', {
+          style: 'currency',
+          currency: currency,
+        }).format(amount);
+
+        return formatted;
+      } catch (error) {
+        // 如果貨幣代碼無效，回退到TWD
+        console.warn(`Invalid currency code: ${currency}, falling back to TWD`);
+        return new Intl.NumberFormat('zh-TW', {
+          style: 'currency',
+          currency: 'TWD',
+        }).format(amount);
+      }
     });
 
     // 數字格式化（千分位）
-    this.handlebars.registerHelper('formatNumber', (num: number, decimals?: number) => {
+    this.handlebars.registerHelper('formatNumber', function(num: number, options?: any) {
       if (typeof num !== 'number') return num;
+
+      // 處理Handlebars options對象
+      let decimals = 0;
+      if (options && typeof options === 'object' && options.hash) {
+        decimals = options.hash.decimals || 0;
+      } else if (typeof options === 'number') {
+        decimals = options;
+      }
+
       return num.toLocaleString('zh-TW', {
-        minimumFractionDigits: decimals || 0,
-        maximumFractionDigits: decimals || 0,
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
       });
     });
 
     // 百分比格式化
-    this.handlebars.registerHelper('formatPercent', (num: number, decimals?: number) => {
+    this.handlebars.registerHelper('formatPercent', function(num: number, options?: any) {
       if (typeof num !== 'number') return num;
-      return (num * 100).toFixed(decimals || 0) + '%';
+
+      // 處理Handlebars options對象
+      let decimals = 0;
+      if (options && typeof options === 'object' && options.hash) {
+        decimals = options.hash.decimals || 0;
+      } else if (typeof options === 'number') {
+        decimals = options;
+      }
+
+      return (num * 100).toFixed(decimals) + '%';
     });
 
     // 字串大寫
