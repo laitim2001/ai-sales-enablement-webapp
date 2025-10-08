@@ -175,9 +175,15 @@ export default function NewTemplatePage() {
         return acc;
       }, {} as Record<string, any>);
 
+      // 獲取認證token
+      const token = localStorage.getItem('auth-token');
+
       const response = await fetch('/api/templates/preview-temp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
         body: JSON.stringify({
           content,
           variables: variablesDef,
@@ -251,9 +257,15 @@ export default function NewTemplatePage() {
         return acc;
       }, {} as Record<string, any>);
 
+      // 獲取認證token
+      const token = localStorage.getItem('auth-token');
+
       const response = await fetch('/api/templates', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
         body: JSON.stringify({
           name,
           description,
