@@ -27,7 +27,8 @@ import {
   PieChart,
   Calendar,
   Archive,
-  Star
+  Star,
+  Layout
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
@@ -119,6 +120,12 @@ export function DashboardSidebar() {
           href: '/dashboard/proposals',
           icon: FileText,
           description: 'AI 個人化提案生成'
+        },
+        {
+          name: '範本管理',
+          href: '/dashboard/templates',
+          icon: Layout,
+          description: '提案範本創建和管理'
         },
         {
           name: '對話分析',

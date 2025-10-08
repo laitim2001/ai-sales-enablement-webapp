@@ -10,6 +10,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { templateEngine } from '@/lib/template/template-engine';
+import { requirePermission } from '@/lib/security/permission-middleware';
+import { Resource, Action } from '@/lib/security/rbac';
 
 /**
  * POST /api/templates/preview-temp
@@ -17,6 +19,16 @@ import { templateEngine } from '@/lib/template/template-engine';
  */
 export async function POST(request: NextRequest) {
   try {
+    // RBAC權限檢查 - 預覽範本需要READ權限
+    const authResult = await requirePermission(request, {
+      resource: Resource.PROPOSAL_TEMPLATES,
+      action: Action.READ,
+    });
+
+    if (!authResult.authorized) {
+      return authResult.response!;
+    }
+
     const body = await request.json();
     const { content, variables, data, useTestData } = body;
 
