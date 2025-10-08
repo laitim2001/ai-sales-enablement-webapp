@@ -86,12 +86,13 @@ export enum AuditResource {
 
 /**
  * 審計日誌嚴重級別
+ * 使用與Prisma schema一致的值
  */
 export enum AuditSeverity {
-  INFO = 'info',
-  WARNING = 'warning',
-  ERROR = 'error',
-  CRITICAL = 'critical',
+  INFO = 'INFO',
+  WARNING = 'WARNING',
+  ERROR = 'ERROR',
+  CRITICAL = 'CRITICAL',
 }
 
 /**

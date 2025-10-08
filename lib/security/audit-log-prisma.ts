@@ -8,10 +8,11 @@
  * @lastModified 2025-10-08
  */
 
-import { PrismaClient, UserRole, AuditSeverity } from '@prisma/client';
+import { PrismaClient, UserRole, AuditSeverity as PrismaAuditSeverity } from '@prisma/client';
 import {
   AuditAction,
   AuditResource,
+  AuditSeverity,
   AuditLogEntry,
   AuditLogQuery,
   AuditLogStats
@@ -20,6 +21,20 @@ import {
 // 初始化Prisma客戶端 (使用單例模式)
 const prisma = global.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
+
+/**
+ * 轉換Prisma AuditSeverity到應用層AuditSeverity
+ */
+function toPrismaAuditSeverity(severity: AuditSeverity): PrismaAuditSeverity {
+  return severity as unknown as PrismaAuditSeverity;
+}
+
+/**
+ * 轉換應用層AuditSeverity到Prisma AuditSeverity
+ */
+function fromPrismaAuditSeverity(severity: PrismaAuditSeverity): AuditSeverity {
+  return severity as unknown as AuditSeverity;
+}
 
 /**
  * Prisma審計日誌記錄器
@@ -58,7 +73,7 @@ export class AuditLoggerPrisma {
         entity_type: params.resource,
         entity_id: params.resourceId ? parseInt(params.resourceId) : null,
         action: params.action,
-        severity: severity,
+        severity: toPrismaAuditSeverity(severity),
         success: params.success !== undefined ? params.success : true,
         ip_address: params.ipAddress,
         user_agent: params.userAgent,
@@ -89,7 +104,7 @@ export class AuditLoggerPrisma {
       action: auditLog.action as AuditAction,
       resource: auditLog.entity_type as AuditResource,
       resourceId: auditLog.entity_id?.toString(),
-      severity: auditLog.severity,
+      severity: fromPrismaAuditSeverity(auditLog.severity),
       success: auditLog.success,
       ipAddress: auditLog.ip_address || undefined,
       userAgent: auditLog.user_agent || undefined,
@@ -127,9 +142,12 @@ export class AuditLoggerPrisma {
 
     // 嚴重級別過濾
     if (query.severity !== undefined) {
-      where.severity = Array.isArray(query.severity)
-        ? { in: query.severity }
-        : query.severity;
+      const prismaSeverity = Array.isArray(query.severity)
+        ? query.severity.map(s => toPrismaAuditSeverity(s))
+        : toPrismaAuditSeverity(query.severity);
+      where.severity = Array.isArray(prismaSeverity)
+        ? { in: prismaSeverity }
+        : prismaSeverity;
     }
 
     // 成功狀態過濾
@@ -174,7 +192,7 @@ export class AuditLoggerPrisma {
       action: log.action as AuditAction,
       resource: log.entity_type as AuditResource,
       resourceId: log.entity_id?.toString(),
-      severity: log.severity,
+      severity: fromPrismaAuditSeverity(log.severity),
       success: log.success,
       ipAddress: log.ip_address || undefined,
       userAgent: log.user_agent || undefined,
@@ -227,7 +245,8 @@ export class AuditLoggerPrisma {
 
     const logsBySeverity: Partial<Record<AuditSeverity, number>> = {};
     severityStats.forEach(stat => {
-      logsBySeverity[stat.severity] = stat._count;
+      const appSeverity = fromPrismaAuditSeverity(stat.severity);
+      logsBySeverity[appSeverity] = stat._count;
     });
 
     // 成功率
