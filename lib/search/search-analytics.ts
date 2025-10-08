@@ -965,8 +965,8 @@ export class SearchAnalyticsService {
   }
 
   private generateReportCacheKey(_startDate: Date, _endDate: Date, _filters: any): string {
-    const filterKey = JSON.stringify(filters)
-    return `analytics_report:${startDate.getTime()}:${endDate.getTime()}:${Buffer.from(filterKey).toString('base64')}`
+    const filterKey = JSON.stringify(_filters)
+    return `analytics_report:${_startDate.getTime()}:${_endDate.getTime()}:${Buffer.from(filterKey).toString('base64')}`
   }
 
   private async getCachedReport(cacheKey: string): Promise<SearchAnalyticsReport | null> {

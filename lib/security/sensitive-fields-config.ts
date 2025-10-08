@@ -18,9 +18,10 @@ export enum SensitivityLevel {
 }
 
 /**
- * 敏感欄位配置介面
+ * 加密欄位配置介面
+ * (renamed from SensitiveFieldConfig to avoid conflict with field-level-permissions.ts)
  */
-export interface SensitiveFieldConfig {
+export interface EncryptionFieldConfig {
   /** 數據模型名稱 (對應Prisma Model) */
   model: string;
   /** 需要加密的欄位清單 */
@@ -43,7 +44,7 @@ export interface SensitiveFieldConfig {
  * 4. **性能平衡**: 根據敏感度和使用頻率選擇性加密
  * 5. **可維護性**: 集中配置,易於審計和更新
  */
-export const SENSITIVE_FIELDS_CONFIG: SensitiveFieldConfig[] = [
+export const SENSITIVE_FIELDS_CONFIG: EncryptionFieldConfig[] = [
   // ==========================================
   // 客戶相關模型
   // ==========================================
@@ -130,7 +131,7 @@ export const SENSITIVE_FIELDS_CONFIG: SensitiveFieldConfig[] = [
  *   // 加密Customer的敏感欄位
  * }
  */
-export function getSensitiveFieldsConfig(modelName: string): SensitiveFieldConfig | undefined {
+export function getSensitiveFieldsConfig(modelName: string): EncryptionFieldConfig | undefined {
   return SENSITIVE_FIELDS_CONFIG.find(config => config.model === modelName);
 }
 
@@ -159,19 +160,20 @@ export function getSensitiveFields(modelName: string, onlyEnabled: boolean = tru
 }
 
 /**
- * 檢查指定欄位是否為敏感欄位
+ * 檢查指定欄位是否需要加密
+ * (renamed from isSensitiveField to avoid conflict with field-level-permissions.ts)
  *
  * @param modelName - Prisma模型名稱
  * @param fieldName - 欄位名稱
  * @param onlyEnabled - 是否只檢查啟用的配置 (默認: true)
- * @returns true表示該欄位為敏感欄位且需要加密
+ * @returns true表示該欄位需要加密
  *
  * @example
- * if (isSensitiveField('Customer', 'email')) {
+ * if (isEncryptedField('Customer', 'email')) {
  *   // 加密email欄位
  * }
  */
-export function isSensitiveField(
+export function isEncryptedField(
   modelName: string,
   fieldName: string,
   onlyEnabled: boolean = true
@@ -179,6 +181,11 @@ export function isSensitiveField(
   const fields = getSensitiveFields(modelName, onlyEnabled);
   return fields.includes(fieldName);
 }
+
+/**
+ * @deprecated Use isEncryptedField instead - kept for backward compatibility
+ */
+export const isSensitiveField = isEncryptedField;
 
 /**
  * 獲取所有已啟用的敏感欄位配置
@@ -189,7 +196,7 @@ export function isSensitiveField(
  * const enabledConfigs = getEnabledSensitiveFieldsConfigs();
  * // 用於批量加密操作或性能測試
  */
-export function getEnabledSensitiveFieldsConfigs(): SensitiveFieldConfig[] {
+export function getEnabledSensitiveFieldsConfigs(): EncryptionFieldConfig[] {
   return SENSITIVE_FIELDS_CONFIG.filter(config => config.enabled);
 }
 
@@ -207,7 +214,7 @@ export function getEnabledSensitiveFieldsConfigs(): SensitiveFieldConfig[] {
 export function getSensitiveFieldsConfigsByLevel(
   level: SensitivityLevel,
   onlyEnabled: boolean = true
-): SensitiveFieldConfig[] {
+): EncryptionFieldConfig[] {
   return SENSITIVE_FIELDS_CONFIG.filter(
     config => config.sensitivity === level && (!onlyEnabled || config.enabled)
   );

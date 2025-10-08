@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       userId: filters.userId,
       action: filters.action as AuditAction | AuditAction[] | undefined,
       resource: filters.resource as AuditResource | AuditResource[] | undefined,
-      severity: filters.severity as AuditSeverity | AuditSeverity[] | undefined,
+      severity: filters.severity as any, // Type assertion needed due to Prisma enum vs app enum
       success: filters.success,
       startDate: filters.startDate ? new Date(filters.startDate) : undefined,
       endDate: filters.endDate ? new Date(filters.endDate) : undefined,

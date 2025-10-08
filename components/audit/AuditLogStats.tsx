@@ -41,7 +41,7 @@ export function AuditLogStats({
   const [stats, setStats] = useState<AuditLogStatsType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   const fetchStats = async () => {
     try {
@@ -56,6 +56,9 @@ export function AuditLogStats({
           }
         });
       }
+
+      // Get token from localStorage or cookie (auth token is stored client-side)
+      const token = typeof window !== 'undefined' ? localStorage.getItem('auth-token') : null;
 
       const response = await fetch(`/api/audit-logs/stats?${params}`, {
         headers: {

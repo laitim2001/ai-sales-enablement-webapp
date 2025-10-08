@@ -24,10 +24,21 @@ export * from './fine-grained-permissions';
 
 // Encryption
 export * from './encryption';
-export * from './sensitive-fields-config';
+export {
+  SensitivityLevel,
+  type EncryptionFieldConfig,
+  SENSITIVE_FIELDS_CONFIG,
+  getSensitiveFieldsConfig,
+  getEnabledSensitiveFieldsConfigs,
+  getSensitiveFieldsConfigsByLevel,
+  getSensitiveFields,
+  isEncryptedField,
+  // Note: isSensitiveField is deprecated and exported from field-level-permissions instead
+} from './sensitive-fields-config';
 
 // Azure Key Vault
 export * from './azure-key-vault';
 
 // Edit Lock (Collaboration)
-export * from './edit-lock-manager';
+// Note: edit-lock-manager is not yet implemented
+// export * from './edit-lock-manager';

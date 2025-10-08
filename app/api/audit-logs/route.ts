@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       userId,
       action: action as AuditAction | undefined,
       resource: resource as AuditResource | undefined,
-      severity: severity as AuditSeverity | undefined,
+      severity: severity as any, // Type assertion needed due to Prisma enum vs app enum
       success,
       startDate,
       endDate,

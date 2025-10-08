@@ -87,6 +87,7 @@ export function AuditLogList({
       [AuditAction.DELETE]: '刪除',
       [AuditAction.BULK_DELETE]: '批量刪除',
       [AuditAction.PERMISSION_GRANT]: '權限授予',
+      [AuditAction.PERMISSION_DENY]: '權限拒絕',
       [AuditAction.PERMISSION_REVOKE]: '權限撤銷',
       [AuditAction.ROLE_CHANGE]: '角色變更',
       [AuditAction.ACCESS_DENIED]: '訪問拒絕',

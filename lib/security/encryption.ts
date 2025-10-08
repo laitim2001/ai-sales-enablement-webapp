@@ -169,9 +169,13 @@ export class EncryptionService {
 
     this.keyLoadPromise = (async () => {
       try {
+        if (!this.config.keyVaultSecretName) {
+          throw new Error('Key Vault secret name is not configured');
+        }
+
         console.log(`[EncryptionService] Loading encryption key from Azure Key Vault: ${this.config.keyVaultSecretName}`);
 
-        const keyBase64 = await this.keyVaultService.getSecret(this.config.keyVaultSecretName);
+        const keyBase64 = await this.keyVaultService!.getSecret(this.config.keyVaultSecretName);
         const keyBuffer = Buffer.from(keyBase64, 'base64');
 
         // 驗證金鑰長度

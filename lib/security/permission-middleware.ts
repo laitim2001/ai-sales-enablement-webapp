@@ -589,23 +589,45 @@ async function logPermissionAudit(params: {
     const userAgent = request.headers.get('user-agent') || 'unknown';
     const requestId = request.headers.get('x-request-id') || undefined;
 
-    // 轉換Resource到AuditResource（大部分可以直接映射）
-    const resourceMapping: Record<Resource, AuditResource> = {
+    // 轉換Resource到AuditResource（使用Partial避免完整映射要求）
+    const resourceMapping: Partial<Record<Resource, AuditResource>> = {
+      // 客戶管理
       [Resource.CUSTOMERS]: AuditResource.CUSTOMER,
-      [Resource.CONTACTS]: AuditResource.CONTACT,
+      [Resource.CUSTOMER_CONTACTS]: AuditResource.CUSTOMER_CONTACT,
       [Resource.SALES_OPPORTUNITIES]: AuditResource.SALES_OPPORTUNITY,
+
+      // 提案管理
       [Resource.PROPOSALS]: AuditResource.PROPOSAL,
+      [Resource.PROPOSAL_TEMPLATES]: AuditResource.PROPOSAL_TEMPLATE,
+      [Resource.TEMPLATES]: AuditResource.PROPOSAL_TEMPLATE,
+      [Resource.PROPOSAL_GENERATIONS]: AuditResource.PROPOSAL,
+
+      // 知識庫
       [Resource.KNOWLEDGE_BASE]: AuditResource.KNOWLEDGE_BASE,
-      [Resource.TEMPLATES]: AuditResource.TEMPLATE,
-      [Resource.WORKFLOWS]: AuditResource.WORKFLOW,
-      [Resource.ANALYTICS]: AuditResource.ANALYTICS,
+      [Resource.KNOWLEDGE_CHUNKS]: AuditResource.KNOWLEDGE_CHUNK,
+      [Resource.KNOWLEDGE_TAGS]: AuditResource.KNOWLEDGE_TAG,
+
+      // 文檔管理
+      [Resource.DOCUMENTS]: AuditResource.DOCUMENT,
+      [Resource.CALL_RECORDS]: AuditResource.DOCUMENT,
+      [Resource.INTERACTIONS]: AuditResource.DOCUMENT,
+
+      // 系統管理
       [Resource.USERS]: AuditResource.USER,
-      [Resource.AUDIT_LOGS]: AuditResource.AUDIT_LOG,
+      [Resource.ROLES]: AuditResource.USER,
       [Resource.API_KEYS]: AuditResource.API_KEY,
-      [Resource.SYSTEM_SETTINGS]: AuditResource.SYSTEM,
+      [Resource.AUDIT_LOGS]: AuditResource.AUDIT_LOG,
+      [Resource.SYSTEM_CONFIGS]: AuditResource.SYSTEM_CONFIG,
+
+      // AI 功能
+      [Resource.AI_GENERATION_CONFIGS]: AuditResource.SYSTEM_CONFIG,
+
+      // 分析
+      [Resource.ANALYTICS]: AuditResource.ANALYTICS,
+      [Resource.REPORTS]: AuditResource.REPORT,
     };
 
-    const auditResource = resourceMapping[requirement.resource] || AuditResource.SYSTEM;
+    const auditResource = resourceMapping[requirement.resource] || AuditResource.SYSTEM_CONFIG;
 
     // 確定審計操作類型
     const auditAction = authorized ? AuditAction.PERMISSION_GRANT : AuditAction.PERMISSION_DENY;
@@ -613,18 +635,18 @@ async function logPermissionAudit(params: {
     // 記錄審計日誌
     await AuditLoggerPrisma.log({
       userId: user.userId,
-      userName: user.name,
+      userName: user.email, // JWTPayload doesn't have name, use email instead
       userEmail: user.email,
-      userRole: user.role,
+      userRole: user.role as any, // Type assertion: user.role is string, not UserRole enum
       action: auditAction,
       resource: auditResource,
-      severity: authorized ? AuditSeverity.INFO : AuditSeverity.WARNING,
+      severity: authorized ? AuditSeverity.INFO : AuditSeverity.WARNING as any,
       success: authorized,
       ipAddress,
       userAgent,
       requestId,
       details: {
-        resource: requirement.resource,
+        requestedResource: requirement.resource, // Renamed to avoid conflict with resource parameter
         actions: Array.isArray(requirement.action) ? requirement.action : [requirement.action],
         requireAll: requirement.requireAll,
         checkOwnership: requirement.checkOwnership,

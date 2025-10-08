@@ -127,7 +127,7 @@ export class MicrosoftGraphOAuth {
 
     return {
       accessToken: response.accessToken,
-      refreshToken: response.refreshToken || refreshToken,
+      refreshToken: refreshToken, // refreshToken is not returned by MSAL, use the original one
       expiresOn: response.expiresOn!,
       scopes: response.scopes || this.config.scopes
     };

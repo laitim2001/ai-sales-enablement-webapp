@@ -32,7 +32,8 @@ import { useRouter } from 'next/navigation';
  */
 export default function AuditLogsPage() {
   const router = useRouter();
-  const { user, token } = useAuth();
+  const { user } = useAuth();
+  // Note: token is stored in cookie/localStorage, not in AuthContext
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -73,9 +74,12 @@ export default function AuditLogsPage() {
       if (filters.endDate) params.append('endDate', filters.endDate);
       if (filters.ipAddress) params.append('ipAddress', filters.ipAddress);
 
+      // Get token from localStorage or cookie (auth token is stored client-side)
+      const token = typeof window !== 'undefined' ? localStorage.getItem('auth-token') : null;
+
       const response = await fetch(`/api/audit-logs?${params}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          ...(token && { 'Authorization': `Bearer ${token}` }),
         },
       });
 
@@ -98,10 +102,10 @@ export default function AuditLogsPage() {
 
   // 初始加載和篩選變更時重新獲取
   useEffect(() => {
-    if (token && user?.role === 'ADMIN') {
+    if (user?.role === 'ADMIN') {
       fetchLogs();
     }
-  }, [pagination.offset, token, user]);
+  }, [pagination.offset, user]);
 
   // 應用篩選
   const handleApplyFilters = () => {

@@ -30,18 +30,21 @@ export function AuditLogExport({ filters }: AuditLogExportProps) {
   const [format, setFormat] = useState<'csv' | 'json'>('csv');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   const handleExport = async () => {
     setLoading(true);
     setError(null);
 
     try {
+      // Get token from localStorage or cookie (auth token is stored client-side)
+      const token = typeof window !== 'undefined' ? localStorage.getItem('auth-token') : null;
+
       const response = await fetch('/api/audit-logs/export', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          ...(token && { 'Authorization': `Bearer ${token}` }),
         },
         body: JSON.stringify({
           format,

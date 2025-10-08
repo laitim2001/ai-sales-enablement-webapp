@@ -29,6 +29,7 @@ export enum AuditAction {
 
   // 權限操作
   PERMISSION_GRANT = 'permission_grant',
+  PERMISSION_DENY = 'permission_deny',
   PERMISSION_REVOKE = 'permission_revoke',
   ROLE_CHANGE = 'role_change',
   ACCESS_DENIED = 'access_denied',
