@@ -20,6 +20,7 @@ export enum Resource {
   // 提案管理
   PROPOSALS = 'proposals',
   PROPOSAL_TEMPLATES = 'proposal_templates',
+  TEMPLATES = 'proposal_templates', // Alias for PROPOSAL_TEMPLATES
   PROPOSAL_GENERATIONS = 'proposal_generations',
 
   // 知識庫
@@ -469,6 +470,73 @@ export function owns(
  */
 export function isAdmin(userRole: UserRole): boolean {
   return RBACService.isAdmin(userRole);
+}
+
+/**
+ * 擁有權檢查結果接口
+ */
+export interface OwnershipCheckResult {
+  allowed: boolean;
+  reason: string;
+}
+
+/**
+ * 擁有權檢查參數接口
+ */
+export interface OwnershipCheckParams {
+  userRole: UserRole;
+  userId: number;
+  resourceOwnerId?: number;
+  resource: Resource;
+  teamAccess?: boolean;
+}
+
+/**
+ * 資源擁有權檢查函數
+ *
+ * @param params - 擁有權檢查參數
+ * @returns 擁有權檢查結果（包含 allowed 和 reason）
+ */
+export function checkOwnership(params: OwnershipCheckParams): OwnershipCheckResult {
+  const { userRole, userId, resourceOwnerId, resource, teamAccess = false } = params;
+
+  // ADMIN 可以訪問所有資源
+  if (RBACService.isAdmin(userRole)) {
+    return {
+      allowed: true,
+      reason: 'ADMIN has access to all resources'
+    };
+  }
+
+  // 如果沒有指定資源擁有者，允許訪問（公共資源）
+  if (resourceOwnerId === undefined) {
+    return {
+      allowed: true,
+      reason: 'Public resource with no specific owner'
+    };
+  }
+
+  // 檢查是否是資源擁有者
+  if (userId === resourceOwnerId) {
+    return {
+      allowed: true,
+      reason: 'User is the resource owner'
+    };
+  }
+
+  // SALES_MANAGER 可以訪問團隊資源
+  if (RBACService.isSalesManager(userRole) && teamAccess) {
+    return {
+      allowed: true,
+      reason: 'SALES_MANAGER has team access to this resource'
+    };
+  }
+
+  // 其他情況拒絕訪問
+  return {
+    allowed: false,
+    reason: 'User is not authorized to access this resource'
+  };
 }
 
 /**

@@ -325,9 +325,9 @@ describe('RBAC Permission System - Core Tests', () => {
 
   describe('Edge Cases and Error Handling', () => {
     it('should handle invalid role gracefully', () => {
-      // @ts-expect-error Testing invalid role
+      // Testing invalid role (type assertion required for invalid values)
       const result = RBACService.hasPermission(
-        'INVALID_ROLE',
+        'INVALID_ROLE' as any,
         Resource.CUSTOMERS,
         Action.READ
       );
@@ -335,21 +335,21 @@ describe('RBAC Permission System - Core Tests', () => {
     });
 
     it('should handle invalid resource gracefully', () => {
-      // @ts-expect-error Testing invalid resource
+      // Testing invalid resource (type assertion required for invalid values)
       const result = RBACService.hasPermission(
         UserRole.ADMIN,
-        'INVALID_RESOURCE',
+        'INVALID_RESOURCE' as any,
         Action.READ
       );
       expect(result).toBe(false);
     });
 
     it('should handle invalid action gracefully for non-MANAGE roles', () => {
-      // @ts-expect-error Testing invalid action
+      // Testing invalid action (type assertion required for invalid values)
       const result = RBACService.hasPermission(
         UserRole.SALES_REP,
         Resource.CUSTOMERS,
-        'INVALID_ACTION'
+        'INVALID_ACTION' as any
       );
       expect(result).toBe(false);
     });
@@ -357,11 +357,11 @@ describe('RBAC Permission System - Core Tests', () => {
     it('should return true for ADMIN with MANAGE permission even with invalid action', () => {
       // ADMIN有MANAGE權限，所以對於任何action都返回true（包括無效action）
       // 這是feature，不是bug：MANAGE包含所有可能的操作
-      // @ts-expect-error Testing invalid action
+      // Testing invalid action (type assertion required for invalid values)
       const result = RBACService.hasPermission(
         UserRole.ADMIN,
         Resource.CUSTOMERS,
-        'INVALID_ACTION'
+        'INVALID_ACTION' as any
       );
       expect(result).toBe(true);
     });
