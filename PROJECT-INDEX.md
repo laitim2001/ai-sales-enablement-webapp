@@ -54,7 +54,6 @@
 | **需求文檔** | `docs/prd.md` | 產品需求文檔，項目核心業務需求 | 🔴 極高  |
 | **index-maintenance-root-cause-analysis.md** | `docs/index-maintenance-root-cause-analysis.md` | 項目文檔 | 🟡 高 |
 | **load-test-execution-report-2025-10-07.md** | `docs/load-test-execution-report-2025-10-07.md` | 項目文檔 | 🟡 高 |
-| **project-index-analysis-report.md** | `docs/project-index-analysis-report.md` | 項目文檔 | 🟡 高 |
 | **project-index-smart-analysis-report.md** | `docs/project-index-smart-analysis-report.md` | 項目文檔 | 🟡 高 |
 | **story-1.1-project-initialization.md** | `docs/user-stories/epic-1/story-1.1-project-initialization.md` | 項目文檔 | 🟡 高 |
 | **story-1.2-authentication-and-user-management.md** | `docs/user-stories/epic-1/story-1.2-authentication-and-user-management.md` | 項目文檔 | 🟡 高 |
@@ -88,6 +87,8 @@
 | **ai-full-automation-plan.md** | `docs/ai-full-automation-plan.md` | 項目文檔 | 🟡 高 |
 | **code-comments-enhancement-plan.md** | `docs/code-comments-enhancement-plan.md` | 項目文檔 | 🟡 高 |
 | **code-comments-qa.md** | `docs/code-comments-qa.md` | 項目文檔 | 🟡 高 |
+| **post-ai-comments-compliance-check-report.md** | `docs/post-ai-comments-compliance-check-report.md` | 項目文檔 | 🟡 高 |
+| **type-errors-fix-progress-report.md** | `docs/type-errors-fix-progress-report.md` | 項目文檔 | 🟡 高 |
 
 ### 📖 docs/ - 項目文檔和規格
 
@@ -1683,6 +1684,10 @@ const users = await prisma.user.findMany();
 | **next.config.js** | `next.config.js` | Next.js配置文件 | 🟡 高 |
 | **postcss.config.js** | `postcss.config.js` | PostCSS配置 | 🟡 高 |
 | **tailwind.config.js** | `tailwind.config.js` | Tailwind CSS配置 | 🟡 高 |
+| **.eslintrc.json** | `.eslintrc.json` | JSON配置文件 | 🟢 中 |
+| **index-sync-report.json** | `index-sync-report.json` | JSON配置文件 | 🟢 中 |
+| **mvp-progress-report.json** | `mvp-progress-report.json` | JSON配置文件 | 🟢 中 |
+| **test-results.json** | `test-results.json` | JSON配置文件 | 🟢 中 |
 | **.eslintrc.json** | `.eslintrc.json` | JSON配置文件 | 🟢 中 |
 | **index-sync-report.json** | `index-sync-report.json` | JSON配置文件 | 🟢 中 |
 | **mvp-progress-report.json** | `mvp-progress-report.json` | JSON配置文件 | 🟢 中 |
