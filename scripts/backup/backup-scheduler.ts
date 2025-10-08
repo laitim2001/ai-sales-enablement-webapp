@@ -25,13 +25,13 @@
  * ```
  *
  * Cron 排程建議：
- * ```
+ * @example
  * # 每日凌晨2點完整備份
  * 0 2 * * * cd /path/to/project && npx tsx scripts/backup/backup-scheduler.ts --type full
  *
  * # 每6小時增量備份
- * 0 */6 * * * cd /path/to/project && npx tsx scripts/backup/backup-scheduler.ts --type incremental
- * ```
+ * 0 (star)/6 * * * cd /path/to/project && npx tsx scripts/backup/backup-scheduler.ts --type incremental
+ * (Note: Replace (star) with actual * character in cron)
  *
  * @author Claude Code
  * @date 2025-10-06
