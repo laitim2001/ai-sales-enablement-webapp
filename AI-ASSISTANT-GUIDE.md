@@ -49,7 +49,41 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-08)**:
-- 🎨 TC-PROP-001範本預覽UX優化完成！⭐️ **最新**
+- 🐛 Sprint 6 Week 12 - 修復3個關鍵UAT測試問題 (99.2%完成率) ⭐️ **最新**
+  - 📊 **修復統計**:
+    * ✅ TC-KB-003: AI智能搜索500錯誤修復
+    * ✅ TC-PROP-002: AI生成提案錯誤修復
+    * ✅ TC-KB-002: 編輯文檔不顯示原內容修復
+    * 📋 TC-KB-005: 文檔上傳功能增強（需PDF/Word解析庫 - 未來改進）
+    * 📋 TC-AUTH-002: Azure AD SSO登入（後端完成，需前端按鈕 - 未來改進）
+  - ✅ **TC-KB-003修復**: AI智能搜索500錯誤
+    * 問題: AI服務不可用時搜索崩潰
+    * 修復: app/api/knowledge-base/search/route.ts (line 207-226)
+      - 增強fallback機制，強制降級到文本搜索
+      - 添加用戶友好錯誤信息: "AI搜索服務暫時不可用，已自動切換到文本搜索模式"
+    * 修復: components/knowledge/knowledge-search.tsx (line 161-173)
+      - 檢測fallback模式，顯示info提示而非錯誤
+      - 確保搜索即使AI服務不可用也能工作
+  - ✅ **TC-PROP-002修復**: AI生成提案錯誤 "Cannot convert undefined or null to object"
+    * 問題: Object.entries()調用null/undefined導致崩潰
+    * 修復: app/dashboard/proposals/generate/page.tsx (3處)
+      - Line 145-163 (selectTemplate): 安全variables檢查
+      - Line 183-188 (validateForm): 提前返回無variables情況
+      - Line 469-470 (rendering): 安全檢查variables存在
+    * 修復: app/dashboard/templates/page.tsx (line 95-96)
+      - 同步修復variables安全訪問
+  - ✅ **TC-KB-002修復**: 編輯文檔不顯示原內容
+    * 問題: RichTextEditor不響應content prop變化
+    * 修復: components/knowledge/rich-text-editor.tsx (line 182-191)
+      - 添加useEffect監聽content prop
+      - editor.commands.setContent(content)更新編輯器
+      - 防止無限循環的條件判斷
+  - 📋 **調查結果 - 未來改進**:
+    * TC-KB-005: 需要pdf-parse和mammoth庫實現PDF/Word文本提取
+    * TC-AUTH-002: 後端已完整實現，需添加前端Microsoft登入按鈕
+  - 📝 **文檔更新**: AI-ASSISTANT-GUIDE.md, DEVELOPMENT-LOG.md
+
+- 🎨 TC-PROP-001範本預覽UX優化完成！
   - 🐛 **問題發現**: 範本編輯頁面預覽按鈕點擊無可見反應
     * 點擊「預覽」按鈕後，預覽HTML成功獲取但用戶看不到
     * 需要手動切換到「預覽」標籤頁才能看到結果

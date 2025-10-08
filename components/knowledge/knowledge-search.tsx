@@ -160,10 +160,16 @@ export function KnowledgeSearch() {
 
       const result = await response.json()
       if (result.success) {
+        // Sprint 6 Week 12: 檢測降級模式並顯示提示
+        const isFallback = result.metadata?.fallbackMode === true
+        const fallbackMessage = result.metadata?.errorMessage || ''
+
         setSearch(prev => ({
           ...prev,
           results: result.data || [],
-          loading: false
+          loading: false,
+          // 如果是降級模式，顯示友好提示而不是錯誤
+          error: isFallback ? `ℹ️ ${fallbackMessage}` : null
         }))
       } else {
         throw new Error(result.error || '搜索失敗')

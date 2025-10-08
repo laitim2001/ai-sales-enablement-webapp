@@ -115,16 +115,23 @@ export default function TemplatesPage() {
   // 狀態管理
   const [templates, setTemplates] = useState<Template[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true); // 首次載入
+  const [refreshing, setRefreshing] = useState(false); // 數據刷新中
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   // 載入範本列表
-  const loadTemplates = async () => {
+  const loadTemplates = async (isInitial = false) => {
     try {
-      setLoading(true);
+      // 首次載入顯示骨架屏，刷新時顯示細微指示器
+      if (isInitial) {
+        setInitialLoading(true);
+      } else {
+        setRefreshing(true);
+      }
+
       const params = new URLSearchParams({
         page: currentPage.toString(),
         pageSize: '12',
@@ -148,7 +155,8 @@ export default function TemplatesPage() {
         variant: 'destructive',
       });
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -166,17 +174,29 @@ export default function TemplatesPage() {
     }
   };
 
-  // 初始載入
+  // 初始載入（只在首次掛載時執行）
   useEffect(() => {
-    loadTemplates();
+    loadTemplates(true); // isInitial = true，顯示骨架屏
+    loadStats();
+  }, []); // 空依賴數組，只執行一次
+
+  // 數據刷新（分頁、過濾變化時執行）
+  useEffect(() => {
+    // 跳過首次渲染（已在上面的useEffect處理）
+    if (initialLoading) return;
+
+    loadTemplates(false); // isInitial = false，不顯示骨架屏
     loadStats();
   }, [currentPage, categoryFilter]);
 
   // 搜索處理（防抖）
   useEffect(() => {
+    // 跳過首次渲染
+    if (initialLoading) return;
+
     const timer = setTimeout(() => {
       if (currentPage === 1) {
-        loadTemplates();
+        loadTemplates(false); // 搜索時不顯示骨架屏
       } else {
         setCurrentPage(1);
       }
@@ -203,7 +223,7 @@ export default function TemplatesPage() {
           title: '刪除成功',
           description: '範本已成功刪除',
         });
-        loadTemplates();
+        loadTemplates(false); // 刪除後刷新，不顯示骨架屏
         loadStats();
       } else {
         throw new Error(result.error);
@@ -233,7 +253,7 @@ export default function TemplatesPage() {
           title: '複製成功',
           description: '範本已成功複製',
         });
-        loadTemplates();
+        loadTemplates(false); // 複製後刷新，不顯示骨架屏
         loadStats();
       } else {
         throw new Error(result.error);
@@ -360,8 +380,13 @@ export default function TemplatesPage() {
         </Select>
       </div>
 
+      {/* 刷新指示器 */}
+      {refreshing && (
+        <div className="fixed top-0 left-0 right-0 h-1 bg-blue-500 animate-pulse z-50" />
+      )}
+
       {/* 範本列表 */}
-      {loading ? (
+      {initialLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
             <Card key={i}>

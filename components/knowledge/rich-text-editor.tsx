@@ -180,6 +180,17 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   })
 
   /**
+   * 當 content prop 改變時更新編輯器內容
+   * Sprint 6 Week 12: 修復編輯文檔時不顯示原內容的問題 (TC-KB-002)
+   */
+  useEffect(() => {
+    if (editor && content !== undefined && content !== editor.getHTML()) {
+      // 只有當content與編輯器當前內容不同時才更新，避免無限循環
+      editor.commands.setContent(content)
+    }
+  }, [editor, content])
+
+  /**
    * 當 editable 屬性改變時更新編輯器
    */
   useEffect(() => {

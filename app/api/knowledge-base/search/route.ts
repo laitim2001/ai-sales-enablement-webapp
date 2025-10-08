@@ -157,6 +157,7 @@ export async function POST(request: NextRequest) {
         /**
          * 4.1 增強向量搜索引擎處理
          * 使用Week 5新增的向量搜索引擎，支援多種演算法和優化
+         * Sprint 6 Week 12: 添加AI服務可用性檢查和優雅降級
          */
 
         // 構建向量搜索配置選項
@@ -206,25 +207,21 @@ export async function POST(request: NextRequest) {
       } catch (embeddingError) {
         /**
          * 4.2 降級機制：向量搜索失敗時的備用方案
-         * 確保服務可用性，即使AI嵌入服務不可用
+         * Sprint 6 Week 12: 增強降級策略，確保服務可用性
+         * 當AI嵌入服務不可用時，自動fallback到文本搜索
          */
-        console.warn('Enhanced vector search failed, falling back to legacy search:', embeddingError)
+        console.warn('Enhanced vector search failed, falling back to text search:', embeddingError)
 
-        // 根據搜索類型執行對應的降級策略
-        if (type === 'semantic') {
-          // 語義搜索降級：使用傳統向量搜索
-          results = await performLegacySemanticSearch(query, category, tags, folder_id, include_subfolders, limit, similarity_threshold)
-        } else {
-          // 混合搜索降級：結合文本搜索和傳統語義搜索
-          const textResults = await performTextSearch(query, category, tags, folder_id, include_subfolders, limit)
-          const legacySemanticResults = await performLegacySemanticSearch(query, category, tags, folder_id, include_subfolders, limit, similarity_threshold)
-          results = mergeSearchResults(textResults, legacySemanticResults, limit)
-        }
+        // 強制降級到文本搜索（最可靠的備用方案）
+        results = await performTextSearch(query, category, tags, folder_id, include_subfolders, limit)
 
-        // 標記為降級模式並記錄錯誤信息
+        // 標記為降級模式並記錄詳細錯誤信息
         searchMetadata = {
           fallbackMode: true,                                         // 降級模式標識
-          errorMessage: 'Enhanced search unavailable, using legacy mode'  // 降級原因
+          fallbackReason: 'ai_service_unavailable',                   // 降級原因代碼
+          errorMessage: 'AI搜索服務暫時不可用，已自動切換到文本搜索模式',  // 用戶友好的錯誤信息
+          originalError: embeddingError instanceof Error ? embeddingError.message : '未知錯誤',
+          searchType: 'text_fallback'                                 // 標記為降級文本搜索
         }
       }
     } else {

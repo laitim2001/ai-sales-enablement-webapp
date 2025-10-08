@@ -144,15 +144,20 @@ const GenerateProposalPage: React.FC = () => {
   // 選擇範本
   const selectTemplate = (template: ProposalTemplate) => {
     setSelectedTemplate(template);
+    // Sprint 6 Week 12: 安全處理 variables
+    const templateVariables = template.variables && typeof template.variables === 'object'
+      ? Object.fromEntries(
+          Object.entries(template.variables).map(([key, def]: [string, any]) => [
+            key,
+            def?.defaultValue || ''
+          ])
+        )
+      : {};
+
     setFormData(prev => ({
       ...prev,
       title: `基於${template.name}的提案`,
-      variables: Object.fromEntries(
-        Object.entries(template.variables).map(([key, def]: [string, any]) => [
-          key,
-          def.defaultValue || ''
-        ])
-      )
+      variables: templateVariables
     }));
     setStep(2);
   };
@@ -180,9 +185,16 @@ const GenerateProposalPage: React.FC = () => {
       return false;
     }
 
+    // Sprint 6 Week 12: 安全檢查 variables 是否存在
+    if (!selectedTemplate.variables || typeof selectedTemplate.variables !== 'object') {
+      // 如果範本沒有變數定義，直接通過驗證
+      setError('');
+      return true;
+    }
+
     // 檢查必填變數
     const requiredVars = Object.entries(selectedTemplate.variables)
-      .filter(([, def]: [string, any]) => def.required)
+      .filter(([, def]: [string, any]) => def && def.required)
       .map(([name]) => name);
 
     for (const varName of requiredVars) {
@@ -454,7 +466,8 @@ const GenerateProposalPage: React.FC = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {Object.keys(selectedTemplate.variables).length === 0 ? (
+              {/* Sprint 6 Week 12: 安全檢查並處理 variables */}
+              {!selectedTemplate.variables || Object.keys(selectedTemplate.variables).length === 0 ? (
                 <p className="text-gray-500 text-center py-8">
                   此範本不需要填寫變數
                 </p>
