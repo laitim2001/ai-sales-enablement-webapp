@@ -89,6 +89,11 @@
 | **code-comments-qa.md** | `docs/code-comments-qa.md` | 項目文檔 | 🟡 高 |
 | **post-ai-comments-compliance-check-report.md** | `docs/post-ai-comments-compliance-check-report.md` | 項目文檔 | 🟡 高 |
 | **type-errors-fix-progress-report.md** | `docs/type-errors-fix-progress-report.md` | 項目文檔 | 🟡 高 |
+| **COMPLETE-UAT-TEST-PLAN.md** | `docs/COMPLETE-UAT-TEST-PLAN.md` | 項目文檔 | 🟡 高 |
+| **UAT-AUTH-FIX-SUMMARY.md** | `docs/UAT-AUTH-FIX-SUMMARY.md` | 項目文檔 | 🟡 高 |
+| **UAT-TEST-ISSUES-ANALYSIS.md** | `docs/UAT-TEST-ISSUES-ANALYSIS.md` | 項目文檔 | 🟡 高 |
+| **UAT-TEST-PROGRESS-TRACKER.md** | `docs/UAT-TEST-PROGRESS-TRACKER.md` | 項目文檔 | 🟡 高 |
+| **如何運行認證診斷工具.md** | `docs/如何運行認證診斷工具.md` | 項目文檔 | 🟡 高 |
 
 ### 📖 docs/ - 項目文檔和規格
 
@@ -1684,6 +1689,10 @@ const users = await prisma.user.findMany();
 | **next.config.js** | `next.config.js` | Next.js配置文件 | 🟡 高 |
 | **postcss.config.js** | `postcss.config.js` | PostCSS配置 | 🟡 高 |
 | **tailwind.config.js** | `tailwind.config.js` | Tailwind CSS配置 | 🟡 高 |
+| **.eslintrc.json** | `.eslintrc.json` | JSON配置文件 | 🟢 中 |
+| **index-sync-report.json** | `index-sync-report.json` | JSON配置文件 | 🟢 中 |
+| **mvp-progress-report.json** | `mvp-progress-report.json` | JSON配置文件 | 🟢 中 |
+| **test-results.json** | `test-results.json` | JSON配置文件 | 🟢 中 |
 | **.eslintrc.json** | `.eslintrc.json` | JSON配置文件 | 🟢 中 |
 | **index-sync-report.json** | `index-sync-report.json` | JSON配置文件 | 🟢 中 |
 | **mvp-progress-report.json** | `mvp-progress-report.json` | JSON配置文件 | 🟢 中 |

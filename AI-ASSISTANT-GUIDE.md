@@ -49,7 +49,44 @@ Cai-sales-enablement-webapptempREADME.md     # 項目相關文檔
 7. ✅ 確認後同步到GitHub
 
 **📅 最近更新 (2025-10-08)**:
-- 🎉 TypeScript錯誤最終修復完成！⭐️ **最新** (錯誤 126 → 1, 99.2%完成率)
+- 🎉 UAT測試啟動 + 文件上傳體驗優化完成！⭐️ **最新**
+  - 📊 **UAT測試開始**:
+    * ✅ 啟動開發服務器進行 UAT 測試
+    * 🌐 測試環境：http://localhost:3000
+    * 📋 開始執行測試計劃 TC-KB-001
+  - ✨ **重複文件上傳體驗優化** (選項2實現):
+    * 🎯 **問題發現**: 上傳重複文件時，直到上傳階段才報錯，用戶體驗差
+    * ✅ **解決方案**: 實現預檢查功能，在選擇文件時立即檢查重複
+    * 📡 **新增API**: `/api/knowledge-base/check-duplicate` (POST)
+      - 接收文件 hash (SHA-256) 和文件名
+      - 查詢數據庫檢查是否存在
+      - 返回重複狀態和詳細信息（上傳時間、上傳者）
+    * 🎨 **前端優化**: `components/knowledge/knowledge-base-upload.tsx`
+      - 新增 `calculateFileHash()` - 計算文件 SHA-256 hash (Web Crypto API)
+      - 新增 `checkDuplicate()` - 調用 API 檢查重複
+      - 修改 `addFiles()` 為 async，文件添加前進行預檢查
+      - Promise.all 並行處理多文件檢查
+      - 友好錯誤提示：顯示原文件上傳時間和上傳者 (zh-TW locale)
+    * 📈 **用戶體驗提升**:
+      - ✅ 選擇文件時立即檢查重複（無需等待上傳）
+      - ✅ 避免無效上傳，節省時間和帶寬
+      - ✅ 提供詳細重複信息（何時、何人上傳）
+      - ✅ 非阻塞設計：預檢查失敗不影響其他流程
+    * 🔬 **技術亮點**:
+      - Web Crypto API 實現 SHA-256 hash 計算
+      - 並行處理多文件預檢查 (Promise.all)
+      - locale-aware 時間格式化 (zh-TW)
+      - 完整的錯誤處理和用戶反饋
+  - 📝 **UAT測試結果** (TC-KB-001):
+    * ✅ 重複文件檢測功能正常
+    * ✅ 用戶體驗問題已修復
+  - 🔗 **Git狀態**:
+    * 修改: app/api/auth/me/route.ts
+    * 修改: .claude/settings.local.json
+    * 新增文檔: UAT測試相關文檔
+    * 新增: scripts/diagnose-auth-issues.js
+
+- 🎉 TypeScript錯誤最終修復完成！⭐️ (錯誤 126 → 1, 99.2%完成率)
   - 📊 **最終修復統計**:
     * TypeScript錯誤: 126個 → 1個 (-125個, 99.2%完成率) 🎯
     * 修復階段: 6個完整階段

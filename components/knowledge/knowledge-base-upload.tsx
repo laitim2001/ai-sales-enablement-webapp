@@ -64,45 +64,114 @@ export function KnowledgeBaseUpload() {
   const [author, setAuthor] = useState('')
   const [isDragging, setIsDragging] = useState(false)
 
-  const addFiles = useCallback((newFiles: File[]) => {
+  /**
+   * 計算文件的SHA-256 hash值
+   */
+  const calculateFileHash = async (file: File): Promise<string> => {
+    const arrayBuffer = await file.arrayBuffer()
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+    return hashHex
+  }
+
+  /**
+   * 檢查文件是否已存在於知識庫
+   */
+  const checkDuplicate = async (file: File): Promise<{ exists: boolean; file?: any; message?: string }> => {
+    try {
+      const fileHash = await calculateFileHash(file)
+
+      const response = await fetch('/api/knowledge-base/check-duplicate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
+        },
+        body: JSON.stringify({
+          fileHash,
+          fileName: file.name
+        })
+      })
+
+      const result = await response.json()
+
+      if (result.success && result.data) {
+        return {
+          exists: result.data.exists,
+          file: result.data.file,
+          message: result.data.message
+        }
+      }
+
+      return { exists: false }
+    } catch (error) {
+      console.error('Duplicate check failed:', error)
+      // 檢查失敗不應阻止流程，返回不存在
+      return { exists: false }
+    }
+  }
+
+  const addFiles = useCallback(async (newFiles: File[]) => {
     const maxSize = 10 * 1024 * 1024 // 10MB
 
-    setFiles(prev => {
-      const uploadFiles: UploadFile[] = newFiles.map(file => {
-        const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
-        let status: 'pending' | 'error' = 'pending'
-        let error: string | undefined
+    // 處理每個文件（包含異步重複檢查）
+    const uploadFilesPromises = newFiles.map(async (file) => {
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase()
+      let status: 'pending' | 'error' = 'pending'
+      let error: string | undefined
 
-        // 檢查文件類型
-        if (!supportedTypes.includes(fileExtension)) {
-          status = 'error'
-          error = `不支援的檔案類型: ${fileExtension}`
-        }
-        // 檢查文件大小
-        else if (file.size > maxSize) {
-          status = 'error'
-          error = `檔案大小超過 10MB 限制 (${(file.size / 1024 / 1024).toFixed(1)}MB)`
-        }
-        // 檢查重複文件
-        else {
+      // 檢查文件類型
+      if (!supportedTypes.includes(fileExtension)) {
+        status = 'error'
+        error = `不支援的檔案類型: ${fileExtension}`
+      }
+      // 檢查文件大小
+      else if (file.size > maxSize) {
+        status = 'error'
+        error = `檔案大小超過 10MB 限制 (${(file.size / 1024 / 1024).toFixed(1)}MB)`
+      }
+      // 檢查列表中的重複文件
+      else {
+        setFiles(prev => {
           const existingFile = prev.find(f => f.file.name === file.name && f.file.size === file.size)
           if (existingFile) {
             status = 'error'
             error = '檔案已存在於列表中'
           }
-        }
+          return prev
+        })
 
-        return {
-          id: Math.random().toString(36).substr(2, 9),
-          file,
-          status,
-          progress: 0,
-          error
+        // 如果基本驗證通過，檢查知識庫中是否存在
+        if (status === 'pending') {
+          const duplicateCheck = await checkDuplicate(file)
+          if (duplicateCheck.exists && duplicateCheck.file) {
+            status = 'error'
+            const uploadedAt = new Date(duplicateCheck.file.uploadedAt).toLocaleString('zh-TW', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+            error = `檔案已存在於知識庫中 (上傳時間: ${uploadedAt}, 上傳者: ${duplicateCheck.file.uploadedBy})`
+          }
         }
-      })
+      }
 
-      return [...prev, ...uploadFiles]
+      return {
+        id: Math.random().toString(36).substr(2, 9),
+        file,
+        status,
+        progress: 0,
+        error
+      }
     })
+
+    // 等待所有文件處理完成
+    const uploadFiles = await Promise.all(uploadFilesPromises)
+
+    setFiles(prev => [...prev, ...uploadFiles])
   }, [])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
