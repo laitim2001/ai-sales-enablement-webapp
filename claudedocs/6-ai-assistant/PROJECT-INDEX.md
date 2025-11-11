@@ -1,10 +1,11 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年10月7日 - MVP2優化建議執行追蹤啟動
+> **📅 最後更新**: 2025年10月8日 - AI助手場景化提示詞系統
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 >
 > **✨ 最新添加**:
+> - 🤖 AI助手場景化提示詞系統 (2025-10-08): 完整場景化提示詞管理系統（5個場景提示詞，3個子目錄，~2,000行，覆蓋會話開始/開發過程/進度管理全流程）
 > - ⚡ MVP2負載測試框架 (2025-10-07): 完整負載測試框架（autocannon，~2,600行，6測試場景，5 NPM命令，完整文檔）
 > - 📊 Sprint 6知識庫管理儀表板 (2025-10-07): 批量操作 + 統計視圖 + 快速篩選（~850行，commit ebdc36f，Sprint 6進度50%）
 > - 📈 MVP2優化建議執行追蹤 (2025-10-07): 優化任務追蹤文檔（9大任務，短期/中期/長期建議，實時進度更新10%，Sprint 6進度50%）
@@ -1679,6 +1680,12 @@ const users = await prisma.user.findMany();
 | 文件名稱                   | 文件路徑                    | 用途說明                           | 重要程度 |
 | -------------------------- | --------------------------- | ---------------------------------- | -------- |
 | **AI助手指南**       | `AI-ASSISTANT-GUIDE.md`     | AI助手完整使用指南和提醒系統       | 🔴 極高  |
+| **AI助手場景化提示詞系統** | `claudedocs/6-ai-assistant/prompts/README.md` | AI助手不同開發場景的執行指引和提示詞管理系統 | 🔴 極高 |
+| **項目快速入門提示詞** | `claudedocs/6-ai-assistant/prompts/session-start/01-quick-start.md` | 會話開始時快速了解項目結構和當前狀態 | 🟡 高 |
+| **開發前準備提示詞** | `claudedocs/6-ai-assistant/prompts/session-start/02-dev-preparation.md` | 開發前架構驗證和需求分析指引 | 🟡 高 |
+| **舊功能開發測試提示詞** | `claudedocs/6-ai-assistant/prompts/development/03-existing-feature.md` | 修改和優化現有功能的執行流程 | 🟡 高 |
+| **新功能開發測試提示詞** | `claudedocs/6-ai-assistant/prompts/development/04-new-feature.md` | 從零開始開發新功能的完整指引 | 🟡 高 |
+| **進度保存與同步提示詞** | `claudedocs/6-ai-assistant/prompts/progress/05-save-progress.md` | 保存進度、索引維護和GitHub同步流程 | 🟡 高 |
 | **開發服務管理指南** | `DEVELOPMENT-SERVICE-MANAGEMENT.md` | 避免多服務運行，開發流程規範  | 🟡 高    |
 | **服務啟動指南**     | `START-SERVICES.md`         | 快速服務啟動指南                  | 🟡 高    |
 | **E2E測試執行摘要**  | `e2e-test-summary.md`       | 端到端測試執行結果和分析      | 🟢 中    |
