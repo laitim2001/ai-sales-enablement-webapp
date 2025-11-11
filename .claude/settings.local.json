@@ -30,7 +30,10 @@
       "Bash(npm run:*)",
       "Bash(cat:*)",
       "Bash(taskkill:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(docker start:*)",
+      "Bash(timeout 5 bash -c 'while ! netstat -ano | findstr :5433 > /dev/null 2>&1; do sleep 1; done')",
+      "Bash(timeout 30 npx prisma:*)"
     ],
     "deny": [],
     "ask": []
