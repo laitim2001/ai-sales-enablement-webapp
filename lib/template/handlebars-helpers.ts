@@ -15,10 +15,18 @@ import Handlebars from 'handlebars';
  */
 export function registerHandlebarsHelpers(): void {
   // 日期格式化 helper
-  Handlebars.registerHelper('formatDate', function(date: Date | string, format?: string) {
+  Handlebars.registerHelper('formatDate', function(date: Date | string, options?: any) {
     if (!date) return '';
 
     const d = typeof date === 'string' ? new Date(date) : date;
+
+    // 處理Handlebars options對象
+    let format = 'default';
+    if (options && typeof options === 'object' && options.hash) {
+      format = options.hash.format || 'default';
+    } else if (typeof options === 'string') {
+      format = options;
+    }
 
     if (format === 'short') {
       return d.toLocaleDateString('zh-TW');
@@ -34,18 +42,47 @@ export function registerHandlebarsHelpers(): void {
   });
 
   // 貨幣格式化 helper
-  Handlebars.registerHelper('formatCurrency', function(amount: number, currency = 'TWD') {
+  Handlebars.registerHelper('formatCurrency', function(amount: number, options?: any) {
     if (typeof amount !== 'number') return '';
 
-    return new Intl.NumberFormat('zh-TW', {
-      style: 'currency',
-      currency: currency
-    }).format(amount);
+    // 處理Handlebars options對象
+    // 如果第二個參數是options對象（有hash屬性），從hash中獲取currency
+    // 否則將其視為currency字符串
+    let currency = 'TWD';
+    if (options && typeof options === 'object' && options.hash) {
+      // 從options.hash中獲取currency參數
+      currency = options.hash.currency || 'TWD';
+    } else if (typeof options === 'string') {
+      // 直接傳遞的currency字符串
+      currency = options;
+    }
+
+    try {
+      return new Intl.NumberFormat('zh-TW', {
+        style: 'currency',
+        currency: currency
+      }).format(amount);
+    } catch (error) {
+      // 如果貨幣代碼無效，回退到TWD
+      console.warn(`Invalid currency code: ${currency}, falling back to TWD`);
+      return new Intl.NumberFormat('zh-TW', {
+        style: 'currency',
+        currency: 'TWD'
+      }).format(amount);
+    }
   });
 
   // 數字格式化 helper
-  Handlebars.registerHelper('formatNumber', function(num: number, decimals = 0) {
+  Handlebars.registerHelper('formatNumber', function(num: number, options?: any) {
     if (typeof num !== 'number') return '';
+
+    // 處理Handlebars options對象
+    let decimals = 0;
+    if (options && typeof options === 'object' && options.hash) {
+      decimals = options.hash.decimals || 0;
+    } else if (typeof options === 'number') {
+      decimals = options;
+    }
 
     return num.toLocaleString('zh-TW', {
       minimumFractionDigits: decimals,
@@ -108,8 +145,17 @@ export function registerHandlebarsHelpers(): void {
   });
 
   // 百分比 helper
-  Handlebars.registerHelper('percent', function(num: number, decimals = 1) {
+  Handlebars.registerHelper('percent', function(num: number, options?: any) {
     if (typeof num !== 'number') return '';
+
+    // 處理Handlebars options對象
+    let decimals = 1;
+    if (options && typeof options === 'object' && options.hash) {
+      decimals = options.hash.decimals || 1;
+    } else if (typeof options === 'number') {
+      decimals = options;
+    }
+
     return (num * 100).toFixed(decimals) + '%';
   });
 
