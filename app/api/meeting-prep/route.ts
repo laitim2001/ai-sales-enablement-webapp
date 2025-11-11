@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAccessToken } from '@/lib/auth/token-service';
+import { authenticateRequest } from '@/lib/auth/request-auth';
 import prisma from '@/lib/prisma';
 import {
   MeetingPrepPackageManager,
@@ -23,23 +23,9 @@ import {
  */
 export async function GET(req: NextRequest) {
   try {
-    // 驗證用戶身份
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { error: 'Missing or invalid authorization header' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-
-    let payload;
-    try {
-      payload = await verifyAccessToken(token);
-    } catch (error) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(req);
+    const userId = payload.userId;
 
     // 獲取查詢參數
     const { searchParams } = new URL(req.url);
@@ -53,7 +39,7 @@ export async function GET(req: NextRequest) {
     const manager = new MeetingPrepPackageManager(prisma);
 
     // 獲取準備包列表
-    const packages = await manager.getUserPrepPackages(payload.userId, {
+    const packages = await manager.getUserPrepPackages(userId, {
       status: status || undefined,
       type: type || undefined,
       limit,
@@ -78,23 +64,9 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: NextRequest) {
   try {
-    // 驗證用戶身份
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { error: 'Missing or invalid authorization header' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-
-    let payload;
-    try {
-      payload = await verifyAccessToken(token);
-    } catch (error) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(req);
+    const userId = payload.userId;
 
     // 解析請求體
     const body = await req.json();
@@ -108,14 +80,14 @@ export async function POST(req: NextRequest) {
 
     // 智能生成準備包
     if (autoGenerate && meetingInfo) {
-      prepPackage = await manager.autoGeneratePrepPackage(payload.userId, {
+      prepPackage = await manager.autoGeneratePrepPackage(userId, {
         ...meetingInfo,
         meetingType: type || PrepPackageType.SALES_MEETING,
       });
     }
     // 從模板創建
     else if (templateId) {
-      prepPackage = await manager.createFromTemplate(templateId, payload.userId, {
+      prepPackage = await manager.createFromTemplate(templateId, userId, {
         title,
         description,
         metadata,
@@ -131,7 +103,7 @@ export async function POST(req: NextRequest) {
       }
 
       prepPackage = await manager.createPrepPackage({
-        userId: payload.userId,
+        userId: userId,
         type,
         title,
         description,

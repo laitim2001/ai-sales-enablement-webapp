@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-11T15:03:15.910Z",
+  "timestamp": "2025-11-11T15:19:16.022Z",
   "checkerVersion": "2.0.0",
   "systemInfo": {
     "platform": "win32",
@@ -1253,7 +1253,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\meeting-intelligence\\analyze\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.069Z"
+      "modifiedTime": "2025-11-11T15:18:02.876Z"
     },
     {
       "type": "add_to_index",
@@ -1261,7 +1261,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\meeting-intelligence\\recommendations\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.070Z"
+      "modifiedTime": "2025-11-11T15:18:13.086Z"
     },
     {
       "type": "add_to_index",
@@ -1269,7 +1269,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\meeting-prep\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.070Z"
+      "modifiedTime": "2025-11-11T15:17:15.850Z"
     },
     {
       "type": "add_to_index",
@@ -1277,7 +1277,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\meeting-prep\\templates\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.071Z"
+      "modifiedTime": "2025-11-11T15:17:51.752Z"
     },
     {
       "type": "add_to_index",
@@ -1285,7 +1285,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\meeting-prep\\[id]\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.072Z"
+      "modifiedTime": "2025-11-11T15:17:41.722Z"
     },
     {
       "type": "add_to_index",
@@ -1309,7 +1309,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\notifications\\preferences\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.074Z"
+      "modifiedTime": "2025-11-11T15:15:40.850Z"
     },
     {
       "type": "add_to_index",
@@ -1317,7 +1317,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\notifications\\read\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.075Z"
+      "modifiedTime": "2025-11-11T15:15:54.156Z"
     },
     {
       "type": "add_to_index",
@@ -1325,7 +1325,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\notifications\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.076Z"
+      "modifiedTime": "2025-11-11T15:14:49.910Z"
     },
     {
       "type": "add_to_index",
@@ -1333,7 +1333,7 @@
       "importance": "medium",
       "severity": "low",
       "message": "建議將重要文件加入索引: app\\api\\notifications\\stats\\route.ts",
-      "modifiedTime": "2025-10-07T17:32:17.077Z"
+      "modifiedTime": "2025-11-11T15:16:10.011Z"
     },
     {
       "type": "add_to_index",
@@ -1868,5 +1868,5 @@
       "message": "建議將重要文件加入索引: tsconfig.json"
     }
   ],
-  "lastUpdated": "2025-11-11T15:03:15.911Z"
+  "lastUpdated": "2025-11-11T15:19:16.023Z"
 }

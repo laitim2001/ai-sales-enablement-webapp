@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAccessToken } from '@/lib/auth/token-service';
+import { authenticateRequest } from '@/lib/auth/request-auth';
 import prisma from '@/lib/prisma';
 import { MeetingPrepPackageManager } from '@/lib/meeting/meeting-prep-package';
 
@@ -19,23 +19,8 @@ import { MeetingPrepPackageManager } from '@/lib/meeting/meeting-prep-package';
  */
 export async function GET(req: NextRequest) {
   try {
-    // 驗證用戶身份
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { error: 'Missing or invalid authorization header' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-
-    let payload;
-    try {
-      payload = await verifyAccessToken(token);
-    } catch (error) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(req);
 
     // 創建準備包管理器實例
     const manager = new MeetingPrepPackageManager(prisma);

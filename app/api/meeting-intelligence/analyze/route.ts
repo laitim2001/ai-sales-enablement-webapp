@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAccessToken } from '@/lib/auth/token-service';
+import { authenticateRequest } from '@/lib/auth/request-auth';
 import { createMeetingIntelligenceAnalyzer } from '@/lib/meeting';
 import { AzureOpenAIService } from '@/lib/ai/azure-openai-service';
 import { MeetingInfo } from '@/lib/meeting';
@@ -28,28 +28,9 @@ import { MeetingInfo } from '@/lib/meeting';
 export async function POST(request: NextRequest) {
   try {
     // ========================================================================
-    // 1. 身份驗證
+    // 1. 身份驗證（支持Bearer token或Cookie）
     // ========================================================================
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { success: false, error: '未提供認證token' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-
-    let payload;
-    try {
-      payload = await verifyAccessToken(token);
-    } catch (error) {
-      return NextResponse.json(
-        { success: false, error: '無效的認證token' },
-        { status: 401 }
-      );
-    }
-
+    const payload = await authenticateRequest(request);
     const userId = payload.userId;
 
     // ========================================================================

@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAccessToken } from '@/lib/auth/token-service';
+import { authenticateRequest } from '@/lib/auth/request-auth';
 import prisma from '@/lib/prisma';
 import { MeetingPrepPackageManager } from '@/lib/meeting/meeting-prep-package';
 
@@ -22,23 +22,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // 驗證用戶身份
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { error: 'Missing or invalid authorization header' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-
-    let payload;
-    try {
-      payload = await verifyAccessToken(token);
-    } catch (error) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(req);
+    const userId = payload.userId;
 
     // 創建準備包管理器實例
     const manager = new MeetingPrepPackageManager(prisma);
@@ -54,7 +40,7 @@ export async function GET(
     }
 
     // 驗證權限
-    if (prepPackage.userId !== payload.userId) {
+    if (prepPackage.userId !== userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -77,23 +63,9 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // 驗證用戶身份
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { error: 'Missing or invalid authorization header' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-
-    let payload;
-    try {
-      payload = await verifyAccessToken(token);
-    } catch (error) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(req);
+    const userId = payload.userId;
 
     // 創建準備包管理器實例
     const manager = new MeetingPrepPackageManager(prisma);
@@ -108,7 +80,7 @@ export async function PATCH(
       );
     }
 
-    if (existingPackage.userId !== payload.userId) {
+    if (existingPackage.userId !== userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -116,7 +88,7 @@ export async function PATCH(
     const updates = await req.json();
     console.log('📝 PATCH準備包更新請求:', {
       packageId: params.id,
-      userId: payload.userId,
+      userId: userId,
       updates
     });
 
@@ -154,23 +126,9 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // 驗證用戶身份
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        { error: 'Missing or invalid authorization header' },
-        { status: 401 }
-      );
-    }
-
-    const token = authHeader.substring(7);
-
-    let payload;
-    try {
-      payload = await verifyAccessToken(token);
-    } catch (error) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(req);
+    const userId = payload.userId;
 
     // 創建準備包管理器實例
     const manager = new MeetingPrepPackageManager(prisma);
@@ -185,14 +143,14 @@ export async function DELETE(
       );
     }
 
-    if (existingPackage.userId !== payload.userId) {
+    if (existingPackage.userId !== userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
     // 歸檔準備包（軟刪除）
     console.log('🗑️ DELETE準備包請求:', {
       packageId: params.id,
-      userId: payload.userId
+      userId: userId
     });
 
     await manager.updatePrepPackage(params.id, {

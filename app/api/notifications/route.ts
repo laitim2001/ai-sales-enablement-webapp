@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient, NotificationType, NotificationCategory, NotificationStatus } from '@prisma/client'
 import { NotificationEngine } from '@/lib/notification/engine'
 import { InAppNotificationService } from '@/lib/notification/in-app-service'
-import { verifyAccessToken } from '@/lib/auth/token-service'
+import { authenticateRequest } from '@/lib/auth/request-auth'
 
 const prisma = new PrismaClient()
 const notificationEngine = new NotificationEngine(prisma)
@@ -35,26 +35,9 @@ const inAppService = new InAppNotificationService(prisma, notificationEngine)
  */
 export async function GET(request: NextRequest) {
   try {
-    // 驗證用戶身份
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json(
-        { error: 'Missing authorization header' },
-        { status: 401 }
-      )
-    }
-
-    const token = authHeader.replace('Bearer ', '')
-    const decoded = await verifyAccessToken(token)
-
-    if (!decoded || !decoded.userId) {
-      return NextResponse.json(
-        { error: 'Invalid token' },
-        { status: 401 }
-      )
-    }
-
-    const userId = decoded.userId
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(request)
+    const userId = payload.userId
 
     // 解析查詢參數
     const { searchParams } = new URL(request.url)
@@ -139,26 +122,9 @@ export async function GET(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    // 驗證用戶身份
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json(
-        { error: 'Missing authorization header' },
-        { status: 401 }
-      )
-    }
-
-    const token = authHeader.replace('Bearer ', '')
-    const decoded = await verifyAccessToken(token)
-
-    if (!decoded || !decoded.userId) {
-      return NextResponse.json(
-        { error: 'Invalid token' },
-        { status: 401 }
-      )
-    }
-
-    const userId = decoded.userId
+    // 驗證用戶身份（支持Bearer token或Cookie）
+    const payload = await authenticateRequest(request)
+    const userId = payload.userId
 
     // 解析請求體
     const body = await request.json()
