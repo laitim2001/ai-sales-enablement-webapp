@@ -1,0 +1,3281 @@
+{
+  "timestamp": "2025-10-07T17:32:21.791Z",
+  "summary": {
+    "totalFiles": 399,
+    "processed": 399,
+    "skipped": 0,
+    "failed": 0,
+    "successRate": "100.0"
+  },
+  "byPriority": [
+    {
+      "priority": "critical",
+      "totalFiles": 43,
+      "processed": 43,
+      "skipped": 0,
+      "failed": 0,
+      "batches": [
+        {
+          "batchNumber": 1,
+          "files": [
+            "lib\\ai\\azure-openai-service.ts",
+            "lib\\ai\\chat.ts",
+            "lib\\ai\\embeddings.ts",
+            "lib\\ai\\enhanced-embeddings.ts",
+            "lib\\ai\\index.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\azure-openai-service.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\chat.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\embeddings.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\enhanced-embeddings.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\index.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 40
+        },
+        {
+          "batchNumber": 2,
+          "files": [
+            "lib\\ai\\openai.ts",
+            "lib\\ai\\proposal-generation-service.ts",
+            "lib\\ai\\types.ts",
+            "lib\\middleware\\api-versioning.ts",
+            "lib\\middleware\\cors.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\openai.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\proposal-generation-service.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\ai\\types.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\api-versioning.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\cors.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 38
+        },
+        {
+          "batchNumber": 3,
+          "files": [
+            "lib\\middleware\\https-enforcement.ts",
+            "lib\\middleware\\rate-limiter.ts",
+            "lib\\middleware\\request-id.ts",
+            "lib\\middleware\\request-transformer.ts",
+            "lib\\middleware\\request-validator.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\https-enforcement.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\rate-limiter.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\request-id.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\request-transformer.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\request-validator.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 41
+        },
+        {
+          "batchNumber": 4,
+          "files": [
+            "lib\\middleware\\response-cache.ts",
+            "lib\\middleware\\response-transformer.ts",
+            "lib\\middleware\\route-matcher.ts",
+            "lib\\middleware\\routing-config.ts",
+            "lib\\middleware\\security-headers.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\response-cache.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\response-transformer.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\route-matcher.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\routing-config.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware\\security-headers.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 43
+        },
+        {
+          "batchNumber": 5,
+          "files": [
+            "lib\\middleware.ts",
+            "lib\\notification\\email-service.ts",
+            "lib\\notification\\engine.ts",
+            "lib\\notification\\in-app-service.ts",
+            "lib\\notification\\index.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\middleware.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\notification\\email-service.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\notification\\engine.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\notification\\in-app-service.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\notification\\index.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 40
+        },
+        {
+          "batchNumber": 6,
+          "files": [
+            "lib\\security\\action-restrictions.ts",
+            "lib\\security\\audit-log-prisma.ts",
+            "lib\\security\\audit-log.ts",
+            "lib\\security\\azure-key-vault.ts",
+            "lib\\security\\backup.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\action-restrictions.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\audit-log-prisma.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\audit-log.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\azure-key-vault.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\backup.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 43
+        },
+        {
+          "batchNumber": 7,
+          "files": [
+            "lib\\security\\field-level-permissions.ts",
+            "lib\\security\\fine-grained-permissions.ts",
+            "lib\\security\\gdpr.ts",
+            "lib\\security\\index.ts",
+            "lib\\security\\permission-middleware.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\field-level-permissions.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\fine-grained-permissions.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\gdpr.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\index.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\permission-middleware.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 39
+        },
+        {
+          "batchNumber": 8,
+          "files": [
+            "lib\\security\\rbac.ts",
+            "lib\\security\\resource-conditions.ts",
+            "lib\\security\\sensitive-fields-config.ts",
+            "lib\\workflow\\approval-manager.ts",
+            "lib\\workflow\\comment-system.ts"
+          ],
+          "total": 5,
+          "processed": 5,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\rbac.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\resource-conditions.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\security\\sensitive-fields-config.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\workflow\\approval-manager.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\workflow\\comment-system.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 39
+        },
+        {
+          "batchNumber": 9,
+          "files": [
+            "lib\\workflow\\engine.ts",
+            "lib\\workflow\\index.ts",
+            "lib\\workflow\\version-control.ts"
+          ],
+          "total": 3,
+          "processed": 3,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\workflow\\engine.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\workflow\\index.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\workflow\\version-control.ts",
+              "status": "success",
+              "priority": "critical",
+              "depth": 3
+            }
+          ],
+          "duration": 22
+        }
+      ],
+      "startTime": "2025-10-07T17:31:09.189Z",
+      "endTime": "2025-10-07T17:31:49.599Z"
+    },
+    {
+      "priority": "high",
+      "totalFiles": 69,
+      "processed": 69,
+      "skipped": 0,
+      "failed": 0,
+      "batches": [
+        {
+          "batchNumber": 1,
+          "files": [
+            "components\\audit\\AuditLogExport.tsx",
+            "components\\audit\\AuditLogFilters.tsx",
+            "components\\audit\\AuditLogList.tsx",
+            "components\\audit\\AuditLogStats.tsx",
+            "components\\audit\\index.ts",
+            "components\\dashboard\\ai-insights.tsx",
+            "components\\dashboard\\dashboard-stats.tsx",
+            "components\\dashboard\\quick-actions.tsx",
+            "components\\dashboard\\recent-activity.tsx",
+            "components\\dashboard\\sales-chart.tsx"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\audit\\AuditLogExport.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\audit\\AuditLogFilters.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\audit\\AuditLogList.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\audit\\AuditLogStats.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\audit\\index.ts",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\dashboard\\ai-insights.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\dashboard\\dashboard-stats.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\dashboard\\quick-actions.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\dashboard\\recent-activity.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\dashboard\\sales-chart.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            }
+          ],
+          "duration": 13
+        },
+        {
+          "batchNumber": 2,
+          "files": [
+            "components\\dashboard\\top-customers.tsx",
+            "components\\knowledge\\advanced-editor-toolbar.tsx",
+            "components\\knowledge\\advanced-search-builder.tsx",
+            "components\\knowledge\\analytics\\BarChart.tsx",
+            "components\\knowledge\\analytics\\DocumentList.tsx",
+            "components\\knowledge\\analytics\\index.ts",
+            "components\\knowledge\\analytics\\PieChart.tsx",
+            "components\\knowledge\\analytics\\StatsCard.tsx",
+            "components\\knowledge\\breadcrumb-navigation.tsx",
+            "components\\knowledge\\bulk-upload.tsx"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\dashboard\\top-customers.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\advanced-editor-toolbar.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\advanced-search-builder.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\analytics\\BarChart.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\analytics\\DocumentList.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\analytics\\index.ts",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\analytics\\PieChart.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\analytics\\StatsCard.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\breadcrumb-navigation.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\bulk-upload.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            }
+          ],
+          "duration": 31
+        },
+        {
+          "batchNumber": 3,
+          "files": [
+            "components\\knowledge\\document-preview.tsx",
+            "components\\knowledge\\enhanced-knowledge-editor.tsx",
+            "components\\knowledge\\enhanced-knowledge-search.tsx",
+            "components\\knowledge\\folder-selector.tsx",
+            "components\\knowledge\\knowledge-base-filters.tsx",
+            "components\\knowledge\\knowledge-base-list-optimized.tsx",
+            "components\\knowledge\\knowledge-base-list.tsx",
+            "components\\knowledge\\knowledge-base-upload.tsx",
+            "components\\knowledge\\knowledge-create-form.tsx",
+            "components\\knowledge\\knowledge-document-edit-with-version.tsx"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\document-preview.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\enhanced-knowledge-editor.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\enhanced-knowledge-search.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\folder-selector.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-base-filters.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-base-list-optimized.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-base-list.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-base-upload.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-create-form.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-document-edit-with-version.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            }
+          ],
+          "duration": 32
+        },
+        {
+          "batchNumber": 4,
+          "files": [
+            "components\\knowledge\\knowledge-document-edit.tsx",
+            "components\\knowledge\\knowledge-document-view.tsx",
+            "components\\knowledge\\knowledge-folder-tree.tsx",
+            "components\\knowledge\\knowledge-management-dashboard.tsx",
+            "components\\knowledge\\knowledge-recommendation-widget.tsx",
+            "components\\knowledge\\knowledge-review-workflow.tsx",
+            "components\\knowledge\\knowledge-search.tsx",
+            "components\\knowledge\\quick-jump-search.tsx",
+            "components\\knowledge\\rich-text-editor.tsx",
+            "components\\knowledge\\search-analytics-dashboard.tsx"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-document-edit.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-document-view.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-folder-tree.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-management-dashboard.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-recommendation-widget.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-review-workflow.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\knowledge-search.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\quick-jump-search.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\rich-text-editor.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\search-analytics-dashboard.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            }
+          ],
+          "duration": 33
+        },
+        {
+          "batchNumber": 5,
+          "files": [
+            "components\\knowledge\\search-results-optimizer.tsx",
+            "components\\knowledge\\search-suggestions.tsx",
+            "components\\knowledge\\version\\index.ts",
+            "components\\knowledge\\version\\KnowledgeVersionComparison.tsx",
+            "components\\knowledge\\version\\KnowledgeVersionHistory.tsx",
+            "components\\knowledge\\version\\KnowledgeVersionRestore.tsx",
+            "components\\ui\\alert-dialog.tsx",
+            "components\\ui\\alert.tsx",
+            "components\\ui\\avatar.tsx",
+            "components\\ui\\badge.tsx"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\search-results-optimizer.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\search-suggestions.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\version\\index.ts",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\version\\KnowledgeVersionComparison.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\version\\KnowledgeVersionHistory.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\knowledge\\version\\KnowledgeVersionRestore.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\alert-dialog.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\alert.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\avatar.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\badge.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            }
+          ],
+          "duration": 30
+        },
+        {
+          "batchNumber": 6,
+          "files": [
+            "components\\ui\\card.tsx",
+            "components\\ui\\checkbox.tsx",
+            "components\\ui\\command.tsx",
+            "components\\ui\\dialog.tsx",
+            "components\\ui\\dropdown-menu.tsx",
+            "components\\ui\\error-display.tsx",
+            "components\\ui\\input.tsx",
+            "components\\ui\\label.tsx",
+            "components\\ui\\popover.tsx",
+            "components\\ui\\progress.tsx"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\card.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\checkbox.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\command.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\dialog.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\dropdown-menu.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\error-display.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\input.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\label.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\popover.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\progress.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            }
+          ],
+          "duration": 21
+        },
+        {
+          "batchNumber": 7,
+          "files": [
+            "components\\ui\\select.tsx",
+            "components\\ui\\separator.tsx",
+            "components\\ui\\sheet.tsx",
+            "components\\ui\\skeleton.tsx",
+            "components\\ui\\slider.tsx",
+            "components\\ui\\switch.tsx",
+            "components\\ui\\tabs.tsx",
+            "components\\ui\\textarea.tsx",
+            "components\\ui\\use-toast.ts"
+          ],
+          "total": 9,
+          "processed": 9,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\select.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\separator.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\sheet.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\skeleton.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\slider.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\switch.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\tabs.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\textarea.tsx",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\ui\\use-toast.ts",
+              "status": "success",
+              "priority": "high",
+              "depth": 2
+            }
+          ],
+          "duration": 20
+        }
+      ],
+      "startTime": "2025-10-07T17:31:49.599Z",
+      "endTime": "2025-10-07T17:32:07.830Z"
+    },
+    {
+      "priority": "medium",
+      "totalFiles": 32,
+      "processed": 32,
+      "skipped": 0,
+      "failed": 0,
+      "batches": [
+        {
+          "batchNumber": 1,
+          "files": [
+            "lib\\knowledge\\analytics-service.ts",
+            "lib\\knowledge\\full-text-search.ts",
+            "lib\\knowledge\\index.ts",
+            "lib\\knowledge\\search-history-manager.ts",
+            "lib\\knowledge\\version-control.ts",
+            "lib\\monitoring\\backend-factory.ts",
+            "lib\\monitoring\\config.ts",
+            "lib\\monitoring\\connection-monitor.ts",
+            "lib\\monitoring\\middleware.ts",
+            "lib\\monitoring\\monitor-init.ts"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\knowledge\\analytics-service.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\knowledge\\full-text-search.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\knowledge\\index.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\knowledge\\search-history-manager.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\knowledge\\version-control.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\monitoring\\backend-factory.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\monitoring\\config.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\monitoring\\connection-monitor.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\monitoring\\middleware.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\monitoring\\monitor-init.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            }
+          ],
+          "duration": 19
+        },
+        {
+          "batchNumber": 2,
+          "files": [
+            "lib\\monitoring\\performance-monitor.ts",
+            "lib\\monitoring\\telemetry.ts",
+            "lib\\parsers\\excel-parser.ts",
+            "lib\\parsers\\image-ocr-parser.ts",
+            "lib\\parsers\\index.ts",
+            "lib\\parsers\\pdf-parser.ts",
+            "lib\\parsers\\word-parser.ts",
+            "lib\\performance\\monitor.ts",
+            "lib\\performance\\query-optimizer.ts",
+            "lib\\performance\\response-cache.ts"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\monitoring\\performance-monitor.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\monitoring\\telemetry.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\parsers\\excel-parser.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\parsers\\image-ocr-parser.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\parsers\\index.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\parsers\\pdf-parser.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\parsers\\word-parser.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\performance\\monitor.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\performance\\query-optimizer.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\performance\\response-cache.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            }
+          ],
+          "duration": 33
+        },
+        {
+          "batchNumber": 3,
+          "files": [
+            "lib\\resilience\\circuit-breaker.ts",
+            "lib\\resilience\\health-check.ts",
+            "lib\\resilience\\retry.ts",
+            "lib\\search\\contextual-result-enhancer.ts",
+            "lib\\search\\crm-search-adapter.ts",
+            "lib\\search\\pgvector-search.ts",
+            "lib\\search\\query-processor.ts",
+            "lib\\search\\result-ranker.ts",
+            "lib\\search\\search-analytics.ts",
+            "lib\\search\\search-suggestions.ts"
+          ],
+          "total": 10,
+          "processed": 10,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\resilience\\circuit-breaker.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\resilience\\health-check.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\resilience\\retry.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\contextual-result-enhancer.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\crm-search-adapter.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\pgvector-search.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\query-processor.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\result-ranker.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\search-analytics.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\search-suggestions.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            }
+          ],
+          "duration": 38
+        },
+        {
+          "batchNumber": 4,
+          "files": [
+            "lib\\search\\semantic-query-processor.ts",
+            "lib\\search\\vector-search.ts"
+          ],
+          "total": 2,
+          "processed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\semantic-query-processor.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\search\\vector-search.ts",
+              "status": "success",
+              "priority": "medium",
+              "depth": 2
+            }
+          ],
+          "duration": 6
+        }
+      ],
+      "startTime": "2025-10-07T17:32:07.830Z",
+      "endTime": "2025-10-07T17:32:13.955Z"
+    },
+    {
+      "priority": "normal",
+      "totalFiles": 33,
+      "processed": 33,
+      "skipped": 0,
+      "failed": 0,
+      "batches": [
+        {
+          "batchNumber": 1,
+          "files": [
+            "e2e\\auth.setup.ts",
+            "e2e\\fixtures\\auth.ts",
+            "e2e\\global-setup.ts",
+            "e2e\\run-knowledge-tests.ts",
+            "scripts\\add-missing-files-to-index.js",
+            "scripts\\analyze-project-index-smart.js",
+            "scripts\\backup\\backup-scheduler.ts",
+            "scripts\\backup\\database-backup.ts",
+            "scripts\\backup\\file-system-backup.ts",
+            "scripts\\check-comments.js",
+            "scripts\\check-index-completeness.js",
+            "scripts\\check-index-sync.js",
+            "scripts\\debug-login-api.ts",
+            "scripts\\debug-workflow.ts",
+            "scripts\\dev-reminder.js"
+          ],
+          "total": 15,
+          "processed": 15,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\e2e\\auth.setup.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\e2e\\fixtures\\auth.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\e2e\\global-setup.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\e2e\\run-knowledge-tests.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\add-missing-files-to-index.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\analyze-project-index-smart.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\backup\\backup-scheduler.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\backup\\database-backup.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\backup\\file-system-backup.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\check-comments.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\check-index-completeness.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\check-index-sync.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\debug-login-api.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\debug-workflow.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\dev-reminder.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            }
+          ],
+          "duration": 13
+        },
+        {
+          "batchNumber": 2,
+          "files": [
+            "scripts\\environment-setup.js",
+            "scripts\\health-check.js",
+            "scripts\\load-test-runner.js",
+            "scripts\\performance-setup.js",
+            "scripts\\quick-fix.js",
+            "scripts\\quick-load-test.js",
+            "scripts\\run-audit-log-migration.ts",
+            "scripts\\run-integration-tests.ts",
+            "scripts\\run-tests.js",
+            "scripts\\seed-folders.ts",
+            "scripts\\setup-local-env.js",
+            "scripts\\setup-test-db-docker.js",
+            "scripts\\setup-test-db.js",
+            "scripts\\sync-mvp-checklist.js",
+            "scripts\\test-encryption-performance.ts"
+          ],
+          "total": 15,
+          "processed": 15,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\environment-setup.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\health-check.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\load-test-runner.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\performance-setup.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\quick-fix.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\quick-load-test.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\run-audit-log-migration.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\run-integration-tests.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\run-tests.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\seed-folders.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\setup-local-env.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\setup-test-db-docker.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\setup-test-db.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\sync-mvp-checklist.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\test-encryption-performance.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            }
+          ],
+          "duration": 14
+        },
+        {
+          "batchNumber": 3,
+          "files": [
+            "scripts\\uat-test-runner.js",
+            "__tests__\\utils\\mock-next-request.ts",
+            "__tests__\\utils\\test-helpers.ts"
+          ],
+          "total": 3,
+          "processed": 3,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\scripts\\uat-test-runner.js",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\__tests__\\utils\\mock-next-request.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\__tests__\\utils\\test-helpers.ts",
+              "status": "success",
+              "priority": "normal",
+              "depth": 1
+            }
+          ],
+          "duration": 3
+        }
+      ],
+      "startTime": "2025-10-07T17:32:13.955Z",
+      "endTime": "2025-10-07T17:32:16.006Z"
+    },
+    {
+      "priority": "low",
+      "totalFiles": 222,
+      "processed": 222,
+      "skipped": 0,
+      "failed": 0,
+      "batches": [
+        {
+          "batchNumber": 1,
+          "files": [
+            "app\\(auth)\\layout.tsx",
+            "app\\(auth)\\login\\page.tsx",
+            "app\\(auth)\\register\\page.tsx",
+            "app\\api\\ai\\generate-proposal\\route.ts",
+            "app\\api\\ai\\regenerate-proposal\\route.ts",
+            "app\\api\\analytics\\behaviors\\route.ts",
+            "app\\api\\analytics\\profile\\route.ts",
+            "app\\api\\analytics\\track\\route.ts",
+            "app\\api\\assistant\\chat\\route.ts",
+            "app\\api\\audit-logs\\export\\route.ts",
+            "app\\api\\audit-logs\\route.ts",
+            "app\\api\\audit-logs\\stats\\route.ts",
+            "app\\api\\auth\\azure-ad\\callback\\route.ts",
+            "app\\api\\auth\\azure-ad\\login\\route.ts",
+            "app\\api\\auth\\login\\route.ts",
+            "app\\api\\auth\\logout\\route.ts",
+            "app\\api\\auth\\me\\route.ts",
+            "app\\api\\auth\\refresh\\route.ts",
+            "app\\api\\auth\\register\\route.ts",
+            "app\\api\\calendar\\auth\\route.ts"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\(auth)\\layout.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\(auth)\\login\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\(auth)\\register\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\ai\\generate-proposal\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\ai\\regenerate-proposal\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\analytics\\behaviors\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\analytics\\profile\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\analytics\\track\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\assistant\\chat\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\audit-logs\\export\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\audit-logs\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\audit-logs\\stats\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\auth\\azure-ad\\callback\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\auth\\azure-ad\\login\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\auth\\login\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\auth\\logout\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\auth\\me\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\auth\\refresh\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\auth\\register\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\calendar\\auth\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 17
+        },
+        {
+          "batchNumber": 2,
+          "files": [
+            "app\\api\\calendar\\events\\route.ts",
+            "app\\api\\calendar\\sync\\route.ts",
+            "app\\api\\collaboration\\locks\\lock\\[lockId]\\route.ts",
+            "app\\api\\collaboration\\locks\\route.ts",
+            "app\\api\\collaboration\\locks\\[resourceType]\\[resourceId]\\status\\route.ts",
+            "app\\api\\customers\\route.ts",
+            "app\\api\\customers\\[id]\\360-view\\route.ts",
+            "app\\api\\health\\route.ts",
+            "app\\api\\knowledge-base\\advanced-search\\route.ts",
+            "app\\api\\knowledge-base\\analytics\\route.ts",
+            "app\\api\\knowledge-base\\bulk-upload\\route.ts",
+            "app\\api\\knowledge-base\\processing\\route.ts",
+            "app\\api\\knowledge-base\\route-optimized.ts",
+            "app\\api\\knowledge-base\\route.ts",
+            "app\\api\\knowledge-base\\search\\route.ts",
+            "app\\api\\knowledge-base\\suggestions\\route.ts",
+            "app\\api\\knowledge-base\\tags\\route.ts",
+            "app\\api\\knowledge-base\\upload\\route.ts",
+            "app\\api\\knowledge-base\\[id]\\content\\route.ts",
+            "app\\api\\knowledge-base\\[id]\\download\\route.ts"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\calendar\\events\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\calendar\\sync\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\collaboration\\locks\\lock\\[lockId]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\collaboration\\locks\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\collaboration\\locks\\[resourceType]\\[resourceId]\\status\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\customers\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\customers\\[id]\\360-view\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\health\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\advanced-search\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\analytics\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\bulk-upload\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\processing\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\route-optimized.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\search\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\suggestions\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\tags\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\upload\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\[id]\\content\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\[id]\\download\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 19
+        },
+        {
+          "batchNumber": 3,
+          "files": [
+            "app\\api\\knowledge-base\\[id]\\route.ts",
+            "app\\api\\knowledge-base\\[id]\\versions\\compare\\route.ts",
+            "app\\api\\knowledge-base\\[id]\\versions\\revert\\route.ts",
+            "app\\api\\knowledge-base\\[id]\\versions\\route.ts",
+            "app\\api\\knowledge-base\\[id]\\versions\\[versionId]\\route.ts",
+            "app\\api\\knowledge-folders\\reorder\\route.ts",
+            "app\\api\\knowledge-folders\\route.ts",
+            "app\\api\\knowledge-folders\\[id]\\move\\route.ts",
+            "app\\api\\knowledge-folders\\[id]\\route.ts",
+            "app\\api\\meeting-intelligence\\analyze\\route.ts",
+            "app\\api\\meeting-intelligence\\recommendations\\route.ts",
+            "app\\api\\meeting-prep\\route.ts",
+            "app\\api\\meeting-prep\\templates\\route.ts",
+            "app\\api\\meeting-prep\\[id]\\route.ts",
+            "app\\api\\mock\\dynamics365\\[...path]\\route.ts",
+            "app\\api\\monitoring\\init\\route.ts",
+            "app\\api\\notifications\\preferences\\route.ts",
+            "app\\api\\notifications\\read\\route.ts",
+            "app\\api\\notifications\\route.ts",
+            "app\\api\\notifications\\stats\\route.ts"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\[id]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\[id]\\versions\\compare\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\[id]\\versions\\revert\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\[id]\\versions\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-base\\[id]\\versions\\[versionId]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-folders\\reorder\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-folders\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-folders\\[id]\\move\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\knowledge-folders\\[id]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\meeting-intelligence\\analyze\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\meeting-intelligence\\recommendations\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\meeting-prep\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\meeting-prep\\templates\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\meeting-prep\\[id]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\mock\\dynamics365\\[...path]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\monitoring\\init\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\notifications\\preferences\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\notifications\\read\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\notifications\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\notifications\\stats\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 18
+        },
+        {
+          "batchNumber": 4,
+          "files": [
+            "app\\api\\proposal-templates\\route.ts",
+            "app\\api\\proposal-templates\\[id]\\route.ts",
+            "app\\api\\proposal-templates\\[id]\\stats\\route.ts",
+            "app\\api\\proposal-templates\\[id]\\test\\route.ts",
+            "app\\api\\proposals\\[id]\\route.ts",
+            "app\\api\\proposals\\[id]\\versions\\compare\\route.ts",
+            "app\\api\\proposals\\[id]\\versions\\restore\\route.ts",
+            "app\\api\\proposals\\[id]\\versions\\route.ts",
+            "app\\api\\proposals\\[id]\\versions\\[versionId]\\route.ts",
+            "app\\api\\recommendations\\content\\route.ts",
+            "app\\api\\recommendations\\feedback\\route.ts",
+            "app\\api\\recommendations\\meetings\\route.ts",
+            "app\\api\\reminders\\route.ts",
+            "app\\api\\reminders\\[id]\\route.ts",
+            "app\\api\\reminders\\[id]\\snooze\\route.ts",
+            "app\\api\\search\\crm\\route.ts",
+            "app\\api\\templates\\export-pdf-test\\route.ts",
+            "app\\api\\templates\\preview-temp\\route.ts",
+            "app\\api\\templates\\route.ts",
+            "app\\api\\templates\\stats\\route.ts"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposal-templates\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposal-templates\\[id]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposal-templates\\[id]\\stats\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposal-templates\\[id]\\test\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposals\\[id]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposals\\[id]\\versions\\compare\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposals\\[id]\\versions\\restore\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposals\\[id]\\versions\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\proposals\\[id]\\versions\\[versionId]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\recommendations\\content\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\recommendations\\feedback\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\recommendations\\meetings\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\reminders\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\reminders\\[id]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\reminders\\[id]\\snooze\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\search\\crm\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\export-pdf-test\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\preview-temp\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\stats\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 16
+        },
+        {
+          "batchNumber": 5,
+          "files": [
+            "app\\api\\templates\\[id]\\duplicate\\route.ts",
+            "app\\api\\templates\\[id]\\export-pdf\\route.ts",
+            "app\\api\\templates\\[id]\\preview\\route.ts",
+            "app\\api\\templates\\[id]\\route.ts",
+            "app\\api\\[...slug]\\route.ts",
+            "app\\dashboard\\admin\\audit-logs\\page.tsx",
+            "app\\dashboard\\assistant\\page.tsx",
+            "app\\dashboard\\customers\\page.tsx",
+            "app\\dashboard\\customers\\[id]\\page.tsx",
+            "app\\dashboard\\knowledge\\advanced-search\\page.tsx",
+            "app\\dashboard\\knowledge\\analytics\\page.tsx",
+            "app\\dashboard\\knowledge\\create\\page.tsx",
+            "app\\dashboard\\knowledge\\folders\\page.tsx",
+            "app\\dashboard\\knowledge\\page.tsx",
+            "app\\dashboard\\knowledge\\search\\page.tsx",
+            "app\\dashboard\\knowledge\\upload\\page.tsx",
+            "app\\dashboard\\knowledge\\[id]\\edit\\page.tsx",
+            "app\\dashboard\\knowledge\\[id]\\page.tsx",
+            "app\\dashboard\\layout.tsx",
+            "app\\dashboard\\notifications\\page.tsx"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\[id]\\duplicate\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\[id]\\export-pdf\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\[id]\\preview\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\templates\\[id]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\api\\[...slug]\\route.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\admin\\audit-logs\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\assistant\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\customers\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\customers\\[id]\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\advanced-search\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\analytics\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\create\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\folders\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\search\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\upload\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\[id]\\edit\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\knowledge\\[id]\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\layout.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\notifications\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 19
+        },
+        {
+          "batchNumber": 6,
+          "files": [
+            "app\\dashboard\\notifications\\preferences\\page.tsx",
+            "app\\dashboard\\page.tsx",
+            "app\\dashboard\\proposals\\generate\\page.tsx",
+            "app\\dashboard\\proposals\\page.tsx",
+            "app\\dashboard\\proposals\\templates\\new\\page.tsx",
+            "app\\dashboard\\proposals\\templates\\[id]\\page.tsx",
+            "app\\dashboard\\proposals\\[id]\\versions\\page.tsx",
+            "app\\dashboard\\search\\page.tsx",
+            "app\\dashboard\\settings\\page.tsx",
+            "app\\dashboard\\tasks\\page.tsx",
+            "app\\dashboard\\templates\\new\\page.tsx",
+            "app\\dashboard\\templates\\page.tsx",
+            "app\\dashboard\\templates\\[id]\\page.tsx",
+            "app\\dashboard\\templates\\[id]\\preview\\page.tsx",
+            "app\\error.tsx",
+            "app\\global-error.tsx",
+            "app\\layout.tsx",
+            "app\\loading.tsx",
+            "app\\not-found.tsx",
+            "app\\page.tsx"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\notifications\\preferences\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\proposals\\generate\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\proposals\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\proposals\\templates\\new\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\proposals\\templates\\[id]\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\proposals\\[id]\\versions\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\search\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\settings\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\tasks\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\templates\\new\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\templates\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\templates\\[id]\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\dashboard\\templates\\[id]\\preview\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\error.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\global-error.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\layout.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\loading.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\not-found.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\app\\page.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 22
+        },
+        {
+          "batchNumber": 7,
+          "files": [
+            "components\\admin\\performance-dashboard.tsx",
+            "components\\admin\\system-monitor.tsx",
+            "components\\assistant\\ChatInput.tsx",
+            "components\\assistant\\ChatMessage.tsx",
+            "components\\assistant\\ChatWindow.tsx",
+            "components\\assistant\\index.ts",
+            "components\\calendar\\CalendarView.tsx",
+            "components\\calendar\\index.ts",
+            "components\\collaboration\\EditLockIndicator.tsx",
+            "components\\collaboration\\index.ts",
+            "components\\crm\\customer-360-view.tsx",
+            "components\\layout\\dashboard-header.tsx",
+            "components\\layout\\dashboard-mobile-nav.tsx",
+            "components\\layout\\dashboard-sidebar.tsx",
+            "components\\meeting-prep\\index.ts",
+            "components\\meeting-prep\\PrepPackageCard.tsx",
+            "components\\meeting-prep\\PrepPackageList.tsx",
+            "components\\meeting-prep\\PrepPackageWizard.tsx",
+            "components\\notifications\\notification-bell.tsx",
+            "components\\notifications\\notification-item.tsx"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\admin\\performance-dashboard.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\admin\\system-monitor.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\assistant\\ChatInput.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\assistant\\ChatMessage.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\assistant\\ChatWindow.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\assistant\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\calendar\\CalendarView.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\calendar\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\collaboration\\EditLockIndicator.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\collaboration\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\crm\\customer-360-view.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\layout\\dashboard-header.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\layout\\dashboard-mobile-nav.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\layout\\dashboard-sidebar.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\meeting-prep\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\meeting-prep\\PrepPackageCard.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\meeting-prep\\PrepPackageList.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\meeting-prep\\PrepPackageWizard.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\notifications\\notification-bell.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\notifications\\notification-item.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 19
+        },
+        {
+          "batchNumber": 8,
+          "files": [
+            "components\\notifications\\notification-list.tsx",
+            "components\\permissions\\CustomerActions.tsx",
+            "components\\permissions\\index.ts",
+            "components\\permissions\\ProposalActions.tsx",
+            "components\\permissions\\ProtectedRoute.tsx",
+            "components\\recommendation\\index.ts",
+            "components\\recommendation\\RecommendationCard.tsx",
+            "components\\recommendation\\RecommendationList.tsx",
+            "components\\reminder\\index.ts",
+            "components\\reminder\\ReminderCard.tsx",
+            "components\\reminder\\ReminderList.tsx",
+            "components\\search\\enhanced-search.tsx",
+            "components\\workflow\\approval\\ApprovalForm.tsx",
+            "components\\workflow\\approval\\ApprovalProgress.tsx",
+            "components\\workflow\\approval\\ApprovalTaskList.tsx",
+            "components\\workflow\\comments\\CommentForm.tsx",
+            "components\\workflow\\comments\\CommentItem.tsx",
+            "components\\workflow\\comments\\CommentThread.tsx",
+            "components\\workflow\\ProposalStatusBadge.tsx",
+            "components\\workflow\\StateTransitionButton.tsx"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\notifications\\notification-list.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\permissions\\CustomerActions.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\permissions\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\permissions\\ProposalActions.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\permissions\\ProtectedRoute.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\recommendation\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\recommendation\\RecommendationCard.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\recommendation\\RecommendationList.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\reminder\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\reminder\\ReminderCard.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\reminder\\ReminderList.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\search\\enhanced-search.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\approval\\ApprovalForm.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\approval\\ApprovalProgress.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\approval\\ApprovalTaskList.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\comments\\CommentForm.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\comments\\CommentItem.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\comments\\CommentThread.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\ProposalStatusBadge.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\StateTransitionButton.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 15
+        },
+        {
+          "batchNumber": 9,
+          "files": [
+            "components\\workflow\\version\\VersionComparison.tsx",
+            "components\\workflow\\version\\VersionHistory.tsx",
+            "components\\workflow\\version\\VersionRestore.tsx",
+            "components\\workflow\\WorkflowTimeline.tsx",
+            "healthcheck.js",
+            "hooks\\use-auth.ts",
+            "hooks\\use-permission.ts",
+            "hooks\\use-toast.ts",
+            "instrumentation.ts",
+            "jest.config.workflow.js",
+            "jest.setup.js",
+            "jest.setup.workflow.js",
+            "lib\\analytics\\index.ts",
+            "lib\\analytics\\user-behavior-tracker.ts",
+            "lib\\api\\error-handler.ts",
+            "lib\\api\\response-helper.ts",
+            "lib\\auth\\azure-ad-service.ts",
+            "lib\\auth\\token-service.ts",
+            "lib\\auth-server.ts",
+            "lib\\auth.ts"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\version\\VersionComparison.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\version\\VersionHistory.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\version\\VersionRestore.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\components\\workflow\\WorkflowTimeline.tsx",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\healthcheck.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\hooks\\use-auth.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\hooks\\use-permission.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\hooks\\use-toast.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\instrumentation.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\jest.config.workflow.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\jest.setup.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\jest.setup.workflow.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\analytics\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\analytics\\user-behavior-tracker.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\api\\error-handler.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\api\\response-helper.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\auth\\azure-ad-service.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\auth\\token-service.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\auth-server.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\auth.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 20
+        },
+        {
+          "batchNumber": 10,
+          "files": [
+            "lib\\cache\\redis-client.ts",
+            "lib\\cache\\vector-cache.ts",
+            "lib\\calendar\\calendar-mock-service.ts",
+            "lib\\calendar\\calendar-sync-service.ts",
+            "lib\\calendar\\microsoft-graph-oauth.ts",
+            "lib\\collaboration\\edit-lock-manager.ts",
+            "lib\\collaboration\\index.ts",
+            "lib\\db.ts",
+            "lib\\errors.ts",
+            "lib\\integrations\\customer-360\\service.ts",
+            "lib\\integrations\\dynamics365\\auth.ts",
+            "lib\\integrations\\dynamics365\\client.ts",
+            "lib\\integrations\\dynamics365\\sync.ts",
+            "lib\\meeting\\index.ts",
+            "lib\\meeting\\meeting-intelligence-analyzer.ts",
+            "lib\\meeting\\meeting-prep-package.ts",
+            "lib\\pdf\\index.ts",
+            "lib\\pdf\\pdf-generator.ts",
+            "lib\\pdf\\proposal-pdf-template.ts",
+            "lib\\prisma.ts"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\cache\\redis-client.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\cache\\vector-cache.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\calendar\\calendar-mock-service.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\calendar\\calendar-sync-service.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\calendar\\microsoft-graph-oauth.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\collaboration\\edit-lock-manager.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\collaboration\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\db.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\errors.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\integrations\\customer-360\\service.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\integrations\\dynamics365\\auth.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\integrations\\dynamics365\\client.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\integrations\\dynamics365\\sync.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\meeting\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\meeting\\meeting-intelligence-analyzer.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\meeting\\meeting-prep-package.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\pdf\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\pdf\\pdf-generator.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\pdf\\proposal-pdf-template.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\prisma.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 17
+        },
+        {
+          "batchNumber": 11,
+          "files": [
+            "lib\\recommendation\\index.ts",
+            "lib\\recommendation\\recommendation-engine.ts",
+            "lib\\reminder\\index.ts",
+            "lib\\reminder\\reminder-rule-engine.ts",
+            "lib\\reminder\\reminder-scheduler.ts",
+            "lib\\startup\\monitoring-initializer.ts",
+            "lib\\template\\handlebars-helpers.ts",
+            "lib\\template\\template-engine.ts",
+            "lib\\template\\template-manager.ts",
+            "middleware.ts",
+            "next.config.optimized.js",
+            "poc\\azure-openai-basic-test.js",
+            "poc\\azure-openai-cost-test.js",
+            "poc\\dynamics-365-mock.js",
+            "poc\\dynamics-365-test-mock.js",
+            "poc\\dynamics-365-test.js",
+            "poc\\pgvector-performance-test.js",
+            "poc\\run-all-tests.js",
+            "poc\\test-dynamics-mock.js",
+            "prisma\\seed.ts"
+          ],
+          "total": 20,
+          "processed": 20,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\recommendation\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\recommendation\\recommendation-engine.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\reminder\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\reminder\\reminder-rule-engine.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\reminder\\reminder-scheduler.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\startup\\monitoring-initializer.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\template\\handlebars-helpers.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\template\\template-engine.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\lib\\template\\template-manager.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\middleware.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\next.config.optimized.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\azure-openai-basic-test.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\azure-openai-cost-test.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\dynamics-365-mock.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\dynamics-365-test-mock.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\dynamics-365-test.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\pgvector-performance-test.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\run-all-tests.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\poc\\test-dynamics-mock.js",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\prisma\\seed.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 17
+        },
+        {
+          "batchNumber": 12,
+          "files": [
+            "types\\ai.ts",
+            "types\\index.ts"
+          ],
+          "total": 2,
+          "processed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "details": [
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\types\\ai.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            },
+            {
+              "file": "C:\\ai-sales-enablement-webapp\\types\\index.ts",
+              "status": "success",
+              "priority": "low",
+              "depth": 1
+            }
+          ],
+          "duration": 3
+        }
+      ],
+      "startTime": "2025-10-07T17:32:16.006Z",
+      "endTime": "2025-10-07T17:32:21.791Z"
+    }
+  ],
+  "overallDuration": 73
+}

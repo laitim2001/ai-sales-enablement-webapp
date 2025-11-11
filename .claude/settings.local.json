@@ -28,7 +28,9 @@
       "Bash(npx prisma:*)",
       "Bash(timeout 10 bash -c 'while ! curl -s http://localhost:3000 > /dev/null; do sleep 1; done; echo \"\"Server ready\"\"')",
       "Bash(npm run:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(taskkill:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
