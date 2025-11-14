@@ -1,11 +1,23 @@
 /**
- * @fileoverview Progress UI組件功能：- 提供進度條顯示組件- 支援百分比進度顯示- 可自訂顏色和樣式作者：Claude Code創建時間：2025-09-28
+ * @fileoverview Progress UI組件
+功能：
+- 提供進度條顯示組件
+- 支援百分比進度顯示
+- 可自訂顏色和樣式
+作者：Claude Code
+創建時間：2025-09-28
  * @module components/ui/progress
- * @description
- * Progress UI組件功能：- 提供進度條顯示組件- 支援百分比進度顯示- 可自訂顏色和樣式作者：Claude Code創建時間：2025-09-28
+ *
+ * Progress UI組件
+ * 功能：
+ * - 提供進度條顯示組件
+ * - 支援百分比進度顯示
+ * - 可自訂顏色和樣式
+ * 作者：Claude Code
+ * 創建時間：2025-09-28
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 "use client"

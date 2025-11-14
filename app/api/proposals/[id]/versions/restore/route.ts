@@ -1,11 +1,19 @@
 /**
- * @fileoverview 版本回滾 API 路由功能：- POST: 將提案回滾到指定版本@author Claude Code@date 2025-10-02
+ * @fileoverview 版本回滾 API 路由
+功能：
+- POST: 將提案回滾到指定版本
+@author Claude Code
+@date 2025-10-02
  * @module app/api/proposals/[id]/versions/restore/route
- * @description
- * 版本回滾 API 路由功能：- POST: 將提案回滾到指定版本@author Claude Code@date 2025-10-02
+ *
+ * 版本回滾 API 路由
+ * 功能：
+ * - POST: 將提案回滾到指定版本
+ * @author Claude Code
+ * @date 2025-10-02
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

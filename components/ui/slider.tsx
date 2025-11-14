@@ -1,11 +1,23 @@
 /**
- * @fileoverview Slider UI組件功能：- 提供數值範圍選擇滑塊組件- 支援單值和雙值模式- 可自訂最小值、最大值和步進作者：Claude Code創建時間：2025-09-28
+ * @fileoverview Slider UI組件
+功能：
+- 提供數值範圍選擇滑塊組件
+- 支援單值和雙值模式
+- 可自訂最小值、最大值和步進
+作者：Claude Code
+創建時間：2025-09-28
  * @module components/ui/slider
- * @description
- * Slider UI組件功能：- 提供數值範圍選擇滑塊組件- 支援單值和雙值模式- 可自訂最小值、最大值和步進作者：Claude Code創建時間：2025-09-28
+ *
+ * Slider UI組件
+ * 功能：
+ * - 提供數值範圍選擇滑塊組件
+ * - 支援單值和雙值模式
+ * - 可自訂最小值、最大值和步進
+ * 作者：Claude Code
+ * 創建時間：2025-09-28
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 "use client"

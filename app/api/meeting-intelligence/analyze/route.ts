@@ -1,11 +1,49 @@
 /**
- * @fileoverview 會議智能分析API路由📋 檔案用途：提供AI驅動的會議信息分析和洞察提取🔗 API端點：- POST /api/meeting-intelligence/analyze - 分析會議信息📊 請求體：{  meetingInfo: {    title: string,    description?: string,    startTime: string (ISO 8601),    endTime: string (ISO 8601),    participants?: string[],    location?: string,    notes?: string  }}📤 響應格式：{  success: boolean,  data: {    insights: MeetingInsights,    analysisId: string,    timestamp: string  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ * @fileoverview 會議智能分析API路由
+📋 檔案用途：
+提供AI驅動的會議信息分析和洞察提取
+🔗 API端點：
+- POST /api/meeting-intelligence/analyze - 分析會議信息
+📊 請求體：
+{
+  meetingInfo: {
+    title: string,
+    description?: string,
+    startTime: string (ISO 8601...
  * @module app/api/meeting-intelligence/analyze/route
- * @description
- * 會議智能分析API路由📋 檔案用途：提供AI驅動的會議信息分析和洞察提取🔗 API端點：- POST /api/meeting-intelligence/analyze - 分析會議信息📊 請求體：{  meetingInfo: {    title: string,    description?: string,    startTime: string (ISO 8601),    endTime: string (ISO 8601),    participants?: string[],    location?: string,    notes?: string  }}📤 響應格式：{  success: boolean,  data: {    insights: MeetingInsights,    analysisId: string,    timestamp: string  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ *
+ * 會議智能分析API路由
+ * 📋 檔案用途：
+ * 提供AI驅動的會議信息分析和洞察提取
+ * 🔗 API端點：
+ * - POST /api/meeting-intelligence/analyze - 分析會議信息
+ * 📊 請求體：
+ * {
+ * meetingInfo: {
+ * title: string,
+ * description?: string,
+ * startTime: string (ISO 8601),
+ * endTime: string (ISO 8601),
+ * participants?: string[],
+ * location?: string,
+ * notes?: string
+ * }
+ * }
+ * 📤 響應格式：
+ * {
+ * success: boolean,
+ * data: {
+ * insights: MeetingInsights,
+ * analysisId: string,
+ * timestamp: string
+ * }
+ * }
+ * 作者：Claude Code
+ * 創建時間：2025-10-05
+ * Sprint：Sprint 7 Phase 2
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,11 +1,15 @@
 /**
- * @fileoverview 操作級別權限限制服務提供CRUD操作的細粒度控制，包括速率限制、配額限制、欄位限制和條件限制@module lib/security/action-restrictions
+ * @fileoverview 操作級別權限限制服務
+提供CRUD操作的細粒度控制，包括速率限制、配額限制、欄位限制和條件限制
+@module lib/security/action-restrictions
  * @module lib/security/action-restrictions
- * @description
- * 操作級別權限限制服務提供CRUD操作的細粒度控制，包括速率限制、配額限制、欄位限制和條件限制@module lib/security/action-restrictions
+ *
+ * 操作級別權限限制服務
+ * 提供CRUD操作的細粒度控制，包括速率限制、配額限制、欄位限制和條件限制
+ * @module lib/security/action-restrictions
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { UserRole, Resource, Action } from './rbac';

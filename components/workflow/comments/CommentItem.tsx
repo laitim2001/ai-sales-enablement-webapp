@@ -1,11 +1,25 @@
 /**
- * @fileoverview 評論項目組件功能：- 單個評論的顯示- @mentions 解析和高亮- 回覆、編輯、刪除操作- 評論狀態標記作者：Claude Code日期：2025-10-01
+ * @fileoverview 評論項目組件
+功能：
+- 單個評論的顯示
+- @mentions 解析和高亮
+- 回覆、編輯、刪除操作
+- 評論狀態標記
+作者：Claude Code
+日期：2025-10-01
  * @module components/workflow/comments/CommentItem
- * @description
- * 評論項目組件功能：- 單個評論的顯示- @mentions 解析和高亮- 回覆、編輯、刪除操作- 評論狀態標記作者：Claude Code日期：2025-10-01
+ *
+ * 評論項目組件
+ * 功能：
+ * - 單個評論的顯示
+ * - @mentions 解析和高亮
+ * - 回覆、編輯、刪除操作
+ * - 評論狀態標記
+ * 作者：Claude Code
+ * 日期：2025-10-01
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 'use client';

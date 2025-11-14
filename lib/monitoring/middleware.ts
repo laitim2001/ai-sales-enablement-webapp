@@ -1,11 +1,13 @@
 /**
- * @fileoverview 監控中間件自動追蹤 API 請求的性能和狀態
+ * @fileoverview 監控中間件
+自動追蹤 API 請求的性能和狀態
  * @module lib/monitoring/middleware
- * @description
- * 監控中間件自動追蹤 API 請求的性能和狀態
+ *
+ * 監控中間件
+ * 自動追蹤 API 請求的性能和狀態
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

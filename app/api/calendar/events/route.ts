@@ -1,11 +1,31 @@
 /**
- * @fileoverview Calendar Events API路由📋 功能說明：- 獲取日曆事件列表- 創建新日曆事件- 同步日曆事件🔗 路由：- GET /api/calendar/events - 獲取事件列表- POST /api/calendar/events - 創建新事件作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ * @fileoverview Calendar Events API路由
+📋 功能說明：
+- 獲取日曆事件列表
+- 創建新日曆事件
+- 同步日曆事件
+🔗 路由：
+- GET /api/calendar/events - 獲取事件列表
+- POST /api/calendar/events - 創建新事件
+作者：Claude Code
+日期：2025-10-05
+Sprint：Sprint 7 Phase 3
  * @module app/api/calendar/events/route
- * @description
- * Calendar Events API路由📋 功能說明：- 獲取日曆事件列表- 創建新日曆事件- 同步日曆事件🔗 路由：- GET /api/calendar/events - 獲取事件列表- POST /api/calendar/events - 創建新事件作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ *
+ * Calendar Events API路由
+ * 📋 功能說明：
+ * - 獲取日曆事件列表
+ * - 創建新日曆事件
+ * - 同步日曆事件
+ * 🔗 路由：
+ * - GET /api/calendar/events - 獲取事件列表
+ * - POST /api/calendar/events - 創建新事件
+ * 作者：Claude Code
+ * 日期：2025-10-05
+ * Sprint：Sprint 7 Phase 3
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

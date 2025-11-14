@@ -1,11 +1,31 @@
 /**
- * @fileoverview Calendar OAuth認證API路由📋 功能說明：- 生成Microsoft OAuth授權URL- 處理OAuth回調- 管理訪問token🔗 路由：- GET /api/calendar/auth - 獲取授權URL- POST /api/calendar/auth/callback - 處理OAuth回調作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ * @fileoverview Calendar OAuth認證API路由
+📋 功能說明：
+- 生成Microsoft OAuth授權URL
+- 處理OAuth回調
+- 管理訪問token
+🔗 路由：
+- GET /api/calendar/auth - 獲取授權URL
+- POST /api/calendar/auth/callback - 處理OAuth回調
+作者：Claude Code
+日期：2025-10-05
+Spri...
  * @module app/api/calendar/auth/route
- * @description
- * Calendar OAuth認證API路由📋 功能說明：- 生成Microsoft OAuth授權URL- 處理OAuth回調- 管理訪問token🔗 路由：- GET /api/calendar/auth - 獲取授權URL- POST /api/calendar/auth/callback - 處理OAuth回調作者：Claude Code日期：2025-10-05Sprint：Sprint 7 Phase 3
+ *
+ * Calendar OAuth認證API路由
+ * 📋 功能說明：
+ * - 生成Microsoft OAuth授權URL
+ * - 處理OAuth回調
+ * - 管理訪問token
+ * 🔗 路由：
+ * - GET /api/calendar/auth - 獲取授權URL
+ * - POST /api/calendar/auth/callback - 處理OAuth回調
+ * 作者：Claude Code
+ * 日期：2025-10-05
+ * Sprint：Sprint 7 Phase 3
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

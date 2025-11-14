@@ -1,11 +1,47 @@
 /**
- * @fileoverview 資料備份與恢復系統功能：- 自動備份資料庫- 備份文件管理- 備份驗證- 資料恢復- 備份保留策略使用方式：```typescript// 創建備份const backup = await BackupService.createBackup({  type: BackupType.FULL,  includeFiles: true,});// 列出備份const backups = await BackupService.listBackups();// 恢復備份await BackupService.restoreBackup(backup.id);```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
+ * @fileoverview 資料備份與恢復系統
+功能：
+- 自動備份資料庫
+- 備份文件管理
+- 備份驗證
+- 資料恢復
+- 備份保留策略
+使用方式：
+```typescript
+// 創建備份
+const backup = await BackupService.createBackup({
+  type: BackupType.FULL,
+  includeFiles: true,
+});
+// 列出備份
+const b...
  * @module lib/security/backup
- * @description
- * 資料備份與恢復系統功能：- 自動備份資料庫- 備份文件管理- 備份驗證- 資料恢復- 備份保留策略使用方式：```typescript// 創建備份const backup = await BackupService.createBackup({  type: BackupType.FULL,  includeFiles: true,});// 列出備份const backups = await BackupService.listBackups();// 恢復備份await BackupService.restoreBackup(backup.id);```@author Claude Code@date 2025-10-01@epic Sprint 3 - 安全加固與合規
+ *
+ * 資料備份與恢復系統
+ * 功能：
+ * - 自動備份資料庫
+ * - 備份文件管理
+ * - 備份驗證
+ * - 資料恢復
+ * - 備份保留策略
+ * 使用方式：
+ * ```typescript
+ * // 創建備份
+ * const backup = await BackupService.createBackup({
+ * type: BackupType.FULL,
+ * includeFiles: true,
+ * });
+ * // 列出備份
+ * const backups = await BackupService.listBackups();
+ * // 恢復備份
+ * await BackupService.restoreBackup(backup.id);
+ * ```
+ * @author Claude Code
+ * @date 2025-10-01
+ * @epic Sprint 3 - 安全加固與合規
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import * as crypto from 'crypto';

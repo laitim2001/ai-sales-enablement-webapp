@@ -1,11 +1,28 @@
 /**
- * @fileoverview 範本預覽 APIPOST /api/templates/[id]/preview - 預覽範本渲染結果@author Claude Code@date 2025-10-02
+ * @fileoverview AI銷售賦能平台範本預覽API - 實現範本渲染預覽功能
  * @module app/api/templates/[id]/preview/route
- * @description
- * 範本預覽 APIPOST /api/templates/[id]/preview - 預覽範本渲染結果@author Claude Code@date 2025-10-02
+ *
+ * ## 功能說明
+ * 提供範本渲染預覽功能,支援測試數據自動生成和變數驗證。
+ *
+ * ## API規格
+ * - **端點**: `POST /api/templates/[id]/preview` - 預覽範本渲染結果
+ * - **請求**: { data?: object, useTestData?: boolean }
+ * - **響應**: { success, data: { html, testData, template }, message }
+ * - **狀態碼**: 200 (成功) | 400 (驗證錯誤) | 404 (範本不存在) | 500 (伺服器錯誤)
+ *
+ * ## 主要職責
+ * - 範本查詢 - 獲取指定ID的範本信息
+ * - 變數驗證 - 驗證提供的數據是否符合範本變數要求
+ * - 渲染預覽 - 生成範本的HTML渲染結果
+ * - 測試數據 - 支援自動生成測試數據進行預覽
+ *
+ * ## 相關文件
+ * - `/lib/template/template-manager.ts` - 範本管理邏輯
+ * - `/lib/template/template-engine.ts` - 範本渲染引擎
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,11 +1,15 @@
 /**
- * @fileoverview 統一的細粒度權限檢查入口整合三層權限控制：欄位級別、資源級別、操作級別@module lib/security/fine-grained-permissions
+ * @fileoverview 統一的細粒度權限檢查入口
+整合三層權限控制：欄位級別、資源級別、操作級別
+@module lib/security/fine-grained-permissions
  * @module lib/security/fine-grained-permissions
- * @description
- * 統一的細粒度權限檢查入口整合三層權限控制：欄位級別、資源級別、操作級別@module lib/security/fine-grained-permissions
+ *
+ * 統一的細粒度權限檢查入口
+ * 整合三層權限控制：欄位級別、資源級別、操作級別
+ * @module lib/security/fine-grained-permissions
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { UserRole, Resource, Action } from './rbac';

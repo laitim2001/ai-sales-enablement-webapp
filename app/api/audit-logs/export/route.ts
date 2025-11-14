@@ -1,11 +1,36 @@
 /**
- * @fileoverview 審計日誌導出 APIPOST /api/audit-logs/export - 導出審計日誌為CSV或JSON（需要ADMIN權限）Request Body:{  "format": "csv" | "json",  // 導出格式  "filters": {                // 可選過濾條件    "userId": number,    "action": string | string[],    "resource": string | string[],    "severity": string | string[],    "success": boolean,    "startDate": string (ISO 8601),    "endDate": string (ISO 8601),    "ipAddress": string  }}@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
+ * @fileoverview 審計日誌導出 API
+POST /api/audit-logs/export - 導出審計日誌為CSV或JSON（需要ADMIN權限）
+Request Body:
+{
+  "format": "csv" | "json",  // 導出格式
+  "filters": {                // 可選過濾條件
+    "userId": number,
+    "action": str...
  * @module app/api/audit-logs/export/route
- * @description
- * 審計日誌導出 APIPOST /api/audit-logs/export - 導出審計日誌為CSV或JSON（需要ADMIN權限）Request Body:{  "format": "csv" | "json",  // 導出格式  "filters": {                // 可選過濾條件    "userId": number,    "action": string | string[],    "resource": string | string[],    "severity": string | string[],    "success": boolean,    "startDate": string (ISO 8601),    "endDate": string (ISO 8601),    "ipAddress": string  }}@author Claude Code@date 2025-10-07@epic Sprint 3 Week 8 - 審計日誌系統實施
+ *
+ * 審計日誌導出 API
+ * POST /api/audit-logs/export - 導出審計日誌為CSV或JSON（需要ADMIN權限）
+ * Request Body:
+ * {
+ * "format": "csv" | "json",  // 導出格式
+ * "filters": {                // 可選過濾條件
+ * "userId": number,
+ * "action": string | string[],
+ * "resource": string | string[],
+ * "severity": string | string[],
+ * "success": boolean,
+ * "startDate": string (ISO 8601),
+ * "endDate": string (ISO 8601),
+ * "ipAddress": string
+ * }
+ * }
+ * @author Claude Code
+ * @date 2025-10-07
+ * @epic Sprint 3 Week 8 - 審計日誌系統實施
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,11 +1,36 @@
 /**
- * @fileoverview CRM 搜索適配器功能：- 將CRM資料整合到現有搜索系統- 支援客戶、聯絡人、銷售機會的智能搜索- 與語義搜索引擎整合- 提供統一的搜索介面和結果格式- 支援混合搜索（知識庫 + CRM）搜索實體類型：- Customer (客戶公司)- CustomerContact (聯絡人)- SalesOpportunity (銷售機會)- Interaction (互動記錄)作者：Claude Code創建時間：2025-09-28
+ * @fileoverview CRM 搜索適配器
+功能：
+- 將CRM資料整合到現有搜索系統
+- 支援客戶、聯絡人、銷售機會的智能搜索
+- 與語義搜索引擎整合
+- 提供統一的搜索介面和結果格式
+- 支援混合搜索（知識庫 + CRM）
+搜索實體類型：
+- Customer (客戶公司)
+- CustomerContact (聯絡人)
+- SalesOpportunity (銷售機會)
+- Interaction (互動記錄)
+作...
  * @module lib/search/crm-search-adapter
- * @description
- * CRM 搜索適配器功能：- 將CRM資料整合到現有搜索系統- 支援客戶、聯絡人、銷售機會的智能搜索- 與語義搜索引擎整合- 提供統一的搜索介面和結果格式- 支援混合搜索（知識庫 + CRM）搜索實體類型：- Customer (客戶公司)- CustomerContact (聯絡人)- SalesOpportunity (銷售機會)- Interaction (互動記錄)作者：Claude Code創建時間：2025-09-28
+ *
+ * CRM 搜索適配器
+ * 功能：
+ * - 將CRM資料整合到現有搜索系統
+ * - 支援客戶、聯絡人、銷售機會的智能搜索
+ * - 與語義搜索引擎整合
+ * - 提供統一的搜索介面和結果格式
+ * - 支援混合搜索（知識庫 + CRM）
+ * 搜索實體類型：
+ * - Customer (客戶公司)
+ * - CustomerContact (聯絡人)
+ * - SalesOpportunity (銷售機會)
+ * - Interaction (互動記錄)
+ * 作者：Claude Code
+ * 創建時間：2025-09-28
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { PrismaClient } from '@prisma/client';

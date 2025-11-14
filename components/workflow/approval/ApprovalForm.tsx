@@ -1,11 +1,25 @@
 /**
- * @fileoverview 審批表單組件功能：- 審批決策表單（批准/拒絕）- 審批意見輸入- 委派審批給其他用戶- 決策確認對話框作者：Claude Code日期：2025-10-01
+ * @fileoverview 審批表單組件
+功能：
+- 審批決策表單（批准/拒絕）
+- 審批意見輸入
+- 委派審批給其他用戶
+- 決策確認對話框
+作者：Claude Code
+日期：2025-10-01
  * @module components/workflow/approval/ApprovalForm
- * @description
- * 審批表單組件功能：- 審批決策表單（批准/拒絕）- 審批意見輸入- 委派審批給其他用戶- 決策確認對話框作者：Claude Code日期：2025-10-01
+ *
+ * 審批表單組件
+ * 功能：
+ * - 審批決策表單（批准/拒絕）
+ * - 審批意見輸入
+ * - 委派審批給其他用戶
+ * - 決策確認對話框
+ * 作者：Claude Code
+ * 日期：2025-10-01
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 'use client';

@@ -1,11 +1,32 @@
 /**
- * @fileoverview 提醒API路由 - 列表和創建功能：- GET: 獲取用戶的提醒列表（支持狀態篩選）- POST: 創建新提醒作者：Claude Code日期：2025-10-05
+ * @fileoverview AI銷售賦能平台提醒API - 實現用戶提醒列表查詢和創建功能
  * @module app/api/reminders/route
- * @description
- * 提醒API路由 - 列表和創建功能：- GET: 獲取用戶的提醒列表（支持狀態篩選）- POST: 創建新提醒作者：Claude Code日期：2025-10-05
+ *
+ * ## 功能說明
+ * 提供用戶提醒的列表查詢和創建功能,支援狀態篩選和多種提醒類型。
+ *
+ * ## API規格
+ * - **端點**: `GET /api/reminders` - 獲取用戶提醒列表
+ *   - 查詢參數: status (可選,篩選狀態)
+ *   - 響應: { reminders: [...], total: number }
+ * - **端點**: `POST /api/reminders` - 創建新提醒
+ *   - 請求: { type, resourceId, resourceTitle, scheduledFor?, options? }
+ *   - 響應: { message, reminder: {...} }
+ * - **狀態碼**: 200/201 (成功) | 400 (驗證錯誤) | 401 (未認證) | 500 (伺服器錯誤)
+ *
+ * ## 主要職責
+ * - 提醒查詢 - 獲取用戶的提醒列表,支援狀態過濾
+ * - 提醒創建 - 根據類型創建相應的提醒(會議、跟進、任務、提案)
+ * - 類型支援 - MEETING_UPCOMING, FOLLOW_UP_DUE, TASK_OVERDUE, PROPOSAL_EXPIRING
+ * - JWT認證 - Bearer Token驗證
+ *
+ * ## 相關文件
+ * - `/lib/auth/token-service.ts` - JWT令牌驗證
+ * - `/lib/prisma.ts` - Prisma數據庫客戶端
+ * - `/lib/reminder.ts` - 提醒規則引擎和類型定義
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

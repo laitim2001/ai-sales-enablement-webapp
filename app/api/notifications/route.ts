@@ -1,11 +1,33 @@
 /**
- * @fileoverview 通知 API 路由 (Notifications API Route)處理通知的查詢、創建和刪除操作端點：- GET /api/notifications - 獲取通知列表（支援分頁、過濾）- DELETE /api/notifications - 刪除通知（支援批量刪除）@module app/api/notifications/route@since Sprint 5 Week 10 Day 2
+ * @fileoverview AI銷售賦能平台通知API - 實現通知列表查詢和刪除功能
  * @module app/api/notifications/route
- * @description
- * 通知 API 路由 (Notifications API Route)處理通知的查詢、創建和刪除操作端點：- GET /api/notifications - 獲取通知列表（支援分頁、過濾）- DELETE /api/notifications - 刪除通知（支援批量刪除）@module app/api/notifications/route@since Sprint 5 Week 10 Day 2
+ *
+ * ## 功能說明
+ * 提供通知的列表查詢和刪除功能,支援分頁、過濾和批量刪除操作。
+ *
+ * ## API規格
+ * - **端點**: `GET /api/notifications` - 獲取通知列表
+ *   - 查詢參數: page, limit, category, unreadOnly, type
+ *   - 響應: { success, data: { notifications: [...], pagination: {...} } }
+ * - **端點**: `DELETE /api/notifications` - 刪除通知
+ *   - 請求: { notificationIds?: number[], deleteAll?: boolean }
+ *   - 響應: { success, data: { deletedCount: number } }
+ * - **狀態碼**: 200 (成功) | 400 (驗證錯誤) | 401 (未認證) | 500 (伺服器錯誤)
+ *
+ * ## 主要職責
+ * - 通知查詢 - 支援分頁、分類和未讀過濾
+ * - 批量刪除 - 支援指定ID列表或刪除所有已讀通知
+ * - 分頁處理 - 包含總數和總頁數計算
+ * - 統一認證 - 使用authenticateRequest支援Bearer Token和Cookie
+ *
+ * ## 相關文件
+ * - `/lib/notification/engine.ts` - 通知引擎
+ * - `/lib/notification/in-app-service.ts` - 站內通知服務
+ * - `/lib/auth/request-auth.ts` - 統一請求認證
+ * - `@prisma/client` - NotificationType, NotificationCategory, NotificationStatus枚舉
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server'

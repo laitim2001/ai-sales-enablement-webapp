@@ -1,6 +1,11 @@
 /**
  * @fileoverview 知識庫文件重複檢查API
- * @description 在上傳前檢查文件是否已存在（基於SHA-256 hash）
+ * @module app/api/knowledge-base/check-duplicate/route.ts
+ *
+ * 知識庫文件重複檢查API
+ *
+ * @created 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server'

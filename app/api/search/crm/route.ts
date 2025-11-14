@@ -1,11 +1,35 @@
 /**
- * @fileoverview CRM 搜索 API 路由功能：- 提供 CRM 數據搜索的 RESTful API- 支援多實體搜索和混合搜索- 實現搜索結果分頁和篩選- 錯誤處理和回應格式化支援的搜索類型：- 客戶搜索- 聯絡人搜索- 銷售機會搜索- 混合搜索（知識庫 + CRM）作者：Claude Code創建時間：2025-09-28
+ * @fileoverview CRM 搜索 API 路由
+功能：
+- 提供 CRM 數據搜索的 RESTful API
+- 支援多實體搜索和混合搜索
+- 實現搜索結果分頁和篩選
+- 錯誤處理和回應格式化
+支援的搜索類型：
+- 客戶搜索
+- 聯絡人搜索
+- 銷售機會搜索
+- 混合搜索（知識庫 + CRM）
+作者：Claude Code
+創建時間：2025-09-28
  * @module app/api/search/crm/route
- * @description
- * CRM 搜索 API 路由功能：- 提供 CRM 數據搜索的 RESTful API- 支援多實體搜索和混合搜索- 實現搜索結果分頁和篩選- 錯誤處理和回應格式化支援的搜索類型：- 客戶搜索- 聯絡人搜索- 銷售機會搜索- 混合搜索（知識庫 + CRM）作者：Claude Code創建時間：2025-09-28
+ *
+ * CRM 搜索 API 路由
+ * 功能：
+ * - 提供 CRM 數據搜索的 RESTful API
+ * - 支援多實體搜索和混合搜索
+ * - 實現搜索結果分頁和篩選
+ * - 錯誤處理和回應格式化
+ * 支援的搜索類型：
+ * - 客戶搜索
+ * - 聯絡人搜索
+ * - 銷售機會搜索
+ * - 混合搜索（知識庫 + CRM）
+ * 作者：Claude Code
+ * 創建時間：2025-09-28
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

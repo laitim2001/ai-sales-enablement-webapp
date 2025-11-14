@@ -1,11 +1,25 @@
 /**
- * @fileoverview 會議準備包管理器功能：- 會議準備包數據模型- 智能準備包生成- 模板系統- 內容推薦作者：Claude Code日期：2025-10-05
+ * @fileoverview 會議準備包管理器
+功能：
+- 會議準備包數據模型
+- 智能準備包生成
+- 模板系統
+- 內容推薦
+作者：Claude Code
+日期：2025-10-05
  * @module lib/meeting/meeting-prep-package
- * @description
- * 會議準備包管理器功能：- 會議準備包數據模型- 智能準備包生成- 模板系統- 內容推薦作者：Claude Code日期：2025-10-05
+ *
+ * 會議準備包管理器
+ * 功能：
+ * - 會議準備包數據模型
+ * - 智能準備包生成
+ * - 模板系統
+ * - 內容推薦
+ * 作者：Claude Code
+ * 日期：2025-10-05
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { PrismaClient } from '@prisma/client';

@@ -1,11 +1,17 @@
 /**
- * @fileoverview 範本統計 APIGET /api/templates/stats - 獲取範本統計信息@author Claude Code@date 2025-10-02
+ * @fileoverview 範本統計 API
+GET /api/templates/stats - 獲取範本統計信息
+@author Claude Code
+@date 2025-10-02
  * @module app/api/templates/stats/route
- * @description
- * 範本統計 APIGET /api/templates/stats - 獲取範本統計信息@author Claude Code@date 2025-10-02
+ *
+ * 範本統計 API
+ * GET /api/templates/stats - 獲取範本統計信息
+ * @author Claude Code
+ * @date 2025-10-02
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

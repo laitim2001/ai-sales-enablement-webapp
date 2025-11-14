@@ -1,11 +1,19 @@
 /**
- * @fileoverview 準備包模板API路由功能：- GET: 獲取所有模板作者：Claude Code日期：2025-10-05
+ * @fileoverview 準備包模板API路由
+功能：
+- GET: 獲取所有模板
+作者：Claude Code
+日期：2025-10-05
  * @module app/api/meeting-prep/templates/route
- * @description
- * 準備包模板API路由功能：- GET: 獲取所有模板作者：Claude Code日期：2025-10-05
+ *
+ * 準備包模板API路由
+ * 功能：
+ * - GET: 獲取所有模板
+ * 作者：Claude Code
+ * 日期：2025-10-05
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

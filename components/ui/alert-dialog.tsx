@@ -1,11 +1,11 @@
 /**
  * @fileoverview alert-dialog - 工具模組
  * @module components/ui/alert-dialog
- * @description
- * 提供輔助功能的工具函數
+ *
+ * alert-dialog - 工具模組
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 "use client"

@@ -1,11 +1,44 @@
 /**
- * @fileoverview 會議建議生成API路由📋 檔案用途：基於會議分析生成AI建議（議程、討論重點、Q&A、後續行動）🔗 API端點：- POST /api/meeting-intelligence/recommendations - 生成會議建議📊 請求體：{  meetingInfo: MeetingInfo,  insights: MeetingInsights}📤 響應格式：{  success: boolean,  data: {    recommendations: MeetingRecommendations,    recommendationId: string,    timestamp: string  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ * @fileoverview 會議建議生成API路由
+📋 檔案用途：
+基於會議分析生成AI建議（議程、討論重點、Q&A、後續行動）
+🔗 API端點：
+- POST /api/meeting-intelligence/recommendations - 生成會議建議
+📊 請求體：
+{
+  meetingInfo: MeetingInfo,
+  insights: MeetingInsights
+}
+📤 響應格式：
+{
+  suc...
  * @module app/api/meeting-intelligence/recommendations/route
- * @description
- * 會議建議生成API路由📋 檔案用途：基於會議分析生成AI建議（議程、討論重點、Q&A、後續行動）🔗 API端點：- POST /api/meeting-intelligence/recommendations - 生成會議建議📊 請求體：{  meetingInfo: MeetingInfo,  insights: MeetingInsights}📤 響應格式：{  success: boolean,  data: {    recommendations: MeetingRecommendations,    recommendationId: string,    timestamp: string  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ *
+ * 會議建議生成API路由
+ * 📋 檔案用途：
+ * 基於會議分析生成AI建議（議程、討論重點、Q&A、後續行動）
+ * 🔗 API端點：
+ * - POST /api/meeting-intelligence/recommendations - 生成會議建議
+ * 📊 請求體：
+ * {
+ * meetingInfo: MeetingInfo,
+ * insights: MeetingInsights
+ * }
+ * 📤 響應格式：
+ * {
+ * success: boolean,
+ * data: {
+ * recommendations: MeetingRecommendations,
+ * recommendationId: string,
+ * timestamp: string
+ * }
+ * }
+ * 作者：Claude Code
+ * 創建時間：2025-10-05
+ * Sprint：Sprint 7 Phase 2
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

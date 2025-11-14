@@ -1,11 +1,34 @@
 /**
- * @fileoverview 提案詳情 API 路由功能：- GET: 獲取提案詳細信息- PATCH: 更新提案- DELETE: 刪除提案- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: READ權限 (所有角色)- PATCH: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)- DELETE: DELETE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)@author Claude Code@date 2025-10-02@updated 2025-10-06 (RBAC整合)
+ * @fileoverview AI銷售賦能平台提案詳情API - 實現單個提案的查詢、更新和刪除功能
  * @module app/api/proposals/[id]/route
- * @description
- * 提案詳情 API 路由功能：- GET: 獲取提案詳細信息- PATCH: 更新提案- DELETE: 刪除提案- RBAC權限控制整合 (Sprint 3 Week 7)權限要求：- GET: READ權限 (所有角色)- PATCH: UPDATE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)- DELETE: DELETE權限 + 擁有權檢查 (ADMIN, SALES_MANAGER, SALES_REP - 僅自己的提案)@author Claude Code@date 2025-10-02@updated 2025-10-06 (RBAC整合)
+ *
+ * ## 功能說明
+ * 提供單個提案的完整管理功能,包含詳情查詢、內容更新和刪除操作,
+ * 並整合RBAC權限控制和資源擁有權驗證。
+ *
+ * ## API規格
+ * - **端點**: `GET /api/proposals/[id]` - 獲取提案詳情
+ *   - 響應: { success, data: {...} } (包含customer, user, items)
+ * - **端點**: `PATCH /api/proposals/[id]` - 更新提案
+ *   - 請求: 任意提案字段
+ *   - 響應: { success, data: {...}, message }
+ * - **端點**: `DELETE /api/proposals/[id]` - 刪除提案
+ *   - 響應: { success, message }
+ * - **狀態碼**: 200 (成功) | 400 (驗證錯誤) | 401 (未認證) | 403 (無權限) | 404 (未找到) | 500 (伺服器錯誤)
+ *
+ * ## 主要職責
+ * - 提案查詢 - 包含完整的關聯數據(customer, user, items)
+ * - 提案更新 - RBAC權限控制+擁有權驗證
+ * - 提案刪除 - 級聯刪除相關數據
+ * - 權限驗證 - READ (所有角色)、UPDATE/DELETE (需擁有權檢查)
+ *
+ * ## 相關文件
+ * - `/lib/db.ts` - Prisma數據庫連接
+ * - `/lib/security/permission-middleware.ts` - RBAC權限中間件
+ * - `/lib/security/rbac.ts` - 資源和動作定義
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

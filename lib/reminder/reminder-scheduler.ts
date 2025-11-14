@@ -1,11 +1,23 @@
 /**
- * @fileoverview 提醒調度器功能：- 定期檢查待觸發的提醒- 自動觸發到期的提醒- 管理提醒調度任務作者：Claude Code日期：2025-10-05
+ * @fileoverview 提醒調度器
+功能：
+- 定期檢查待觸發的提醒
+- 自動觸發到期的提醒
+- 管理提醒調度任務
+作者：Claude Code
+日期：2025-10-05
  * @module lib/reminder/reminder-scheduler
- * @description
- * 提醒調度器功能：- 定期檢查待觸發的提醒- 自動觸發到期的提醒- 管理提醒調度任務作者：Claude Code日期：2025-10-05
+ *
+ * 提醒調度器
+ * 功能：
+ * - 定期檢查待觸發的提醒
+ * - 自動觸發到期的提醒
+ * - 管理提醒調度任務
+ * 作者：Claude Code
+ * 日期：2025-10-05
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { PrismaClient } from '@prisma/client';

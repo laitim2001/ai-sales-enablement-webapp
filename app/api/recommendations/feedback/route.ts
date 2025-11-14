@@ -1,11 +1,43 @@
 /**
- * @fileoverview 推薦反饋API路由📋 檔案用途：接收用戶對推薦的反饋，用於優化推薦算法🔗 API端點：- POST /api/recommendations/feedback - 提交推薦反饋📊 請求體：{  recommendationId: string,  itemId: string,  action: 'view' | 'click' | 'dismiss' | 'like' | 'dislike',  rating?: number (1-5),  comment?: string}📤 響應格式：{  success: boolean,  data: {    feedbackId: string,    message: string  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ * @fileoverview 推薦反饋API路由
+📋 檔案用途：
+接收用戶對推薦的反饋，用於優化推薦算法
+🔗 API端點：
+- POST /api/recommendations/feedback - 提交推薦反饋
+📊 請求體：
+{
+  recommendationId: string,
+  itemId: string,
+  action: 'view' | 'click' | 'dismiss' | 'like' | 'd...
  * @module app/api/recommendations/feedback/route
- * @description
- * 推薦反饋API路由📋 檔案用途：接收用戶對推薦的反饋，用於優化推薦算法🔗 API端點：- POST /api/recommendations/feedback - 提交推薦反饋📊 請求體：{  recommendationId: string,  itemId: string,  action: 'view' | 'click' | 'dismiss' | 'like' | 'dislike',  rating?: number (1-5),  comment?: string}📤 響應格式：{  success: boolean,  data: {    feedbackId: string,    message: string  }}作者：Claude Code創建時間：2025-10-05Sprint：Sprint 7 Phase 2
+ *
+ * 推薦反饋API路由
+ * 📋 檔案用途：
+ * 接收用戶對推薦的反饋，用於優化推薦算法
+ * 🔗 API端點：
+ * - POST /api/recommendations/feedback - 提交推薦反饋
+ * 📊 請求體：
+ * {
+ * recommendationId: string,
+ * itemId: string,
+ * action: 'view' | 'click' | 'dismiss' | 'like' | 'dislike',
+ * rating?: number (1-5),
+ * comment?: string
+ * }
+ * 📤 響應格式：
+ * {
+ * success: boolean,
+ * data: {
+ * feedbackId: string,
+ * message: string
+ * }
+ * }
+ * 作者：Claude Code
+ * 創建時間：2025-10-05
+ * Sprint：Sprint 7 Phase 2
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

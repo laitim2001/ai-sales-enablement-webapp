@@ -1,11 +1,25 @@
 /**
- * @fileoverview 提醒卡片組件功能：- 顯示單個提醒的詳細信息- 支持延遲（snooze）和忽略（dismiss）操作- 優先級視覺化展示- 時間格式化顯示作者：Claude Code日期：2025-10-05
+ * @fileoverview 提醒卡片組件
+功能：
+- 顯示單個提醒的詳細信息
+- 支持延遲（snooze）和忽略（dismiss）操作
+- 優先級視覺化展示
+- 時間格式化顯示
+作者：Claude Code
+日期：2025-10-05
  * @module components/reminder/ReminderCard
- * @description
- * 提醒卡片組件功能：- 顯示單個提醒的詳細信息- 支持延遲（snooze）和忽略（dismiss）操作- 優先級視覺化展示- 時間格式化顯示作者：Claude Code日期：2025-10-05
+ *
+ * 提醒卡片組件
+ * 功能：
+ * - 顯示單個提醒的詳細信息
+ * - 支持延遲（snooze）和忽略（dismiss）操作
+ * - 優先級視覺化展示
+ * - 時間格式化顯示
+ * 作者：Claude Code
+ * 日期：2025-10-05
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 'use client';

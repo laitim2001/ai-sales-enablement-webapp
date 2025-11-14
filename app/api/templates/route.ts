@@ -1,11 +1,33 @@
 /**
- * @fileoverview 範本管理 API - 列表和創建GET  /api/templates - 獲取範本列表POST /api/templates - 創建新範本@author Claude Code@date 2025-10-02
+ * @fileoverview AI銷售賦能平台範本管理API - 實現範本列表查詢和創建功能
  * @module app/api/templates/route
- * @description
- * 範本管理 API - 列表和創建GET  /api/templates - 獲取範本列表POST /api/templates - 創建新範本@author Claude Code@date 2025-10-02
+ *
+ * ## 功能說明
+ * 提供範本的列表查詢和創建功能,支援分頁、過濾和完整的RBAC權限控制。
+ *
+ * ## API規格
+ * - **端點**: `GET /api/templates` - 獲取範本列表
+ *   - 查詢參數: category, accessLevel, isActive, organization, createdBy, search, sortBy, sortOrder, page, pageSize
+ *   - 響應: { success, data: {...}, message }
+ * - **端點**: `POST /api/templates` - 創建新範本
+ *   - 請求: { name, description?, category, content, variables?, organization?, accessLevel?, isDefault?, tags? }
+ *   - 響應: { success, data: {...}, message }
+ * - **狀態碼**: 200/201 (成功) | 400 (驗證錯誤) | 401 (未認證) | 403 (無權限) | 500 (伺服器錯誤)
+ *
+ * ## 主要職責
+ * - 範本查詢 - 支援多條件過濾和分頁的範本列表
+ * - 範本創建 - 驗證必需字段並創建新範本
+ * - RBAC權限 - LIST和CREATE權限檢查
+ * - 變數驗證 - 確保變數格式正確
+ *
+ * ## 相關文件
+ * - `/lib/template/template-manager.ts` - 範本管理邏輯
+ * - `/lib/security/permission-middleware.ts` - RBAC權限中間件
+ * - `/lib/security/rbac.ts` - 權限定義
+ * - `@prisma/client` - TemplateCategory, TemplateAccess枚舉
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

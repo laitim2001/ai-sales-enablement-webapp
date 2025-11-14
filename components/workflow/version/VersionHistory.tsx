@@ -1,11 +1,25 @@
 /**
- * @fileoverview 版本歷史組件功能：- 顯示提案的所有版本快照- 版本列表與時間線- 支持版本比較和回滾- 顯示版本標籤和創建者作者：Claude Code日期：2025-10-01
+ * @fileoverview 版本歷史組件
+功能：
+- 顯示提案的所有版本快照
+- 版本列表與時間線
+- 支持版本比較和回滾
+- 顯示版本標籤和創建者
+作者：Claude Code
+日期：2025-10-01
  * @module components/workflow/version/VersionHistory
- * @description
- * 版本歷史組件功能：- 顯示提案的所有版本快照- 版本列表與時間線- 支持版本比較和回滾- 顯示版本標籤和創建者作者：Claude Code日期：2025-10-01
+ *
+ * 版本歷史組件
+ * 功能：
+ * - 顯示提案的所有版本快照
+ * - 版本列表與時間線
+ * - 支持版本比較和回滾
+ * - 顯示版本標籤和創建者
+ * 作者：Claude Code
+ * 日期：2025-10-01
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 'use client';

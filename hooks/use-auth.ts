@@ -1,17 +1,11 @@
 /**
  * @fileoverview use-auth - 工具模組
  * @module hooks/use-auth
- * @description
- * 提供輔助功能的工具函數
  *
- * ### 主要功能:
- * - useAuth(): 函數功能
- * - useAuthState(): 函數功能
- * - AuthProvider(): 函數功能
- * - ProtectedRoute(): 函數功能
+ * use-auth - 工具模組
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 'use client'

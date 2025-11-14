@@ -1,11 +1,15 @@
 /**
- * @fileoverview 統一監控抽象層使用 OpenTelemetry 標準 API支持切換到任何 OpenTelemetry 兼容的後端（Prometheus / Azure Monitor / Jaeger）
+ * @fileoverview 統一監控抽象層
+使用 OpenTelemetry 標準 API
+支持切換到任何 OpenTelemetry 兼容的後端（Prometheus / Azure Monitor / Jaeger）
  * @module lib/monitoring/telemetry
- * @description
- * 統一監控抽象層使用 OpenTelemetry 標準 API支持切換到任何 OpenTelemetry 兼容的後端（Prometheus / Azure Monitor / Jaeger）
+ *
+ * 統一監控抽象層
+ * 使用 OpenTelemetry 標準 API
+ * 支持切換到任何 OpenTelemetry 兼容的後端（Prometheus / Azure Monitor / Jaeger）
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { trace, metrics, context, SpanStatusCode, Span, Context } from '@opentelemetry/api';

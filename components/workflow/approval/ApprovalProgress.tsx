@@ -1,11 +1,25 @@
 /**
- * @fileoverview 審批進度組件功能：- 顯示多級審批流程進度- 並行審批狀態追蹤- 審批歷史時間線- 當前審批者信息作者：Claude Code日期：2025-10-01
+ * @fileoverview 審批進度組件
+功能：
+- 顯示多級審批流程進度
+- 並行審批狀態追蹤
+- 審批歷史時間線
+- 當前審批者信息
+作者：Claude Code
+日期：2025-10-01
  * @module components/workflow/approval/ApprovalProgress
- * @description
- * 審批進度組件功能：- 顯示多級審批流程進度- 並行審批狀態追蹤- 審批歷史時間線- 當前審批者信息作者：Claude Code日期：2025-10-01
+ *
+ * 審批進度組件
+ * 功能：
+ * - 顯示多級審批流程進度
+ * - 並行審批狀態追蹤
+ * - 審批歷史時間線
+ * - 當前審批者信息
+ * 作者：Claude Code
+ * 日期：2025-10-01
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 'use client';

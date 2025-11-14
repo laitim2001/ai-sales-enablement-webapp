@@ -1,11 +1,29 @@
 /**
- * @fileoverview 郵件通知服務 (Email Notification Service)處理郵件通知的發送、模板渲染和發送狀態追蹤主要功能：1. 郵件模板渲染2. 郵件發送（SMTP/SendGrid）3. 發送狀態追蹤4. 批次發送5. 重試機制@module lib/notification/email-service@since Sprint 5 Week 10
+ * @fileoverview 郵件通知服務 (Email Notification Service)
+處理郵件通知的發送、模板渲染和發送狀態追蹤
+主要功能：
+1. 郵件模板渲染
+2. 郵件發送（SMTP/SendGrid）
+3. 發送狀態追蹤
+4. 批次發送
+5. 重試機制
+@module lib/notification/email-service
+@since Sprint 5 Week 10
  * @module lib/notification/email-service
- * @description
- * 郵件通知服務 (Email Notification Service)處理郵件通知的發送、模板渲染和發送狀態追蹤主要功能：1. 郵件模板渲染2. 郵件發送（SMTP/SendGrid）3. 發送狀態追蹤4. 批次發送5. 重試機制@module lib/notification/email-service@since Sprint 5 Week 10
+ *
+ * 郵件通知服務 (Email Notification Service)
+ * 處理郵件通知的發送、模板渲染和發送狀態追蹤
+ * 主要功能：
+ * 1. 郵件模板渲染
+ * 2. 郵件發送（SMTP/SendGrid）
+ * 3. 發送狀態追蹤
+ * 4. 批次發送
+ * 5. 重試機制
+ * @module lib/notification/email-service
+ * @since Sprint 5 Week 10
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { PrismaClient, NotificationType, NotificationPriority } from '@prisma/client'

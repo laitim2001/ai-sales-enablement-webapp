@@ -1,11 +1,23 @@
 /**
- * @fileoverview 監控系統初始化 API 路由功能：- 手動啟動/停止監控服務- 查詢監控系統狀態- 重新初始化監控系統作者：Claude Code創建時間：2025-09-29
+ * @fileoverview 監控系統初始化 API 路由
+功能：
+- 手動啟動/停止監控服務
+- 查詢監控系統狀態
+- 重新初始化監控系統
+作者：Claude Code
+創建時間：2025-09-29
  * @module app/api/monitoring/init/route
- * @description
- * 監控系統初始化 API 路由功能：- 手動啟動/停止監控服務- 查詢監控系統狀態- 重新初始化監控系統作者：Claude Code創建時間：2025-09-29
+ *
+ * 監控系統初始化 API 路由
+ * 功能：
+ * - 手動啟動/停止監控服務
+ * - 查詢監控系統狀態
+ * - 重新初始化監控系統
+ * 作者：Claude Code
+ * 創建時間：2025-09-29
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 import { NextRequest, NextResponse } from 'next/server';

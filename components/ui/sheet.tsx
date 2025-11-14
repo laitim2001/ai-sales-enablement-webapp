@@ -1,11 +1,15 @@
 /**
- * @fileoverview Sheet UI Component側邊抽屜組件，用於顯示附加內容基於 Radix UI Dialog
+ * @fileoverview Sheet UI Component
+側邊抽屜組件，用於顯示附加內容
+基於 Radix UI Dialog
  * @module components/ui/sheet
- * @description
- * Sheet UI Component側邊抽屜組件，用於顯示附加內容基於 Radix UI Dialog
+ *
+ * Sheet UI Component
+ * 側邊抽屜組件，用於顯示附加內容
+ * 基於 Radix UI Dialog
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 "use client"

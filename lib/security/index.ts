@@ -1,11 +1,13 @@
 /**
- * @fileoverview Security Module ExportsCentralized export for all security-related services
+ * @fileoverview Security Module Exports
+Centralized export for all security-related services
  * @module lib/security/index
- * @description
- * Security Module ExportsCentralized export for all security-related services
+ *
+ * Security Module Exports
+ * Centralized export for all security-related services
  *
  * @created 2025-10-08
- * @lastModified 2025-10-08
+ * @lastModified 2025-11-14
  */
 
 // RBAC Core
