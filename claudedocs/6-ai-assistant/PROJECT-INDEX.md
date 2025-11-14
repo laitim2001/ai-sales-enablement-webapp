@@ -1,10 +1,11 @@
 # 📁 AI 銷售賦能平台 - 主索引目錄
 
 > **🎯 目的**: 為 AI 助手提供快速導航和文件查找指南
-> **📅 最後更新**: 2025年11月11日 - UAT測試進度更新
+> **📅 最後更新**: 2025年11月14日 - 文件頭部優化和索引維護
 > **🔍 使用方法**: AI 助手應首先查看此文件以了解項目結構和文件位置
 >
 > **✨ 最新添加**:
+> - 🧹 代碼文件頭部優化完成 (2025-11-14): 340個文件處理，移除5,490行重複內容（7個批處理腳本，100%完成）
 > - 📊 UAT測試進度更新 (2025-11-11): 認證系統測試 (TC-AUTH-001, TC-AUTH-003完成，進度6/33 18%)
 > - 🤖 AI助手場景化提示詞系統 (2025-10-08): 完整場景化提示詞管理系統（5個場景提示詞，3個子目錄，~2,000行，覆蓋會話開始/開發過程/進度管理全流程）
 > - ⚡ MVP2負載測試框架 (2025-10-07): 完整負載測試框架（autocannon，~2,600行，6測試場景，5 NPM命令，完整文檔）
@@ -1033,6 +1034,13 @@ const users = await prisma.user.findMany();
 | **UAT測試運行器** | `scripts/uat-test-runner.js`   | Sprint 7 UAT自動化測試執行腳本 | 🟡 高    |
 | **負載測試運行器** | `scripts/load-test-runner.js` | MVP2負載測試執行腳本（autocannon，6測試場景，~450行） | 🔴 極高  |
 | **服務重啟**     | `scripts/restart-services.bat`  | Windows服務重啟批處理        | 🟢 中    |
+| **頭部優化Batch1** | `scripts/optimize-headers-batch1.py` | 文件頭部優化腳本-批次1 (51個文件, P0+P1優先級) | 🟡 中    |
+| **頭部優化Batch2** | `scripts/optimize-headers-batch2.py` | 文件頭部優化腳本-批次2 (50個文件, P1+P2優先級) | 🟡 中    |
+| **頭部優化Batch3** | `scripts/optimize-headers-batch3.py` | 文件頭部優化腳本-批次3 (50個文件, P2+P3優先級) | 🟡 中    |
+| **頭部優化Batch4** | `scripts/optimize-headers-batch4.py` | 文件頭部優化腳本-批次4 (50個文件, P3 API優先級) | 🟡 中    |
+| **頭部優化Batch5** | `scripts/optimize-headers-batch5.py` | 文件頭部優化腳本-批次5 (50個文件, 頁面+工作流組件) | 🟡 中    |
+| **頭部優化Batch6** | `scripts/optimize-headers-batch6.py` | 文件頭部優化腳本-批次6 (50個文件, UI組件) | 🟡 中    |
+| **頭部優化Batch7** | `scripts/optimize-headers-batch7.py` | 文件頭部優化腳本-批次7 (68個文件, 最終批次) | 🟡 中    |
 
 #### 💾 scripts/backup/ - 備份系統腳本 (Sprint 3 Week 6)
 
@@ -1687,6 +1695,7 @@ const users = await prisma.user.findMany();
 | **舊功能開發測試提示詞** | `claudedocs/6-ai-assistant/prompts/development/03-existing-feature.md` | 修改和優化現有功能的執行流程 | 🟡 高 |
 | **新功能開發測試提示詞** | `claudedocs/6-ai-assistant/prompts/development/04-new-feature.md` | 從零開始開發新功能的完整指引 | 🟡 高 |
 | **進度保存與同步提示詞** | `claudedocs/6-ai-assistant/prompts/progress/05-save-progress.md` | 保存進度、索引維護和GitHub同步流程 | 🟡 高 |
+| **代碼頭部優化執行計劃** | `claudedocs/6-ai-assistant/CODE-HEADER-OPTIMIZATION-PLAN.md` | 文件頭部優化完整執行計劃（7批次，340文件，移除5,490行重複內容） | 🔴 極高 |
 | **開發服務管理指南** | `DEVELOPMENT-SERVICE-MANAGEMENT.md` | 避免多服務運行，開發流程規範  | 🟡 高    |
 | **服務啟動指南**     | `START-SERVICES.md`         | 快速服務啟動指南                  | 🟡 高    |
 | **E2E測試執行摘要**  | `e2e-test-summary.md`       | 端到端測試執行結果和分析      | 🟢 中    |
